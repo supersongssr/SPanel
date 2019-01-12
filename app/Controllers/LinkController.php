@@ -96,7 +96,7 @@ class LinkController extends BaseController
             return Tools::base64_url_encode(URL::getAllUrl($user, $mu, 0));
         } 
 		elseif ($mu == LinkController::V2RYA_MU){
-            return Tools::base64_url_encode(URL::getAllVMessUrl($user));
+            return Tools::base64_url_encode(URL::getAllVMessUrl($user) . "\n" . URL::getAllUrl($user, 0, 1));
         }
 		elseif ($mu==LinkController::SSD_MU) {
 			return URL::getAllSSDUrl($user);

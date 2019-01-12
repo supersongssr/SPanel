@@ -329,13 +329,19 @@ class URL
     public static function getItemUrl($item, $is_ss) {
         $ss_obfs_list = Config::getSupportParam('ss_obfs');
         if(!$is_ss) {
-            $ssurl = $item['address'].":".$item['port'].":".$item['protocol'].":".$item['method'].":".$item['obfs'].":".Tools::base64_url_encode($item['passwd'])."/?obfsparam=".Tools::base64_url_encode($item['obfs_param'])."&protoparam=".Tools::base64_url_encode($item['protocol_param'])."&remarks=".Tools::base64_url_encode($item['remark'])."&group=".Tools::base64_url_encode($item['group']);
-            return "ssr://".Tools::base64_url_encode($ssurl);
+            //song
+            if ( empty($item['addn']) || ($item['addn'] == 'SR')) {
+                $ssurl = $item['address'].":".$item['port'].":".$item['protocol'].":".$item['method'].":".$item['obfs'].":".Tools::base64_url_encode($item['passwd'])."/?obfsparam=".Tools::base64_url_encode($item['obfs_param'])."&protoparam=".Tools::base64_url_encode($item['protocol_param'])."&remarks=".Tools::base64_url_encode($item['remark'])."&group=".Tools::base64_url_encode($item['group']);
+                return "ssr://".Tools::base64_url_encode($ssurl);
+            }   
+            //end
         } else {
             if($is_ss == 2) {
                 $personal_info = $item['method'].':'.$item['passwd']."@".$item['address'].":".$item['port'];
                 $ssurl = "ss://".Tools::base64_url_encode($personal_info);
-                $ssurl .= "#".rawurlencode(Config::get('appName')." - ".$item['remark']);
+                //song
+                //$ssurl .= "#".rawurlencode(Config::get('appName')." - ".$item['remark']);
+                $ssurl .= "#".rawurlencode($item['remark']);
             }else{
                 $personal_info = $item['method'].':'.$item['passwd'];
                 $ssurl = "ss://".Tools::base64_url_encode($personal_info)."@".$item['address'].":".$item['port'];
@@ -351,13 +357,15 @@ class URL
                     }
                     $ssurl .= "?plugin=".rawurlencode($plugin);
                 }
-                $ssurl .= "#".rawurlencode(Config::get('appName')." - ".$item['remark']);
+                //song
+                //$ssurl .= "#".rawurlencode(Config::get('appName')." - ".$item['remark']);
+                $ssurl .= $ssurl .= "#".rawurlencode($item['remark']);
             }
             return $ssurl;
         }
     }
     public static function getV2Url($user, $node){
-        $node_explode = explode(';', $node->server);
+        $node_explode = explode('#', $node->server);
         $item = [
             'v'=>'2',
             'host'=>'',
@@ -387,10 +395,16 @@ class URL
                 $item['net'] = 'ws';
             }
         }
-
+/**song 
         if (count($node_explode) >= 6) {
             $item = array_merge($item, URL::parse_args($node_explode[5]));
         }
+**/
+#Song addnode V2
+        if (count($node_explode) >= 6) {
+            $item['id'] = $node_explode['5'];
+        }
+#end
 
         return "vmess://".base64_encode((json_encode($item, JSON_UNESCAPED_UNICODE)));
     }
@@ -456,6 +470,17 @@ class URL
 			$server=array();
 			$server['id']=$server_index;
 			$server['server']=$node->server;
+
+            //song  addnode ssd
+            $addn = explode('#', $node->server);
+            if (!empty($addn['1'])) {
+                # code...
+                $server['server']=$addn['0'];
+                $array_all['port']=$addn['1'];
+                $array_all['password']=$addn['2'];
+                $array_all['encryption']=$addn['3'];
+            }
+            //end
 			//判断是否是中转起源节点
 			$relay_rule = Relay::where('source_node_id', $node->id)->where(
 				function ($query) use ($user) {
@@ -502,6 +527,9 @@ class URL
 					$server['password']=$muport_user->passwd;
 					$server['plugin']='simple-obfs';//目前只支持这个
 					$plugin_options='';
+                    //song
+
+                    //end
 					if(strpos($muport_user->obfs,'http')!=FALSE){
 						$plugin_options='obfs=http';
 					}
@@ -587,9 +615,11 @@ class URL
             $mu_user->obfs_param = $user->getMuMd5();
             $mu_user->protocol_param = $user->id.":".$user->passwd;
             $user = $mu_user;
+            /** song
             if(!Config::get('mergeSub')){
                 $node_name .= " - ".$mu_port." 单端口";
             }
+            **/
         }
         if($is_ss) {
             if(!URL::SSCanConnect($user)) {
@@ -612,9 +642,27 @@ class URL
         $return_array['obfs'] = $user->obfs;
         $return_array['obfs_param'] = $user->obfs_param;
         $return_array['group'] = Config::get('appName');
+        /** song 
         if($mu_port != 0 && !Config::get('mergeSub')) {
             $return_array['group'] .= ' - 单端口';
         }
+        **/ 
+//song  check if addnode ;about server  ip#port#pass#method#SS/SR
+        $return_array['addn'] = '';
+        $addn = explode('#', $node->server);
+        if (!empty($addn['1'])) {
+            # code...
+            $return_array['address'] = $addn['0'];
+            $return_array['port'] = $addn['1'];
+            $return_array['passwd'] = $addn['2'];
+            $return_array['method'] = $addn['3'];
+            $return_array['addn'] = $addn['4'];
+            $return_array['protocol'] = 'origin';
+            $return_array['protocol_param'] = '';
+            $return_array['obfs'] = 'plain';
+            $return_array['obfs_param'] = '';
+        }
+//end
         return $return_array;
     }
     public static function cloneUser($user) {

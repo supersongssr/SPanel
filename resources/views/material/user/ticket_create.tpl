@@ -12,7 +12,7 @@
 	<main class="content">
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">创建工单</h1>
+				<h1 class="content-heading">创建工单 - 详细描述您的问题</h1>
 			</div>
 		</div>
 		<div class="container">
@@ -23,7 +23,7 @@
 						<div class="card-main">
 							<div class="card-inner">
 								<div class="form-group form-group-label">
-									<label class="floating-label" for="title">标题</label>
+									<label class="floating-label" for="title">标题 - 工单36H内回复 VIP24H内回复</label>
 									<input class="form-control maxwidth-edit" id="title" type="text" >
 								</div>
 								

@@ -3,17 +3,20 @@
 <script src="//cdn.jsdelivr.net/gh/YihanH/canvasjs.js@v2.2/canvasjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1"></script>
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-
+<!-- song 
+-->
 {function displayV2rayNode node=null}
 	{assign var=server_explode value=";"|explode:$node['server']}
-
+	{if empty($server_explode[5])}
+		{$server_explode[5] = $user->getUuid()}
+	{/if}
 	<p>地址：<span class="card-tag tag-blue">{$server_explode[0]}</span></p>
 
 	<p>端口：<span class="card-tag tag-volcano">{$server_explode[1]}</span></p>
 
-	<p>协议参数：<span class="card-tag tag-green">{$server_explode[0]}</span></p>
+	<p>协议参数：<span class="card-tag tag-green">{$server_explode[3]}:{$server_explode[4]}</span></p>
 
-	<p>用户 UUID：<span class="card-tag tag-geekblue">{$user->getUuid()}</span></p>
+	<p>用户 UUID：<span class="card-tag tag-geekblue">{$server_explode[5]}</span></p>
 
 	<p>流量比例：<span class="card-tag tag-red">{$node['traffic_rate']}</span></p>
 

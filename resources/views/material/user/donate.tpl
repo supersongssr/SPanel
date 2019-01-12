@@ -32,7 +32,7 @@
 								<div class="card-inner">
 									<p>感谢各位捐赠来支撑服务器的日常支出！您可以在<a href="/user/code">充值界面</a>进行充值，这样就等同于捐赠了。</p>
 									{if $user->isAdmin()}
-									<p>总收入：{$total_in} 元</p>
+									<p>总收入：{$total_in / 100} 元</p>
 									{/if}
 								
 								</div>
@@ -103,10 +103,10 @@
 															<td>财务支出</td>
 															{/if}
 															{if $code->type == -1}
-															<td>捐赠 {$code->number} 元</td>
+															<td>捐赠 {$code->number} 捐赠</td>
 															{/if}
 															{if $code->type == -2}
-															<td>支出 {$code->number} 元</td>
+															<td>支出 {$code->number} 捐赠</td>
 															{/if}
 															<td>{$code->code}</td>
 															<td>{$code->usedatetime}</td>

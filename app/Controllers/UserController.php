@@ -542,9 +542,16 @@ class UserController extends BaseController
             }
 
 			$node_online=$node->isNodeOnline();
+            /**
+            if($node_online===null){
+                $array_node['online']=0;
+            }
+            **/
+            //song
 			if($node_online===null){
-				$array_node['online']=0;
-			}
+                $array_node['online']=1;
+            }
+            //end
 			else if($node_online===true){
 				$array_node['online']=1;
 			}

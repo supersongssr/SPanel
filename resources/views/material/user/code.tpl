@@ -21,8 +21,12 @@
                         <div class="card-main">
                             <div class="card-inner">
                                 <div class="card-inner">
-                                    <p class="card-heading">注意!</p>
-                                    <p>充值完成后需刷新网页以查看余额，通常一分钟内到账。</p>
+                                    <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
+                                      <p><a href="https://donate.okss.xyz" target="_blank">点此捐赠 获取捐赠码</a><br>
+                                        <a href="https://donate.okss.xyz" target="_blank">https://donate.okss.xyz</a><br>
+                                        <a href="https://donate.okss.xyz" target="_blank">点此捐赠 获取捐赠码</a><br>
+                                  </p>
+                                        <p>充值完成后需刷新网页以查看余额，通常一分钟内到账。如没有到账，请提交工单。</p>
                                     {if $config["enable_admin_contact"] == 'true'}
                                         <p class="card-heading">如果没有到账请立刻联系管理员：</p>
                                         {if $config["admin_contact1"]!=null}
@@ -36,7 +40,7 @@
                                         {/if}
                                     {/if}
                                     <br/>
-                                    <p><i class="icon icon-lg">attach_money</i>当前余额：<font color="#399AF2" size="5">{$user->money}</font> 元</p>
+                                    <p><i class="icon icon-lg">attach_money</i>当前余额：<font color="#399AF2" size="5">{$user->money}</font> 捐赠</p>
                                 </div>
                             </div>
                         </div>
@@ -98,7 +102,7 @@
                                                             <!--	<td>#{$code->id}</td>  -->
                                                             <td>{$code->code}</td>
                                                             {if $code->type==-1}
-                                                                <td>金额充值</td>
+                                                                <td>金额捐赠</td>
                                                             {/if}
                                                             {if $code->type==10001}
                                                                 <td>流量充值</td>
@@ -110,7 +114,7 @@
                                                                 <td>等级续期 - 等级{$code->type}</td>
                                                             {/if}
                                                             {if $code->type==-1}
-                                                                <td>充值 {$code->number} 元</td>
+                                                                <td>捐赠 {$code->number} 捐赠</td>
                                                             {/if}
                                                             {if $code->type==10001}
                                                                 <td>充值 {$code->number} GB 流量</td>

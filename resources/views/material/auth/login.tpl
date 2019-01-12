@@ -138,6 +138,9 @@
 {include file='dialog.tpl'}
 
 {include file='footer.tpl'}
+<script>
+  alert("凿壁借光の书签 www.okss.xyz \n Q群：961178261 \n TG群：okssxyz ");
+</script>  
 </div>
 {literal}
 <script>

@@ -70,80 +70,32 @@
 						<ul class="menu-collapse collapse in" id="ui_menu_me">
 							<li>
 								<a href="/user">
-									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户中心
+									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户中心/教程
 								</a>
 							</li>
 
 							<li>
-								<a href="/user/profile">
-									<i class="icon icon-lg">account_box</i>&nbsp;账户信息
+								<a href="/user/invite">
+									<i class="icon icon-lg">loyalty</i>&nbsp;邀请返利
 								</a>
 							</li>
 
-							<li>
-								<a href="/user/edit">
-									<i class="icon icon-lg">sync_problem</i>&nbsp;资料编辑
-								</a>
-							</li>
-
-							{if $config['enable_ticket']=='true'}
                             <li>
 								<a href="/user/ticket">
-									<i class="icon icon-lg">question_answer</i>&nbsp;工单系统
-								</a>
-							</li>
-							{/if}
-
-                            <li>
-								<a href="/user/invite">
-									<i class="icon icon-lg">loyalty</i>&nbsp;邀请链接
+									<i class="icon icon-lg">question_answer</i>&nbsp;客服/工单
 								</a>
 							</li>
 							
-						</ul>
 
-
-						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_use">使用</a>
-						<ul class="menu-collapse collapse in" id="ui_menu_use">
-							<li>
-								<a href="/user/node">
-									<i class="icon icon-lg">airplanemode_active</i>&nbsp;节点列表
-								</a>
-							</li>
-
-							<li>
-								<a href="/user/relay">
-									<i class="icon icon-lg">compare_arrows</i>&nbsp;中转规则
-								</a>
-							</li>
-
-							<li>
-								<a href="/user/trafficlog">
-									<i class="icon icon-lg">hourglass_empty</i>&nbsp;流量记录
-								</a>
-							</li>
-
-							<li>
-								<a href="/user/lookingglass">
-									<i class="icon icon-lg">visibility</i>&nbsp;延迟检测
-								</a>
-								<a href="/user/announcement">
-									<i class="icon icon-lg">start</i>&nbsp;使用教程
-								</a>
-							</li>
-						</ul>
-
-						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_detect">审计</a>
-						<ul class="menu-collapse collapse in" id="ui_menu_detect">
-							<li><a href="/user/detect"><i class="icon icon-lg">account_balance</i>&nbsp;审计规则</a></li>
-							<li><a href="/user/detect/log"><i class="icon icon-lg">assignment_late</i>&nbsp;审计记录</a></li>
+                            
+							
 						</ul>
 
 						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_help">商店</a>
 						<ul class="menu-collapse collapse in" id="ui_menu_help">
                           	<li>
 								<a href="/user/code">
-									<i class="icon icon-lg">code</i>&nbsp;充值
+									<i class="icon icon-lg">code</i>&nbsp;捐赠/充值
 								</a>
 							</li>
 
@@ -168,6 +120,58 @@
 
 						</ul>
 
+
+						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_use">使用</a>
+						<ul class="menu-collapse collapse in" id="ui_menu_use">
+							<li>
+								<a href="/user/node">
+									<i class="icon icon-lg">airplanemode_active</i>&nbsp;节点列表
+								</a>
+							</li>
+							<li>
+								<a href="/help.html" target="_blank">
+									<i class="icon icon-lg">visibility</i>&nbsp;帮助中心
+								</a>
+							</li>
+						</ul>
+
+						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_detect">账户</a>
+						<ul class="menu-collapse collapse in" id="ui_menu_detect">
+
+							<li>
+								<a href="/user/profile">
+									<i class="icon icon-lg">account_box</i>&nbsp;账户信息
+								</a>
+							</li>
+
+							<li>
+								<a href="/user/edit">
+									<i class="icon icon-lg">sync_problem</i>&nbsp;资料编辑
+								</a>
+							</li>
+							<li>
+								<a href="/user/relay">
+									<i class="icon icon-lg">compare_arrows</i>&nbsp;中转规则
+								</a>
+							</li>
+
+							<li>
+								<a href="/user/trafficlog">
+									<i class="icon icon-lg">hourglass_empty</i>&nbsp;流量记录
+								</a>
+							</li>
+
+							<li>
+								<a href="/user/lookingglass">
+									<i class="icon icon-lg">visibility</i>&nbsp;延迟检测
+								</a>
+							</li>
+							<li><a href="/user/detect"><i class="icon icon-lg">account_balance</i>&nbsp;审计规则</a></li>
+							<li><a href="/user/detect/log"><i class="icon icon-lg">assignment_late</i>&nbsp;审计记录</a></li>
+						</ul>
+
+						
+
 						{if $config['enable_telegram']=='true' && $config['telegram_grouplink']!='' }
 						<li>
 							<a href="{$config['telegram_grouplink']}" target="_blank"><span class="icon icon-lg">near_me</span> Telegram群组</a>
@@ -175,7 +179,7 @@
 						{/if}
 
 						{if $user->isAdmin()}
-							<li>
+							<li>s
 								<a href="/admin">
 									<i class="icon icon-lg">person_pin</i>&nbsp;管理面板
 								</a>
