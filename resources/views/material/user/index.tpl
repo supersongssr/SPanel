@@ -7,7 +7,7 @@
 		<div class="content-header ui-content-header">
 			<div class="container">
 				<!-- song -->
-				<h1 class="content-heading">用户中心 ★ {$[globalConfig.indexMsg.appname]$}</h1>
+				<h1 class="content-heading">用户中心 ★ {$baseUrl}</h1>
 			</div>
 		</div>
 		<div class="container">
@@ -142,7 +142,7 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ {$[globalConfig.indexMsg.appname]$}</p>
+                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ {$baseUrl}</p>
 										{if $ann != null}
 										<p>{$ann->content}</p>
 										<br/>
@@ -170,8 +170,8 @@
 									<div class="card-inner margin-bottom-no">
 									<div class="cardbtn-edit">
 											<div class="card-heading"><i class="icon icon-md">phonelink</i> 快速添加节点 ★ 技术支持提交工单</div><br>
-											<p>☆本站支持SS 、SR 、V.2 同时使用。<br><code>☆V.2</code>：支持多种协议tcp/udp/mkcp支持。<br>备注：本站v.2采用多采用 mKCP/udp提高速度，但udp/mkcp可能会被部分地区运营商 Qos 限速。<br><code>☆SR</code>：tcp协议，支持伪装、破限速，最新chain协议。<br><code>☆SSD</code>：最新ahead加密支持！订阅支持！</p>
 											<div class="reset-flex"><span>重置订阅链接</span><a class="reset-link btn btn-brand-accent btn-flat" ><i class="icon">autorenew</i>&nbsp;</a></div>
+											<p>☆本站支持SS 、SR 、V.2 同时使用。<br><code>☆V.2</code>：支持多种协议tcp/udp/mkcp支持。<br>备注：本站v.2采用多采用 mKCP/udp提高速度，但udp/mkcp可能会被部分地区运营商 Qos 限速。<br><code>☆SR</code>：tcp协议，支持伪装、破限速，最新chain协议。<br><code>☆SSD</code>：最新ahead加密支持！订阅支持！</p>
 									</div>
 										<nav class="tab-nav margin-top-no">
 											<ul class="nav nav-list">
