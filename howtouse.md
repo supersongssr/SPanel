@@ -13,6 +13,12 @@ howtouse
 9 首页显示内容 还没更改
 ````
 
+## how to update
+````
+git fetch --all
+git reset --hard origin/master
+git pull
+````
 
 ##how to use
 ````

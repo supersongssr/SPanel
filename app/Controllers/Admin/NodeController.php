@@ -60,7 +60,7 @@ class NodeController extends AdminController
 		}
                   
         if ($node->sort == 11) {
-            $server_list = explode(";", $node->server);
+            $server_list = explode("#", $node->server);
 			if(!Tools::is_ip($server_list[0])){
 				$node->node_ip = gethostbyname($server_list[0]);
 			}else{
@@ -137,7 +137,7 @@ class NodeController extends AdminController
 
 		$success=true;
 		if ($node->sort == 11) {
-            $server_list = explode(";", $node->server);
+            $server_list = explode("#", $node->server);
 			if(!Tools::is_ip($server_list[0])){
 				$success=$node->changeNodeIp($server_list[0]);
 			}else{
