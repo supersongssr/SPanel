@@ -7,7 +7,7 @@
 		<div class="content-header ui-content-header">
 			<div class="container">
 				<!-- song -->
-				<h1 class="content-heading">用户中心 ★ $[globalConfig.indexMsg.appname]$</h1>
+				<h1 class="content-heading">用户中心 ★ {$[globalConfig.indexMsg.appname]$}</h1>
 			</div>
 		</div>
 		<div class="container">
@@ -142,7 +142,7 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ $[globalConfig.indexMsg.appname]$</p>
+                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ {$[globalConfig.indexMsg.appname]$}</p>
 										{if $ann != null}
 										<p>{$ann->content}</p>
 										<br/>
@@ -169,7 +169,7 @@
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
 									<div class="cardbtn-edit">
-											<div class="card-heading"><i class="icon icon-md">phonelink</i> 快速添加节点 ★ 技术支持提交工单</div>
+											<div class="card-heading"><i class="icon icon-md">phonelink</i> 快速添加节点 ★ 技术支持提交工单</div><br>
 											<p>☆本站支持SS 、SR 、V.2 同时使用。<br><code>☆V.2</code>：支持多种协议tcp/udp/mkcp支持。<br>备注：本站v.2采用多采用 mKCP/udp提高速度，但udp/mkcp可能会被部分地区运营商 Qos 限速。<br><code>☆SR</code>：tcp协议，支持伪装、破限速，最新chain协议。<br><code>☆SSD</code>：最新ahead加密支持！订阅支持！</p>
 											<div class="reset-flex"><span>重置订阅链接</span><a class="reset-link btn btn-brand-accent btn-flat" ><i class="icon">autorenew</i>&nbsp;</a></div>
 									</div>
@@ -224,20 +224,20 @@
 	                                                        {$user = URL::getSSRConnectInfo($pre_user)}
 															{$ssr_url_all = URL::getAllUrl($pre_user, 0, 0)}
 															{$ssr_url_all_mu = URL::getAllUrl($pre_user, 1, 0)}
+															<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 															<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssr-win.zip"> 点击下载SR</a> 或者<a href="/ssr-download/ssrr-win.zip"> 或者SR（SR升级版，但是不支持在安装有360 百度的电脑上运行）</a>，解压至任意磁盘并运行</a></p>
 															<p><span class="icon icon-lg text-white">filter_2</span> 任务栏右下角右键纸飞机图标->服务器订阅->SR服务器订阅设置，将订阅链接设置为下面的地址，确定之后再更新SR服务器订阅（绕过代理）</p>
 															<p> <span class="icon icon-lg text-white">filter_3</span> 然后选择一个合适的服务器，代理规则选“绕过局域网和大陆”，然后即可上网</p>
 															<p><span class="icon icon-lg text-white">filter_4</span> 备用导入节点方法：点击<a class="copy-text" data-clipboard-text="{$ssr_url_all_mu}">这个</a>，然后右键小飞机->从剪贴板复制地址</p>
-															<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 	                                                       <p><a href="/user/tutorial">点击这里查看Windows傻瓜式教程</a></p>
 													</div>
 													<div class="tab-pane fade" id="all_ssr_mac">
+														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssr-mac.dmg"> 点击下载</a>，并打开</p>
                                                  	    <p><span class="icon icon-lg text-white">filter_2</span> 把S***socksX拖入到Finder的应用程序列表(Applications)</p>
                                                   		<p><span class="icon icon-lg text-white">filter_3</span> 打开Launchapad里的S***socksX</p>
                                                   		<p><span class="icon icon-lg text-white">filter_4</span> 菜单栏的纸飞机图标-服务器-服务器订阅填入以下订阅地址，更新后出现您的节点</p>
                                                       <p><span class="icon icon-lg text-white">filter_5</span> 菜单栏的纸飞机图标-打开s***socks</p>
-                                        				<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
                                                       <p><a href="/user/tutorial">点击这里查看Mac傻瓜式教程</a></p>
 													</div>
                                                   <div class="tab-pane fade" id="all_ssr_linux">
@@ -245,31 +245,33 @@
 													  <p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 													</div>
 													<div class="tab-pane fade" id="all_ssr_ios">
-													
-													<p><span class="icon icon-lg text-white">filter_1</span> 在 Safari 中<a class="btn-dl" href="itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/xcxnig/ssr-download/master/potatso-lite.plist"><i class="material-icons">save_alt</i> 点击安装 Potatso Lite</a></p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Potatso Lite，点击添加代理，点击右上角的 + 号，选择“订阅”，名字任意填写，开启自动更新，URL填写以下地址并保存即可</p>
+														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
+														<p><span class="icon icon-lg text-white">filter_1</span> 在 Safari 中<a class="btn-dl" href="itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/xcxnig/ssr-download/master/potatso-lite.plist"><i class="material-icons">save_alt</i> 点击安装 Potatso Lite</a></p>
+														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Potatso Lite，点击添加代理，点击右上角的 + 号，选择“订阅”，名字任意填写，开启自动更新，URL填写订阅地址并保存即可</p>
 														<hr>
 														<p><span class="icon icon-lg text-white">filter_1</span> iOS端需要用爱思助手来安装</p>
 														<p><span class="icon icon-lg text-white">filter_2</span> <a href="/ssr-download/Shadowrocket_2.1.12.ipa" target="_blank">点击此处</a>下载iOS客户端的ipa安装文件</p>
                                                       	<p><span class="icon icon-lg text-white">filter_3</span>  <a href="https://www.i4.cn/news_detail_3339.html" target="_blank">点击此处</a>查看爱思助手安装ipa文件教程</p>
-														<p><span class="icon icon-lg text-white">filter_4</span> 打开Shadowrocket，点击右上角<span class="icon icon-lg text-white">add</span>，添加类型为<code>Subscribe</code>，URL填写以下地址即可自动更新节点</p>
-														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
+														<p><span class="icon icon-lg text-white">filter_4</span> 打开Shadowrocket，点击右上角<span class="icon icon-lg text-white">add</span>，添加类型为<code>Subscribe</code>，URL填写订阅地址即可自动更新节点</p>
+														
                                                       <p><a href="/user/tutorial">点击这里查看iOS傻瓜式教程</a></p>
 													</div>
 													<div class="tab-pane fade" id="all_ssr_android">
+														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 														<p><span class="icon icon-lg text-white">filter_1</span>点击下载<a href="/ssr-download/ssr-android.apk"> SR </a> 或 <a href="/ssr-download/ssrr-android.apk"> SRR </a> 并安装</p>
-                                                      <p><span class="icon icon-lg text-white">filter_2</span> 打开App，点击右下角的<span class="icon icon-lg text-white">add</span>号图标</p>
+                                                      	<p><span class="icon icon-lg text-white">filter_2</span> 打开App，点击右下角的<span class="icon icon-lg text-white">add</span>号图标</p>
                                                         <p><span class="icon icon-lg text-white">filter_3</span> 添加/升级 SR订阅</p>
                                                           <p><span class="icon icon-lg text-white">filter_4</span> 添加订阅地址，输入以下订阅地址后确定</p>
-                                                      <p><span class="icon icon-lg text-white">filter_5</span> 订阅出现系统自带的与{$config["appName"]}，请把系统自带的无效订阅左滑删除（自带影响订阅更新速度）</p>
-                                                       <p><span class="icon icon-lg text-white">filter_6</span> 点击确定并升级</p>
-                                                      <p><span class="icon icon-lg text-white">filter_7</span> 点击选择任意节点， 路由选择：略过区域网路以及中国大陆</p>
+                                                      	<p><span class="icon icon-lg text-white">filter_5</span> 订阅出现系统自带的与{$config["appName"]}，请把系统自带的无效订阅左滑删除（自带影响订阅更新速度）</p>
+                                                       	<p><span class="icon icon-lg text-white">filter_6</span> 点击确定并升级</p>
+                                                      	<p><span class="icon icon-lg text-white">filter_7</span> 点击选择任意节点， 路由选择：略过区域网路以及中国大陆</p>
                                                         <p><span class="icon icon-lg text-white">filter_8</span> 点击右上角的纸飞机图标即可连接</p>
-														<p><span class="icon icon-lg text-white">filter_9</span> 备用导入节点方法：在手机上默认浏览器中点击<a href="{$ssr_url_all}">这个链接（普通端口）</a>或者<a href="{$ssr_url_all_mu}">这个链接（单端口多用户）</a>，然后点击确定</p>
-														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
+														<p><span class="icon icon-lg text-white">filter_9</span> 备用导入节点方法：在手机上默认浏览器中点击<a href="{$ssr_url_all_mu}">这个链接（单端口多用户）</a>，然后点击确定</p>
+														
                                                       <p><a href="/user/tutorial">点击这里查看Android傻瓜式教程</a></p>
 													</div>
 													<div class="tab-pane fade" id="all_ssr_router">
+														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 													<p>梅林：</p>
 													<p><span class="icon icon-lg text-white">filter_1</span><a href="https://github.com/hq450/fancyss_history_package" class="btn-dl"><i class="material-icons">save_alt</i> 进入下载页面 </a> 下载“科学上网”插件</p>
                                                       <p><span class="icon icon-lg text-white">filter_2</span> 进入路由器管理页面->系统管理->勾选“Format JFFS partition at next boot”和“Enable JFFS custom scripts and configs”->应用本页面设置，重启路由器</p>
@@ -280,15 +282,16 @@
                                                       <p><span class="icon icon-lg text-white">filter_1</span> 进入路由器管理页面->扩展功能->Shadowsocks</p>
                                                         <p><span class="icon icon-lg text-white">filter_2</span> 将下方的订阅地址填入“ssr服务器订阅”，点击“更新”</p>
 														<p><span class="icon icon-lg text-white">filter_3</span> 选择需要的节点（右方勾选）->应用主SS->打开上方的开关</p>
-														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
+														
 													</div>
                                                     <div class="tab-pane fade" id="all_ssr_game">
+                                                    	<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
 														 <p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/SSTap.7z" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载SSTap</a>，并安装</p>
                                                        <p><span class="icon icon-lg text-white">filter_2</span> 期间会安装虚拟网卡，请点击允许或确认</p>
                                                        <p><span class="icon icon-lg text-white">filter_3</span> 打开桌面程序SSTap</p>
                                                        <p><span class="icon icon-lg text-white">filter_4</span> 齿轮图标-SSR订阅-SSR订阅管理添加以下订阅链接即可</p>
                                                        <p><span class="icon icon-lg text-white">filter_5</span> 更新后选择其中一个节点闪电图标测试节点-测试UDP转发...通过!（UDP通过即可连接并开始游戏），如测试不通过，点击齿轮图标设置DNS，推荐谷歌DNS</p>
-														<p><span class="icon icon-lg text-white">flash_auto</span> ★SR订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=1?max=17" ><br></p>
+														
                                                       <p><a href="/user/tutorial">点击这里查看游戏客户端傻瓜式教程</a></p>
 													</div>
                                                   <div class="tab-pane fade" id="all_ssr_info">
@@ -375,11 +378,12 @@
 													-->
 													</div>
 													<div class="tab-pane fade" id="all_ss_windows">
+														<p><span class="icon icon-lg text-white">flash_auto</span> SS订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=3" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=3" ><br></p>
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssd-win.7z" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 SSD</a>，解压至任意磁盘并运行</p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 任务栏右下角右键纸飞机图标->服务器订阅->SSD服务器订阅设置，将订阅链接设置为下面的地址，确定之后再更新SSD服务器订阅</p>
+														<p><span class="icon icon-lg text-white">filter_2</span> 任务栏右下角右键纸飞机图标->服务器订阅->SSD服务器订阅设置，将订阅链接设置订阅地址，确定之后再更新SSD服务器订阅</p>
 														<p><span class="icon icon-lg text-white">filter_3</span> 然后选择一个合适的服务器，代理规则选“绕过局域网和大陆”，然后即可上网</p>
 														<p><span class="icon icon-lg text-white">filter_4</span> 备用导入节点方法：<a class="copy-text btn-dl" data-clipboard-text='{$ssd_url_all}'><i class="material-icons icon-sm">how_to_vote</i>点我复制链接</a>，然后右键小飞机->从剪贴板复制地址</p>
-														<p><span class="icon icon-lg text-white">flash_auto</span> SS订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=3" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=3" ><br></p>
+														
 													</div>
 													<div class="tab-pane fade" id="all_ss_mac">
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ss-mac.zip" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 ShadowsocksX-NG</a>，并安装</p>
@@ -396,10 +400,11 @@
 														<p><span class="icon icon-lg text-white">filter_4</span> 打开<a href="/user/node">节点列表</a>，点开自己需要的节点详情，自行导入节点</p>
 													</div>
 													<div class="tab-pane fade" id="all_ss_android">
+														<p><span class="icon icon-lg text-white">flash_auto</span> SS订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=3" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=3" ><br></p>
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssd-android.apk" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 SSD</a>，<a href="/ssr-download/ss-android-obfs.apk" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 SS 混淆插件</a></p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 安装后，在手机上点击复制下方的订阅链接</a></p>
 														<p><span class="icon icon-lg text-white">filter_3</span> 打开 ShadowsocksD 客户端，点击右上角的“加号”，选择“添加订阅”，将剪贴板中的内容粘贴进去，点击“OK”，稍等片刻即可看见订阅的节点</p>
-														<p><span class="icon icon-lg text-white">flash_auto</span> SS订阅：<input type="text" class="input form-control form-control-monospace" name="input1" value="{$subUrl}/link/{$ssr_sub_token}?mu=3" ><input type="text" class="input form-control form-control-monospace" name="input1" value="{$baseUrl}/link/{$ssr_sub_token}?mu=3" ><br></p>
+														
 													</div>
 													<div class="tab-pane fade" id="all_ss_router">
 														<p>梅林：</p>
@@ -434,6 +439,7 @@
 														</ul>
 													</nav>
 													<div class="tab-pane fade" id="all_v2ray_windows">
+														{$v2_url_all = URL::getAllVMessUrl($user)}
 														<p><span class="icon icon-lg text-white">filter_1</span>假如您的电脑为64位，请<a href="/ssr-download/v2ray_x64.zip">下载64位版</a>，否则请<a href="/ssr-download/v2ray_x86.zip">下载32位版</a>，下载后解压，运行程序<code>v.2rayN.exe</code></p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 双击任务栏右下角V.2RayN图标->订阅->订阅设置->添加->填入下方的地址，点击确定</p>
 														<p><span class="icon icon-lg text-white">filter_3</span> 再次点击订阅->更新订阅，右击任务栏右下角V2RayN图标->启动Http代理</p>
@@ -488,7 +494,7 @@
                                                       	</p>
 													</div>
 													<div class="tab-pane fade active in" id="all_v2ray_info">
-														{$v2_url_all = URL::getAllVMessUrl($user)}
+														
 														<p>
 														<span class="icon icon-lg text-white">flash_auto</span> 
 														V.2 All Vmess链接：

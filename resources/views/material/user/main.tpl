@@ -182,7 +182,7 @@
 						{/if}
 
 						{if $user->isAdmin()}
-							<li>s
+							<li>
 								<a href="/admin">
 									<i class="icon icon-lg">person_pin</i>&nbsp;管理面板
 								</a>

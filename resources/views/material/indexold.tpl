@@ -16,10 +16,8 @@
         <link rel="shortcut icon" href="/favicon.ico"/>
         <link rel="bookmark" href="/favicon.ico"/>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"/>
-	<link rel="stylesheet" href="/assets/css/main.css"/>
-        <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>
-	<link href="//unpkg.com/nprogress@0.2.0/nprogress.css" rel="stylesheet" />
-    <script src="//unpkg.com/nprogress@0.2.0/nprogress.js"></script>
+		<link rel="stylesheet" href="/assets/css/main.css"/>
+        <noscript><link rel="stylesheet" href="/assets/css/noscript.css" /></noscript>   
   </head>
   
        <body>
@@ -33,7 +31,7 @@
 						<div class="content">
 							<div class="inner">
                                   <p>用户：<code>{$user->user_name}</code>
-                                    等级：{if $user->class!=0}
+                                    等级：{if $user->class>1}
 											<code>VIP{$user->class}</code>
                                           {else}
                                              <code>免费</code>
@@ -53,25 +51,28 @@
                                 <li><a href="#1">简介</a></li>
 					            <li><a href="/user">用户中心</a></li>
 								<li><a href="/user/logout">退出登录</a></li>
+								<li><a href="#5">下载</a></li>
                         </ul>
 						</nav>
                               {else}
                               <div class="content">
 							<div class="inner">
 								<h1>{$config["appName"]}</h1>
+                              	<p>支持：<code>V.2</code><code>S$</code><code>S$D</code><code>S$R</code><code>S$RR</code></p>
+								<p>公告：注册送<code>16G</code>流量，<code>32</code>次邀请码，随机<code>1-3M</code>带宽</p>
+								<p>签到送<code>1-5G</code>流量/天，邀请注册送<code>64G</code>流量/用户</p>
+								<p>节约账号资源，浪费可耻:)</p>
 								<!--
-								如果想自定义文本请删除下面这段script代码,格式为
-								<p>自定义文本</p>
-								-->
-								<div id="lwlhitokoto"></div>
-                          </div>
+								<script type="text/javascript" src="https://api.lwl12.com/hitokoto/main/get?encode=js&charset=utf-8"></script><div id="lwlhitokoto"><script>lwlhitokoto()</script></div>
+								-->                          
+                            </div>
                       </div>	
                               <nav>
 							<ul>
                                <li><a href="#1">简介</a></li>
 								<li><a href="/auth/login">登录</a></li>
 								<li><a href="/auth/register">注册</a></li>
-                              
+                              	<li><a href="#5">下载</a></li> 
                            </ul>
 						</nav>
                               {/if}
@@ -82,7 +83,7 @@
                       <!--标签1开始-->
                       <article id="1">
                       <h2 class="major">简介</h2>
-                      <p>「ホワイトアルバムの季節」が、また、やってきた。</p></article>
+                      <p>我变秃了，也变强了。<br>本站支持SS、SSD、SSR、SSRR、V2Ray同时使用。<br>请节约账号资源，浪费可耻。</p></article>
 					  <!--
 					  简介修改示例: 
 					  <p> 123</p>
@@ -101,6 +102,19 @@
                                     </li>
                                   </ul>
                                   </article>
+                      <!--标签5开始-->
+	                        <article id="5">
+							<h2 class="major">软件下载</h2>
+							<ul>
+							  <li><a href="/ssr-download/ssr-win.7z" class="icon fa-windows"><span class="label"></span> Windows</a></li>
+							  <li><a href="/ssr-download/ssr-mac.dmg" class="icon fa-apple"><span class="label">Mac</span> Mac</a></li>
+							  <li><a href="/ssr-download/ssr-android.apk" class="icon fa-android"><span class="label">Android</span> Android</a></li>
+							  <li><a href="#ios" class="icon fa-apple"><span class="label">iOS</span> iOS</a></li>
+                              <li><a href="/ssr-download/SSTap.7z" class="icon fa-gamepad"><span class="label">Win游戏专用</span> Win游戏专用</a></li>
+                            
+	                         </ul>
+                             </article>
+                            <!--标签5开始-->
                       	<article id="login">  
 		
 								<h2 class="major">登录</h2>
@@ -138,7 +152,7 @@
                               </div>
                      <!-- 版权底部 -->
                       <footer id="footer">
-                   <p class="copyright">&copy;{date("Y")} {$config["appName"]}</p>
+                   <p class="copyright">&copy;2015-{date("Y")} {$config["appName"]}</p>
                       </footer>
               <!-- 版权结束 -->
 			 </div>
@@ -160,42 +174,5 @@ try{
 };
  
 </script>
-<!-- 進度條 -->
-<script>
-	$(function() {
-       $(window).load(function(){
-	   NProgress.done();
-		});
-       NProgress.set(0.0);
-       NProgress.configure({ showSpinner: false });
-       NProgress.configure({ minimum: 0.4 });
-       NProgress.configure({ easing: 'ease', speed: 1200 });
-       NProgress.configure({ trickleSpeed: 200 });
-       NProgress.configure({ trickleRate: 0.2, trickleSpeed: 1200 });
-       NProgress.inc();
-       $(window).ready(function(){
-	   NProgress.start();
-		});
-	})
-
-	window.addEventListener('load',()=>{
-		fetch('https://api.lwl12.com/hitokoto/v1?encode=realjson',{
-			method: 'GET',
-		}).then((response)=>{
-			return response.json();
-		}).then((r)=>{
-			insertHitokoto(r);
-		})
-	});
-
-	function insertHitokoto(data) {
-		let hitokoto = document.getElementById('lwlhitokoto');
-		if (data.author || data.source) {
-			hitokoto.innerHTML = `${ldelim}data.text{rdelim} —— ${ldelim}data.author{rdelim} ${ldelim}data.source{rdelim}`;
-		} else {
-			hitokoto.innerHTML = `${ldelim}data.text{rdelim}`;
-		}
-	}
-</script>
-</body>
+	</body>
 </html>
