@@ -85,9 +85,7 @@
 									<i class="icon icon-lg">question_answer</i>&nbsp;客服/工单
 								</a>
 							</li>
-							
-
-                            
+							                          
 							
 						</ul>
 
@@ -129,8 +127,13 @@
 								</a>
 							</li>
 							<li>
-								<a href="/help.html" target="_blank">
-									<i class="icon icon-lg">visibility</i>&nbsp;帮助中心
+								<a href="/user/tutorial">
+									<i class="icon icon-lg">start</i>&nbsp;使用教程
+								</a>
+							</li>
+							<li>
+								<a href="/user/announcement">
+									<i class="icon icon-lg">announcement</i>&nbsp;网站公告
 								</a>
 							</li>
 						</ul>
