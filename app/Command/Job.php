@@ -437,6 +437,7 @@ class Job
                         $subject = Config::get('appName')."-系统警告";
                         $to = $user->email;
                         $text = "管理员您好，系统发现节点 ".$node->name." 掉线了，请您及时处理。" ;
+                        
                         try {
                             Mail::send($to, $subject, 'news/warn.tpl', [
                                 "user" => $user,"text" => $text
@@ -598,6 +599,7 @@ class Job
             }
 
             if (strtotime($user->expire_in) < time()&&!file_exists(BASE_PATH."/storage/".$user->id.".expire_in")) {
+                /** song 用户过期
                 $user->transfer_enable = 0;
                 $user->u = 0;
                 $user->d = 0;
@@ -614,6 +616,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
+                **/
 				$myfile = fopen(BASE_PATH."/storage/".$user->id.".expire_in", "w+") or die("Unable to open file!");
 				$txt = "1";
                 fwrite($myfile, $txt);
@@ -733,6 +736,8 @@ class Job
 				strtotime($user->class_expire)<time() && 
 				strtotime($user->class_expire) > 1420041600
 			){
+
+  /**              //Song  账号过期不通知
 				$text = '您好，系统发现您的账号等级已经过期了。';
 				$reset_traffic=Config::get('class_expire_reset_traffic');
 				if($reset_traffic>=0){
@@ -752,7 +757,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-
+**/
                 $user->class=0;
             }
 

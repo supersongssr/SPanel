@@ -6,7 +6,7 @@
 <!-- song 
 -->
 {function displayV2rayNode node=null}
-	{assign var=server_explode value=";"|explode:$node['server']}
+	{assign var=server_explode value="#"|explode:$node['server']}
 	{if empty($server_explode[5])}
 		{$server_explode[5] = $user->getUuid()}
 	{/if}
