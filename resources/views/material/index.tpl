@@ -7,22 +7,35 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="keywords" content=""/>
     <meta name="description" content=""/>
+    <title>{$config["appName"]}</title>
     <link rel="shortcut icon" href="/favicon.ico"/>
     <link rel="bookmark" href="/favicon.ico"/>
-    <title>Document</title>
     <link rel="stylesheet" href="/theme/material/css/index_base.css">
     <link rel="stylesheet" href="/theme/material/css/index.css">
+    {if $config["enable_crisp"] == 'true'}
+    <literal><script type="text/javascript"> 
+    window.$crisp=[];
+    window.CRISP_WEBSITE_ID="{$config["crisp_id"]}";
+    $crisp.push(["set", "user:email", "{$user->email}"]);
+    $crisp.push(["config", "color:theme", "grey"]);
+    (function(){ d=document;s=d.createElement("script"); s.src="https://client.crisp.chat/l.js"; s.async=1;d.getElementsByTagName("head")[0].appendChild(s);})();
+    </script></literal>
+    {/if}
 </head>
 
 <style>
-.slide-fade-enter-active,.fade-enter-active,.loading-fade-enter-active,.rotate-fade-enter-active {
+.slide-fade-enter-active,.fade-enter-active,.loading-fade-enter-active,.rotate-fade-enter-active,.loading-fadex-enter-active {
     transition: all .3s ease;
 }
-.slide-fade-leave-active,.fade-leave-active,.loading-fade-leave-active,.rotate-fade-leave-active {
+.slide-fade-leave-active,.fade-leave-active,.loading-fade-leave-active,.rotate-fade-leave-active,.loading-fadex-leave-active {
     transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
 }
 .loading-fade-enter {
     transform: scaleY(.75);
+    opacity: 0;
+}
+.loading-fadex-enter {
+    transform: scaleX(.75);
     opacity: 0;
 }
 .slide-fade-enter {
@@ -43,7 +56,7 @@
     -webkit-transform: rotateY(90deg);
     opacity: 0;
 }
-.fade-enter,.fade-leave-to {
+.fade-enter,.fade-leave-to,.loading-fade-leave-to,.loading-fadex-leave-to {
     opacity: 0;
 }
 </style>
@@ -85,7 +98,7 @@
                 </div>
                 <div class="footer pure-g">
                     <div class="pure-u-1 pure-u-sm-1-2 staff">POWERED BY <a href="./staff">SSP-UIM</a></div>
-                    <div class="pure-u-1 pure-u-sm-1-2 time">&copy;$[globalConfig.indexMsg.date]$ $[globalConfig.indexMsg.appname]$</div>
+                    <div class="pure-u-1 pure-u-sm-1-2 time" :class="{ enableCrisp:globalConfig.crisp === 'true' }">&copy;$[globalConfig.indexMsg.date]$ $[globalConfig.indexMsg.appname]$</div>
                 </div>
                 
                 <transition name="slide-fade" mode="out-in">
@@ -97,18 +110,26 @@
             </div>
         </transition>
     </div>
-
+       
     {if $recaptcha_sitekey != null}
     <script src="https://recaptcha.net/recaptcha/api.js?render=explicit" async defer></script>
     {/if}
-    <script src="/theme/material/js/vue.min.js"></script>
-    <script src="/theme/material/js/vuex.min.js"></script>
-    <script src="/theme/material/js/vue-router.min.js"></script>
-    <script src="/theme/material/js/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2"></script>
     {if isset($geetest_html)}
 	<script src="//static.geetest.com/static/tools/gt.js"></script>
     {/if}
-    
+    {if $config['enable_telegram'] == 'true'}
+    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+    {/if}
+    <script>
+        ;(function(){
+            if (!window.Vuex) {
+                window.location = '/indexold';
+            }
+        })();      
+    </script> 
 </body>
 
 </html>
@@ -116,7 +137,79 @@
   alert("凿壁借光の书签 www.okss.xyz \n Q群：961178261 \n TG群：okssxyz ");
 </script>  
 <script>
+{*/**
+ * A wrapper of window.Fetch API
+ * @author Sukka (https://skk.moe)
+
+/**
+ * A Request Helper of Fetch
+ * @function _request
+ * @param {string} url
+ * @param {string} body
+ * @param {string} method
+ * @returns {function} - A Promise Object
+ */*}
+const _request = (url, body, method,credentials) => 
+    fetch(url, {
+        method: method,
+        body: body,
+        headers: {
+            'content-type': 'application/json'
+        },
+        credentials: credentials,
+    }).then(resp => {
+        return Promise.all([resp.ok, resp.status, resp.json()]);
+    }).then(([ok, status, json]) => {
+        if (ok) {
+            return json;
+        } else {
+            throw new Error(JSON.stringify(json.error));
+        }
+    }).catch(error => {
+        throw error;
+    });
+
     
+
+{*/**
+ * A Wrapper of Fetch GET Method
+ * @function _get
+ * @param {string} url
+ * @returns {function} - A Promise Object
+ * @example
+ * get('https://example.com').then(resp => { console.log(resp) })
+ */*}
+const _get = (url,credentials) => 
+    fetch(url, {
+        method: 'GET',
+        credentials,
+    }).then(resp => {
+        return Promise.all([resp.ok, resp.status, resp.json(), resp.headers])
+    })
+    .then(([ok, status, json, headers]) => {
+        if (ok) {
+            return json;
+        } else {
+            throw new Error(JSON.stringify(json.error));
+        }
+    }).catch(error => {
+        console.log(error);
+        throw error;
+    });
+
+    
+{*/**
+ * A Wrapper of Fetch POST Method
+ * @function _post
+ * @param {string} url
+ * @param {string} json - The POST Body in JSON Format
+ * @returns {function} - A Promise Object
+ * @example
+ * _post('https://example.com', JSON.stringify(data)).then(resp => { console.log(resp) })
+ */*}
+
+const _post = (url, body, credentials) => _request(url, body, 'POST', credentials);
+
 let validate,captcha;
 
 let globalConfig;
@@ -137,7 +230,13 @@ const tmp = new Vuex.Store({
             jumpDelay: '',
             isGetestSuccess: '',
             registMode: '',
+            crisp: '',
+            base_url: '',
             isEmailVeryify: '',
+            login_token: '',
+            login_number: '',
+            telegram_bot: '',
+            enable_telegram: '',
             enableLoginCaptcha: '',
             enableRegCaptcha: '',
             indexMsg: {
@@ -164,6 +263,7 @@ const tmp = new Vuex.Store({
         },
         SET_GLOBALCONFIG (state,config) {
             state.logintoken = config.isLogin
+            state.globalConfig.base_url = config.base_url;
             state.globalConfig.captchaProvider = config.captcha_provider;
             state.globalConfig.recaptchaSiteKey = config.recaptcha_sitekey;
             state.globalConfig.jumpDelay = config.jump_delay;
@@ -175,6 +275,8 @@ const tmp = new Vuex.Store({
             state.globalConfig.login_token = config.login_token;
             state.globalConfig.login_number = config.login_number;
             state.globalConfig.telegram_bot = config.telegram_bot;
+            state.globalConfig.crisp = config.enable_crisp;
+            state.globalConfig.enable_telegram = config.enable_telegram;
             state.globalConfig.indexMsg.appname = config.appName;
             state.globalConfig.indexMsg.date = config.dateY;
         },
@@ -183,7 +285,7 @@ const tmp = new Vuex.Store({
         },
         SET_JINRISHICI (state,content) {
             state.globalConfig.indexMsg.jinrishici = content;
-        }
+        },
     },
     actions: {
         CALL_MSGR ({ commit,state },config) {
@@ -191,18 +293,22 @@ const tmp = new Vuex.Store({
             commit('ISSHOW_MSGR',true);
             window.setTimeout(function() {
                 commit('ISSHOW_MSGR',false);
-            },1000)
+            },config.time)
         }
     }
 });
 
-var storeAuth = {
+var storeMap = {
     store: tmp,
     computed: Vuex.mapState({
         msgrCon: 'msgrCon',
         globalConfig: 'globalConfig',
         logintoken: 'logintoken',
+        isLoading: 'isLoading',
     }),
+}
+
+var storeAuth = {
     methods: {
         loadCaptcha(id) {
             if (this.globalConfig.recaptchaSiteKey !== null ) {
@@ -215,14 +321,11 @@ var storeAuth = {
             if (this.globalConfig.captchaProvider === 'geetest') {
                 this.$nextTick(function(){
 
-                    axios({
-                        method: 'get',
-                        url: '/auth/login_getCaptcha',
-                        responseType: 'json',
-                    }).then((r)=>{
+                _get('/auth/login_getCaptcha','include')
+                    .then((r) => {
                         let GeConfig = {
-                            gt: r.data.GtSdk.gt,
-                            challenge: r.data.GtSdk.challenge,
+                            gt: r.GtSdk.gt,
+                            challenge: r.GtSdk.challenge,
                             product: "embed",
                         }
 
@@ -247,13 +350,13 @@ var storeAuth = {
         },
         //加载完成的时间很谜
         grecaptchaRender(id) {
-            setTimeout(function() {
-                if (typeof grecaptcha === 'undefined' || typeof grecaptcha.render ==='undefined') {
-                    this.grecaptchaRender();
+            setTimeout(() => {
+                if (!grecaptcha || !grecaptcha.render) {
+                    this.grecaptchaRender(id);
                 } else {
                     grecaptcha.render(id);
                 }
-            },300)
+            }, 300)
         }
     },
 };
@@ -284,7 +387,7 @@ const Auth = {
     <div class="auth pure-g align-center">
         <div class="pure-u-1 pure-u-sm-4-24 flex wrap space-around auth-links">
             <router-link v-for="(links,key) in routerLinks" @click.native="setButtonState" :class="{ active:links.isActive }" class="button-round flex align-center" :to="links.href" :key="links.id">
-                <span class="icon-round"><i :class="links.icon"></i></span> $[links.content]$
+                <span class="fa-stack"><i class="fa fa-circle fa-stack-2x"></i><i :class="links.icon"></i></span><span>$[links.content]$</span> 
             </router-link>
         </div>
         <transition name="slide-fade" mode="out-in">
@@ -300,21 +403,21 @@ const Auth = {
                     id: 'R_AUTH_0',
                     href: '/auth/login',
                     content: '登录',
-                    icon: ['fa','fa-pencil'],
+                    icon: ['fa','fa-sign-in','fa-stack-1x','fa-inverse'],
                     isActive: false,
                 },
                 register: {
                     id: 'R_AUTH_1',
                     href: '/auth/register',
                     content: '注册',
-                    icon: ['fa','fa-plus'],
+                    icon: ['fa','fa-user-plus','fa-stack-1x','fa-inverse'],
                     isActive: false,
                 },
                 reset: {
                     id: 'R_PW_0',
                     href: '/password/reset',
                     content: '密码重置',
-                    icon: ['fa','fa-gear'],
+                    icon: ['fa','fa-unlock-alt','fa-stack-1x','fa-inverse'],
                     isActive: false,
                 },
             },
@@ -331,6 +434,9 @@ const Auth = {
             }
         },
     },
+    watch: {
+        $route: 'setButtonState',
+    },
     beforeRouteEnter (to,from,next) {
         next(vm=>{
             vm.setButtonState();
@@ -344,33 +450,66 @@ const Auth = {
 
 const Login = {
     delimiters: ['$[',']$'],
-    mixins: [storeAuth],
+    mixins: [storeMap,storeAuth],
+    computed: Vuex.mapState({
+        telegramHref: function() {
+            return 'https://t.me/' + this.globalConfig.telegram_bot;
+        },
+        isTgEnabled: function() {
+            return this.globalConfig.enable_telegram === 'true';
+        }
+    }),
     template: /*html*/ `
-    <div class="page-auth pure-g pure-u-1 pure-u-sm-20-24">
+    <div class="page-auth pure-g pure-u-1 pure-u-sm-20-24 wrap">
         <div class="title-back flex align-center">LOGIN</div>
         <h1>登录</h1>
-        <div class="input-control flex wrap">
-            <label for="Email">邮箱</label>
-            <input v-model="email" type="text" name="Email">        
+        <div class="pure-u-1 basis-max" :class="[ isTgEnabled ? 'pure-u-sm-11-24' : 'pure-u-sm-1-2' ]">
+            <div class="input-control flex wrap">
+                <label for="Email">邮箱</label>
+                <input v-model="email" type="text" name="Email">        
+            </div>
+            <div class="input-control flex wrap">
+                <label for="Password">密码</label>
+                <input v-model="passwd" type="password" name="Password">        
+            </div>
+            <div class="input-control flex wrap">
+                <uim-checkbox v-model="remember_me">
+                    <span slot="content">记住我</span>
+                </uim-checkbox>
+            </div>
+            <div class="input-control flex wrap">
+                <div v-if="globalConfig.captchaProvider === 'geetest'" id="embed-captcha-login"></div>
+                <form action="?" method="POST">    
+                <div v-if="globalConfig.recaptchaSiteKey" id="g-recaptcha-login" class="g-recaptcha" data-theme="dark" :data-sitekey="globalConfig.recaptchaSiteKey"></div>
+                </form>
+            </div>
+            <button @click.prevent="login" @keyup.13.native="login" class="auth-submit" id="login" type="submit" :disabled="isDisabled">
+                确认登录
+            </button>
         </div>
-        <div class="input-control flex wrap">
-            <label for="Password">密码</label>
-            <input v-model="passwd" type="password" name="Password">        
-        </div>
-        <div class="input-control flex wrap">
-            <uim-checkbox v-model="remember_me">
-                <span slot="content">记住我</span>
-            </uim-checkbox>
-        </div>
-        <div class="input-control flex wrap">
-            <div v-if="globalConfig.captchaProvider === 'geetest'" id="embed-captcha-login"></div>
-            <form action="?" method="POST">    
-            <div v-if="globalConfig.recaptchaSiteKey" id="g-recaptcha-login" class="g-recaptcha" :data-sitekey="globalConfig.recaptchaSiteKey"></div>
-            </form>
-        </div>
-        <button @click.prevent="login" @keyup.13.native="login" class="auth-submit" id="login" type="submit" :disabled="isDisabled">
-            确认登录
-        </button>
+        <div v-if="globalConfig.enable_telegram === 'true'" class="pure-u-1 pure-u-sm-11-24 pure-g auth-tg">
+            <h3>Telegram登录</h3>
+            <div>
+                <p>Telegram OAuth一键登陆</p>
+            </div>
+            <p id="telegram-alert">正在载入 Telegram，如果长时间未显示请刷新页面或检查代理</p>
+            <div class="text-center" id="telegram-login-box"></div>
+            <p>或者添加机器人账号 <a :href="telegramHref">@$[globalConfig.telegram_bot]$</a>，发送下面的数字/二维码验证码给它
+            </p>
+            <transition name="fade" mode="out-in">
+            <div v-if="!isTgtimeout" class="pure-g pure-u-20-24" key="notTimeout">
+                <div class="text-center qr-center pure-u-11-24">
+                    <div id="telegram-qr" class="flex space-around"></div>
+                </div>
+                <div class="pure-u-11-24">
+                    <div class="auth-submit" id="code_number">$[globalConfig.login_number]$</div>
+                </div>
+            </div>
+            <div v-else class="pure-g space-around" key="timeout">
+                <div class="auth-submit pure-u-18-24 tg-timeout">验证方式已过期，请刷新页面后重试</div>
+            </div>
+            </transition>
+        </div>  
     </div>
     `,
     data: function () {
@@ -379,6 +518,7 @@ const Login = {
             passwd: '',
             remember_me: false,
             isDisabled: false,
+            isTgtimeout: false,
         }
     },
     methods: {
@@ -395,6 +535,7 @@ const Login = {
             let callConfig = {
                 msg: '',
                 icon: '',
+                time: 1000,
             };
 
             if (this.globalConfig.enableLoginCaptcha !== 'false') {
@@ -414,16 +555,12 @@ const Login = {
                 }
             }
 
-            axios({
-                method: 'post',
-                url: '/auth/login',
-                data: ajaxCon,
-            }).then((r)=>{
-                if (r.data.ret == 1) {
+            _post('/auth/login', JSON.stringify(ajaxCon),'include').then((r) => {
+                if (r.ret === 1) {
                     callConfig.msg += '登录成功Kira~';
                     callConfig.icon += 'fa-check-square-o';
                     tmp.dispatch('CALL_MSGR',callConfig);
-                    window.setTimeout(()=>{
+                    window.setTimeout(() => {
                         tmp.commit('SET_LOGINTOKEN',1);
                         this.$router.replace('/user/panel');
                     }, this.globalConfig.jumpDelay);
@@ -433,11 +570,66 @@ const Login = {
                     tmp.dispatch('CALL_MSGR',callConfig);
                     window.setTimeout(()=>{
                         this.isDisabled = false;
-                    },3000)
+                    }, 3000)
                 }
             });
 
         },
+        telegramRender() {
+            let el = document.createElement('script');
+            document.getElementById('telegram-login-box').append(el);
+            el.onload = function () {
+                document.getElementById('telegram-alert').outerHTML = '';
+            }
+            el.src = 'https://telegram.org/js/telegram-widget.js?4';
+            el.setAttribute('data-size', 'large');
+            el.setAttribute('data-telegram-login', this.globalConfig.telegram_bot);
+            el.setAttribute('data-auth-url', this.globalConfig.base_url + '/auth/telegram_oauth');
+            el.setAttribute('data-request-access', 'write');
+
+            let telegram_qrcode = 'mod://login/' + this.globalConfig.login_token;
+            let qrcode = new QRCode(document.getElementById("telegram-qr"));
+            qrcode.clear();
+            qrcode.makeCode(telegram_qrcode);
+        },
+        tgAuthTrigger(tid) {
+            if (this.logintoken === 1) {
+                return;
+            }
+            let callConfig = {
+                msg: '',
+                icon: '',
+                time: 1000,
+            };
+            _post('/auth/qrcode_check', JSON.stringify({
+                token: this.globalConfig.login_token,
+                number: this.globalConfig.login_number,
+            }),'include').then((r) => {
+                if(r.ret > 0) {
+                    clearTimeout(tid);
+                    
+                    _post('/auth/qrcode_login',JSON.stringify({
+                        token: this.globalConfig.login_token,
+                        number: this.globalConfig.login_number,
+                    }),'include').then(r=>{
+                        if (r.ret) {
+                            callConfig.msg += '登录成功Kira~';
+                            callConfig.icon += 'fa-check-square-o';
+                            tmp.dispatch('CALL_MSGR',callConfig);
+                            window.setTimeout(()=>{
+                                tmp.commit('SET_LOGINTOKEN',1);
+                                this.$router.replace('/user/panel');
+                            }, this.globalConfig.jumpDelay);
+                        }
+                    })
+                } else if (r.ret == -1) {
+                    this.isTgtimeout = true;
+                }
+            });
+            tid = setTimeout(()=>{
+                this.tgAuthTrigger(tid);
+            }, 2500);
+        }
     },
     mounted() {
         document.addEventListener('keyup',(e)=>{
@@ -445,6 +637,13 @@ const Login = {
                 this.login();
             }
         });
+
+        if (this.globalConfig.enable_telegram === 'true') {
+            this.telegramRender();
+            let tid = setTimeout(() => {
+                this.tgAuthTrigger(tid);
+            }, 2500);
+        }
 
         if (this.globalConfig.enableLoginCaptcha === 'false') {
             return;
@@ -456,9 +655,9 @@ const Login = {
 
 const Register = {
     delimiters: ['$[',']$'],
-    mixins: [storeAuth],
+    mixins: [storeMap,storeAuth],
     template: /*html*/ `
-    <div class="page-auth pure-g pure-u-20-24">
+    <div class="page-auth pure-g pure-u-1 pure-u-sm-20-24">
         <div class="title-back flex align-center">REGISTER</div>
         <h1>账号注册</h1>
         <div class="flex space-around reg">
@@ -506,7 +705,7 @@ const Register = {
             <div class="input-control wrap flex align-center">
             <div v-if="globalConfig.captchaProvider === 'geetest'" id="embed-captcha-reg"></div>
                 <form action="?" method="POST">    
-                <div v-if="globalConfig.recaptchaSiteKey" id="g-recaptcha-reg" class="g-recaptcha" :data-sitekey="globalConfig.recaptchaSiteKey"></div>
+                <div v-if="globalConfig.recaptchaSiteKey" id="g-recaptcha-reg" class="g-recaptcha" data-theme="dark" :data-sitekey="globalConfig.recaptchaSiteKey"></div>
                 </form>
             </div>
         </div>
@@ -549,11 +748,16 @@ const Register = {
             let callConfig = {
                 msg: '',
                 icon: '',
+                time: 1000,
             };
+
+            if (this.globalConfig.isEmailVeryify === 'true') {
+                ajaxCon.emailcode = this.email_code;
+            }
 
             if (this.globalConfig.registMode !== 'invite') {
                 ajaxCon.code = 0;
-                if ((this.getCookie('code'))!='') {
+                if ((this.getCookie('code')) !== '') {
                     ajaxCon.code = this.getCookie('code');
                 }
             }
@@ -573,15 +777,10 @@ const Register = {
                         }      
                         break;
                 }
-            }      
+            }
 
-            axios({
-                method: 'post',
-                url: '/auth/register',
-                responseType: 'json',
-                data: ajaxCon,
-            }).then((r)=>{
-                if (r.data.ret == 1) {
+            _post('/auth/register', JSON.stringify(ajaxCon),'omit').then((r)=>{
+                if (r.ret == 1) {
                     callConfig.msg += '注册成功meow~';
                     callConfig.icon += 'fa-check-square-o';
                     tmp.dispatch('CALL_MSGR',callConfig);
@@ -654,22 +853,19 @@ const Register = {
                     email: this.email,
                 }
 
-            axios({
-                method: 'post',
-                url: 'auth/send',
-                responseType: 'json',
-                data: ajaxCon,
-            }).then((r)=>{
-                if (r.data.ret) {
+            _post('auth/send', JSON.stringify(ajaxCon),'omit').then((r)=>{
+                if (r.ret) {
                     let callConfig = {
                             msg: 'biu~邮件发送成功',
                             icon: 'fa-check-square-o',
+                            time: 1000,
                         };
                     tmp.dispatch('CALL_MSGR',callConfig);
                 } else {
                     let callConfig = {
                             msg: 'emm……邮件发送失败',
                             icon: 'fa-times-circle-o',
+                            time: 1000,
                         };
                     tmp.dispatch('CALL_MSGR',callConfig);
                 }
@@ -689,7 +885,7 @@ const Register = {
             }
         }
         
-        document.addEventListener('keyup',(e)=>{
+        document.addEventListener('keyup', (e) => {
             if (e.keyCode == 13) {
                 this.register();
             }
@@ -711,16 +907,65 @@ const Password = {
         <router-view></router-view>
     </div>
     `,
+    props: ['routermsg'],
 }
 
 const Reset = {
     delimiters: ['$[',']$'],
+    mixins: [storeMap],
     template: /*html*/ `
-    <div class="page-pw pure-u-1">
-        <h1>密码重置页demo</h1>
-        <a href="./password/reset">点此进入旧版密码重置页面</a>
+    <div class="page-pw pure-u-1 pure-g flex align-center space-around wrap">
+        <div class="title-back flex align-center">PASSWORD</div>
+        <div class="pure-u-1 pure-u-sm-10-24 flex space-around wrap basis-max">
+            <h1>密码重置</h1>
+            <div class="input-control flex wrap">
+                <label for="Email" class="flex space-between align-center">
+                    <span>邮箱</span>
+                    <span><router-link class="button-index" to="/auth/login"><i class="fa fa-mail-forward"></i> 返回登录页</router-link></span>
+                </label>
+                <input v-model="email" type="text" name="Email">        
+            </div>
+            <button @click.prevent="reset" @keyup.13.native="reset" class="auth-submit" id="reset" type="submit" :disabled="isDisabled">
+                    重置密码
+            </button>
+        </div>
     </div>
     `,
+    data: function() {
+        return {
+            email: '',
+            isDisabled: false,
+        }
+    },
+    methods: {
+        reset() {
+            let callConfig = {
+                msg: '',
+                icon: '',
+                time: 1000,
+            };
+
+            _post('/password/reset', JSON.stringify({
+                email: this.email,
+            }),'omit').then(r => {
+                if (r.ret == 1) {
+                    callConfig.msg += '邮件发送成功kira~';
+                    callConfig.icon += 'fa-check-square-o';
+                    tmp.dispatch('CALL_MSGR',callConfig);
+                    window.setTimeout(() => {
+                        this.$router.push('/auth/login');
+                    }, this.globalConfig.jumpDelay);
+                } else {
+                    callConfig.msg += 'WTF……邮件发送失败，请检查邮箱地址';
+                    callConfig.icon += 'fa-times-circle-o';
+                    tmp.dispatch('CALL_MSGR',callConfig);
+                    window.setTimeout(()=>{
+                        this.isDisabled = false;
+                    }, 3000)
+                }
+            })
+        }
+    },
 }
 
 const User = {
@@ -733,22 +978,599 @@ const User = {
     props: ['routermsg'],
 };
 
+const userMixin = {
+    delimiters: ['$[',']$'],
+    props: ['annC','thisuser','baseURL'],
+}
+
+const UserAnnouncement = {
+    mixins: [userMixin],
+    template: `
+    <div>
+        <div class="card-title">公告栏</div>
+        <div class="card-body">
+            <div class="ann" v-html="annC.content"></div>
+        </div>
+    </div>
+    `,
+};
+
+const UserInvite = {
+    mixins: [userMixin],
+    template: /*html*/ `
+    <div>
+        <div class="card-title">邀请链接</div>
+        <div class="card-body">
+            <div class="user-invite">
+                <div v-if="thisuser.class !== 0">
+                    <input type="button" class="tips tips-blue" :value="inviteLink">
+                    <h5>邀请链接剩余次数： <span class="invite-number tips tips-gold">$[thisuser.invite_num]$次</span></h5>       
+                </div>
+                <div v-else>
+                    <h3>$[thisuser.user_name]$，您不是VIP暂时无法使用邀请链接，<slot name='inviteToShop'></slot></h3>
+                </div>
+            </div>
+        </div>
+    </div>
+    `,
+    computed: {
+        inviteLink: function() {
+            return this.baseURL + '/#/auth/register?code=' + this.code;
+        }
+    },
+    data: function() {
+        return {
+            code: '',
+        }
+    },
+    mounted() {
+        _get('getuserinviteinfo','include').then((r)=>{
+            console.log(r);
+            this.code = r.inviteInfo.code.code;
+            console.log(this.thisuser);
+        });
+    }
+};
+
+const UserShop = {
+    mixins: [userMixin],
+    template: /*html*/ `
+    <div>
+        <div class="pure-g">
+            <div class="pure-u-20-24 flex align-center">
+                <div class="card-title">套餐购买</div>
+                <transition name="fade" mode="out-in">
+                <label v-if="isCheckerShow" class="relative" for="">
+                    <input class="coupon-checker tips tips-blue" v-model="coupon" type="text" placeholder="优惠码">
+                    <button @click="couponCheck" class="btn-forinput" name="check"><span class="fa fa-arrow-up"></span></button>                       
+                    <button @click="hideChecker" class="btn-forinput" name="reset"><span class="fa fa-refresh"></span></button>                       
+                </label>
+                </transition>
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="user-shop">
+                <div v-for="shop in shops" class="list-shop pure-g" :key="shop.id">
+                    <div class="pure-u-20-24">
+                        <span>$[shop.name]$</span>
+                        <span class="tips tips-gold">VIP $[shop.details.class]$</span>
+                        <span class="tips tips-green">￥$[shop.price]$</span>
+                        <span class="tips tips-cyan">$[shop.details.bandwidth]$G<span v-if="shop.details.reset !== '0'">+$[shop.details.reset_value]$G/($[shop.details.reset]$天/$[shop.details.reset_exp]$天)</span></span>
+                        <span class="tips tips-blue">$[shop.details.class_expire]$天</span>
+                    </div>
+                    <div class="pure-u-4-24 text-right"><button :disabled="isDisabled" class="buy-submit" @click="buy(shop.id,shop.auto_renew)">购买</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    `,
+    data: function() {
+        return {
+            shops: '',
+            isDisabled: false,
+            coupon: '',
+            isCheckerShow: false,
+            ajaxBody: {
+                shop: '',
+                autorenew: '',
+            },
+        }
+    },
+    methods: {
+        buy(id,autoRenew) {
+            this.isDisabled = true;
+            this.isCheckerShow = true;
+            let callConfig = {
+                msg: '请输入优惠码，如没有请直接确认',
+                icon: 'fa-bell',
+                time: 3000,
+            };
+            tmp.dispatch('CALL_MSGR',callConfig);
+            id = (id).toString();
+            Vue.set(this.ajaxBody,'shop',id);
+            Vue.set(this.ajaxBody,'autorenew',autoRenew);
+        },
+        couponCheck() {
+            let ajaxCon = {
+                coupon: this.coupon,
+                shop: this.ajaxBody.shop,
+            };
+            _post('/user/coupon_check',JSON.stringify(ajaxCon),'include').then((r)=>{
+                if (r.ret) {
+                    console.log(r);
+                    this.isCheckerShow = false;
+                } else {
+                    console.log(r);
+                }
+            });
+        },
+        orderCheck() {
+
+        },
+        hideChecker() {
+            this.isCheckerShow = false;
+            this.isDisabled = false;
+        },
+    },
+    mounted() {
+        _get('/getusershops','include').then((r)=>{
+            this.shops = r.arr.shops;
+            this.shops.forEach((el,index)=>{
+                Vue.set(this.shops[index],'details',JSON.parse(el.content))
+            });
+            console.log(this.shops);
+        });
+    },
+};
+
+const UserGuide = {
+    mixins: [userMixin],
+    template: /*html*/ `
+    <div>
+        <div class="card-title">配置指南</div>
+        <div class="card-body">
+            <div class="user-guide"></div>
+        </div>
+    </div>
+    `,
+}
+
 const Panel = {
     delimiters: ['$[',']$'],
+    mixins: [storeMap],
+    components: {
+        'user-announcement': UserAnnouncement,
+        'user-invite': UserInvite,
+        'user-shop': UserShop,
+        'user-guide': UserGuide,
+    },
     template: /*html*/ `
     <div class="page-user pure-u-1">
-        <h1>用户页面demo</h1>
-        <a href="/user" class="button-index">进入用户中心</a>
+        <div class="title-back flex align-center">USERCENTER</div>
+        <transition name="loading-fadex" mode="out-in">
+            <div class="loading flex align-center" v-if="userLoadState === 'beforeload'">USERCENTER</div>
+
+            <div class="loading flex align-center" v-else-if="userLoadState === 'loading'" key="loading">
+                <div class="spinnercube">
+                    <div class="cube1"></div>
+                    <div class="cube2"></div>
+                </div>
+            </div>
+
+            <div class="usrcenter text-left pure-g space-between" v-else-if="userLoadState === 'loaded'">
+                <div class="pure-u-1 pure-u-sm-6-24">
+                    <div class="card account-base">
+                        <div class="card-title">账户明细</div>
+                        <div class="card-body">
+                            <div class="pure-g">
+                                <div class="pure-u-1-2">
+                                    <p class="tips tips-blue">用户名</p>
+                                    <p class="font-light">$[userCon.user_name]$</p>
+                                    <p class="tips tips-blue">邮箱</p>
+                                    <p class="font-light">$[userCon.email]$</p>
+                                </div>
+                                <div class="pure-u-1-2">
+                                    <p class="tips tips-blue">VIP等级</p>
+                                    <p class="font-light">Lv. $[userCon.class]$</p>
+                                    <p class="tips tips-blue">余额</p>
+                                    <p class="font-light">$[userCon.money]$</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card margin-nobottom">
+                        <div class="card-title">快速配置</div>
+                        <div class="card-body">
+                            <div class="pure-g">
+                                <button @click="changeAgentType" v-for="dl in downloads" :data-type="dl.type" :class="{ 'index-btn-active':currentDlType === dl.type }" class="pure-u-1-3 btn-user dl-type" :key="dl.type">
+                                    $[dl.type]$
+                                </button>
+                                <h5 class="pure-u-1">平台选择/客户端下载</h5>
+                                <transition name="rotate-fade" mode="out-in">
+                                <div v-if="currentDlType === 'SSR'" class="dl-link" key="ssr">
+                                    <uim-dropdown v-for="(value,key) in downloads[0].agent" class="pure-u-1-3 btn-user" :key="key">
+                                        <span slot="dpbtn-content">$[key]$</span>
+                                        <ul slot="dp-menu">
+                                            <li v-for="agent in value" :key="agent.id"><a :href="agent.href">$[agent.agentName]$</a></li>
+                                        </ul>
+                                    </uim-dropdown>                                
+                                </div>
+                                <div v-else-if="currentDlType === 'SS/SSD'" class="dl-link" key="ss">
+                                    <uim-dropdown v-for="(value,key) in downloads[1].agent" class="pure-u-1-3 btn-user" :key="key">
+                                        <span slot="dpbtn-content">$[key]$</span>
+                                        <ul slot="dp-menu">
+                                            <li v-for="agent in value" :key="agent.id"><a :href="agent.href">$[agent.agentName]$</a></li>
+                                        </ul>
+                                    </uim-dropdown>                                
+                                </div>
+                                <div v-else-if="currentDlType === 'V2RAY'" class="dl-link" key="v2ray">
+                                    <uim-dropdown v-for="(value,key) in downloads[2].agent" class="pure-u-1-3 btn-user" :key="key">
+                                        <span slot="dpbtn-content">$[key]$</span>
+                                        <ul slot="dp-menu">
+                                            <li v-for="agent in value" :key="agent.id"><a :href="agent.href">$[agent.agentName]$</a></li>
+                                        </ul>
+                                    </uim-dropdown>                                
+                                </div>
+                                </transition>
+                                <h5 class="pure-u-1">订阅链接</h5>
+                                <transition name="rotate-fade" mode="out-in">
+                                <div class="input-copy" v-if="currentDlType === 'SSR'" key="ssrsub">
+                                    <div class="pure-g align-center">
+                                        <span class="pure-u-6-24">普通端口:</span><input class="tips tips-blue pure-u-18-24" type="text" name="" id="" :value="suburlMu0" readonly>                                
+                                    </div>
+                                    <div v-if="mergeSub !== 'true'" class="pure-g align-center">
+                                        <span class="pure-u-6-24">单端口:</span><input class="tips tips-blue pure-u-18-24" type="text" name="" id="" :value="suburlMu1" readonly>                                                                  
+                                    </div>
+                                </div>
+                                <div class="input-copy" v-else-if="currentDlType === 'V2RAY'" key="sssub">
+                                    <input class="tips tips-blue" type="text" name="" id="" :value="suburlMu2" readonly>
+                                </div>
+                                <div class="input-copy" v-else-if="currentDlType === 'SS/SSD'" key="v2sub">
+                                    <input class="tips tips-blue" type="text" name="" id="" :value="suburlMu3" readonly>
+                                </div>
+                                </transition>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="pure-u-1 pure-u-sm-17-24">
+                    <div class="card">
+                        <div class="card-title">连接信息</div>
+                        <div class="card-body">
+                            <div class="pure-g">
+                                <div v-for="tip in tipsLink" class="pure-u-lg-4-24" :key="tip.name">
+                                    <p class="tips tips-blue">$[tip.name]$</p>
+                                    <p class="font-light">$[tip.content]$</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="user-btngroup pure-g">
+                        <div class="pure-u-16-24">
+                            <uim-dropdown>
+                                <span slot="dpbtn-content">栏目导航</span>
+                                <ul slot="dp-menu">
+                                    <li @click="componentChange" v-for="menu in menuOptions" :data-component="menu.id" :key="menu.id">$[menu.name]$</li>
+                                </ul>
+                            </uim-dropdown>
+                        </div>
+                        <div class="pure-u-8-24 text-right">
+                            <a href="/user" class="btn-user">进入管理面板</a>
+                            <button @click="logout" class="btn-user">登出</button>                            
+                        </div>
+                    </div>
+                    <transition name="fade" mode="out-in">
+                    <component :is="currentCardComponent" :baseURL="baseUrl" :thisuser="userCon" :annC="ann" class="card margin-nobottom">
+                        <button @click="componentChange" class="btn-inline" :data-component="menuOptions[3].id" slot="inviteToShop">成为VIP请点击这里</button>
+                    </component>
+                    </transition>
+                </div>
+            </div>
+        </transition>
     </div>
     `,
     props: ['routermsg'],
-    mounted() {
-        axios.get('/user/getuserinfo')
-            .then((r)=>{
-                if (r.data.ret === 1) {
-                    console.log(r.data.info);
+    computed: {
+        suburlBase: function() {
+            return this.subUrl + this.ssrSubToken;
+        },
+        suburlMu0: function() {
+            return this.suburlBase + '?mu=0';
+        },
+        suburlMu1: function() {
+            return this.suburlBase + '?mu=1';
+        },
+        suburlMu3: function() {
+            return this.suburlBase + '?mu=3';
+        },
+        suburlMu2: function() {
+            return this.suburlBase + '?mu=2';
+        },
+    },
+    data: function() {
+        return {
+            userLoadState: 'beforeload',
+            userCon: '',
+            ann: {
+                content: '',
+                date: '',
+                id: '',
+                markdown: '',
+            },
+            baseUrl: '',
+            subUrl: '',
+            ssrSubToken: '',
+            mergeSub: 'false',
+            tipsLink: [
+                {
+                    name: '端口',
+                    content: '',
+                },
+                {
+                    name: '密码',
+                    content: '',
+                },
+                {
+                    name: '加密',
+                    content: '',
+                },
+                {
+                    name: '协议',
+                    content: '',
+                },
+                {
+                    name: '混淆',
+                    content: '',
+                },
+                {
+                    name: '混淆参数',
+                    content: '',
+                },
+            ],
+            menuOptions: [
+                {
+                    name: '公告栏',
+                    id: 'user-announcement',
+                },
+                {
+                    name: '配置指南',
+                    id: 'user-guide',
+                },
+                {
+                    name: '邀请链接',
+                    id: 'user-invite',
+                },
+                {
+                    name: '套餐购买',
+                    id: 'user-shop',
+                },
+            ],
+            currentCardComponent: 'user-announcement',
+            downloads: [
+                {
+                    type: 'SSR',
+                    agent: {
+                        Windows: [
+                            {
+                                agentName: 'SSR',
+                                href: '/ssr-download/ssr-win.7z',
+                                id: 'AGENT_1_1_1',
+                            },
+                            {
+                                agentName: 'SSTAP',
+                                href: '/ssr-download/SSTap.7z',
+                                id: 'AGENT_1_1_2',
+                            },
+                        ],
+                        Macos: [
+                            {
+                                agentName: 'SSX',
+                                href: '/ssr-download/ssr-mac.dmg',
+                                id: 'AGENT_1_2_1',
+                            },
+                        ],
+                        Linux: [
+                            {
+                                agentName: 'SS-qt5',
+                                href: '#',
+                                id: 'AGENT_1_3_1',
+                            },
+                        ],
+                        Ios: [
+                            {
+                                agentName: 'Potatso Lite',
+                                href: '#',
+                                id: 'AGENT_1_4_1',
+                            },
+                            {
+                                agentName: 'Shadowrocket',
+                                href: '#',
+                                id: 'AGENT_1_4_2',
+                            },
+                        ],
+                        Android: [
+                            {
+                                agentName: 'SSR',
+                                href: '/ssr-download/ssr-android.apk',
+                                id: 'AGENT_1_5_1',
+                            },
+                            {
+                                agentName: 'SSRR',
+                                href: '/ssr-download/ssrr-android.apk',
+                                id: 'AGENT_1_5_2',
+                            },
+                        ],
+                        Router: [
+                            {
+                                agentName: 'FancySS',
+                                href: 'https://github.com/hq450/fancyss_history_package',
+                                id: 'AGENT_1_6_1',
+                            },
+                        ],
+                    },
+                },
+                {
+                    type: 'SS/SSD',
+                    agent: {
+                        Windows: [
+                            {
+                                agentName: 'SSD',
+                                href: '/ssr-download/ssd-win.7z',
+                                id: 'AGENT_2_1_1',
+                            },
+                        ],
+                        Macos: [
+                            {
+                                agentName: 'SSXG',
+                                href: '/ssr-download/ss-mac.zip',
+                                id: 'AGENT_2_2_1',
+                            },
+                        ],
+                        Linux: [
+                            {
+                                agentName: '/',
+                                href: '#',
+                                id: 'AGENT_2_3_1',
+                            },
+                        ],
+                        Ios: [
+                            {
+                                agentName: 'Potatso Lite',
+                                href: '#',
+                                id: 'AGENT_2_4_1',
+                            },
+                            {
+                                agentName: 'Shadowrocket',
+                                href: '#',
+                                id: 'AGENT_2_4_2',
+                            },
+                        ],
+                        Android: [
+                            {
+                                agentName: 'SSD',
+                                href: '/ssr-download/ssd-android.apk',
+                                id: 'AGENT_2_5_1',
+                            },
+                            {
+                                agentName: '混淆插件',
+                                href: '/ssr-download/ss-android-obfs.apk',
+                                id: 'AGENT_2_5_2',
+                            },
+                        ],
+                        Router: [
+                            {
+                                agentName: 'FancySS',
+                                href: 'https://github.com/hq450/fancyss_history_package',
+                                id: 'AGENT_2_6_1',
+                            },
+                        ],
+                    },
+                },
+                {
+                    type: 'V2RAY',
+                    agent: {
+                        Windows: [
+                            {
+                                agentName: 'V2RayN',
+                                href: '/ssr-download/v2rayn.zip',
+                                id: 'AGENT_3_1_1',
+                            },
+                        ],
+                        Macos: [
+                            {
+                                agentName: '/',
+                                href: '#',
+                                id: 'AGENT_3_2_1',
+                            },
+                        ],
+                        Linux: [
+                            {
+                                agentName: '/',
+                                href: '#',
+                                id: 'AGENT_3_3_1',
+                            },
+                        ],
+                        Ios: [
+                            {
+                                agentName: 'Shadowrocket',
+                                href: '#',
+                                id: 'AGENT_3_4_1',
+                            },
+                        ],
+                        Android: [
+                            {
+                                agentName: 'V2RayN',
+                                href: '/ssr-download/v2rayng.apk',
+                                id: 'AGENT_3_5_1',
+                            },
+                        ],
+                        Router: [
+                            {
+                                agentName: 'FancySS',
+                                href: 'https://github.com/hq450/fancyss_history_package',
+                                id: 'AGENT_3_6_1',
+                            },
+                        ],
+                    },
+                },
+            ],
+            currentDlType: 'SSR',
+        }
+    },
+    methods: {
+        logout() {
+            let callConfig = {
+                msg: '',
+                icon: '',
+                time: 1000,
+            };
+            _get('/logout','include').then((r)=>{
+                if (r.ret === 1) {
+                    callConfig.msg += '账户成功登出Kira~';
+                    callConfig.icon += 'fa-check-square-o';
+                    tmp.dispatch('CALL_MSGR',callConfig);
+                    window.setTimeout(() => {
+                        tmp.commit('SET_LOGINTOKEN',0);
+                        this.$router.replace('/');
+                    }, this.globalConfig.jumpDelay);
                 }
             });
+        },
+        componentChange(e) {
+            this.currentCardComponent = e.target.dataset.component;
+        },
+        changeAgentType(e) {
+            this.currentDlType = e.target.dataset.type;
+        }
+    },
+    mounted() {
+        let self = this;
+        this.userLoadState = 'loading';
+   
+         _get('/getuserinfo','include').then((r) => {
+            if (r.ret === 1) {
+                console.log(r.info);
+                this.userCon = r.info.user;
+                if (r.info.ann) {
+                    this.ann = r.info.ann;
+                }
+                this.baseUrl = r.info.baseUrl;
+                this.subUrl = r.info.subUrl;
+                this.ssrSubToken = r.info.ssrSubToken;
+                this.mergeSub = r.info.mergeSub;
+                this.tipsLink[0].content = this.userCon.port;
+                this.tipsLink[1].content = this.userCon.passwd;
+                this.tipsLink[2].content = this.userCon.method;
+                this.tipsLink[3].content = this.userCon.protocol;
+                this.tipsLink[4].content = this.userCon.obfs;
+                this.tipsLink[5].content = this.userCon.obfs_param;
+                console.log(this.userCon);
+            }
+        }).then((r)=>{
+            setTimeout(()=>{
+                self.userLoadState = 'loaded';
+            },1000)
+        });
     },
     beforeRouteLeave (to, from, next) {
         if (to.matched.some(function(record) {
@@ -766,6 +1588,9 @@ const vueRoutes = [
         path: '/',
         components: {
             default: Root,
+        },
+        meta: {
+            title: 'Index',
         }
     },
     {
@@ -773,16 +1598,22 @@ const vueRoutes = [
         component: Auth,
         redirect: '/auth/login',
         meta: {
-            alreadyAuth: true
+            alreadyAuth: true,
         },
         children: [
             {
-                path: 'login',
+                path: 'Login',
                 component: Login,
+                meta: {
+                    title: 'login',
+                }
             },
             {
                 path: 'register',
                 component: Register,
+                meta: {
+                    title: 'Register',
+                }
             },
         ],
     },
@@ -797,6 +1628,9 @@ const vueRoutes = [
             {
                 path: 'reset',
                 component: Reset,
+                meta: {
+                    title: 'Reset',
+                }
             },
         ],
     },
@@ -811,6 +1645,9 @@ const vueRoutes = [
             {
                 path: 'panel',
                 component: Panel,
+                meta: {
+                    title: 'Usercenter',
+                }
             }
         ]
     }
@@ -822,10 +1659,9 @@ const Router = new VueRouter({
 
 Router.beforeEach((to,from,next)=>{
     if (!globalConfig) {
-        axios.get('/globalconfig')
-        .then((r)=>{
-            if (r.data.ret == 1) {
-                    globalConfig = r.data.globalConfig;
+        _get('/globalconfig','include').then((r)=>{
+            if (r.ret == 1) {
+                    globalConfig = r.globalConfig;
                     if (globalConfig.geetest_html && globalConfig.geetest_html.success) {
                         globalConfig.isGetestSuccess = '1';
                         tmp.commit('SET_GLOBALCONFIG',globalConfig);
@@ -851,6 +1687,7 @@ Router.beforeEach((to,from,next)=>{
         })) {
             next('/auth/login');
         } else {
+            document.title = tmp.state.globalConfig.indexMsg.appname + ' - ' + to.meta.title;
             next();
         }
     }
@@ -898,21 +1735,51 @@ Vue.component('uim-checkbox',{
     },
 })
 
+Vue.component('uim-dropdown',{
+    delimiters: ['$[',']$'],
+    template: /*html*/ `
+    <div class="uim-dropdown">
+        <button @click.stop="show" class="uim-dropdown-btn"><slot name="dpbtn-content"></slot></button>
+        <transition name="dropdown-fade" mode="out-in">
+        <div v-show="isDropdown" @click.stop="hide" class="uim-dropdown-menu"><slot name="dp-menu"></slot></div>
+        </transition>
+    </div>
+    `,
+    data: function() {
+        return {
+            isDropdown: false,
+        }
+    },
+    methods: {
+        show() {
+            if (this.isDropdown === false) {
+                this.isDropdown = true;
+            } else {
+                this.isDropdown = false;
+            }
+        },
+        hide() {
+            if (this.isDropdown === true) {
+                this.isDropdown = false;
+            } 
+        }
+    },
+    mounted() {
+        document.addEventListener('click',()=>{
+            this.hide();
+        })
+    }
+})
+
 const indexPage = new Vue({
     router: Router,
     el: '#index',
     delimiters: ['$[',']$'],
-    store: tmp,
+    mixins: [storeMap],
     data: {
         routerN: 'auth',
         transType: 'slide-fade'
     },
-    computed: Vuex.mapState({
-        msgrCon: 'msgrCon',
-        globalConfig: 'globalConfig',
-        logintoken: 'logintoken',
-        isLoading: 'isLoading',
-    }),
     methods: {
         routeJudge() {
             switch(this.$route.path) {
@@ -939,21 +1806,20 @@ const indexPage = new Vue({
         }
     },
     beforeMount() {
-        axios.get('https://api.lwl12.com/hitokoto/v1')
-        .then((r)=>{
-            tmp.commit('SET_HITOKOTO',r.data);
-        })
-        axios.get('https://v2.jinrishici.com/one.json',{
-            withCredentials: true,
+        fetch('https://api.lwl12.com/hitokoto/v1').then((r)=>{
+            return r.text();
         }).then((r)=>{
-            tmp.commit('SET_JINRISHICI',r.data.data.content);
+            tmp.commit('SET_HITOKOTO',r);            
+        })
+        _get('https://v2.jinrishici.com/one.json','include').then((r) => {
+            tmp.commit('SET_JINRISHICI',r.data.content);
         })
     },
     mounted() {
         this.routeJudge();
         setTimeout(()=>{
             tmp.commit('SET_LOADSTATE');
-        },1000)
+        },1000);
     },
     
 });
