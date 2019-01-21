@@ -246,7 +246,7 @@
             );
             function f() {
                 $.ajax({
-                    type: "POST",
+                    type: "GET",
                     url: "qrcode_check",
                     dataType: "json",
                     data: {
