@@ -1,4 +1,4 @@
-    <?php
+<?php
 
 namespace App\Controllers;
 
@@ -816,7 +816,7 @@ class UserController extends BaseController
 
     public function announcement($request, $response, $args)
     {   
-        if (empty($args['id']) {        //Song
+        if (empty($args['id'])) {        //Song
             # code...
             $Anns = Ann::orderBy('date', 'desc')->get();
         }else{
