@@ -161,6 +161,7 @@ class Job
                   $user->last_day_t = 0;
                   $user->save();
 
+                  /** song
                   $subject = Config::get('appName')."-您的流量被重置了";
                   $to = $user->email;
                   $text = "您好，根据您所订购的订单 ID:".$bought->id."，流量已经被重置为".$shop->reset_value().'GB' ;
@@ -172,6 +173,7 @@ class Job
                   } catch (\Exception $e) {
                       echo $e->getMessage();
                   }
+                  **/
                 }
               }
             }
@@ -190,7 +192,7 @@ class Job
                 $user->last_day_t = 0;
                 $user->transfer_enable = $user->auto_reset_bandwidth*1024*1024*1024;
                 $user->save();
-
+                /** song
                 $subject = Config::get('appName')."-您的流量被重置了";
                 $to = $user->email;
                 $text = "您好，根据管理员的设置，流量已经被重置为".$user->auto_reset_bandwidth.'GB' ;
@@ -202,6 +204,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
+                **/
             }
         }
 
@@ -357,6 +360,7 @@ class Job
 				$subject = Config::get('appName')."-续费失败";
                     $to = $user->email;
                     $text = "您好，系统为您自动续费商品时，发现该商品已被下架，为能继续正常使用，建议您登录用户面板购买新的商品。" ;
+                    /** song 
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -365,6 +369,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
+                    **/
                 continue;
             }
             if ($user->money >= $shop->price) {    
@@ -386,6 +391,7 @@ class Job
                 $subject = Config::get('appName')."-续费成功";
                 $to = $user->email;
                 $text = "您好，系统已经为您自动续费，商品名：".$shop->name.",金额:".$shop->price." 元。" ;
+                /**
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -394,6 +400,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
+                **/
 
                 if (file_exists(BASE_PATH."/storage/".$bought->id.".renew")) {
                     unlink(BASE_PATH."/storage/".$bought->id.".renew");
@@ -403,6 +410,7 @@ class Job
                     $subject = Config::get('appName')."-续费失败";
                     $to = $user->email;
                     $text = "您好，系统为您自动续费商品名：".$shop->name.",金额:".$shop->price." 元 时，发现您余额不足，请及时充值。充值后请稍等系统便会自动为您续费。" ;
+                    /**
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -411,6 +419,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
+                    **/
                     $myfile = fopen(BASE_PATH."/storage/".$bought->id.".renew", "w+") or die("Unable to open file!");
                     $txt = "1";
                     fwrite($myfile, $txt);
@@ -437,7 +446,7 @@ class Job
                         $subject = Config::get('appName')."-系统警告";
                         $to = $user->email;
                         $text = "管理员您好，系统发现节点 ".$node->name." 掉线了，请您及时处理。" ;
-                        
+                        /**
                         try {
                             Mail::send($to, $subject, 'news/warn.tpl', [
                                 "user" => $user,"text" => $text
@@ -446,6 +455,7 @@ class Job
                         } catch (\Exception $e) {
                             echo $e->getMessage();
                         }
+                        **/
 
                         if (Config::get('enable_cloudxns')=='true' && ($node->sort==0 || $node->sort==10)) {
                             $api=new Api();
@@ -501,6 +511,7 @@ class Job
                     $subject = Config::get('appName')."-系统提示";
                     $to = $user->email;
                     $text = "管理员您好，系统发现节点 ".$node->name." 恢复上线了。" ;
+                    /**
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -509,6 +520,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
+                    **/
 
                     if (Config::get('enable_cloudxns')=='true'&& ($node->sort==0 || $node->sort==10)) {
                         $api=new Api();
@@ -678,6 +690,7 @@ class Job
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
+                /**
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -686,6 +699,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
+                **/
 				
 				$user->kill_user();
                 continue;
@@ -700,6 +714,7 @@ class Job
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_uncheck_days')." 天没签到了，帐号已经被删除。" ;
+                /**
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -708,6 +723,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
+                **/
                 $user->kill_user();
                 continue;
             }
@@ -720,6 +736,7 @@ class Job
 				$subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_unused_days')." 天没使用了，帐号已经被删除。" ;
+                /**
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -728,6 +745,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
+                **/
                 $user->kill_user();
                 continue;
             }

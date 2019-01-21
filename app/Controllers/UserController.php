@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 namespace App\Controllers;
 
@@ -78,7 +78,7 @@ class UserController extends BaseController
             }
         }
 
-        $Ann = Ann::orderBy('date', 'desc')->first();
+        $Ann = Ann::orderBy('id', 'desc')->first();   //song
 
 
         return $this->view()
@@ -859,10 +859,15 @@ class UserController extends BaseController
 
 
     public function announcement($request, $response, $args)
-    {
-        $Anns = Ann::orderBy('date', 'desc')->get();
-
-
+    {   
+        if (empty($args['id']) {        //Song
+            # code...
+            $Anns = Ann::orderBy('date', 'desc')->get();
+        }else{
+            $id = $args['id'];
+            $Anns = Ann::where("id", "=", $id)->get();
+        }
+        
         return $this->view()->assign("anns", $Anns)->display('user/announcement.tpl');
     }
 
@@ -1288,7 +1293,8 @@ class UserController extends BaseController
         $ticket->userid = $this->user->id;
         $ticket->datetime = time();
         $ticket->save();
-
+        //新工单不再邮件提醒
+/** 
         $adminUser = User::where("is_admin", "=", "1")->get();
         foreach ($adminUser as $user) {
             $subject = Config::get('appName') . "-新工单被开启";
@@ -1303,7 +1309,7 @@ class UserController extends BaseController
                 echo $e->getMessage();
             }
         }
-
+**/
         $res['ret'] = 1;
         $res['msg'] = "提交成功";
         return $this->echoJson($response, $res);
@@ -1333,11 +1339,11 @@ class UserController extends BaseController
             $newResponse = $response->withStatus(302)->withHeader('Location', '/user/ticket');
             return $newResponse;
         }
-
+/**
         if ($status == 1 && $ticket_main->status != $status) {
             $adminUser = User::where("is_admin", "=", "1")->get();
             foreach ($adminUser as $user) {
-                $subject = Config::get('appName') . "-工单被重新开启";
+                $subject = $ticket_main->id . "-重新开启";
                 $to = $user->email;
                 $text = "管理员，有人重新开启了<a href=\"" . Config::get('baseUrl') . "/admin/ticket/" . $ticket_main->id . "/view\">工单</a>，请您及时处理。";
                 try {
@@ -1349,10 +1355,28 @@ class UserController extends BaseController
                     echo $e->getMessage();
                 }
             }
-        } else {
+        } elseif($status == 1) {
             $adminUser = User::where("is_admin", "=", "1")->get();
             foreach ($adminUser as $user) {
-                $subject = Config::get('appName') . "-工单被回复";
+                $subject = $ticket_main->id . "-回复";
+                $to = $user->email;
+                $text = "管理员，有人回复了<a href=\"" . Config::get('baseUrl') . "/admin/ticket/" . $ticket_main->id . "/view\">工单</a>，请您及时处理。";
+                try {
+                    Mail::send($to, $subject, 'news/warn.tpl', [
+                        "user" => $user, "text" => $text
+                    ], [
+                    ]);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+            }
+        }
+**/       
+        //Song 工单只有回复没有其他      
+        if ($status == 1) {
+            $adminUser = User::where("is_admin", "=", "1")->get();
+            foreach ($adminUser as $user) {
+                $subject = $ticket_main->id . "-回复";
                 $to = $user->email;
                 $text = "管理员，有人回复了<a href=\"" . Config::get('baseUrl') . "/admin/ticket/" . $ticket_main->id . "/view\">工单</a>，请您及时处理。";
                 try {

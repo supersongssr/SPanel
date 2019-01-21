@@ -87,6 +87,7 @@ $app->group('/user', function () {
     $this->get('/node', 'App\Controllers\UserController:node');
     $this->get('/tutorial', 'App\Controllers\UserController:tutorial');
     $this->get('/announcement', 'App\Controllers\UserController:announcement');
+    $this->get('/announcement/{id}', 'App\Controllers\UserController:announcement');    //Song
     $this->get('/donate', 'App\Controllers\UserController:donate');
     $this->get('/lookingglass', 'App\Controllers\UserController:lookingglass');
     $this->get('/node/{id}', 'App\Controllers\UserController:nodeInfo');

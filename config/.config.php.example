@@ -66,6 +66,8 @@ $System_Config['register_mode'] = 'open';					//注册模式。close：关闭，
 $System_Config['defaultTraffic'] = '1';						//用户初始流量 单位GB
 $System_Config['user_expire_in_default']='3650';			//用户账户过期时间，在注册时设置。（天）
 $System_Config['user_class_default']='0';					//用户注册等级，在注册时设置。
+//user reg money 
+$System_Config['user_money_default']='0.66';
 $System_Config['user_class_expire_default']='24';			//用户等级过期时间，在注册时设置。（小时）
 $System_Config['user_conn']='0';							//用户注册客户端数量限制，0为不限制
 $System_Config['user_speedlimit']='0';						//用户注册速度默认限制，0为不限制
@@ -105,6 +107,8 @@ $System_Config['auto_clean_unused_days']='-1';	//自动清理多少天没使用�
 $System_Config['auto_clean_min_money']='1';		//余额低于多少的0级用户可以被清理
 $System_Config['code_payback']='20';			//充值返利百分比
 $System_Config['invite_gift']='2';				//邀请新用户获得流量奖励，单位G
+// and gift money 
+$System_Config['invite_gift_money']='5';				//邀请新用户获得的金额奖励
 $System_Config['enable_bought_reset']='true';	//购买时是否重置流量
 $System_Config['port_price']='-1';				//用户随机重置端口所需要的价格，价格小于0时视为不开放购买
 $System_Config['port_price_specify']='-1';		//用户指明钦定端口所需要的价格，价格小于0时视为不开放购买

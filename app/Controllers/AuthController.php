@@ -264,6 +264,15 @@ class AuthController extends BaseController
                 return $response->getBody()->write(json_encode($res));
             }
 
+            $junk_email = explode(';', Config::get('junk_email_list'));
+            $check_email = explode('@', $email);
+            if (in_array($check_email['1'], $junk_email)) {
+                # code...
+                $res['ret'] = 0;
+                $res['msg'] = "垃圾邮箱";
+                return $response->getBody()->write(json_encode($res));
+            }
+
             $user = User::where('email', '=', $email)->first();
             if ($user != null) {
                 $res['ret'] = 0;
@@ -478,6 +487,14 @@ class AuthController extends BaseController
                 $user->ref_by = $c->user_id;
                 $user->money = Config::get('invite_get_money');
                 $gift_user->transfer_enable = ($gift_user->transfer_enable + Config::get('invite_gift') * 1024 * 1024 * 1024);
+                //add gift money 5yuan
+                //check if qq.com hotmail.com 163.com 126.com gmail.com 等等常用邮箱，赠送
+                $gift_email = explode(';', Config::get('gift_email_list'));
+                $check_email = explode('@', $email);
+                if (in_array($check_email['1'], $gift_email)) {
+                    # code...
+                    $gift_user->money = ($gift_user->money + Config::get('invite_gift_money'));
+                }
                 $gift_user->invite_num -= 1;
                 $gift_user->save();
             }

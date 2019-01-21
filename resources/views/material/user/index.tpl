@@ -599,7 +599,7 @@
 
 												<div id="checkin-btn">
 													<button id="checkin" class="btn btn-brand btn-flat"><span class="icon">check</span>&nbsp;点我签到&nbsp;
-													<div><span class="icon">screen_rotation</span>&nbsp;或者摇动手机签到</div>
+													<div><span class="icon">screen_rotation</span>&nbsp;或者加telegram群签到</div>
 													</button>
 												</div>
 

@@ -359,7 +359,7 @@ class URL
                 }
                 //song
                 //$ssurl .= "#".rawurlencode(Config::get('appName')." - ".$item['remark']);
-                $ssurl .= $ssurl .= "#".rawurlencode($item['remark']);
+                $ssurl .= "#".rawurlencode($item['remark']);
             }
             return $ssurl;
         }

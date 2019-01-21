@@ -3,7 +3,7 @@
 	<main class="content">
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">公告</h1>
+				<h1 class="content-heading">公告&帮助&教程</h1>
 			</div>
 		</div>
 		<div class="container">
@@ -14,20 +14,20 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-										<p class="card-heading">公告</p>
+										<p class="card-heading"><a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a><a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a><a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a></p>
 										<div class="card-table">
 											<div class="table-responsive">
 												<table class="table">
-													<tr>
+													<!--<tr>
 														<th>ID</th>
 														<th>日期</th>
 														<th>内容</th>
-													</tr>
+													</tr> song-->
 													{foreach $anns as $ann}
 														<tr>
-															<td>#{$ann->id}</td>
-															<td>{$ann->date}</td>
-															<td>{$ann->content}</td>
+															<!--<td>#{$ann->id}</td> 
+															<td>{$ann->date}</td> song-->
+															<td>#{$ann->id}#{$ann->date}#{$ann->content}</td>
 														</tr>
 													{/foreach}
 												</table>

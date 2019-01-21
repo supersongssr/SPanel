@@ -70,7 +70,7 @@
 						<ul class="menu-collapse collapse in" id="ui_menu_me">
 							<li>
 								<a href="/user">
-									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户中心/教程
+									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户中心
 								</a>
 							</li>
 
@@ -126,14 +126,15 @@
 									<i class="icon icon-lg">airplanemode_active</i>&nbsp;节点列表
 								</a>
 							</li>
+							<!--
 							<li>
-								<a href="/user/tutorial">
-									<i class="icon icon-lg">start</i>&nbsp;使用教程
+								<a href="/help.html">
+									<i class="icon icon-lg">start</i>&nbsp;帮助中心
 								</a>
-							</li>
+							</li> Song-->
 							<li>
-								<a href="/user/announcement">
-									<i class="icon icon-lg">announcement</i>&nbsp;网站公告
+								<a href="/user/announcement/1">
+									<i class="icon icon-lg">announcement</i>&nbsp;帮助中心
 								</a>
 							</li>
 						</ul>
