@@ -50,6 +50,7 @@
 							<ul>
                                 <li><a href="#1">简介</a></li>
 					            <li><a href="/user">用户中心</a></li>
+					            <li><a href="/">新版首页</a></li>
 								<li><a href="/user/logout">退出登录</a></li>
 								<li><a href="#5">下载</a></li>
                         </ul>
@@ -60,7 +61,7 @@
 								<h1>{$config["appName"]}</h1>
                               	<p>支持：<code>V.2</code><code>S$</code><code>S$D</code><code>S$R</code><code>S$RR</code></p>
 								<p>公告：注册送<code>16G</code>流量，<code>32</code>次邀请码，随机<code>1-3M</code>带宽</p>
-								<p>签到送<code>1-5G</code>流量/天，邀请注册送<code>64G</code>流量/用户</p>
+								<p>签到送<code>1-5G</code>流量/天，邀请注册送<code>64G</code>流量/用户，邀请好友注册送<code>5￥</code>/用户</p>
 								<p>节约账号资源，浪费可耻:)</p>
 								<!--
 								<script type="text/javascript" src="https://api.lwl12.com/hitokoto/main/get?encode=js&charset=utf-8"></script><div id="lwlhitokoto"><script>lwlhitokoto()</script></div>
@@ -71,6 +72,7 @@
 							<ul>
                                <li><a href="#1">简介</a></li>
 								<li><a href="/auth/login">登录</a></li>
+								<li><a href="/">新版首页</a></li>
 								<li><a href="/auth/register">注册</a></li>
                               	<li><a href="#5">下载</a></li> 
                            </ul>

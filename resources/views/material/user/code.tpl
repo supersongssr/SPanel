@@ -22,9 +22,10 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
-                                      <p><a href="https://donate.okss.xyz" target="_blank">点此捐赠 获取捐赠码</a><br>
-                                        <a href="https://donate.okss.xyz" target="_blank">https://donate.okss.xyz</a><br>
-                                        <a href="https://donate.okss.xyz" target="_blank">点此捐赠 获取捐赠码</a><br>
+                                      <p><a href="https://www.fakajun.com/space/okss.html" target="_blank">点此 捐赠/充值 发卡君</a><br>
+                                        <a href="https://www.fakajun.com/space/okss.html" target="_blank">点此 捐赠/充值 发卡君</a><br>
+                                        <a href="https://www.fakajun.com/space/okss.html" target="_blank">点此 捐赠/充值 发卡君</a><br>
+                                        重要的事情说三遍
                                   </p>
                                         <p>充值完成后需刷新网页以查看余额，通常一分钟内到账。如没有到账，请提交工单。</p>
                                     {if $config["enable_admin_contact"] == 'true'}

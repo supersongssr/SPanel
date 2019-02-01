@@ -1145,7 +1145,13 @@ const Panel = {
         'user-guide': UserGuide,
     },
     template: /*html*/ `
+
     <div class="page-user pure-u-1">
+    <h1>快速预览</h1>
+    <a href="/user" class="button-index">进入用户中心</a>
+    <!-- 
+    <br>
+    <br>
         <div class="title-back flex align-center">USERCENTER</div>
         <transition name="loading-fadex" mode="out-in">
             <div class="loading flex align-center" v-if="userLoadState === 'beforeload'">USERCENTER</div>
@@ -1266,7 +1272,7 @@ const Panel = {
                     </transition>
                 </div>
             </div>
-        </transition>
+        </transition> -->
     </div>
     `,
     props: ['routermsg'],
@@ -1637,7 +1643,7 @@ const vueRoutes = [
     {
         path: '/user/',
         component: User,
-        redirect: '/user/panel',
+        redirect: 'user',
         meta: {
             requireAuth: true
         },

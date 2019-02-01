@@ -16,6 +16,6 @@ It will not impact the appearance and can give developers a lot of support :)
     {/if}
 	<script src="/theme/material/js/base.min.js"></script>
 	<script src="/theme/material/js/project.min.js"></script>
-	<script color="0,217,255" opacity="0.5" count="49" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1.0.1"></script>
+	<!-- song <script color="0,217,255" opacity="0.5" count="49" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1.0.1"></script> -->
 </body>
 </html>

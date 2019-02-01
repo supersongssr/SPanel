@@ -126,15 +126,14 @@
 									<i class="icon icon-lg">airplanemode_active</i>&nbsp;节点列表
 								</a>
 							</li>
-							<!--
 							<li>
-								<a href="/help.html">
-									<i class="icon icon-lg">start</i>&nbsp;帮助中心
+								<a href="/user/announcement">
+									<i class="icon icon-lg">announcement</i>&nbsp;帮助中心
 								</a>
-							</li> Song-->
+							</li>
 							<li>
 								<a href="/user/announcement/1">
-									<i class="icon icon-lg">announcement</i>&nbsp;帮助中心
+									<i class="icon icon-lg">announcement</i>&nbsp;常见问题汇总
 								</a>
 							</li>
 						</ul>
