@@ -6,7 +6,7 @@
 
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">用户中心 ★ {$baseUrl}</h1>
+				<h1 class="content-heading">用户中心 ★ {$config["appName"]}</h1>
 			</div>
 		</div>
 		<div class="container">
@@ -517,7 +517,7 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ {$baseUrl} </p>
+                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ {$config["appName"]} </p>
 										{if $ann != null}
 										<p>{$ann->content}</p>
 										<br/>

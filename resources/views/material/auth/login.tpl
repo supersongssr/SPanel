@@ -139,7 +139,7 @@
 
 {include file='footer.tpl'}
 <script>
-  alert("凿壁借光の书签 www.okss.xyz \n Q群：961178261 \n TG群：okssxyz ");
+  alert("凿壁借光の书签 \n家： {$config["appName"]} \n{$config["admin_contact1"]} \n{$config["admin_contact2"]} \n{$config["admin_contact3"]}");
 </script>  
 </div>
 {literal}

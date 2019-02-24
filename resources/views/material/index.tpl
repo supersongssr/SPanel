@@ -137,7 +137,7 @@
 
 </html>
 <script>
-  alert("凿壁借光の书签 www.okss.xyz \n Q群：961178261 \n TG群：okssxyz ");
+  alert("凿壁借光の书签 \n家： {$config["appName"]} \n{$config["admin_contact1"]} \n{$config["admin_contact2"]} \n{$config["admin_contact3"]}");
 </script>  
 <script>
 {*/**
@@ -1874,10 +1874,7 @@ const Panel = {
 
     <div class="page-user pure-u-1">
     <h1>快速预览</h1>
-    <a href="/user" class="button-index">进入用户中心</a>
-    <!-- 
-    <br>
-    <br>
+
         <div class="title-back flex align-center">USERCENTER</div>
         <transition name="loading-fadex" mode="out-in">
             <div class="loading flex align-center" v-if="userLoadState === 'beforeload'">USERCENTER</div>
@@ -2042,7 +2039,7 @@ const Panel = {
                     </transition>
                 </div>
             </div>
-        </transition> -->
+        </transition> 
     </div>
     `,
     props: ['routermsg'],
