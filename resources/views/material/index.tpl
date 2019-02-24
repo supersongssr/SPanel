@@ -62,6 +62,7 @@
 </style>
 
 <body>
+    {*<script src="/assets/js/fuck.js"></script>*}
     <div id="index" >
         <transition name="loading-fade" mode="out-in">
             <div class="loading flex align-center" v-if="isLoading === 'loading'" key="loading">
@@ -105,8 +106,10 @@
                     <uim-messager v-show="msgrCon.isShow">
                         <i slot="icon" :class="msgrCon.icon"></i>
                         <span slot="msg">$[msgrCon.msg]$</span>
+                        <div v-if="msgrCon.html !== ''" slot="html" v-html="msgrCon.html"></div>
                     </uim-messager>
                 </transition>
+
             </div>
         </transition>
     </div>
@@ -114,9 +117,9 @@
     {if $recaptcha_sitekey != null}
     <script src="https://recaptcha.net/recaptcha/api.js?render=explicit" async defer></script>
     {/if}
-    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.21"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vuex@3.0.1/dist/vuex.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.22/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuex@3.1.0/dist/vuex.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue-router@3.0.2/dist/vue-router.min.js"></script>
     {if isset($geetest_html)}
 	<script src="//static.geetest.com/static/tools/gt.js"></script>
     {/if}
@@ -214,6 +217,103 @@ let validate,captcha;
 
 let globalConfig;
 
+const UserTmp = {
+    state: {
+        userCon: '',
+        userSettings: {
+            pages: [
+                {
+                    id: 'user-resourse',
+                },
+                {
+                    id: 'user-settings',
+                },
+            ],
+            currentPage: 'user-resourse',
+            currentPageIndex: 0,
+            resourse: [
+                {
+                    name: '等级有效期',
+                    content: '',
+                },
+                {
+                    name: '账号有效期',
+                    content: '',
+                },
+                {
+                    name: '在线设备数',
+                    content: '',
+                },
+                {
+                    name: '端口速率',
+                    content: '',
+                },
+            ],
+            tipsLink: [
+                {
+                    name: '端口',
+                    content: '',
+                },
+                {
+                    name: '密码',
+                    content: '',
+                },
+                {
+                    name: '加密',
+                    content: '',
+                },
+                {
+                    name: '协议',
+                    content: '',
+                },
+                {
+                    name: '混淆',
+                    content: '',
+                },
+                {
+                    name: '混淆参数',
+                    content: '',
+                },
+            ],
+        },
+    },
+    mutations: {
+        SET_USERCON (state,config) {
+            state.userCon = config;
+        },
+        SET_USERMONEY (state,number) {
+            state.userCon.money = number;
+        },
+        SET_INVITE_NUM (state,number) {
+            state.userCon.invite_num = number;
+        },
+        SET_USERSETTINGS (state,config) {
+            state.userSettings.tipsLink[0].content = config.port;
+            state.userSettings.tipsLink[1].content = config.passwd;
+            state.userSettings.tipsLink[2].content = config.method;
+            state.userSettings.tipsLink[3].content = config.protocol;
+            state.userSettings.tipsLink[4].content = config.obfs;
+            state.userSettings.tipsLink[5].content = config.obfs_param;
+        },
+        ADD_NEWUSERCON (state,config) {
+            for (let key in config) {
+                Vue.set(state.userCon,key,config[key]);
+            }
+        },
+        SET_RESOURSE (state,config) {
+            state.userSettings.resourse[config.index].content = config.content;
+        },
+        SET_ALLURESOURSE (state,config) {
+            for (let key in config) {
+                state.userCon[key] = config[key];
+            }
+        }
+    },
+    actions: {
+        
+    },
+}
+
 const tmp = new Vuex.Store({
     state: {
         isLoading: 'loading',
@@ -221,8 +321,15 @@ const tmp = new Vuex.Store({
         logintoken: false,
         msgrCon: {
             msg: '操作成功',
+            html: '',
             icon: ['fa','fa-check-square-o'],
             isShow: false,
+        },
+        modalCon: {
+            isMaskShow: false,
+            isCardShow: false,
+            title: '订单确认',
+            bodyContent: '',
         },
         globalConfig: {
             captchaProvider: '',
@@ -255,11 +362,21 @@ const tmp = new Vuex.Store({
             state.logintoken = n;
         },
         SET_MSGRCON (state,config) {
+            if (state.msgrCon.html !== '') {
+                state.msgrCon.html = '';
+            }
             state.msgrCon.msg = config.msg;
             state.msgrCon.icon[1] = config.icon;
+            state.msgrCon.html = config.html;
         },
         ISSHOW_MSGR (state,boolean) {
             state.msgrCon.isShow = boolean;
+        },
+        ISSHOW_MODAL_MASK (state,boolean) {
+            state.modalCon.isMaskShow = boolean;
+        },
+        ISSHOW_MODAL_CARD (state,boolean) {
+            state.modalCon.isCardShow = boolean;
         },
         SET_GLOBALCONFIG (state,config) {
             state.logintoken = config.isLogin
@@ -288,24 +405,109 @@ const tmp = new Vuex.Store({
         },
     },
     actions: {
-        CALL_MSGR ({ commit,state },config) {
-            commit('SET_MSGRCON',config);
-            commit('ISSHOW_MSGR',true);
-            window.setTimeout(function() {
+        CALL_MSGR ({ dispatch,commit,state },config) {
+            if (state.msgrCon.isShow === true) {
                 commit('ISSHOW_MSGR',false);
-            },config.time)
-        }
+                setTimeout(() => {
+                    dispatch('CALL_MSGR',config);                    
+                }, 300);
+            } else {
+                commit('SET_MSGRCON',config);
+                commit('ISSHOW_MSGR',true);
+                window.setTimeout(function() {
+                    commit('ISSHOW_MSGR',false);
+                },config.time)
+            }
+        },
+        CALL_MODAL ({ commit,state },config) {
+            if (state.modalCon.isMaskShow === false) {
+                commit('ISSHOW_MODAL_MASK',true);
+                window.setTimeout(() => {
+                    commit('ISSHOW_MODAL_CARD',true)
+                }, 300);
+            } else {
+                commit('ISSHOW_MODAL_CARD',false);
+                window.setTimeout(() => {
+                    commit('ISSHOW_MODAL_MASK',false)
+                }, 300);
+            }
+        },
+    },
+    modules: {
+        userState: UserTmp,
     }
 });
 
+Vue.directive('uimclip',{
+    inserted: function(el, binding) {
+        el.addEventListener('click',(e)=>{
+            let copy = new Promise((resolve,reject)=>{
+                let input = document.createElement('input');
+                let body = document.getElementsByTagName('body')[0];
+                let value = el.dataset.uimclip;
+                input.setAttribute('type','text');
+                input.setAttribute('value',value);
+                body.appendChild(input);
+                input.focus();
+                input.setSelectionRange(0, value.length);
+                document.execCommand('copy',true);
+                resolve(input);
+            })
+            copy.then((r)=>{
+                r.remove();
+                binding.value.onSuccess();
+            })
+        })
+    },
+})
+
+var methodsMixin = {
+    methods: {
+        successCopied() {
+            let callConfig = {
+                msg: '复制成功！,已将链接复制到剪贴板',
+                icon: 'fa-check-square-o',
+                time: '1500',
+            }
+            this.callMsgr(callConfig);
+        },
+    }
+}
+
+var mutationMap = {
+    methods: Vuex.mapMutations({
+        setGlobalConfig: 'SET_GLOBALCONFIG',
+        setHitokoto: 'SET_HITOKOTO',
+        setJinRiShiCi: 'SET_JINRISHICI',
+        setLoadState: 'SET_LOADSTATE',
+        setLoginToken: 'SET_LOGINTOKEN',
+        setUserMoney: 'SET_USERMONEY',
+        setInviteNum: 'SET_INVITE_NUM',
+        setReasourse: 'SET_RESOURSE',
+        setUserCon: 'SET_USERCON',
+        setUserSettings: 'SET_USERSETTINGS',
+        addNewUserCon: 'ADD_NEWUSERCON',
+        setAllResourse: 'SET_ALLURESOURSE',
+    }),
+}
+
 var storeMap = {
     store: tmp,
+    mixins: [mutationMap,methodsMixin],
     computed: Vuex.mapState({
         msgrCon: 'msgrCon',
+        modalCon: 'modalCon',
         globalConfig: 'globalConfig',
         logintoken: 'logintoken',
         isLoading: 'isLoading',
+        userCon: state => state.userState.userCon,
+        userSettings: state => state.userState.userSettings,
     }),
+    methods: Vuex.mapActions({
+        callMsgr: 'CALL_MSGR',
+        callModal: 'CALL_MODAL',
+    }),
+    
 }
 
 var storeAuth = {
@@ -559,15 +761,15 @@ const Login = {
                 if (r.ret === 1) {
                     callConfig.msg += '登录成功Kira~';
                     callConfig.icon += 'fa-check-square-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                     window.setTimeout(() => {
-                        tmp.commit('SET_LOGINTOKEN',1);
+                        this.setLoginToken(1);
                         this.$router.replace('/user/panel');
                     }, this.globalConfig.jumpDelay);
                 } else {
-                    callConfig.msg += '登录失败Boommm';
+                    callConfig.msg = `登录失败Boommm,${ r.msg }`;
                     callConfig.icon += 'fa-times-circle-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                     window.setTimeout(()=>{
                         this.isDisabled = false;
                     }, 3000)
@@ -615,9 +817,9 @@ const Login = {
                         if (r.ret) {
                             callConfig.msg += '登录成功Kira~';
                             callConfig.icon += 'fa-check-square-o';
-                            tmp.dispatch('CALL_MSGR',callConfig);
+                            this.callMsgr(callConfig);
                             window.setTimeout(()=>{
-                                tmp.commit('SET_LOGINTOKEN',1);
+                                this.setLoginToken(1);
                                 this.$router.replace('/user/panel');
                             }, this.globalConfig.jumpDelay);
                         }
@@ -629,14 +831,15 @@ const Login = {
             tid = setTimeout(()=>{
                 this.tgAuthTrigger(tid);
             }, 2500);
-        }
-    },
-    mounted() {
-        document.addEventListener('keyup',(e)=>{
-            if (e.keyCode == 13) {
+        },
+        loginBindEnter(e) {
+            if (this.$route.path === '/auth/login' && e.keyCode == 13) {
                 this.login();
             }
-        });
+        },
+    },
+    mounted() {
+        document.addEventListener('keyup',this.loginBindEnter,false);
 
         if (this.globalConfig.enable_telegram === 'true') {
             this.telegramRender();
@@ -650,6 +853,10 @@ const Login = {
         }
         this.loadCaptcha('g-recaptcha-login');
         this.loadGT('#embed-captcha-login');
+    },
+    beforeRouteLeave(to, from , next) {
+        document.removeEventListener('keyup',this.loginBindEnter,false);
+        next();
     },
 };
 
@@ -779,18 +986,18 @@ const Register = {
                 }
             }
 
-            _post('/auth/register', JSON.stringify(ajaxCon),'omit').then((r)=>{
+            _post('/auth/register', JSON.stringify(ajaxCon),'include').then((r)=>{
                 if (r.ret == 1) {
-                    callConfig.msg += '注册成功meow~';
-                    callConfig.icon += 'fa-check-square-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    callConfig.msg = '注册成功meow~';
+                    callConfig.icon = 'fa-check-square-o';
+                    this.callMsgr(callConfig);
                     window.setTimeout(()=>{
                         this.$router.replace('/auth/login');
                     }, this.globalConfig.jumpDelay);
                 } else {
-                    callConfig.msg += 'WTF……注册失败';
+                    callConfig.msg = `WTF……注册失败,${ r.msg }`;
                     callConfig.icon += 'fa-times-circle-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                     window.setTimeout(()=>{
                         this.isDisabled = false;
                     },3000)
@@ -860,16 +1067,21 @@ const Register = {
                             icon: 'fa-check-square-o',
                             time: 1000,
                         };
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                 } else {
                     let callConfig = {
                             msg: 'emm……邮件发送失败',
                             icon: 'fa-times-circle-o',
                             time: 1000,
                         };
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                 }
             });
+        },
+        registerBindEnter(e) {
+            if (this.$route.path === '/auth/register' && e.keyCode == 13) {
+                this.register();
+            }
         },
     },
     mounted() {
@@ -885,11 +1097,7 @@ const Register = {
             }
         }
         
-        document.addEventListener('keyup', (e) => {
-            if (e.keyCode == 13) {
-                this.register();
-            }
-        });
+        document.addEventListener('keyup',this.registerBindEnter,false);
 
         //验证加载
         if (this.globalConfig.enableRegCaptcha === 'false') {
@@ -897,6 +1105,10 @@ const Register = {
         }
         this.loadCaptcha('g-recaptcha-reg');
         this.loadGT('#embed-captcha-reg');    
+    },
+    beforeRouteLeave(to, from , next) {
+        document.removeEventListener('keyup',this.registerBindEnter,false);
+        next();
     }
 };
 
@@ -951,14 +1163,14 @@ const Reset = {
                 if (r.ret == 1) {
                     callConfig.msg += '邮件发送成功kira~';
                     callConfig.icon += 'fa-check-square-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                     window.setTimeout(() => {
                         this.$router.push('/auth/login');
                     }, this.globalConfig.jumpDelay);
                 } else {
                     callConfig.msg += 'WTF……邮件发送失败，请检查邮箱地址';
                     callConfig.icon += 'fa-times-circle-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                     window.setTimeout(()=>{
                         this.isDisabled = false;
                     }, 3000)
@@ -980,11 +1192,22 @@ const User = {
 
 const userMixin = {
     delimiters: ['$[',']$'],
-    props: ['annC','thisuser','baseURL'],
+    props: ['annC','baseURL'],
+    methods: {
+        reConfigResourse() {
+            _get('/getallresourse','include').then((r)=>{
+                console.log(r);
+                this.updateUserSet(r.resourse);
+            });
+        },
+        updateUserSet(resourse) {
+            this.setAllResourse(resourse);
+        },
+    }
 }
 
 const UserAnnouncement = {
-    mixins: [userMixin],
+    mixins: [userMixin,storeMap],
     template: `
     <div>
         <div class="card-title">公告栏</div>
@@ -996,18 +1219,73 @@ const UserAnnouncement = {
 };
 
 const UserInvite = {
-    mixins: [userMixin],
+    mixins: [userMixin,storeMap],
     template: /*html*/ `
     <div>
-        <div class="card-title">邀请链接</div>
+        <div class="user-invite-title flex align-center">
+            <div class="card-title">邀请链接</div>
+            <div class="relative flex align-center justify-center text-center">
+                <transition name="fade" mode="out-in">
+                <label v-show="showToolInput" class="relative" for="">
+                    <input @keyup.13="submitToolInput" v-model="toolInputContent" :data-type="toolInputType" class="coupon-checker tips tips-blue" type="text" :placeholder="placeholder">
+                    <button @click="submitToolInput" class="btn-forinput" name="check"><span class="fa fa-arrow-up"></span></button>                       
+                    <button @click="hideToolInput" class="btn-forinput" name="reset"><span class="fa fa-refresh"></span></button>                       
+                </label>
+                </transition>
+                <uim-tooltip v-show="showOrderCheck" class="uim-tooltip-top flex justify-center">
+                    <div slot="tooltip-inner">
+                        <span v-if="toolInputType === 'buy'"><div>确认购买 <span class="text-red">$[toolInputContent]$</span> 个吗？总价为 <span class="text-red">￥$[totalPrice]$</span></div></span>
+                        <span v-if="toolInputType === 'custom'">确认定制链接后缀为 <span class="text-red">$[toolInputContent]$</span> 吗？价格为 <span class="text-red">￥$[customPrice]$</span></span>
+                        <div>
+                            <button @click="submitOrder" class="tips tips-green"><span class="fa fa-fw fa-check"></span></button>
+                            <button @click="hideOrderCheck" class="tips tips-red"><span class="fa fa-fw fa-remove"></span></button>
+                        </div>
+                    </div>
+                </uim-tooltip>
+            </div>
+            <transition name="fade" mode="out-in">
+            <div v-show="showToolInput">
+                <div class="flex align-center" v-if="toolInputType === 'buy'" key="buy">
+                    <span v-show="toolInputType === 'buy'" class="tips tips-green">￥$[invitePrice]$/次</span>
+                    <span v-show="toolInputType === 'buy'" class="tips tips-gold">总价：￥$[totalPrice]$</span>        
+                </div>
+                <div class="flex align-center" v-else key="custom">
+                    <span v-show="toolInputType === 'custom'" class="tips tips-green">价格：￥$[customPrice]$</span>            
+                </div>
+            </div>
+            </transition>
+        </div>
         <div class="card-body">
             <div class="user-invite">
-                <div v-if="thisuser.class !== 0">
-                    <input type="button" class="tips tips-blue" :value="inviteLink">
-                    <h5>邀请链接剩余次数： <span class="invite-number tips tips-gold">$[thisuser.invite_num]$次</span></h5>       
+                <div v-if="userCon.class !== 0">
+                    <div class="flex align-center wrap">
+                        <input type="text" v-uimclip="{ onSuccess:successCopied }" :data-uimclip="inviteLink" :class="{ 'invite-reset':inviteLinkTrans }" class="invite-link tips tips-blue" :value="inviteLink" readonly>
+                        <span class="invite-tools link-reset relative flex justify-center text-center">
+                            <button @click="showInviteReset" class="tips tips-red"><span class="fa fa-refresh"> 重置</button>
+                            
+                            <uim-tooltip v-show="inviteResetConfirm" class="uim-tooltip-top flex justify-center">
+                                <div slot="tooltip-inner">
+                                    <span>确定要重置邀请链接？</span>
+                                    <div>
+                                        <button @click="resetInviteLink" class="tips tips-green"><span class="fa fa-fw fa-check"></span></button>
+                                        <button @click="hideInviteReset" class="tips tips-red"><span class="fa fa-fw fa-remove"></span></button>
+                                    </div>
+                                </div>
+                            </uim-tooltip>
+                           
+                        </span>
+                        <span v-if="customPrice >= 0" class="invite-tools relative flex justify-center text-center">
+                            <button @click="showCustomToolInput" :disabled="isToolDisabled" class="tips tips-cyan"><span class="fa fa-pencil"> 定制</button>
+                        </span>
+                    </div>
+                    <h5>邀请链接剩余次数： <span :class="{ 'tips-gold-trans':inviteTimeTrans }" class="invite-number tips tips-gold">$[userCon.invite_num]$次</span> 
+                        <span v-if="invitePrice >= 0">
+                        <button @click="showBuyToolInput" :disabled="isToolDisabled" class="invite-tools invite-number tips tips-green"><span class="fa fa-cny"></span> 购买</button>
+                        </span>
+                    </h5>       
                 </div>
                 <div v-else>
-                    <h3>$[thisuser.user_name]$，您不是VIP暂时无法使用邀请链接，<slot name='inviteToShop'></slot></h3>
+                    <h3>$[userCon.user_name]$，您不是VIP暂时无法使用邀请链接，<slot name='inviteToShop'></slot></h3>
                 </div>
             </div>
         </div>
@@ -1016,24 +1294,220 @@ const UserInvite = {
     computed: {
         inviteLink: function() {
             return this.baseURL + '/#/auth/register?code=' + this.code;
-        }
+        },
+        totalPriceCa: function() {
+            return parseInt(this.toolInputContent)*parseInt(this.invitePrice);
+        },
+        totalPrice: function() {
+            return isNaN(this.totalPriceCa) ? '' : this.totalPriceCa;
+        },
     },
     data: function() {
         return {
+            oldCode: '',
             code: '',
+            invitePrice: '',
+            customPrice: '',
+            toolInputContent: '',
+            placeholder: '',
+            toolInputType: '',
+            orderCheckContent: '',
+            inviteResetConfirm: false,
+            inviteLinkTrans: false,
+            inviteTimeTrans: false,
+            showToolInput: false,
+            isToolDisabled: false,
+            showOrderCheck: false,
+            theUnWatch: '',
         }
+    },
+    methods: {
+        destoryWatch() {
+            if (this.theUnWatch !== '') {
+                this.theUnWatch();
+            }
+        },
+        showInviteReset() {
+            this.inviteResetConfirm = true;
+        },
+        hideInviteReset() {
+            this.inviteResetConfirm = false;
+        },
+        showLinkTrans() {
+            this.inviteLinkTrans = true;
+            setTimeout(() => {
+                this.inviteLinkTrans = false;
+            }, 300);
+        },
+        showInviteTimeTrans() {
+            this.inviteTimeTrans = true;
+            setTimeout(() => {
+                this.inviteTimeTrans = false;
+            }, 300);
+        },
+        resetInviteLink() {
+            _get('/getnewinvotecode','include').then((r)=>{
+                console.log(r);
+                this.code = r.arr.code.code;
+                this.hideInviteReset();
+                this.showLinkTrans();
+                let callConfig = {
+                    msg: '已重置您的邀请链接，复制您的邀请链接发送给其他人！',
+                    icon: 'fa-bell',
+                    time: 1500,
+                }
+                this.callMsgr(callConfig);
+            });
+        },
+        hideToolInput(token) {
+            if (token !== 1 || !token) {
+                this.code = this.oldCode;
+            }
+            this.showToolInput = false;
+            this.isToolDisabled = false;
+            this.hideOrderCheck();
+            this.destoryWatch();
+            setTimeout(() => {
+                this.toolInputContent = '';
+            }, 300);
+        },
+        submitToolInput() {
+            switch(this.toolInputType) {
+                case 'buy':
+                    this.buyOrdercheck();
+                    break;
+                case 'custom':
+                    this.customOrderCheck();
+                    break;
+            }
+        },
+        showBuyToolInput() {
+            this.destoryWatch();
+            this.code = this.oldCode;
+            this.showToolInput = true;
+            this.isToolDisabled = true;
+            this.placeholder = '输入购买数量';
+            this.toolInputType = 'buy';
+        },
+        showCustomToolInput() {
+            this.showToolInput = true;
+            this.isToolDisabled = true;
+            this.placeholder = '输入链接后缀';
+            this.toolInputType = 'custom';
+            let unwatchCustom = this.$watch('toolInputContent',function(newVal, oldVal) {
+                this.code = newVal;
+            });
+            this.theUnWatch = unwatchCustom;
+        },
+        hideOrderCheck() {
+            this.showOrderCheck = false;
+        },
+        buyOrdercheck() {
+            if (isNaN(parseInt(this.toolInputContent)) || this.toolInputContent === '') {
+                let callConfig = {
+                    msg: '请输入数字',
+                    icon: 'fa-times-circle-o',
+                    time: 1500,
+                }
+                this.callMsgr(callConfig);
+            } else {
+                this.showOrderCheck = true;
+            }
+        },
+        customOrderCheck() {
+            if (this.toolInputContent === '') {
+                let callConfig = {
+                    msg: '后缀不能为空',
+                    icon: 'fa-times-circle-o',
+                    time: 1500,
+                }
+                this.callMsgr(callConfig);
+            } else {
+                this.showOrderCheck = true;
+            }
+        },
+        submitOrder() {
+            switch(this.toolInputType) {
+                case 'buy':
+                    this.buyInvite();
+                    break;
+                case 'custom':
+                    this.customInvite();
+                    break;
+            }
+        },
+        buyInvite() {
+            let ajaxBody = {
+                num: parseInt(this.toolInputContent),
+            }
+            _post('/user/buy_invite',JSON.stringify(ajaxBody),'include').then((r)=>{
+                this.hideToolInput();
+                if(r.ret) {
+                    this.reConfigResourse();
+                    this.showInviteTimeTrans();
+                    this.setInviteNum(r.invite_num);
+                    let callConfig = {
+                        msg: r.msg,
+                        icon: 'fa-check-square-o',
+                        time: 1000,
+                    };
+                    this.callMsgr(callConfig);
+                } else {
+                    let callConfig = {
+                        msg: r.msg,
+                        icon: 'fa-times-circle-o',
+                        time: 1000,
+                    };
+                    this.callMsgr(callConfig);
+                }
+            });
+        },
+        customInvite() {
+            this.hideToolInput(1);
+            let ajaxBody = {
+                customcode: this.toolInputContent,
+            };
+            _post('/user/custom_invite',JSON.stringify(ajaxBody),'include').then((r)=>{
+                if (r.ret) {
+                    console.log(r);
+                    this.reConfigResourse();
+                    this.showLinkTrans();
+                    this.code = this.oldCode = this.toolInputContent;
+                    let callConfig = {
+                        msg: r.msg,
+                        icon: 'fa-check-square-o',
+                        time: 1000,
+                    };
+                    this.callMsgr(callConfig);
+                } else {
+                    this.showLinkTrans();
+                    this.code = this.oldCode;
+                    let callConfig = {
+                        msg: r.msg,
+                        icon: 'fa-times-circle-o',
+                        time: 1000,
+                    };
+                    this.callMsgr(callConfig);
+                }
+            });
+        },
     },
     mounted() {
         _get('getuserinviteinfo','include').then((r)=>{
             console.log(r);
-            this.code = r.inviteInfo.code.code;
-            console.log(this.thisuser);
+            this.code = this.oldCode = r.inviteInfo.code.code;
+            this.invitePrice = r.inviteInfo.invitePrice;
+            this.customPrice = r.inviteInfo.customPrice;
+            console.log(this.userCon);
         });
-    }
+    },
+    beforeDestroy() {
+        this.hideToolInput();
+    },
 };
 
 const UserShop = {
-    mixins: [userMixin],
+    mixins: [userMixin,storeMap],
     template: /*html*/ `
     <div>
         <div class="pure-g">
@@ -1041,7 +1515,7 @@ const UserShop = {
                 <div class="card-title">套餐购买</div>
                 <transition name="fade" mode="out-in">
                 <label v-if="isCheckerShow" class="relative" for="">
-                    <input class="coupon-checker tips tips-blue" v-model="coupon" type="text" placeholder="优惠码">
+                    <input @keyup.13="couponCheck" class="coupon-checker tips tips-blue" v-model="coupon" type="text" placeholder="优惠码">
                     <button @click="couponCheck" class="btn-forinput" name="check"><span class="fa fa-arrow-up"></span></button>                       
                     <button @click="hideChecker" class="btn-forinput" name="reset"><span class="fa fa-refresh"></span></button>                       
                 </label>
@@ -1055,13 +1529,26 @@ const UserShop = {
                         <span>$[shop.name]$</span>
                         <span class="tips tips-gold">VIP $[shop.details.class]$</span>
                         <span class="tips tips-green">￥$[shop.price]$</span>
-                        <span class="tips tips-cyan">$[shop.details.bandwidth]$G<span v-if="shop.details.reset !== '0'">+$[shop.details.reset_value]$G/($[shop.details.reset]$天/$[shop.details.reset_exp]$天)</span></span>
+                        <span class="tips tips-cyan">$[shop.details.bandwidth]$G<span v-if="shop.details.reset">+$[shop.details.reset_value]$G/($[shop.details.reset]$天/$[shop.details.reset_exp]$天)</span></span>
                         <span class="tips tips-blue">$[shop.details.class_expire]$天</span>
                     </div>
-                    <div class="pure-u-4-24 text-right"><button :disabled="isDisabled" class="buy-submit" @click="buy(shop.id,shop.auto_renew)">购买</button></div>
+                    <div class="pure-u-4-24 text-right"><button :disabled="isDisabled" class="buy-submit" @click="buy(shop)">购买</button></div>
                 </div>
             </div>
         </div>
+
+        <transition name="fade" mode="out-in">
+        <uim-modal v-on:closeModal="callOrderChecker" v-on:callOrderChecker="orderCheck" :bindMask="isMaskShow" :bindCard="isCardShow" v-if="isMaskShow">
+            <h3 slot="uim-modal-title">$[modalCon.title]$</h3>
+            <div class="flex align-center justify-center wrap" slot="uim-modal-body">
+                <div class="order-checker-content">商品名称：<span>$[orderCheckerContent.name]$</span></div>
+                <div class="order-checker-content">优惠额度：<span>$[orderCheckerContent.credit]$</span></div>
+                <div class="order-checker-content">总金额：<span>$[orderCheckerContent.total]$</span></div>
+            </div>
+            <div class="flex align-center" slot="uim-modal-footer"><uim-switch @click.native="test" v-model="orderCheckerContent.disableothers"></uim-switch> <span class="switch-text">关闭旧套餐自动续费</span></div>
+        </uim-modal>
+        </transition>
+
     </div>
     `,
     data: function() {
@@ -1074,21 +1561,43 @@ const UserShop = {
                 shop: '',
                 autorenew: '',
             },
+            isMaskShow: false,
+            isCardShow: false,
+            orderCheckerContent: {
+                name: '',
+                credit: '',
+                total: '',
+                disableothers: true,
+            },
         }
     },
     methods: {
-        buy(id,autoRenew) {
+        buy(shop) {
             this.isDisabled = true;
             this.isCheckerShow = true;
             let callConfig = {
                 msg: '请输入优惠码，如没有请直接确认',
                 icon: 'fa-bell',
-                time: 3000,
+                time: 1500,
             };
-            tmp.dispatch('CALL_MSGR',callConfig);
-            id = (id).toString();
+            this.callMsgr(callConfig);
+            let id = (shop.id).toString();
             Vue.set(this.ajaxBody,'shop',id);
-            Vue.set(this.ajaxBody,'autorenew',autoRenew);
+            Vue.set(this.ajaxBody,'autorenew',shop.autoRenew);
+        },
+        callOrderChecker() {
+            if (this.isMaskShow === false) {
+                this.isMaskShow = true;
+                setTimeout(() => {
+                    this.isCardShow = true
+                }, 300);
+            } else {
+                this.isCardShow = false;
+                setTimeout(() => {
+                    this.isMaskShow = false
+                    this.hideChecker();
+                }, 300);
+            }
         },
         couponCheck() {
             let ajaxCon = {
@@ -1097,15 +1606,75 @@ const UserShop = {
             };
             _post('/user/coupon_check',JSON.stringify(ajaxCon),'include').then((r)=>{
                 if (r.ret) {
-                    console.log(r);
                     this.isCheckerShow = false;
+                    this.orderCheckerContent.name = r.name;
+                    this.orderCheckerContent.credit = r.credit;
+                    this.orderCheckerContent.total = r.total;
+                    this.callOrderChecker();
                 } else {
-                    console.log(r);
+                    let callConfig = {
+                        msg: r.msg,
+                        icon: 'fa-times-circle-o',
+                        time: 1000,
+                    };
+                    this.callMsgr(callConfig);
                 }
             });
         },
         orderCheck() {
-
+            let ajaxCon = {
+                coupon: this.coupon,
+                shop: this.ajaxBody.shop,
+                autorenew: this.ajaxBody.autorenew,
+                disableothers: this.disableothers,
+            };
+            _post('/user/buy',JSON.stringify(ajaxCon),'include').then((r)=>{
+                let self = this;
+                if (r.ret) {
+                    console.log(r);
+                    this.callOrderChecker();
+                    this.reConfigResourse();
+                    this.$emit('resourseTransTrigger');
+                    let callConfig = {
+                        msg: r.msg,
+                        icon: 'fa-check-square-o',
+                        time: 1500,
+                    };
+                    let animation = new Promise(function(resolve) {
+                        self.callOrderChecker();
+                        setTimeout(() => {
+                            resolve('done');                            
+                        }, 600);
+                    });
+                    animation.then((r)=>{
+                        this.callMsgr(callConfig);
+                    })
+                } else {
+                    console.log(r);
+                    let animation = new Promise(function(resolve) {
+                        self.callOrderChecker();
+                        setTimeout(() => {
+                            resolve('done');                            
+                        }, 600);
+                    });
+                    let message = r.msg
+                    let subPosition = message.indexOf('</br>');
+                    let html;
+                    if (subPosition !== -1) {
+                        message = message.substr(0,subPosition);
+                        html = message.substr(subPosition);
+                    }
+                    let callConfig = {
+                        msg: message,
+                        html: html,
+                        icon: 'fa-times-circle-o',
+                        time: 6000,
+                    };
+                    animation.then((r)=>{
+                        this.callMsgr(callConfig);
+                    })
+                }
+            });
         },
         hideChecker() {
             this.isCheckerShow = false;
@@ -1124,7 +1693,7 @@ const UserShop = {
 };
 
 const UserGuide = {
-    mixins: [userMixin],
+    mixins: [userMixin,storeMap],
     template: /*html*/ `
     <div>
         <div class="card-title">配置指南</div>
@@ -1133,7 +1702,162 @@ const UserGuide = {
         </div>
     </div>
     `,
+};
+
+const userSetMixin = {
+    props: ['resourseTrans'],
+    methods: {
+        wheelChange(e) {
+            this.$emit('turnPageByWheel',e.deltaY);
+        },
+    },
 }
+
+const UserResourse = {
+    mixins: [userMixin,storeMap,userSetMixin],
+    template: /*html*/ `
+    <div @mousewheel="wheelChange" class="user-resourse">
+        <div class="flex align-baseline">
+            <div class="card-title">可用资源</div>
+            <span><button @click="dataRefresh" class="tips tips-green"><span class="fa fa-refresh"></span>刷新</button></span>
+        </div>
+        <div class="card-body">
+            <div class="pure-g wrap">
+                <div v-for="tip in calcResourse" class="pure-u-1-2 pure-u-lg-4-24" :key="tip.name">
+                    <p class="tips tips-blue"> $[tip.name]$</p>
+                    <p class="font-light user-config" :class="{ 'font-gold-trans':resourseTrans,'font-green-trans':isDataRefreshed }"> <span class="user-config"></span> $[tip.content]$</p>
+                </div>
+                <div class="pure-u-1 pure-u-lg-8-24">
+                    <uim-progressbar class="uim-progressbar-sub">
+                        <span slot="uim-progressbar-label">已用流量/今日已用</span>
+                        <div slot="progress" class="uim-progressbar-gold uim-progressbar-progress" :style="{ width:transferObj.usedtotal + '%' }"></div>
+                        <div slot="progress-fold" class="uim-progressbar-red uim-progressbar-progress uim-progressbar-fold" :style="{ width:transferObj.usedtoday + '%' }"></div>
+                        <span class="user-config" :class="{ 'font-green-trans':isDataRefreshed }" slot="progress-text">$[userCon.lastUsedTraffic + '/' + userCon.todayUsedTraffic]$</span>
+                        <span slot="progress-sign" class="user-config" :class="{ 'font-green-trans':isDataRefreshed }">$[transferObj.usedtoday.toFixed(1) + '%']$</span>
+                    </uim-progressbar>
+                    <uim-progressbar>
+                        <span slot="uim-progressbar-label">可用流量</span>
+                        <div slot="progress" class="uim-progressbar-blue uim-progressbar-progress" :style="{ width:transferObj.remain + '%' }"></div>
+                        <span :class="{ 'font-green-trans':isDataRefreshed }" slot="progress-text">$[userCon.unUsedTraffic]$</span>
+                        <span slot="progress-sign" class="user-config" :class="{ 'font-green-trans':isDataRefreshed }">$[transferObj.remain.toFixed(1) + '%']$</span>
+                    </uim-progressbar>
+                </div>
+            </div>
+        </div>
+    </div>
+    `,
+    computed: {
+        calcResourse: function() {
+            let resourse = this.userSettings.resourse;
+            for (let i=0;i<resourse.length;i++) {
+                switch (resourse[i].name) {
+                    case '在线设备数':
+                        if (this.userCon.node_connector !== 0) {
+                            this.setReasourse({ index:i,content:this.userCon.online_ip_count + ' / ' + this.userCon.node_connector });
+                        } else {
+                            this.setReasourse({ index:i,content:this.userCon.online_ip_count + ' / 无限制' });
+                        }
+                        break;
+                    case '端口速率':
+                        if (this.userCon.node_speedlimit !== 0) {
+                            this.setReasourse({ index:i,content:this.userCon.node_speedlimit + ' Mbps' });
+                        } else {
+                            this.setReasourse({ index:i,content:'无限制' });
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+            return resourse;
+        },
+        transferObj: function() {
+            let enable = this.userCon.transfer_enable;
+            let upload = this.userCon.u;
+            let download = this.userCon.d;
+            let lastdayTransfer = this.userCon.last_day_t;
+            let obj = {
+                remain: enable === 0 ? 0 : (enable - upload - download)/enable*100,
+                usedtoday: enable === 0 ? 0 : (upload + download)/enable*100,
+                usedtotal: enable === 0 ? 0 : lastdayTransfer/enable*100,
+            };
+            return obj;
+        },
+    },
+    data: function() {
+        return {
+            isDataRefreshed: false,
+        }
+    },
+    methods: {
+        DateParse(str_date) {
+            let str_date_splited = str_date.split(/[^0-9]/);
+            return new Date (str_date_splited[0], str_date_splited[1] - 1, str_date_splited[2], str_date_splited[3], str_date_splited[4], str_date_splited[5]);
+        },
+        calcExpireDays(classExpire,userExpireIn) {
+            let levelExpire = this.DateParse(classExpire);
+            let accountExpire = this.DateParse(userExpireIn);
+            let nowDate = new Date();
+            let a = nowDate.getTime();
+            let b = levelExpire - a;
+            let c = accountExpire - a;
+            let levelExpireDays = Math.floor(b/(24*3600*1000));
+            let accountExpireDays = Math.floor(c/(24*3600*1000));
+            if (levelExpireDays < 0 || levelExpireDays > 315360000000) {
+                this.addNewUserCon({ 'levelExpireDays':'无限期' });
+                this.setReasourse({ index:0,content:this.userCon.levelExpireDays });
+            } else {
+                this.addNewUserCon({ 'levelExpireDays':levelExpireDays });
+                this.setReasourse({ index:0,content:this.userCon.levelExpireDays + ' 天' });
+            }
+            if (accountExpireDays < 0 || accountExpireDays > 315360000000) {
+                this.addNewUserCon({ 'accountExpireDays':'无限期' });
+                this.setReasourse({ index:1,content:this.userCon.accountExpireDays });
+            } else {
+                this.addNewUserCon({ 'accountExpireDays':accountExpireDays });
+                this.setReasourse({ index:1,content:this.userCon.accountExpireDays + ' 天' });
+            }
+        },
+        dataRefresh() {
+            _get('/gettransfer','include').then((r)=>{
+                this.addNewUserCon(r.arr);
+                this.reConfigResourse();
+                this.showTransition('isDataRefreshed');
+            });
+        },
+        showTransition(key) {
+            this[key] = true;
+            setTimeout(() => {
+                this[key] = false;
+            }, 500);
+        },
+    },
+    created() {
+        let resourse = this.userSettings.resourse;
+        this.calcExpireDays(this.userCon.class_expire,this.userCon.expire_in);
+        _get('/gettransfer','include').then((r)=>{
+            this.addNewUserCon(r.arr);
+            console.log(this.userCon);
+        });
+    },
+};
+
+const UserSettings = {
+    mixins: [userMixin,storeMap,userSetMixin],
+    template: /*html*/ `
+    <div @mousewheel="wheelChange" class="user-settings">
+        <div class="card-title">连接信息</div>
+        <div class="card-body">
+            <div class="pure-g wrap">
+                <div v-for="tip in userSettings.tipsLink" class="pure-u-1-2 pure-u-lg-4-24" :key="tip.name">
+                    <p class="tips tips-blue">$[tip.name]$</p>
+                    <p class="font-light">$[tip.content]$</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    `,
+};
 
 const Panel = {
     delimiters: ['$[',']$'],
@@ -1143,6 +1867,8 @@ const Panel = {
         'user-invite': UserInvite,
         'user-shop': UserShop,
         'user-guide': UserGuide,
+        'user-resourse': UserResourse,
+        'user-settings': UserSettings
     },
     template: /*html*/ `
 
@@ -1166,7 +1892,9 @@ const Panel = {
             <div class="usrcenter text-left pure-g space-between" v-else-if="userLoadState === 'loaded'">
                 <div class="pure-u-1 pure-u-sm-6-24">
                     <div class="card account-base">
-                        <div class="card-title">账户明细</div>
+                        <div class="flex space-between">
+                            <div class="card-title">账号明细</div>
+                        </div>
                         <div class="card-body">
                             <div class="pure-g">
                                 <div class="pure-u-1-2">
@@ -1177,14 +1905,14 @@ const Panel = {
                                 </div>
                                 <div class="pure-u-1-2">
                                     <p class="tips tips-blue">VIP等级</p>
-                                    <p class="font-light">Lv. $[userCon.class]$</p>
+                                    <p class="font-light"><span class="user-config" :class="{ 'font-gold-trans':userResourseTrans }">Lv. $[userCon.class]$</span></p>
                                     <p class="tips tips-blue">余额</p>
-                                    <p class="font-light">$[userCon.money]$</p>
+                                    <p class="font-light"><span class="user-config" :class="{ 'font-red-trans':userCreditTrans }">$[userCon.money]$</span></p>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card margin-nobottom">
+                    <div class="card quickset margin-nobottom-sm">
                         <div class="card-title">快速配置</div>
                         <div class="card-body">
                             <div class="pure-g">
@@ -1218,21 +1946,61 @@ const Panel = {
                                     </uim-dropdown>                                
                                 </div>
                                 </transition>
-                                <h5 class="pure-u-1">订阅链接</h5>
+                                <h5 class="pure-u-1 flex align-center space-between">
+                                    <span>订阅链接</span>
+                                    <span class="link-reset relative flex justify-center text-center">
+                                        <button @click="showToolTip('resetConfirm')" class="tips tips-red"><span class="fa fa-refresh"> 重置链接</button>
+                                        <uim-tooltip v-show="toolTips.resetConfirm" class="uim-tooltip-top flex justify-center">
+                                            <div slot="tooltip-inner">
+                                                <span>确定要重置订阅链接？</span>
+                                                <div>
+                                                    <button @click="resetSubscribLink" class="tips tips-green"><span class="fa fa-fw fa-check"></span></button>
+                                                    <button @click="hideToolTip('resetConfirm')" class="tips tips-red"><span class="fa fa-fw fa-remove"></span></button>
+                                                </div>
+                                            </div>
+                                        </uim-tooltip>
+                                    </span>
+                                </h5>
                                 <transition name="rotate-fade" mode="out-in">
                                 <div class="input-copy" v-if="currentDlType === 'SSR'" key="ssrsub">
-                                    <div class="pure-g align-center">
-                                        <span class="pure-u-6-24">普通端口:</span><input class="tips tips-blue pure-u-18-24" type="text" name="" id="" :value="suburlMu0" readonly>                                
+                                    <div class="pure-g align-center relative">
+                                        <span class="pure-u-6-24">普通端口:</span>
+                                        <span class="pure-u-18-24 pure-g relative flex justify-center text-center">
+                                            <input v-uimclip="{ onSuccess:successCopied }" :data-uimclip="suburlMu0" @mouseenter="showToolTip('mu0')" @mouseleave="hideToolTip('mu0')" :class="{ 'sublink-reset':subLinkTrans }" class="tips tips-blue pure-u-1" type="text" name="" id="" :value="suburlMu0" readonly>
+                                            <uim-tooltip v-show="toolTips.mu0" class="uim-tooltip-top flex justify-center">
+                                                <div class="sublink" slot="tooltip-inner">
+                                                    <span>$[suburlMu0]$</span>
+                                                </div>
+                                            </uim-tooltip>
+                                        </span>
                                     </div>
-                                    <div v-if="mergeSub !== 'true'" class="pure-g align-center">
-                                        <span class="pure-u-6-24">单端口:</span><input class="tips tips-blue pure-u-18-24" type="text" name="" id="" :value="suburlMu1" readonly>                                                                  
+                                    <div v-if="mergeSub !== 'true'" class="pure-g align-center relative">
+                                        <span class="pure-u-6-24">单端口:</span>
+                                        <span class="pure-u-18-24 pure-g relative flex justify-center text-center">
+                                            <input v-uimclip="{ onSuccess:successCopied }" :data-uimclip="suburlMu1" @mouseenter="showToolTip('mu1')" @mouseleave="hideToolTip('mu1')" :class="{ 'sublink-reset':subLinkTrans }" class="tips tips-blue pure-u-1" type="text" name="" id="" :value="suburlMu1" readonly>
+                                            <uim-tooltip v-show="toolTips.mu1" class="uim-tooltip-top flex justify-center">
+                                                <div class="sublink" slot="tooltip-inner">
+                                                    <span>$[suburlMu1]$</span>
+                                                </div>
+                                            </uim-tooltip>
+                                        </span>                                                      
                                     </div>
                                 </div>
-                                <div class="input-copy" v-else-if="currentDlType === 'V2RAY'" key="sssub">
-                                    <input class="tips tips-blue" type="text" name="" id="" :value="suburlMu2" readonly>
+                                <div class="pure-g input-copy relative flex justify-center text-center" v-else-if="currentDlType === 'V2RAY'" key="sssub">
+                                    <input v-uimclip="{ onSuccess:successCopied }" :data-uimclip="suburlMu2" @mouseenter="showToolTip('mu2')" @mouseleave="hideToolTip('mu2')" :class="{ 'sublink-reset':subLinkTrans }" class="tips tips-blue" type="text" name="" id="" :value="suburlMu2" readonly>
+                                    <uim-tooltip v-show="toolTips.mu2" class="pure-u-1 uim-tooltip-top flex justify-center">
+                                        <div class="sublink" slot="tooltip-inner">
+                                            <span>$[suburlMu2]$</span>
+                                        </div>
+                                    </uim-tooltip>
                                 </div>
-                                <div class="input-copy" v-else-if="currentDlType === 'SS/SSD'" key="v2sub">
-                                    <input class="tips tips-blue" type="text" name="" id="" :value="suburlMu3" readonly>
+                                <div class="pure-g input-copy relative flex justify-center text-center" v-else-if="currentDlType === 'SS/SSD'" key="v2sub">
+                                    <input v-uimclip="{ onSuccess:successCopied }" :data-uimclip="suburlMu3" @mouseenter="showToolTip('mu3')" @mouseleave="hideToolTip('mu3')" :class="{ 'sublink-reset':subLinkTrans }" class="tips tips-blue" type="text" name="" id="" :value="suburlMu3" readonly>
+                                    <uim-tooltip v-show="toolTips.mu3" class="pure-u-1 uim-tooltip-top flex justify-center">
+                                        <div class="sublink" slot="tooltip-inner">
+                                            <span>$[suburlMu3]$</span>
+                                        </div>
+                                    </uim-tooltip>
                                 </div>
                                 </transition>
                             </div>
@@ -1240,34 +2008,36 @@ const Panel = {
                     </div>
                 </div>
                 <div class="pure-u-1 pure-u-sm-17-24">
-                    <div class="card">
-                        <div class="card-title">连接信息</div>
-                        <div class="card-body">
-                            <div class="pure-g">
-                                <div v-for="tip in tipsLink" class="pure-u-lg-4-24" :key="tip.name">
-                                    <p class="tips tips-blue">$[tip.name]$</p>
-                                    <p class="font-light">$[tip.content]$</p>
-                                </div>
-                            </div>
-                        </div>
+                    <div class="card relative">
+                        <uim-anchor>
+                            <ul slot="uim-anchor-inner">
+                                <li v-for="(page,index) in userSettings.pages" @click="changeUserSetPage(index)" :class="{ 'uim-anchor-active':userSettings.currentPage === page.id }" :data-page="page.id" :key="page.id"></li>
+                            </ul>
+                        </uim-anchor>
+                        <transition name="fade" mode="out-in">
+                        <keep-alive>
+                        <component v-on:turnPageByWheel="scrollPage" :resourseTrans="userResourseTrans" :is="userSettings.currentPage" :initialSet="userSettings" class="settiings-toolbar card margin-nobottom"></component>
+                        </keep-alive>
+                        </transition>
                     </div>
                     <div class="user-btngroup pure-g">
-                        <div class="pure-u-16-24">
+                        <div class="pure-u-1-2 pure-u-sm-16-24">
                             <uim-dropdown>
                                 <span slot="dpbtn-content">栏目导航</span>
                                 <ul slot="dp-menu">
                                     <li @click="componentChange" v-for="menu in menuOptions" :data-component="menu.id" :key="menu.id">$[menu.name]$</li>
                                 </ul>
                             </uim-dropdown>
+                            <a v-if="userCon.is_admin === true" class="btn-user" href="/admin">运营中心</a>
                         </div>
-                        <div class="pure-u-8-24 text-right">
-                            <a href="/user" class="btn-user">进入管理面板</a>
-                            <button @click="logout" class="btn-user">登出</button>                            
+                        <div class="pure-u-1-2 pure-u-sm-8-24 text-right">
+                            <a href="/user" class="btn-user">管理面板</a>
+                            <button @click="logout" class="btn-user">账号登出</button>                            
                         </div>
                     </div>
                     <transition name="fade" mode="out-in">
-                    <component :is="currentCardComponent" :baseURL="baseUrl" :thisuser="userCon" :annC="ann" class="card margin-nobottom">
-                        <button @click="componentChange" class="btn-inline" :data-component="menuOptions[3].id" slot="inviteToShop">成为VIP请点击这里</button>
+                    <component :is="currentCardComponent" v-on:resourseTransTrigger="showTransition('userResourseTrans')" :baseURL="baseUrl" :annC="ann" class="card margin-nobottom">
+                        <button @click="componentChange" class="btn-inline text-red" :data-component="menuOptions[3].id" slot="inviteToShop">成为VIP请点击这里</button>
                     </component>
                     </transition>
                 </div>
@@ -1296,7 +2066,6 @@ const Panel = {
     data: function() {
         return {
             userLoadState: 'beforeload',
-            userCon: '',
             ann: {
                 content: '',
                 date: '',
@@ -1307,32 +2076,16 @@ const Panel = {
             subUrl: '',
             ssrSubToken: '',
             mergeSub: 'false',
-            tipsLink: [
-                {
-                    name: '端口',
-                    content: '',
-                },
-                {
-                    name: '密码',
-                    content: '',
-                },
-                {
-                    name: '加密',
-                    content: '',
-                },
-                {
-                    name: '协议',
-                    content: '',
-                },
-                {
-                    name: '混淆',
-                    content: '',
-                },
-                {
-                    name: '混淆参数',
-                    content: '',
-                },
-            ],
+            toolTips: {
+                mu0: false,
+                mu1: false,
+                mu2: false,
+                mu3: false,
+                resetConfirm: false,
+            },
+            subLinkTrans: false,
+            userCreditTrans: false,
+            userResourseTrans: false,
             menuOptions: [
                 {
                     name: '公告栏',
@@ -1523,6 +2276,11 @@ const Panel = {
             currentDlType: 'SSR',
         }
     },
+    watch: {
+        'userCon.money' (to,from) {
+            this.showTransition('userCreditTrans');
+        },
+    },
     methods: {
         logout() {
             let callConfig = {
@@ -1534,20 +2292,74 @@ const Panel = {
                 if (r.ret === 1) {
                     callConfig.msg += '账户成功登出Kira~';
                     callConfig.icon += 'fa-check-square-o';
-                    tmp.dispatch('CALL_MSGR',callConfig);
+                    this.callMsgr(callConfig);
                     window.setTimeout(() => {
-                        tmp.commit('SET_LOGINTOKEN',0);
+                        this.setLoginToken(0);
                         this.$router.replace('/');
                     }, this.globalConfig.jumpDelay);
                 }
             });
+        },
+        indexPlus(index,arrlength) {
+            if (index === arrlength - 1) {
+                this.userSettings.currentPageIndex = index;
+            } else {
+                this.userSettings.currentPageIndex += 1;
+            }
+            return this.userSettings.currentPageIndex;
+        },
+        indexMinus(index) {
+            if (index === 0) {
+                this.userSettings.currentPageIndex = index;
+            } else {
+                this.userSettings.currentPageIndex -= 1;
+            }
+            return this.userSettings.currentPageIndex;
+        },
+        showTransition(key) {
+            this[key] = true;
+            setTimeout(() => {
+                this[key] = false;
+            }, 500);
         },
         componentChange(e) {
             this.currentCardComponent = e.target.dataset.component;
         },
         changeAgentType(e) {
             this.currentDlType = e.target.dataset.type;
-        }
+        },
+        changeUserSetPage(index) {
+            this.userSettings.currentPage = this.userSettings.pages[index].id;
+            this.userSettings.currentPageIndex = index;
+        },
+        showToolTip(id) {
+            this.toolTips[id] = true;
+        },
+        hideToolTip(id) {
+            this.toolTips[id] = false;
+        },
+        resetSubscribLink() {
+            _get('/getnewsubtoken','include').then((r)=>{
+                this.ssrSubToken = r.arr.ssr_sub_token;
+                this.hideToolTip('resetConfirm');
+                this.showTransition('subLinkTrans');
+                let callConfig = {
+                    msg: '已重置您的订阅链接，请变更或添加您的订阅链接！',
+                    icon: 'fa-bell',
+                    time: 1500,
+                }
+                this.callMsgr(callConfig);
+            });
+        },
+        scrollPage(token) {
+            if (token > 0) {
+                let index = this.indexPlus(this.userSettings.currentPageIndex,this.userSettings.pages.length);
+                this.changeUserSetPage(index);
+            } else {
+                let index = this.indexMinus(this.userSettings.currentPageIndex);
+                this.changeUserSetPage(index);
+            }
+        },
     },
     mounted() {
         let self = this;
@@ -1556,7 +2368,9 @@ const Panel = {
          _get('/getuserinfo','include').then((r) => {
             if (r.ret === 1) {
                 console.log(r.info);
-                this.userCon = r.info.user;
+                this.setUserCon(r.info.user);
+                this.setUserSettings(this.userCon);
+                console.log(this.userCon);
                 if (r.info.ann) {
                     this.ann = r.info.ann;
                 }
@@ -1564,13 +2378,6 @@ const Panel = {
                 this.subUrl = r.info.subUrl;
                 this.ssrSubToken = r.info.ssrSubToken;
                 this.mergeSub = r.info.mergeSub;
-                this.tipsLink[0].content = this.userCon.port;
-                this.tipsLink[1].content = this.userCon.passwd;
-                this.tipsLink[2].content = this.userCon.method;
-                this.tipsLink[3].content = this.userCon.protocol;
-                this.tipsLink[4].content = this.userCon.obfs;
-                this.tipsLink[5].content = this.userCon.obfs_param;
-                console.log(this.userCon);
             }
         }).then((r)=>{
             setTimeout(()=>{
@@ -1704,7 +2511,7 @@ Vue.component('uim-messager',{
     delimiters: ['$[',']$'],
     template: /*html*/ `
     <div class="uim-messager">
-        <div><slot name="icon"></slot><slot name="msg"></slot></div>
+        <div><slot name="icon"></slot><slot name="msg"></slot><slot name="html"></slot></div>
     </div>
     `,
 })
@@ -1777,6 +2584,93 @@ Vue.component('uim-dropdown',{
     }
 })
 
+Vue.component('uim-modal',{
+    delimiters: ['$[',']$'],
+    mixins: [storeMap],
+    template:/*html*/ `
+    <div class="uim-modal">
+        <transition name="fade" mode="out-in">
+        <div v-show="bindMask" class="uim-modal-mask"></div>
+        </transition>
+        <transition name="slide-fade" mode="out-in">
+        <div v-show="bindCard" class="uim-modal-card">
+            <div @click="$emit('closeModal')" class="uim-modal-close"><span class="fa fa-close"></span></div>
+            <div class="uim-modal-title"><slot name="uim-modal-title"></slot></div>
+            <div class="uim-modal-body"><slot name="uim-modal-body"></slot></div>
+            <div class="uim-modal-footer">
+                <div><slot name="uim-modal-footer"></slot></div>
+                <div><button @click="$emit('callOrderChecker')" class="uim-modal-confirm">确认</button></div>
+            </div>
+        </div>
+        </transition>
+    </div>
+    `,
+    props: ['bindMask','bindCard'],
+})
+
+Vue.component('uim-switch',{
+    delimiters: ['$[',']$'],
+    model: {
+        prop: 'isBtnActive',
+        event: 'change',
+    },
+    props: ['isBtnActive'],
+    template:/*html*/ `
+    <span @click="btnSwitch" :class="{ 'uim-switch-body-active':switchStatus }" class="uim-switch-body">
+        <input :checked="isBtnActive" v-on:change="$emit('change',$event.target.checked)" type="checkbox">
+    </span>
+    `,
+    data: function() {
+        return {
+            switchStatus: this.isBtnActive,
+        }
+    },
+    methods: {
+        btnSwitch() {
+            if (this.switchStatus === false) {
+                this.switchStatus = true;
+            } else {
+                this.switchStatus = false;
+            }
+        },
+    },
+})
+
+Vue.component('uim-tooltip',{
+    delimiters: ['$[',']$'],
+    template:/*html*/ `
+    <transition name="fade" mode="out-in">
+    <div class="uim-tooltip">
+        <slot name="tooltip-inner"></slot>
+    </div>
+    </transition>
+    `
+})
+
+Vue.component('uim-anchor',{
+    delimiters: ['$[',']$'],
+    template:/*html*/ `
+    <div class="uim-anchor">
+        <slot class="uim-anchor-inner" name="uim-anchor-inner"></slot>
+    </div>
+    `
+})
+
+Vue.component('uim-progressbar',{
+    delimiters: ['$[',']$'],
+    template:/*html*/ `
+    <div class="uim-progressbar" >
+        <div class="uim-progressbar-label"><slot name="uim-progressbar-label"></slot></div>
+        <div class="uim-progressbar-inner">
+            <slot name="progress"></slot>
+            <slot name="progress-fold"></slot>
+            <div class="uim-progress-text"><slot name="progress-text"></slot></div>
+        </div>
+        <span class="uim-progress-sign"><slot name="progress-sign"></slot></span>
+    </div>
+    `
+})
+
 const indexPage = new Vue({
     router: Router,
     el: '#index',
@@ -1815,16 +2709,16 @@ const indexPage = new Vue({
         fetch('https://api.lwl12.com/hitokoto/v1').then((r)=>{
             return r.text();
         }).then((r)=>{
-            tmp.commit('SET_HITOKOTO',r);            
+            this.setHitokoto(r);            
         })
         _get('https://v2.jinrishici.com/one.json','include').then((r) => {
-            tmp.commit('SET_JINRISHICI',r.data.content);
+            this.setJinRiShiCi(r.data.content);
         })
     },
     mounted() {
         this.routeJudge();
         setTimeout(()=>{
-            tmp.commit('SET_LOADSTATE');
+            this.setLoadState();
         },1000);
     },
     

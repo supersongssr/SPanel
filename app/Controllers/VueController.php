@@ -25,6 +25,10 @@ use App\Utils\Geetest;
 
 use voku\helper\AntiXSS;
 
+use App\Utils\URL;
+use App\Models\Ip;
+use App\Models\Node;
+
 class VueController extends BaseController {
 
     private $user;
@@ -117,6 +121,7 @@ class VueController extends BaseController {
         $mergeSub = Config::get('mergeSub');
         $subUrl = Config::get('subUrl');
         $baseUrl = Config::get('baseUrl');
+        $user['online_ip_count'] = $user->online_ip_count();
 
         $res['info'] = array(
             "user" => $user,
@@ -160,6 +165,7 @@ class VueController extends BaseController {
             "paybacks" => $paybacks,
             "paybacks_sum" => $paybacks_sum,
             "invitePrice" => Config::get('invite_price'),
+            "customPrice" => Config::get('custom_invite_price'),
         );
 
         $res['ret'] = 1;
@@ -179,4 +185,70 @@ class VueController extends BaseController {
         return $response->getBody()->write(json_encode($res));
     }
 
+    public function getAllResourse($request, $response, $args)
+    {
+        $user = $this->user;
+        
+        $res['resourse'] = array(
+            "money" => $user->money,
+            "class" => $user->class,
+            "class_expire" => $user->class_expire,
+            "expire_in" => $user->expire_in,
+            "online_ip_count" => $user->online_ip_count(),
+            "node_speedlimit" => $user->node_speedlimit,
+            "node_connector" => $user->node_connector,
+        );
+        $res['ret'] = 1;
+
+        return $response->getBody()->write(json_encode($res));
+    }
+
+    public function getNewSubToken($request, $response, $args)
+    {
+        $user = $this->user;
+        $user->clean_link();
+        $ssr_sub_token = LinkController::GenerateSSRSubCode($this->user->id, 0);
+
+        $res['arr'] = array(
+            'ssr_sub_token' => $ssr_sub_token,
+        );
+
+        $res['ret'] = 1;
+        
+        return $response->getBody()->write(json_encode($res));
+    }
+
+    public function getNewInviteCode($request, $response, $args)
+    {
+        $user = $this->user;
+        $user->clear_inviteCodes();
+        $code = InviteCode::where('user_id', $this->user->id)->first();
+        if ($code == null) {
+            $this->user->addInviteCode();
+			$code = InviteCode::where('user_id', $this->user->id)->first();
+        }
+
+        $res['arr'] = array(
+            "code" => $code,
+        );
+
+        $res['ret'] = 1;
+        
+        return $response->getBody()->write(json_encode($res));
+    }
+
+    public function getTransfer($request, $response, $args)
+    {
+        $user = $this->user;
+
+        $res['arr'] = array(
+            "todayUsedTraffic" => $user->TodayusedTraffic(),
+            "lastUsedTraffic" => $user->LastusedTraffic(),
+            "unUsedTraffic" => $user->unusedTraffic(),
+        );
+
+        $res['ret'] = 1;
+        
+        return $response->getBody()->write(json_encode($res));
+    }
 }
