@@ -1,6 +1,7 @@
 <template>
   <div class="page-user pure-u-1">
     <div class="title-back flex align-center">USERCENTER</div>
+<p><a href="/user" class="tips tips-green">点此进入 个人中心</a></p>
     <transition name="loading-fadex" mode="out-in">
       <div class="loading flex align-center" v-if="userLoadState === 'beforeload'">USERCENTER</div>
 
@@ -351,7 +352,7 @@ export default {
           id: "user-shop"
         }
       ],
-      currentCardComponent: "user-announcement"
+      currentCardComponent: "user-invite"
     };
   },
   watch: {

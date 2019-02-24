@@ -151,9 +151,6 @@ export default {
   }
 };
 </script>
-<script>
-  alert("凿壁借光の书签 \n家： {$config["appName"]} \n{$config["admin_contact1"]} \n{$config["admin_contact2"]} \n{$config["admin_contact3"]}");
-</script> 
 <style>
 .slide-fade-enter-active,
 .fade-enter-active,
