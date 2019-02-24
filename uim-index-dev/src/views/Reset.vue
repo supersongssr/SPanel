@@ -8,7 +8,7 @@
           <span>邮箱</span>
           <span>
             <router-link class="button-index" to="/auth/login">
-              <i class="fa fa-mail-forward"></i> 返回登录页
+              <font-awesome-icon icon="share" />&nbsp;返回登录页
             </router-link>
           </span>
         </label>
@@ -32,44 +32,44 @@ import { _post } from '../js/fetch'
 
 export default {
   mixins: [storeMap],
-  data: function() {
+  data: function () {
     return {
-      email: "",
+      email: '',
       isDisabled: false
-    };
+    }
   },
   methods: {
-    reset() {
+    reset () {
       let callConfig = {
-        msg: "",
-        icon: "",
+        msg: '',
+        icon: '',
         time: 1000
-      };
+      }
 
       _post(
-        "/password/reset",
+        '/password/reset',
         JSON.stringify({
           email: this.email
         }),
-        "omit"
+        'omit'
       ).then(r => {
-        if (r.ret == 1) {
-          callConfig.msg += "邮件发送成功kira~";
-          callConfig.icon += "fa-check-square-o";
-          this.callMsgr(callConfig);
+        if (r.ret === 1) {
+          callConfig.msg += '邮件发送成功kira~'
+          callConfig.icon += 'check-circle'
+          this.callMsgr(callConfig)
           window.setTimeout(() => {
-            this.$router.push("/auth/login");
-          }, this.globalConfig.jumpDelay);
+            this.$router.push('/auth/login')
+          }, this.globalConfig.jumpDelay)
         } else {
-          callConfig.msg += "WTF……邮件发送失败，请检查邮箱地址";
-          callConfig.icon += "fa-times-circle-o";
-          this.callMsgr(callConfig);
+          callConfig.msg += 'WTF……邮件发送失败，请检查邮箱地址'
+          callConfig.icon += 'times-circle'
+          this.callMsgr(callConfig)
           window.setTimeout(() => {
-            this.isDisabled = false;
-          }, 3000);
+            this.isDisabled = false
+          }, 3000)
         }
-      });
+      })
     }
   }
-};
+}
 </script>

@@ -1,5 +1,3 @@
-@import url(https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css);
-
 .pure-g {
     align-content: unset;
     -webkit-align-content: unset;
@@ -27,6 +25,10 @@ a {
 
 .space-around {
     justify-content: space-around;
+}
+
+.flex-end {
+    justify-content: flex-end;
 }
 
 .space-between {
@@ -194,7 +196,7 @@ a {
 a.btn-user,
 button.btn-user {
     font-size: 1rem;
-    padding: .5rem 1.5rem;
+    padding: .5rem .5rem;
     display: inline-block;
     border: 1px solid #434857;
     min-width: 80px;
@@ -291,8 +293,7 @@ input.checkbox,
 }
 
 .auth-submit:hover,
-.auth-submit:focus,
-    {
+.auth-submit:focus {
     background-color: #d6d6d6;
     border-color: #d6d6d6;
 }
@@ -568,6 +569,11 @@ select {
     outline: none;
 }
 
+.tips-sm {
+    font-size: 12px;
+    padding: .1rem .5rem;
+}
+
 .tips-blue {
     color: #1997c6;
     border-color: #1997c6;
@@ -649,12 +655,27 @@ button.tips {
     padding: .1rem 1rem;
 }
 
+.user-guide {
+    height: 385px;
+    overflow: auto;
+}
+
+.user-guide input {
+    background: transparent;
+    height: unset;
+    display: block;
+}
+
 .ann a {
     color: #D1335B;
 }
 
 .card-title-right {
     padding-right: 1rem;
+}
+
+.dl-link {
+    width: 100%;
 }
 
 .dl-link button {
@@ -682,6 +703,7 @@ button.tips {
 }
 
 .user-invite input,
+.user-charge input,
 .btn-inline {
     background: rgba(255, 255, 255, 0);
 }
@@ -699,26 +721,6 @@ button.tips {
     color: white;
 }
 
-.invite-number {
-    font-size: 14px;
-}
-
-.invite-tools {
-    position: relative;
-    margin-left: .75rem;
-}
-
-.invite-tools .tips.tips-red {
-    position: relative;
-    top: 1px;
-}
-
-.invite-tools.tips-green {
-    padding: 3.5px .7rem;
-    bottom: 1px;
-    margin-left: .55rem;
-}
-
 .invite-link {
     width: 100%;
     cursor: pointer;
@@ -732,8 +734,8 @@ button.tips {
     border: 0;
 }
 
-.user-invite-title .tips {
-    position: relative;
+.user-invite-title .btn-user {
+    margin-right: 1rem;
 }
 
 .list-shop {
@@ -741,14 +743,10 @@ button.tips {
     font-size: 1.2rem;
     border: 1px solid #434857;
     margin-bottom: .7rem;
-    width: 95%;
+    width: 100%;
     backface-visibility: hidden;
     -moz-backface-visibility: hidden;
     -webkit-backface-visibility: hidden;
-}
-
-.list-shop:hover {
-    transform: translate3D(1rem, 0, 0);
 }
 
 .list-shop div:first-of-type .tips {
@@ -906,48 +904,29 @@ button[name=reset] {
         overflow: auto;
     }
 
+    a.btn-user,
+    button.btn-user {
+        padding: .5rem .5rem;
+    }
+
+    .user-invite {
+        max-height: 385px;
+    }
+
     .user-guide {
         height: 385px;
-    }
-
-    .user-guide .tips {
-        margin-right: .5rem;
-    }
-
-    .userguide-bookmark>div {
-        width: 100%;
-    }
-
-    .guide-area {
-        padding-right: 1rem;
-        width: 100%;
-    }
-
-    .userguide-bookmark button {
-        background-color: #c8c8c81f;
-        border: none;
-        padding: .6rem 0;
-        outline: none;
-        display: block;
-        margin-top: 1rem;
-        font-size: 12px;
-        text-align: left;
-        padding-left: 1rem;
-        width: 100%;
-        border-radius: 20px;
     }
 
     .link-reset .uim-tooltip-top {
         width: 230px;
     }
 
-    .invite-link {
-        width: 450px;
+    .list-shop {
+        width: 95%;
     }
 
-    .user-invite-title .tips {
-        margin-bottom: .5rem;
-        margin-left: .75rem;
+    .invite-link {
+        width: 450px;
     }
 
     .margin-nobottom-sm {
@@ -963,6 +942,15 @@ button[name=reset] {
     .user-btngroup .btngroup-left>*:last-child,
     .user-btngroup .btngroup-right>*:last-child {
         margin-right: 0;
+    }
+
+    .user-table-container {
+        overflow: auto;
+        max-height: 355px;
+    }
+
+    .btn-forinput {
+        top: 0.25rem;
     }
 }
 
@@ -1021,6 +1009,9 @@ button[name=reset] {
         margin-left: 10rem;
     }
 
+    .margin-nobottom-xl {
+        margin-bottom: 0 !important;
+    }
 }
 
 @media screen and (max-width:35.5em) {

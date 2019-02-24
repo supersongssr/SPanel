@@ -20,8 +20,8 @@
             <transition name="fade" mode="out-in">
               <router-link class="button-index" :to="globalGuide.href" :key="routerN">
                 <span>
-                  <i class="fa" :class="globalGuide.icon"></i>
-                  <span class="hide-sm">{{globalGuide.content}}</span>
+                  <font-awesome-icon :icon="globalGuide.icon" />
+                  <span class="hide-sm">&nbsp;{{globalGuide.content}}</span>
                 </span>
               </router-link>
             </transition>
@@ -44,11 +44,14 @@
         </div>
 
         <transition name="slide-fade" mode="out-in">
-          <uim-messager v-show="msgrCon.isShow">
-            <i slot="icon" :class="msgrCon.icon"></i>
-            <span slot="msg">{{msgrCon.msg}}</span>
-            <div v-if="msgrCon.html !== ''" slot="html" v-html="msgrCon.html"></div>
+          <uim-messager :msgrCon="msgrCon" v-show="msgrCon.isShow">
+            <template #msg>{{msgrCon.msg}}</template>
+            <template #html></template>
           </uim-messager>
+        </transition>
+
+        <transition name="fade">
+          <uim-signer v-if="showSigner"></uim-signer>
         </transition>
       </div>
     </transition>
@@ -58,7 +61,8 @@
 <script>
 import Router from "./router";
 import storeMap from "@/mixins/storeMap";
-import Messager from "./components/messager.vue";
+import Messager from "@/components/messager.vue";
+import Signer from "@/components/sign.vue";
 
 import { _get } from "./js/fetch";
 
@@ -66,33 +70,34 @@ export default {
   router: Router,
   mixins: [storeMap],
   components: {
-    "uim-messager": Messager
+    "uim-messager": Messager,
+    "uim-signer": Signer
   },
   computed: {
     globalGuide: function() {
       switch (this.routerN) {
         case "index":
           return {
-            icon: "fa-home",
+            icon: "home",
             content: "回到首页",
             href: "/"
           };
-          break;
         case "auth":
           return {
-            icon: "fa-key",
+            icon: "key",
             content: "登录/注册",
             href: "/auth/login"
           };
-          break;
         case "user":
           return {
-            icon: "fa-user",
+            icon: "user",
             content: "用户中心",
             href: "/user/panel"
           };
-          break;
       }
+    },
+    showSigner: function() {
+      return this.logintoken && this.$route.path === "/user/panel";
     }
   },
   data: function() {
@@ -105,7 +110,7 @@ export default {
     routeJudge() {
       switch (this.$route.path) {
         case "/":
-          if (this.logintoken == false) {
+          if (this.logintoken === false) {
             this.routerN = "auth";
           } else {
             this.routerN = "user";
@@ -146,7 +151,6 @@ export default {
   }
 };
 </script>
-
 
 <style>
 .slide-fade-enter-active,
@@ -206,7 +210,9 @@ export default {
 .fade-enter,
 .fade-leave-to,
 .loading-fade-leave-to,
-.loading-fadex-leave-to {
+.loading-fadex-leave-to,
+.list-fade-enter,
+.list-fade-leave-to {
   opacity: 0;
 }
 .list-enter {
@@ -217,18 +223,33 @@ export default {
   transform: translateY(20px);
   opacity: 0;
 }
-.list-enter-active {
-  transition: all 0.5s ease;
+.list-enter-active,
+.list-fade-enter-active {
+  transition: all 0.3s ease;
   overflow: hidden;
-  transition-delay: .5s;
+  transition-delay: 0.3s;
   position: relative;
 }
-.list-leave-active {
-  transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+.list-fade-enter-active {
+  transition: all 1s ease;
+  transition-delay: unset;
+}
+.list-leave-active,
+.list-fade-leave-active {
+  transition: all 0.3s cubic-bezier(1, 0.5, 0.8, 1);
   position: relative;
   overflow: hidden;
 }
 .list-move {
-  transition: all .5s;
+  transition: all 0.3s;
+}
+.signer-enter,
+.signer-leave-to {
+  opacity: 0;
+  transform: scale(0.1, 0.1);
+}
+.signer-enter-active,
+.signer-leave-active {
+  transition: all 0.4s;
 }
 </style>

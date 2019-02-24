@@ -1,7 +1,7 @@
 <template>
   <label for="remember_me" class="flex align-center">
     <span class="uim-check" :class="{ uimchecked:boxChecked }">
-      <i class="fa fa-check uim-checkbox-icon"></i>
+      <font-awesome-icon icon="check" :class="'uim-checkbox-icon'" />
       <input
         :checked="isChecked"
         @click="setClass"
@@ -19,25 +19,25 @@
 <script>
 export default {
   model: {
-    prop: "isChecked",
-    event: "change"
+    prop: 'isChecked',
+    event: 'change'
   },
-  props: ["isChecked"],
-  data: function() {
+  props: ['isChecked'],
+  data: function () {
     return {
       boxChecked: false
-    };
+    }
   },
   methods: {
-    setClass() {
-      if (this.boxChecked == false) {
-        this.boxChecked = true;
+    setClass () {
+      if (this.boxChecked === false) {
+        this.boxChecked = true
       } else {
-        this.boxChecked = false;
+        this.boxChecked = false
       }
     }
   }
-};
+}
 </script>
 
 <style>
@@ -53,7 +53,6 @@ input[type="checkbox"].uim-checkbox {
   font-size: 0.9rem;
   position: relative;
   left: 0.2rem;
-  top: 1px;
 }
 
 .uim-checkbox-icon {

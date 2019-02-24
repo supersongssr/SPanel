@@ -11,21 +11,21 @@
         </div>
       </div>
 
-      <div class="usrcenter text-left pure-g space-between" v-else-if="userLoadState === 'loaded'">
-        <div class="pure-u-1 pure-u-sm-6-24">
-          <div class="card account-base">
+      <div class="usrcenter text-left pure-g space-around" v-else-if="userLoadState === 'loaded'">
+        <div class="pure-u-1 pure-u-xl-6-24 pure-g usrcenter-left">
+          <div class="pure-u-1 pure-u-sm-8-24 pure-u-xl-1 card account-base">
             <div class="flex space-between">
               <div class="card-title">账号明细</div>
             </div>
             <div class="card-body">
               <div class="pure-g">
-                <div class="pure-u-1-2">
+                <div class="pure-u-1-2 pure-u-sm-1 pure-u-xl-1-2">
                   <p class="tips tips-blue">用户名</p>
                   <p class="font-light">{{userCon.user_name}}</p>
                   <p class="tips tips-blue">邮箱</p>
                   <p class="font-light">{{userCon.email}}</p>
                 </div>
-                <div class="pure-u-1-2">
+                <div class="pure-u-1-2 pure-u-sm-1 pure-u-xl-1-2">
                   <p class="tips tips-blue">VIP等级</p>
                   <p class="font-light">
                     <span
@@ -44,7 +44,7 @@
               </div>
             </div>
           </div>
-          <div class="card quickset margin-nobottom-sm">
+          <div class="pure-u-1 pure-u-sm-15-24 pure-u-xl-1 card quickset margin-nobottom-xl">
             <div class="card-title">快速配置</div>
             <div class="card-body">
               <div class="pure-g">
@@ -58,18 +58,18 @@
                 >{{dl.type}}</button>
                 <h5 class="pure-u-1">平台选择/客户端下载</h5>
                 <transition name="rotate-fade" mode="out-in">
-                  <div class="dl-link" :key="typeToken.tagkey">
+                  <div class="pure-g dl-link" :key="typeToken.tagkey">
                     <uim-dropdown
                       v-for="(value,key) in downloads[typeToken.arrIndex].agent"
                       class="pure-u-1-3 btn-user"
                       :key="key"
                     >
-                      <span slot="dpbtn-content">{{key}}</span>
-                      <ul slot="dp-menu">
+                      <template #dpbtn-content>{{key}}</template>
+                      <template #dp-menu>
                         <li v-for="agent in value" :key="agent.id">
                           <a :href="agent.href">{{agent.agentName}}</a>
                         </li>
-                      </ul>
+                      </template>
                     </uim-dropdown>
                   </div>
                 </transition>
@@ -77,23 +77,23 @@
                   <span>订阅链接</span>
                   <span class="link-reset relative flex justify-center text-center">
                     <button @click="showToolTip('resetConfirm')" class="tips tips-red">
-                      <span class="fa fa-refresh"></span> 重置链接
+                      <font-awesome-icon icon="sync-alt" />&nbsp;重置链接
                     </button>
                     <uim-tooltip
                       v-show="toolTips.resetConfirm"
                       class="uim-tooltip-top flex justify-center"
                     >
-                      <div slot="tooltip-inner">
+                      <template #tooltip-inner>
                         <span>确定要重置订阅链接？</span>
                         <div>
                           <button @click="resetSubscribLink" class="tips tips-green">
-                            <span class="fa fa-fw fa-check"></span>
+                            <font-awesome-icon icon="check" fixed-width />
                           </button>
                           <button @click="hideToolTip('resetConfirm')" class="tips tips-red">
-                            <span class="fa fa-fw fa-remove"></span>
+                            <font-awesome-icon icon="times" fixed-width />
                           </button>
                         </div>
-                      </div>
+                      </template>
                     </uim-tooltip>
                   </span>
                 </h5>
@@ -119,13 +119,16 @@
                           v-show="toolTips[typeToken.muType]"
                           class="uim-tooltip-top flex justify-center"
                         >
-                          <div class="sublink" slot="tooltip-inner">
+                          <template #tooltip-inner>
                             <span>{{typeToken.subUrl}}</span>
-                          </div>
+                          </template>
                         </uim-tooltip>
                       </span>
                     </div>
-                    <div v-if="currentDlType === 'SSR' && mergeSub !== 'true'" class="pure-g align-center relative">
+                    <div
+                      v-if="currentDlType === 'SSR' && mergeSub !== 'true'"
+                      class="pure-g align-center relative"
+                    >
                       <span class="pure-u-6-24">单端口:</span>
                       <span class="pure-u-18-24 pure-g relative flex justify-center text-center">
                         <input
@@ -145,9 +148,9 @@
                           v-show="toolTips.mu1"
                           class="uim-tooltip-top flex justify-center"
                         >
-                          <div class="sublink" slot="tooltip-inner">
+                          <template #tooltip-inner>
                             <span>{{suburlMu1}}</span>
-                          </div>
+                          </template>
                         </uim-tooltip>
                       </span>
                     </div>
@@ -157,10 +160,10 @@
             </div>
           </div>
         </div>
-        <div class="pure-u-1 pure-u-sm-17-24">
+        <div class="pure-u-1 pure-u-xl-17-24">
           <div class="card relative">
             <uim-anchor>
-              <ul slot="uim-anchor-inner">
+              <template #uim-anchor-inner>
                 <li
                   v-for="(page,index) in userSettings.pages"
                   @click="changeUserSetPage(index)"
@@ -168,7 +171,7 @@
                   :data-page="page.id"
                   :key="page.id"
                 ></li>
-              </ul>
+              </template>
             </uim-anchor>
             <transition name="fade" mode="out-in">
               <keep-alive>
@@ -183,31 +186,32 @@
             </transition>
           </div>
           <div class="user-btngroup pure-g">
-            <div class="pure-u-1-2 pure-u-sm-16-24 btngroup-left">
+            <div class="pure-u-1-2 btngroup-left">
               <uim-dropdown>
-                <span slot="dpbtn-content">
+                <template #dpbtn-content>
                   <transition name="fade" mode="out-in">
                     <div :key="currentCardComponent">{{menuOptions[currentCardComponentIndex].name}}</div>
                   </transition>
-                </span>
-                <ul slot="dp-menu">
+                </template>
+                <template #dp-menu>
                   <li
                     @click="componentChange"
                     v-for="menu in menuOptions"
                     :data-component="menu.id"
                     :key="menu.id"
                   >{{menu.name}}</li>
-                </ul>
+                </template>
               </uim-dropdown>
               <a v-if="userCon.is_admin === true" class="btn-user" href="/admin">运营中心</a>
             </div>
-            <div class="pure-u-1-2 pure-u-sm-8-24 text-right btngroup-right">
+            <div class="pure-u-1-2 text-right btngroup-right">
               <a href="/user" class="btn-user">管理面板</a>
               <button @click="logout" class="btn-user">账号登出</button>
             </div>
           </div>
           <transition name="fade" mode="out-in">
             <component
+              @guideToShop="componentChange"
               :is="currentCardComponent"
               v-on:resourseTransTrigger="showTransition('userResourseTrans')"
               :baseURL="baseUrl"
@@ -237,6 +241,7 @@ import UserShop from "@/components/panel/UserShop.vue";
 import UserGuide from "@/components/panel/UserGuide.vue";
 import UserResourse from "@/components/panel/UserResourse.vue";
 import UserSettings from "@/components/panel/UserSettings.vue";
+import UserCharge from "@/components/panel/UserCharge.vue";
 
 import Dropdown from "@/components/dropdown.vue";
 import Tooltip from "@/components/tooltip.vue";
@@ -253,6 +258,7 @@ export default {
     "user-guide": UserGuide,
     "user-resourse": UserResourse,
     "user-settings": UserSettings,
+    "user-charge": UserCharge,
     "uim-dropdown": Dropdown,
     "uim-tooltip": Tooltip,
     "uim-anchor": Anchor
@@ -264,62 +270,42 @@ export default {
         case "SSR":
           return {
             tagkey: "dl-ssr",
-            subKey: 'sub-ssr',
+            subKey: "sub-ssr",
             arrIndex: 0,
-            muType: 'mu0',
-            subUrl: this.suburlMu0,
+            muType: "mu0",
+            subUrl: this.suburlMu0
           };
-          break;
         case "SS/SSD":
           return {
             tagkey: "dl-ss",
-            subKey: 'sub-ss',
+            subKey: "sub-ss",
             arrIndex: 1,
-            muType: 'mu3',
-            subUrl: this.suburlMu3,
+            muType: "mu3",
+            subUrl: this.suburlMu3
           };
-          break;
         case "V2RAY":
           return {
             tagkey: "dl-v2",
-            subKey: 'sub-v2',
+            subKey: "sub-v2",
             arrIndex: 2,
-            muType: 'mu2',
-            subUrl: this.suburlMu2,
+            muType: "mu2",
+            subUrl: this.suburlMu2
           };
-          break;
       }
     },
     currentCardComponentIndex: function() {
-      switch(this.currentCardComponent) {
-        case 'user-announcement':
+      switch (this.currentCardComponent) {
+        case "user-announcement":
           return 0;
-          break;
-        case 'user-guide':
+        case "user-guide":
           return 1;
-          break;
-        case 'user-invite':
+        case "user-invite":
           return 2;
-          break;
-        case 'user-shop':
+        case "user-charge":
           return 3;
-          break;
+        case "user-shop":
+          return 4;
       }
-    },
-    suburlBase: function() {
-      return this.subUrl + this.ssrSubToken;
-    },
-    suburlMu0: function() {
-      return this.suburlBase + "?mu=0";
-    },
-    suburlMu1: function() {
-      return this.suburlBase + "?mu=1";
-    },
-    suburlMu3: function() {
-      return this.suburlBase + "?mu=3";
-    },
-    suburlMu2: function() {
-      return this.suburlBase + "?mu=2";
     }
   },
   data: function() {
@@ -332,8 +318,6 @@ export default {
         markdown: ""
       },
       baseUrl: "",
-      subUrl: "",
-      ssrSubToken: "",
       mergeSub: "false",
       toolTips: {
         mu0: false,
@@ -359,6 +343,10 @@ export default {
           id: "user-invite"
         },
         {
+          name: "充值中心",
+          id: "user-charge",
+        },
+        {
           name: "套餐购买",
           id: "user-shop"
         }
@@ -381,10 +369,10 @@ export default {
       _get("/logout", "include").then(r => {
         if (r.ret === 1) {
           callConfig.msg += "账户成功登出Kira~";
-          callConfig.icon += "fa-check-square-o";
+          callConfig.icon += "check-circle";
           this.callMsgr(callConfig);
           window.setTimeout(() => {
-            this.setLoginToken(0);
+            this.setLoginToken(false);
             this.$router.replace("/");
           }, this.globalConfig.jumpDelay);
         }
@@ -432,7 +420,7 @@ export default {
         this.showTransition("subLinkTrans");
         let callConfig = {
           msg: "已重置您的订阅链接，请变更或添加您的订阅链接！",
-          icon: "fa-bell",
+          icon: "bell",
           time: 1500
         };
         this.callMsgr(callConfig);
@@ -449,6 +437,18 @@ export default {
         let index = this.indexMinus(this.userSettings.currentPageIndex);
         this.changeUserSetPage(index);
       }
+    },
+    showSigner() {
+      let promise = new Promise((resolve, reject) => {
+        this.setSignSet({ transition: true });
+        resolve();
+      });
+      promise.then(r => {
+        window.console.log(r);
+        setTimeout(() => {
+          this.setSignSet({ isSignShow: true });
+        }, 500);
+      });
     }
   },
   mounted() {
@@ -458,22 +458,28 @@ export default {
     _get("/getuserinfo", "include")
       .then(r => {
         if (r.ret === 1) {
-          console.log(r.info);
+          window.console.log(r.info);
           this.setUserCon(r.info.user);
           this.setUserSettings(this.userCon);
-          console.log(this.userCon);
+          window.console.log(this.userCon);
           if (r.info.ann) {
             this.ann = r.info.ann;
           }
+          this.setAllBaseCon({
+            subUrl: r.info.subUrl,
+            ssrSubToken: r.info.ssrSubToken,
+            iosAccount: r.info.iosAccount,
+            iosPassword: r.info.iosPassword,
+            displayIosClass: r.info.displayIosClass
+          });
           this.baseUrl = r.info.baseUrl;
-          this.subUrl = r.info.subUrl;
-          this.ssrSubToken = r.info.ssrSubToken;
           this.mergeSub = r.info.mergeSub;
         }
       })
       .then(r => {
         setTimeout(() => {
           self.userLoadState = "loaded";
+          this.showSigner();
         }, 1000);
       });
   },
@@ -485,8 +491,24 @@ export default {
     ) {
       next(false);
     } else {
-      next();
+      this.setSignSet({ isSignShow: false });
+      setTimeout(() => {
+        this.setSignSet({ transition: false });
+        next();
+      }, 200);
     }
   }
 };
 </script>
+
+<style>
+.pure-g.usrcenter-left {
+  justify-content: space-around;
+  display: flex;
+}
+@media screen and (min-width: 80em) {
+  .pure-g.usrcenter-left {
+    display: inline-block;
+  }
+}
+</style>

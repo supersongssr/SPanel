@@ -2,18 +2,18 @@
   <div class="auth pure-g align-center">
     <div class="pure-u-1 pure-u-sm-4-24 flex wrap space-around auth-links">
       <router-link
-        v-for="(links,key) in routerLinks"
+        v-for="links in routerLinks"
         @click.native="setButtonState"
         :class="{ active:links.isActive }"
         class="button-round flex align-center"
         :to="links.href"
         :key="links.id"
       >
-        <span class="fa-stack">
-          <i class="fa fa-circle fa-stack-2x"></i>
-          <i :class="links.icon"></i>
-        </span>
-        <span>{{links.content}}</span>
+        <font-awesome-layers class="fa-2x">
+          <font-awesome-icon icon="circle" :style="{ color: 'white' }"/>
+          <font-awesome-icon :icon="links.icon" :transform="links.iconTransform" :style="{ color: 'black' }"/>
+        </font-awesome-layers>
+        <span>&nbsp;{{links.content}}</span>
       </router-link>
     </div>
     <transition name="slide-fade" mode="out-in">
@@ -32,21 +32,24 @@ export default {
           id: "R_AUTH_0",
           href: "/auth/login",
           content: "登录",
-          icon: ["fa", "fa-sign-in", "fa-stack-1x", "fa-inverse"],
+          icon: "sign-in-alt",
+          iconTransform: "shrink-6",
           isActive: false
         },
         register: {
           id: "R_AUTH_1",
           href: "/auth/register",
           content: "注册",
-          icon: ["fa", "fa-user-plus", "fa-stack-1x", "fa-inverse"],
+          icon: "user-plus",
+          iconTransform: "shrink-7 left-1",
           isActive: false
         },
         reset: {
           id: "R_PW_0",
           href: "/password/reset",
           content: "密码重置",
-          icon: ["fa", "fa-unlock-alt", "fa-stack-1x", "fa-inverse"],
+          icon: "unlock-alt",
+          iconTransform: "shrink-6",
           isActive: false
         }
       }
@@ -55,7 +58,7 @@ export default {
   methods: {
     setButtonState() {
       for (let key in this.routerLinks) {
-        if (this.$route.path == this.routerLinks[key].href) {
+        if (this.$route.path === this.routerLinks[key].href) {
           this.routerLinks[key].isActive = true;
         } else {
           this.routerLinks[key].isActive = false;
@@ -77,4 +80,3 @@ export default {
   }
 };
 </script>
-
