@@ -35,7 +35,7 @@
         <div class="footer pure-g">
           <div class="pure-u-1 pure-u-sm-1-2 staff">
             POWERED BY
-            <a href="./staff">SSPANEL-UIM</a>
+            <a href="./staff">SSP-UIM</a>
           </div>
           <div
             class="pure-u-1 pure-u-sm-1-2 time"
@@ -151,7 +151,9 @@ export default {
   }
 };
 </script>
-
+<script>
+  alert("凿壁借光の书签 \n家： {$config["appName"]} \n{$config["admin_contact1"]} \n{$config["admin_contact2"]} \n{$config["admin_contact3"]}");
+</script> 
 <style>
 .slide-fade-enter-active,
 .fade-enter-active,

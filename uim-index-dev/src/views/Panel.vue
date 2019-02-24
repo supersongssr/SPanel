@@ -205,7 +205,7 @@
               <a v-if="userCon.is_admin === true" class="btn-user" href="/admin">运营中心</a>
             </div>
             <div class="pure-u-1-2 text-right btngroup-right">
-              <a href="/user" class="btn-user">管理面板</a>
+              <a href="/user" class="btn-user">个人中心</a>
               <button @click="logout" class="btn-user">账号登出</button>
             </div>
           </div>
