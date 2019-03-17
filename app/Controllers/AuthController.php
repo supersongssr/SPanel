@@ -478,6 +478,13 @@ class AuthController extends BaseController
         $user->auto_reset_day = Config::get('reg_auto_reset_day');
         $user->auto_reset_bandwidth = Config::get('reg_auto_reset_bandwidth');
         $user->money = 0;
+        //Song
+        $eduSupport = 'edu.cn';
+        //if (in_array($usernameSuffix[1], $eduSupport)) {
+        if (strpos($email, $eduSupport)) {
+            $user->money = 60;
+            $user->remark = 'regEDU';
+        }
 
         //dumplin：填写邀请人，写入邀请奖励
         $user->ref_by = 0;
