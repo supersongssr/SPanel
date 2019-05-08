@@ -21,7 +21,7 @@
 										<p>对方将获得<code>{$config["invite_get_money"]}</code>元奖励作为初始资金。</p>
 										<p>对方充值时您还会获得对方充值金额的 <code>{$config["code_payback"]} %</code> 的返利。</p>
 										<p>对方邀请的用户充值时您还会获得金额的 <code>{$config["code_payback"] / 2 }%</code> 的返利。</p>
-										<p class="card-heading">已获得返利：<code>{$paybacks_sum}</code> 元 ; 满100支持微信提款。</p>
+										<p class="card-heading">已获得返利：<code>{$paybacks_sum}</code> 元 ;。</p>
 									</div>
 
 								</div>

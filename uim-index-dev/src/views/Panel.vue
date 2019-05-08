@@ -1,14 +1,14 @@
 <template>
   <div class="page-user pure-u-1">
     <div class="title-back flex align-center">USERCENTER</div>
-<p><a href="/user" class="tips tips-green">点此进入 个人中心</a></p>
+<p><a href="/user" class="tips tips-green">个人中心 使用教程 帮助中心 点此进入</a></p>
     <transition name="loading-fadex" mode="out-in">
       <div class="loading flex align-center" v-if="userLoadState === 'beforeload'">USERCENTER</div>
-
       <div class="loading flex align-center" v-else-if="userLoadState === 'loading'" key="loading">
         <div class="spinnercube">
           <div class="cube1"></div>
           <div class="cube2"></div>
+          <div><a href="/user" class="tips tips-green">个人中心</a><br><a href="/user" class="tips tips-green">使用教程</a></div>
         </div>
       </div>
 
@@ -46,7 +46,7 @@
             </div>
           </div>
           <div class="pure-u-1 pure-u-sm-15-24 pure-u-xl-1 card quickset margin-nobottom-xl">
-            <div class="card-title">快速配置</div>
+            <div class="card-title">软件下载</div>
             <div class="card-body">
               <div class="pure-g">
                 <button
@@ -101,7 +101,7 @@
                 <transition name="rotate-fade" mode="out-in">
                   <div class="input-copy" :key="typeToken.subKey">
                     <div class="pure-g align-center relative">
-                      <span class="pure-u-6-24">{{currentDlType === 'SSR' ? '普通端口:' : '订阅链接:'}}</span>
+                      <span class="pure-u-6-24">{{currentDlType === 'SSR' ? '单端口:' : '订阅链接:'}}</span>
                       <span class="pure-u-18-24 pure-g relative flex justify-center text-center">
                         <input
                           v-uimclip="{ onSuccess:successCopied }"
@@ -274,7 +274,7 @@ export default {
             subKey: "sub-ssr",
             arrIndex: 0,
             muType: "mu0",
-            subUrl: this.suburlMu0
+            subUrl: this.suburlMu1
           };
         case "SS/SSD":
           return {
@@ -345,7 +345,7 @@ export default {
         },
         {
           name: "充值中心",
-          id: "user-charge",
+          id: "user-charge"
         },
         {
           name: "套餐购买",

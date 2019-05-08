@@ -258,6 +258,20 @@ class UserController extends BaseController
             if ($user->ref_by != "" && $user->ref_by != 0 && $user->ref_by != null) {
                 $gift_user = User::where("id", "=", $user->ref_by)->first();
                 $gift_user->money = ($gift_user->money + ($codeq->number * (Config::get('code_payback') / 100)));
+                //song 这里判断价格，如果价格高于20元，那么返利 用户返利的周期限制在用户注册账号的64天内。每个用户都有一个注册账号的时间呢。这个可以有。哇嘎嘎，非常棒。这个可以增加。
+                if ($codeq->number > 20 && $user->reg_date > time()-86400*64) {
+                    # code...  这是额外赠送的金额
+                    $gift_user->money = ($gift_user->money + Config::get('invite_gift_money'));
+                    //写入返利日志
+                    $Payback = new Payback();
+                    $Payback->total = Config::get('invite_gift_money');
+                    $Payback->userid = $this->user->id;
+                    $Payback->ref_by = $this->user->ref_by;
+                    $Payback->ref_get = Config::get('invite_gift_money');
+                    $Payback->datetime = time();
+                    $Payback->save();
+                }
+
                 $gift_user->save();
 
                 $Payback = new Payback();

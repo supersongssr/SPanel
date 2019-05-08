@@ -53,7 +53,6 @@
 							<ul>
                                 <li><a href="#1">简介</a></li>
 					            <li><a href="/user">用户中心</a></li>
-					            <li><a href="/">新版首页</a></li>
 								<li><a href="/user/logout">退出登录</a></li>
 								<li><a href="#5">下载</a></li>
                         </ul>
@@ -63,8 +62,9 @@
 							<div class="inner">
 								<h1>{$config["appName"]}</h1>
                               	<p>支持：<code>V.2</code><code>S$</code><code>S$D</code><code>S$R</code><code>S$RR</code></p>
-								<p>公告：注册送<code>16G</code>流量，<code>32</code>次邀请码，随机<code>1-3M</code>带宽</p>
-								<p>签到送<code>1-5G</code>流量/天，邀请注册送<code>64G</code>流量/用户，邀请好友注册送<code>5￥</code>/用户</p>
+								<p>公告：注册送<code>32G</code>流量，<code>32</code>次邀请码，免费网速<code>1-3M</code>带宽，捐赠用户网速<code>10Mbps-100Mbps</code></p>
+								<p>全球<code>100+</code>节点，<code>10000M</code>国际带宽，BGP CN2 HKBN PWWC NTT多线接入</p>
+								<p>签到送<code>1-5G</code>流量/天，邀请返利<code>5-15￥</code>/用户+<code>32G</code>流量+<code>20%</code>消费提成</p>
 								<p>节约账号资源，浪费可耻:)</p>
 								<!--
 								<script type="text/javascript" src="https://api.lwl12.com/hitokoto/main/get?encode=js&charset=utf-8"></script><div id="lwlhitokoto"><script>lwlhitokoto()</script></div>
@@ -75,7 +75,6 @@
 							<ul>
                                <li><a href="#1">简介</a></li>
 								<li><a href="/auth/login">登录</a></li>
-								<li><a href="/">新版首页</a></li>
 								<li><a href="/auth/register">注册</a></li>
                               	<li><a href="#5">下载</a></li> 
                            </ul>
@@ -88,7 +87,7 @@
                       <!--标签1开始-->
                       <article id="1">
                       <h2 class="major">简介</h2>
-                      <p>我变秃了，也变强了。<br>本站支持SS、SSD、SSR、SSRR、V2Ray同时使用。<br>请节约账号资源，浪费可耻。</p></article>
+                      <p>我变秃了，也变强了。<br>本站支持SS、SSD、SSR、SSRR、V2Ray同时使用。<br>本站提供超多节点和G口带宽。<br>本站现已服务超3万用户，安全高速上网。<br>请节约账号资源，浪费可耻。</p></article>
 					  <!--
 					  简介修改示例: 
 					  <p> 123</p>

@@ -39,7 +39,7 @@
         :disabled="isDisabled"
       >确认登录</button>
     </div>
-    <div
+    <!-- <div
       v-if="globalConfig.enable_telegram === 'true'"
       class="pure-u-1 pure-u-sm-11-24 pure-g auth-tg"
     >
@@ -66,7 +66,7 @@
           <div class="auth-submit pure-u-18-24 tg-timeout">验证方式已过期，请刷新页面后重试</div>
         </div>
       </transition>
-    </div>
+    </div> -->
   </div>
 </template>
 

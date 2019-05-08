@@ -13,6 +13,10 @@ use App\Services\Gateway\ChenPay;
 use App\Utils\Hash;
 use App\Utils\Tools;
 use App\Services\Config;
+//song
+use App\Models\Bought;
+use App\Models\Payback;
+use App\Models\Code;
 
 use App\Utils\GA;
 use App\Utils\QRcode;
@@ -33,6 +37,9 @@ class XCat
                 return (new ChenPay())->AliPayListen();
             case("wxpay"):
                 return (new ChenPay())->WxPayListen();
+                //song
+            case("banUsernoPay"):
+                return $this->banUsernoPay();
             case("createAdmin"):
                 return $this->createAdmin();
             case("resetTraffic"):
@@ -171,6 +178,30 @@ class XCat
         echo $ret;
     }
 
+//  song 禁用滥用邀请的用户的账户
+    // 如果购买了 64元以上套餐，但是发现实际 充值金额 + 邀请返利 少于 32元的话，就会被禁用账户。
+    public function banUsernoPay()
+    {
+        echo "开始禁用无支付的账号";
+        $boughts = Bought::where("price", ">", 64)->get();
+        foreach ($boughts as $bought) {
+            # code...
+            $codes = Code::where("userid",$bought->userid)->sum('number');
+            $paybacks = Payback::where("ref_by",$bought->userid)->sum('ref_get');
+            //echo $codes + $paybacks;
+            //echo "--";
+            if (($codes + $paybacks) < 32) {
+                # code...
+                echo $codes + $paybacks;
+                echo "-";
+                echo $bought->userid;
+                echo "  ;  ";
+                User::where("id",$bought->userid)->update(['enable'=>'0']);
+            }
+        }
+        echo "禁用完成 ";
+
+    }
     public function createAdmin()
     {
         echo "add admin/ 创建管理员帐号.....";

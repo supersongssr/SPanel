@@ -23,7 +23,7 @@
                                 <div class="card-inner">
                                     <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
                                       <p><a href="http://t.cn/Ecs4fKQ" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="{$config["fakaurl"]}" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                        <a href="http://t.cn/Ecs4fKQ" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
                                         <a href="http://t.cn/Ecs4fKQ" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
                                         重要的事情说三遍
                                   </p>

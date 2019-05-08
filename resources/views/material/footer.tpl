@@ -22,7 +22,8 @@ It will not impact the appearance and can give developers a lot of support :)
     <!-- End Google Analytics -->
     {/if}
 	<!-- js -->
-	<script src="https://cdn.jsdelivr.net/npm/jquery@2.2.1"></script>
+	<!-- <script src="https://cdn.jsdelivr.net/npm/jquery@2.2.1"></script> -->
+    <script src="/theme/material/js/jquery-2.2.1.min.js"></script>
     {if isset($geetest_html)}
 	<script src="//static.geetest.com/static/tools/gt.js"></script>
     {/if}

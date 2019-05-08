@@ -90,7 +90,7 @@ class AuthController extends BaseController
     {
         // $data = $request->post('sdf');
         $email = $request->getParam('email');
-		$email = trim($email);
+        $email = trim($email);
         $email = strtolower($email);
         $passwd = $request->getParam('passwd');
         $code = $request->getParam('code');
@@ -249,7 +249,7 @@ class AuthController extends BaseController
     {
         if (Config::get('enable_email_verify') == 'true') {
             $email = $request->getParam('email');
-			$email = trim($email);
+            $email = trim($email);
 
             if ($email == "") {
                 $res['ret'] = 0;
@@ -264,12 +264,13 @@ class AuthController extends BaseController
                 return $response->getBody()->write(json_encode($res));
             }
 
-            $junk_email = explode(';', Config::get('junk_email_list'));
+            $allow_email = explode(';', Config::get('allow_email_list'));
             $check_email = explode('@', $email);
-            if (in_array($check_email['1'], $junk_email)) {
+            //song 判断是否在白名单中
+            if (!in_array($check_email['1'], $allow_email)) {
                 # code...
                 $res['ret'] = 0;
-                $res['msg'] = "垃圾邮箱";
+                $res['msg'] = "咦,邮箱地址不常见呢,联系管理员加入白名单！";
                 return $response->getBody()->write(json_encode($res));
             }
 
@@ -326,24 +327,24 @@ class AuthController extends BaseController
 
     public function registerHandle($request, $response)
     {
-		if(Config::get('register_mode')=='close'){
-			$res['ret'] = 0;
+        if(Config::get('register_mode')=='close'){
+            $res['ret'] = 0;
             $res['msg'] = "未开放注册。";
             return $response->getBody()->write(json_encode($res));
-		}
+        }
         $name = $request->getParam('name');
         $email = $request->getParam('email');
-		$email = trim($email);
+        $email = trim($email);
         $email = strtolower($email);
         $passwd = $request->getParam('passwd');
         $repasswd = $request->getParam('repasswd');
         $code = $request->getParam('code');
-		$code = trim($code);
+        $code = trim($code);
         $imtype = $request->getParam('imtype');
         $emailcode = $request->getParam('emailcode');
-		$emailcode = trim($emailcode);
+        $emailcode = trim($emailcode);
         $wechat = $request->getParam('wechat');
-		$wechat = trim($wechat);
+        $wechat = trim($wechat);
         // check code
 
 
@@ -477,14 +478,7 @@ class AuthController extends BaseController
         $user->invite_num = Config::get('inviteNum');
         $user->auto_reset_day = Config::get('reg_auto_reset_day');
         $user->auto_reset_bandwidth = Config::get('reg_auto_reset_bandwidth');
-        $user->money = 0;
-        //Song
-        $eduSupport = 'edu.cn';
-        //if (in_array($usernameSuffix[1], $eduSupport)) {
-        if (strpos($email, $eduSupport)) {
-            $user->money = 60;
-            $user->remark = 'regEDU';
-        }
+        $user->money = 0.66;
 
         //dumplin：填写邀请人，写入邀请奖励
         $user->ref_by = 0;
@@ -496,15 +490,22 @@ class AuthController extends BaseController
                 $gift_user->transfer_enable = ($gift_user->transfer_enable + Config::get('invite_gift') * 1024 * 1024 * 1024);
                 //add gift money 5yuan
                 //check if qq.com hotmail.com 163.com 126.com gmail.com 等等常用邮箱，赠送
-                $gift_email = explode(';', Config::get('gift_email_list'));
-                $check_email = explode('@', $email);
-                if (in_array($check_email['1'], $gift_email)) {
+                //$gift_email = explode(';', Config::get('gift_email_list'));
+                //$check_email = explode('@', $email);
+                //$gift_user->money = ($gift_user->money + Config::get('invite_gift_money'));
+                //if (in_array($check_email['1'], $gift_email)) {
                     # code...
-                    $gift_user->money = ($gift_user->money + Config::get('invite_gift_money'));
-                }
+                //}
                 $gift_user->invite_num -= 1;
                 $gift_user->save();
             }
+        }
+        //Song
+        $eduSupport = 'edu.cn';
+        //if (in_array($usernameSuffix[1], $eduSupport)) {
+        if (strpos($email, $eduSupport)) {
+            $user->money = 60;
+            $user->remark = 'regEDU';
         }
 
 

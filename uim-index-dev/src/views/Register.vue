@@ -4,11 +4,11 @@
     <h1>账号注册</h1>
     <div class="flex space-around reg">
       <div class="input-control flex wrap">
-        <label for="usrname">昵称</label>
+        <label for="usrname">昵称(登陆用邮箱登陆，不是昵称)</label>
         <input v-model="usrname" type="text" name="usrname">
       </div>
       <div class="input-control flex wrap">
-        <label for="email">邮箱(唯一凭证请认真对待)</label>
+        <label for="email">邮箱(小众邮箱请联系管理员添加白名单)</label>
         <input v-model="email" type="text" name="email">
       </div>
       <div class="input-control flex wrap">
@@ -23,13 +23,13 @@
         <label for="imtype">选择您的联络方式</label>
         <select v-model="imtype" name="imtype" id="imtype">
           <option value="1">微信</option>
-          <option value="2">QQ</option>
+          <option value="2" selected = "selected">QQ</option>
           <option value="3">Facebook</option>
           <option value="4">Telegram</option>
         </select>
       </div>
       <div class="input-control flex wrap">
-        <label for="contect">联络方式账号</label>
+        <label for="contect">联络方式</label>
         <input v-model="contect" type="text" name="contect">
       </div>
       <div v-if="globalConfig.registMode === 'invite'" class="input-control flex">
@@ -223,7 +223,7 @@ export default {
           this.callMsgr(callConfig)
         } else {
           let callConfig = {
-            msg: 'emm……邮件发送失败',
+            msg: 'emm……邮件发送失败,您的邮箱后缀不常见呢，请联系管理员添加白名单',
             icon: 'times-circle',
             time: 1000
           }

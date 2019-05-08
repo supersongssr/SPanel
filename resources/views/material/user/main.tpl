@@ -82,7 +82,7 @@
 
                             <li>
 								<a href="/user/ticket">
-									<i class="icon icon-lg">question_answer</i>&nbsp;客服/工单
+									<i class="icon icon-lg">question_answer</i>&nbsp;工单
 								</a>
 							</li>
 							                          

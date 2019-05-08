@@ -149,10 +149,10 @@
 										<nav class="tab-nav margin-top-no">
 											<ul class="nav nav-list">
 												<li class="active">
-													<a class="" data-toggle="tab" href="#all_v2ray"><i class="icon icon-lg">flight_land</i>&nbsp;V.2 ★★★★★</a>
+													<a class="" data-toggle="tab" href="#all_ssr"><i class="icon icon-lg">airplanemode_active</i>&nbsp;S.R ★★★★★</a>
 												</li>
-												<li>
-													<a class="" data-toggle="tab" href="#all_ssr"><i class="icon icon-lg">airplanemode_active</i>&nbsp;S.R ★★★</a>
+												<li >
+													<a class="" data-toggle="tab" href="#all_v2ray"><i class="icon icon-lg">flight_land</i>&nbsp;V.2 ★★★</a>
 												</li>
 												<li>
 													<a class="" data-toggle="tab" href="#all_ss"><i class="icon icon-lg">flight_takeoff</i>&nbsp;S.S ★</a>
@@ -161,7 +161,7 @@
 										</nav>
 										<div class="card-inner">
 											<div class="tab-content">
-												<div class="tab-pane fade" id="all_ssr">
+												<div class="tab-pane fade active in" id="all_ssr">
 													{$pre_user = URL::cloneUser($user)}
 													<p>S.R☆☆☆：TCP、UDP、Chain-a协议、支持与S.S V.2同时使用。</p>
 													<nav class="tab-nav margin-top-no">
@@ -197,7 +197,7 @@
                                                         {$user = URL::getSSRConnectInfo($pre_user)}
 														{$ssr_url_all = URL::getAllUrl($pre_user, 0, 0)}
 														{$ssr_url_all_mu = URL::getAllUrl($pre_user, 1, 0)}
-														<p><span class="icon icon-lg text-white">filter_1</span><a class="btn-dl" href="/ssr-download/ssr-win.7z"><i class="material-icons">save_alt</i> 点击下载S.RR</a>解压至任意磁盘并运行</p>
+														<p><span class="icon icon-lg text-white">filter_1</span><a class="btn-dl" href="https://github.com/shadowsocksrr/shadowsocksr-csharp/releases/download/4.9.0/ShadowsocksR-win-4.9.0.zip"><i class="material-icons">save_alt</i> 点击下载S.RR(推荐)</a>解压至任意磁盘并运行 ;或者<a class="btn-dl" href="https://github.com/shadowsocksr-backup/shadowsocksr-csharp/releases/download/4.7.0/ShadowsocksR-4.7.0-win.7z"><i class="material-icons">save_alt</i> 点击下载S.R</a></p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 任务栏右下角右键纸飞机图标->服务器订阅->S.R服务器订阅设置，将订阅链接设置为下面的地址，确定之后再更新S.R服务器订阅（绕过代理）</p>
 														<p> <span class="icon icon-lg text-white">filter_3</span> 然后选择一个合适的服务器，代理规则选“绕过局域网和大陆”，然后即可上网</p>
 														<p><span class="icon icon-lg text-white">filter_4</span> 备用导入节点方法：点击复制<a class="copy-text btn-dl" data-clipboard-text="{$ssr_url_all_mu}"><i class="material-icons icon-sm">how_to_vote</i>单端口多用户链接</a>，然后右键小飞机->从剪贴板复制地址</p>
@@ -216,7 +216,7 @@
 
 															
 															<div><span class="icon icon-lg text-white">flash_auto</span> 单端口节点订阅地址：</div>
-															<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=1" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=1">点击复制</button><br></div>
+															<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=1" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=1">点击复制</button><br></div>
 															
                                                       <p><a href="/user/tutorial">点击这里查看Mac教程</a></p>
 													</div>
@@ -242,10 +242,10 @@
 															</b></p>
 														{/if}
 													{/if}
-														<p><span class="icon icon-lg text-white">filter_1</span> 在 Safari 中<a class="btn-dl" href="itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/xcxnig/ssr-download/master/potatso-lite.plist"><i class="material-icons">save_alt</i> 点击安装 Potatso Lite</a> 或在非国区AppStore中搜索<code>Shadowrocket</code>下载安装 </p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Potatso Lite，点击添加代理，点击右上角的 + 号，选择“订阅”，名字任意填写，开启自动更新，URL填写以下地址并保存即可</p>
+														<!-- <p><span class="icon icon-lg text-white">filter_1</span> 在 Safari 中<a class="btn-dl" href="itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/xcxnig/ssr-download/master/potatso-lite.plist"><i class="material-icons">save_alt</i> 点击安装 Potatso Lite</a> 或在非国区AppStore中搜索<code>Shadowrocket</code>下载安装 </p>
+														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Potatso Lite，点击添加代理，点击右上角的 + 号，选择“订阅”，名字任意填写，开启自动更新，URL填写以下地址并保存即可</p> Song-->
 
-														<p><span class="icon icon-lg text-white">filter_1</span> 或者安装：<code>shadowrocket</code>,<a href="/ssr-download/Shadowrocket_2.1.12.ipa" class="btn-dl">点击下载</a>ipa安装文件,<a href="https://www.i4.cn/news_detail_3339.html" class="btn-dl" target="_blank">点击查看</a>爱思助手安装ipa文件教程 </p>
+														<p><span class="icon icon-lg text-white">filter_1</span> 推荐安装：<code>shadowrocket</code>,<a href="/ssr-download/Shadowrocket_2.1.12.ipa" class="btn-dl">点击下载</a>ipa安装文件,<a href="https://www.i4.cn/news_detail_3339.html" class="btn-dl" target="_blank">点击查看</a>爱思助手安装ipa文件教程 （注意通过爱思助手安装IPA文件可以）</p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Shadowrocket，点击右上角的 + 号，类型选择“Subscribe”，URL填写以下地址并点击右上角完成即可。或使用<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="sub0"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键{if !$mergeSub}普通{/if}端口订阅</a> {if !$mergeSub}<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="sub1"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键单端口订阅</a>{/if}</p>
 														
 														<div><span class="icon icon-lg text-white">flash_auto</span> 单端口节点订阅地址：</div>
@@ -422,7 +422,7 @@
 													</div>
 												</div>
 
-												<div class="tab-pane fade active in" id="all_v2ray">
+												<div class="tab-pane fade" id="all_v2ray">
 													<p>V.2☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装。推荐使用；</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
@@ -454,6 +454,7 @@
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_ios">
+														<p>IOS端推荐使用SR，不推荐使用V2</p>
 														<p><span class="icon icon-lg text-white">filter_1</span> 推荐安装：在非国区AppStore中搜索<code>kitsunebi</code>安装 </p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Kitsunebi，复制全部Vmess链接，粘贴到Kitsunebi中。</p>
 														<p><span class="icon icon-lg text-white">filter_1</span> 或者安装：<code>shadowrocket</code>,<a href="/ssr-download/Shadowrocket_2.1.12.ipa" class="btn-dl">点击下载</a>ipa安装文件,<a href="https://www.i4.cn/news_detail_3339.html" class="btn-dl" target="_blank">点击查看</a>爱思助手安装ipa文件教程 </p>
@@ -474,10 +475,10 @@
 													<div class="tab-pane fade" id="all_v2_mac">
 														<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/V2RayX.app.zip" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V.2.rayX</a>并解压</p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 将 V.2.rayX.app 复制到 程序 文件夹，运行V.2RayX</p>
-														<p><span class="icon icon-lg text-white">filter_3</span> 复制下面ALL Vmess链接，粘贴到V.2RayX中</p>
-														<p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>
+														<p><span class="icon icon-lg text-white">filter_3</span> MAC端需要手动添加节点，配置信息可以在节点列表页面查看到。如果您不会手动添加的话，MAC推荐使用SR呢。</p>
+														<!-- <p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>-->
 														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=2">点击复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_info">
 														{$v2_url_all = URL::getAllVMessUrl($user)}
@@ -541,7 +542,7 @@
                                               {if $user->class_expire!="1989-06-04 00:05:00"}
 											<dd><i class="icon icon-md">event</i>&nbsp;{$user->class_expire}</dd>
                                               {else}
-                                              <dd><i class="icon icon-md">event</i>&nbsp;不过期</dd>
+                                              <dd><i class="icon icon-md">event</i>&nbsp;请续期</dd>
                                               {/if}
 											</p>
                                           	<p><dt>等级有效期</dt>
@@ -756,7 +757,7 @@ function CountDown() {
     var levelExpireDays = Math.floor(b/(24*3600*1000));
     var accountExpireDays = Math.floor(c/(24*3600*1000));
     if (levelExpireDays < 0 || levelExpireDays > 315360000000) {
-        document.getElementById('days-level-expire').innerHTML = "无限期";
+        document.getElementById('days-level-expire').innerHTML = "感谢您使用本站";
         for (var i=0;i<document.getElementsByClassName('label-level-expire').length;i+=1){
             document.getElementsByClassName('label-level-expire')[i].style.display = 'none';
         }
@@ -764,7 +765,7 @@ function CountDown() {
         document.getElementById('days-level-expire').innerHTML = levelExpireDays;
     }
     if (accountExpireDays < 0 || accountExpireDays > 315360000000) {
-        document.getElementById('days-account-expire').innerHTML = "无限期";
+        document.getElementById('days-account-expire').innerHTML = "感谢您使用本站";
         for (var i=0;i<document.getElementsByClassName('label-account-expire').length;i+=1){
             document.getElementsByClassName('label-account-expire')[i].style.display = 'none';
         }
