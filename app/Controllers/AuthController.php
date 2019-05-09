@@ -501,13 +501,18 @@ class AuthController extends BaseController
             }
         }
         //Song
-        $eduSupport = 'edu.cn';
+        //$eduSupport = 'edu.cn';
         //if (in_array($usernameSuffix[1], $eduSupport)) {
-        if (strpos($email, $eduSupport)) {
+        /**if (strpos($email, $eduSupport)) {
+            $user->money = 60;
+            $user->remark = 'regEDU';
+        }**/
+        //song 新版判断邮箱结尾是否为 edu.cn
+        if (strrchr($email, 'edu.cn') == 'edu.cn') {
+            # code...
             $user->money = 60;
             $user->remark = 'regEDU';
         }
-
 
         $user->class_expire = date("Y-m-d H:i:s", time() + Config::get('user_class_expire_default') * 3600);
         $user->class = Config::get('user_class_default');
