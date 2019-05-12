@@ -17,6 +17,7 @@ use App\Services\Config;
 use App\Models\Bought;
 use App\Models\Payback;
 use App\Models\Code;
+use App\Models\Node;
 
 use App\Utils\GA;
 use App\Utils\QRcode;
@@ -40,6 +41,8 @@ class XCat
                 //song
             case("banUsernoPay"):
                 return $this->banUsernoPay();
+            case("autoCheckNodeStatus"):
+                return $this->autoCheckNodeStatus();
             case("createAdmin"):
                 return $this->createAdmin();
             case("resetTraffic"):
@@ -202,6 +205,47 @@ class XCat
         echo "禁用完成 ";
 
     }
+
+    public function autoCheckNodeStatus()
+    {
+        $nodes_vnstat = Node::where('id','>',2)->get();
+        $file = "/www/wwwroot/ssp-uim/public/".date("md");
+        $node_line = '=====================================';
+        $node_error = 'can not connect';
+        $nodes_log = @file_put_contents($file, date("m-d H:i"));
+        foreach ($nodes_vnstat as $node) {
+            # code...
+            $addn = explode('#', $node->server);
+            $addndesc = explode('@', $node->desc);
+            $server = $addndesc['1'] ? $addndesc['1'] : 8000 ;
+            // $addn['0']就是获取到的节点的服务器地址或IP
+            $status_url = "http://".$addn['0'].":".$server."/status";
+            $vnstat_url = "http://".$addn['0'].":".$server."/vnstat";
+            $status = @file_get_contents($status_url);
+            $vnstat = @file_get_contents($vnstat_url);
+            if ($status == 7) {
+                # code...
+                $node->type = 1;
+                $node->save();
+                //将数据写入文件
+                $data = $node->name."#".$addn['0']."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
+                $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
+            }elseif ($status == 4 ) {
+                # code...
+                $node->type = 0;
+                $node->save();
+                //将数据写入文件
+                $data = $node->name."#".$addn['0']."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
+                $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
+            }else{
+                //获取不到运行状态 也写入数据
+                $data = $node->name."#".$addn['0']."#".$node->type.$node_error."\n".$node_line."\n\n\n";
+                $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
+            }
+            //            
+        }
+    }
+
     public function createAdmin()
     {
         echo "add admin/ 创建管理员帐号.....";

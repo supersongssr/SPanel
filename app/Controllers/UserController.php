@@ -493,7 +493,7 @@ class UserController extends BaseController
 
 			$array_node['id']=$node->id;
 			$array_node['class']=$node->node_class;
-			$array_node['name']=$node->name;
+			$array_node['name']=$node->name.'·#'.$node->id;
 			$array_node['server']=$node->server;
 			$array_node['sort']=$node->sort;
 			$array_node['info']=$node->info;

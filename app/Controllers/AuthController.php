@@ -264,10 +264,11 @@ class AuthController extends BaseController
                 return $response->getBody()->write(json_encode($res));
             }
 
-            $allow_email = explode(';', Config::get('allow_email_list'));
+            //$allow_email = explode(';', Config::get('allow_email_list'));
             $check_email = explode('@', $email);
             //song 判断是否在白名单中
-            if (!in_array($check_email['1'], $allow_email)) {
+            //if (!in_array($check_email['1'], $allow_email)) {
+            if (stripos(Config::get('allow_email_list') , $check_email['1']) == flase ) {
                 # code...
                 $res['ret'] = 0;
                 $res['msg'] = "咦,邮箱地址不常见呢,联系管理员加入白名单！";
