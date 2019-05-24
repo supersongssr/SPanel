@@ -53,12 +53,12 @@ class XCat
                  return $this->initQQWry();
             case("sendDiaryMail"):
                 return DailyMail::sendDailyMail();
-			case("sendFinanceMail_day"):
-			    return FinanceMail::sendFinanceMail_day();
-			case("sendFinanceMail_week"):
-			    return FinanceMail::sendFinanceMail_week();
-			case("sendFinanceMail_month"):
-			    return FinanceMail::sendFinanceMail_month();
+            case("sendFinanceMail_day"):
+                return FinanceMail::sendFinanceMail_day();
+            case("sendFinanceMail_week"):
+                return FinanceMail::sendFinanceMail_week();
+            case("sendFinanceMail_month"):
+                return FinanceMail::sendFinanceMail_month();
             case("reall"):
                     return DailyMail::reall();
             case("syncusers"):
@@ -75,8 +75,8 @@ class XCat
                     return Job::syncnode();
             case("syncnasnode"):
                     return Job::syncnasnode();
-			case("detectGFW"):
-				return Job::detectGFW();
+            case("detectGFW"):
+                return Job::detectGFW();
             case("syncnas"):
                     return SyncRadius::syncnas();
             case("dailyjob"):
@@ -87,8 +87,8 @@ class XCat
                 return Job::UserGa();
             case("backup"):
                 return Job::backup(false);
-			case("backupfull"):
-				return Job::backup(true);
+            case("backupfull"):
+                return Job::backup(true);
             case("initdownload"):
                 return $this->initdownload();
             case("updatedownload"):
@@ -97,15 +97,15 @@ class XCat
                 return $this->cleanRelayRule();
             case("resetPort"):
                 return $this->resetPort();
-	        case("resetAllPort"):
+            case("resetAllPort"):
                 return $this->resetAllPort();
-			case("update"):
-			    return Update::update($this);
+            case("update"):
+                return Update::update($this);
             case ("sendDailyUsageByTG"):
                 return $this->sendDailyUsageByTG();
-			case('npmbuild'):
-				return $this->npmbuild();
-			default:
+            case('npmbuild'):
+                return $this->npmbuild();
+            default:
                 return $this->defaultAction();
         }
     }
@@ -113,21 +113,21 @@ class XCat
     public function defaultAction()
     {
         echo(PHP_EOL."用法： php xcat [选项]".PHP_EOL);
-		echo("常用选项:".PHP_EOL);
-		echo("  createAdmin - 创建管理员帐号".PHP_EOL);
-		echo("  setTelegram - 设置 Telegram 机器人".PHP_EOL);
-		echo("  cleanRelayRule - 清除所有中转规则".PHP_EOL);
-		echo("  resetPort - 重置单个用户端口".PHP_EOL);
-		echo("  resetAllPort - 重置所有用户端口".PHP_EOL);
-		echo("  initdownload - 下载 SSR 程序至服务器".PHP_EOL);
-		echo("  initQQWry - 下载 IP 解析库".PHP_EOL);
-		echo("  resetTraffic - 重置所有用户流量".PHP_EOL);
-		echo("  update - 更新并迁移配置".PHP_EOL);
+        echo("常用选项:".PHP_EOL);
+        echo("  createAdmin - 创建管理员帐号".PHP_EOL);
+        echo("  setTelegram - 设置 Telegram 机器人".PHP_EOL);
+        echo("  cleanRelayRule - 清除所有中转规则".PHP_EOL);
+        echo("  resetPort - 重置单个用户端口".PHP_EOL);
+        echo("  resetAllPort - 重置所有用户端口".PHP_EOL);
+        echo("  initdownload - 下载 SSR 程序至服务器".PHP_EOL);
+        echo("  initQQWry - 下载 IP 解析库".PHP_EOL);
+        echo("  resetTraffic - 重置所有用户流量".PHP_EOL);
+        echo("  update - 更新并迁移配置".PHP_EOL);
     }
 
-	public function resetPort()
+    public function resetPort()
     {
-		fwrite(STDOUT, "请输入用户id: ");
+        fwrite(STDOUT, "请输入用户id: ");
         $user=User::Where("id", "=", trim(fgets(STDIN)))->first();
         $origin_port = $user->port;
 
@@ -139,9 +139,9 @@ class XCat
             $rule->save();
         }
 
-		if ($user->save()) {
+        if ($user->save()) {
             echo "重置成功!\n";
-		}
+        }
     }
 
     public function resetAllPort()
@@ -208,41 +208,65 @@ class XCat
 
     public function autoCheckNodeStatus()
     {
-        $nodes_vnstat = Node::where('id','>',2)->get();
+        //song 自动获取每个节点的状态
+        // 1 2 节点是预留节点不能用。只能获取2以上的节点
+        $nodes_vnstat = Node::where('id','>',3)->get();
         $file = "/www/wwwroot/ssp-uim/public/".date("md");
         $node_line = '=====================================';
         $node_error = 'can not connect';
         $nodes_log = @file_put_contents($file, date("m-d H:i"));
         foreach ($nodes_vnstat as $node) {
             # code...
-            $addn = explode('#', $node->server);
+            $addn = explode('#', $node->node_ip);
+            $server = $node->server ? $node->server : $addn['0'];
+            $server_ip = gethostbyname($server);
             $addndesc = explode('@', $node->desc);
-            $server = $addndesc['1'] ? $addndesc['1'] : 8000 ;
-            // $addn['0']就是获取到的节点的服务器地址或IP
-            $status_url = "http://".$addn['0'].":".$server."/status";
-            $vnstat_url = "http://".$addn['0'].":".$server."/vnstat";
-            $status = @file_get_contents($status_url);
-            $vnstat = @file_get_contents($vnstat_url);
+            $server_port = $addndesc['1'] ? $addndesc['1'] : 80 ;
+            $status_url = "http://".$server_ip.":".$server_port."/status";
+            $vnstat_url = "http://".$server_ip.":".$server_port."/vnstat";
+            $s1_url = "http://".$server_ip.":".$server_port."/s1"; // 增加自动获取v2脚本的配置信息
+            $v2_url = "http://".$server_ip.":".$server_port."/v2";
+            //$status = @file_get_contents($status_url);
+            //$vnstat = @file_get_contents($vnstat_url);
+            $s1 = @file_get_contents($s1_url);//增加自动获取v2脚本的配置信息 自动更新参数 
+            $v2 = @file_get_contents($v2_url);
             if ($status == 7) {
                 # code...
                 $node->type = 1;
                 $node->save();
                 //将数据写入文件
-                $data = $node->name."#".$addn['0']."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
+                $data = $node->name."#".$addn['0']."#".$server_ip."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
                 $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
             }elseif ($status == 4 ) {
                 # code...
                 $node->type = 0;
                 $node->save();
                 //将数据写入文件
-                $data = $node->name."#".$addn['0']."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
+                $data = $node->name."#".$addn['0']."#".$server_ip."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
                 $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
             }else{
+                # code...
+                $node->type = 0;
+                $node->save();
                 //获取不到运行状态 也写入数据
-                $data = $node->name."#".$addn['0']."#".$node->type.$node_error."\n".$node_line."\n\n\n";
+                $data = $node->name."#".$addn['0']."#".$server_ip."#".$node->type.$node_error."\n".$node_line."\n\n\n";
                 $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
-            }
-            //            
+            } 
+            // 这里开始 通过获取后端的配置信息 来主动配置节点的单节点 到信息中           
+            if (!empty($addn['1'])) {
+                # code...
+                if ($node->sort == 0 && !empty($s1)) {
+                    # code...
+                    $node->node_ip = $s1;
+                    $node->save();
+                }
+                if ($node->sort == 11 && !empty($v2)) {
+                    # code...
+                    $node->node_ip = $v2;
+                    $node->save();
+                }
+                echo $node->server;
+          //  }
         }
     }
 
@@ -348,7 +372,7 @@ class XCat
 今日已使用 " . $user->TodayusedTraffic() . " " . number_format(($user->u + $user->d - $user->last_day_t) / $user->transfer_enable * 100, 2) . "%
 今日之前已使用 " . $user->LastusedTraffic() . " " . number_format($user->last_day_t / $user->transfer_enable * 100, 2) . "%
 未使用 " . $user->unusedTraffic() . " " . number_format(($user->transfer_enable - ($user->u + $user->d)) / $user->transfer_enable * 100, 2) . "%
-					                        ";
+                                            ";
             try{
                 $bot->sendMessage($user->get_user_attributes("telegram_id"), $reply_message , $parseMode = null, $disablePreview = false, $replyToMessageId = null);
 
@@ -358,10 +382,10 @@ class XCat
         }
     }
 
-	public function npmbuild(){
-		chdir(BASE_PATH.'/uim-index-dev');
-		system('npm install');
-		system('npm run build');
-		system('cp -u ../public/vuedist/index.html ../resources/views/material/index.tpl');
-	}
+    public function npmbuild(){
+        chdir(BASE_PATH.'/uim-index-dev');
+        system('npm install');
+        system('npm run build');
+        system('cp -u ../public/vuedist/index.html ../resources/views/material/index.tpl');
+    }
 }
