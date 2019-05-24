@@ -209,8 +209,8 @@ class Job
             $vnstat_url = "http://".$server_ip.":".$server_port."/vnstat";
             $s1_url = "http://".$server_ip.":".$server_port."/s1"; // 增加自动获取v2脚本的配置信息
             $v2_url = "http://".$server_ip.":".$server_port."/v2";
-            //$status = @file_get_contents($status_url);
-            //$vnstat = @file_get_contents($vnstat_url);
+            $status = @file_get_contents($status_url);
+            $vnstat = @file_get_contents($vnstat_url);
             $s1 = @file_get_contents($s1_url);//增加自动获取v2脚本的配置信息 自动更新参数 
             $v2 = @file_get_contents($v2_url);
             if ($status == 7) {
@@ -218,21 +218,21 @@ class Job
                 $node->type = 1;
                 $node->save();
                 //将数据写入文件
-                $data = $node->name."#".$addn['0']."#".$server_ip."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
+                $data = $node->name."#".$server."#".$server_ip."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
                 $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
             }elseif ($status == 4 ) {
                 # code...
                 $node->type = 0;
                 $node->save();
                 //将数据写入文件
-                $data = $node->name."#".$addn['0']."#".$server_ip."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
+                $data = $node->name."#".$server."#".$server_ip."#".$node->type."\n".$node_line.$vnstat."\n\n\n";
                 $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
             }else{
                 # code...
                 $node->type = 0;
                 $node->save();
                 //获取不到运行状态 也写入数据
-                $data = $node->name."#".$addn['0']."#".$server_ip."#".$node->type.$node_error."\n".$node_line."\n\n\n";
+                $data = $node->name."#".$server."#".$server_ip."#".$node->type.$node_error."\n".$node_line."\n\n\n";
                 $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
             } 
             // 这里开始 通过获取后端的配置信息 来主动配置节点的单节点 到信息中           
@@ -248,7 +248,7 @@ class Job
                     $node->node_ip = $v2;
                     $node->save();
                 }
-          //  }
+            }
         }
 
 
