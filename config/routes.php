@@ -11,6 +11,8 @@ use App\Middleware\Mu;
 use App\Middleware\Mod_Mu;
 use Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware;
 
+#song 
+use App\Utils\QQWry;
 /***
  * The slim documents: http://www.slimframework.com/docs/objects/router.html
  */
@@ -62,13 +64,67 @@ if ($debug == false) {
     };
 }
 
+## 是否开启禁止大陆IP访问
+$isforbidden_china = true;
+#禁止中国大陆的IP 访问本站！
+if ($isforbidden_china) {
+    # code...
+    //先通过CF盾牌判断一次是否是中国IP
+    if ($_SERVER["HTTP_CF_IPCOUNTRY"] == 'CN') {
+        $is_china = true;
+    }
+    //再通过IP所在的运营商来判断是否是中国IP
+    $iplocation = new QQWry();
+    $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
+    //对字符的编码进行一次格式化，编码不同可能影响到判断
+    $location['area'] = iconv('gbk', 'utf-8//IGNORE', $location['area']);
+    // 这里的 location['area'] 获取到的其实是 联通 电信 移动等网络
+    if (in_array($location['area'], ['移动','电信','联通'])) {
+        # code...
+        $is_china = true;
+    }
+}
+
 $app = new App($container);
 $app->add(new WhoopsMiddleware);
 
+##如果禁止
+if ( $is_china ) {
+    # code...
+    $app->get('/', 'App\Controllers\HomeController:china');
+    $app->get('/indexold', 'App\Controllers\HomeController:china');
+    $app->group('/auth', function () {
+        $this->get('/login', 'App\Controllers\HomeController:china');
+        $this->post('/qrcode_check', 'App\Controllers\AuthController:qrcode_check');
+        $this->post('/login', 'App\Controllers\HomeController:china');
+        $this->post('/qrcode_login', 'App\Controllers\AuthController:qrcode_loginHandle');
+        $this->get('/register', 'App\Controllers\HomeController:china');
+        $this->post('/register', 'App\Controllers\HomeController:china');
+        $this->post('/send', 'App\Controllers\AuthController:sendVerify');
+        $this->get('/logout', 'App\Controllers\AuthController:logout');
+        $this->get('/telegram_oauth', 'App\Controllers\AuthController:telegram_oauth');
+        $this->get('/login_getCaptcha', 'App\Controllers\AuthController:getCaptcha');
+    })->add(new Guest());
+}else{
+    $app->get('/', 'App\Controllers\HomeController:index');
+    $app->get('/indexold', 'App\Controllers\HomeController:indexold');
+    $app->group('/auth', function () {
+        $this->get('/login', 'App\Controllers\AuthController:login');
+        $this->post('/qrcode_check', 'App\Controllers\AuthController:qrcode_check');
+        $this->post('/login', 'App\Controllers\AuthController:loginHandle');
+        $this->post('/qrcode_login', 'App\Controllers\AuthController:qrcode_loginHandle');
+        $this->get('/register', 'App\Controllers\AuthController:register');
+        $this->post('/register', 'App\Controllers\AuthController:registerHandle');
+        $this->post('/send', 'App\Controllers\AuthController:sendVerify');
+        $this->get('/logout', 'App\Controllers\AuthController:logout');
+        $this->get('/telegram_oauth', 'App\Controllers\AuthController:telegram_oauth');
+        $this->get('/login_getCaptcha', 'App\Controllers\AuthController:getCaptcha');
+    })->add(new Guest());
+}
 
 // Home
-$app->get('/', 'App\Controllers\HomeController:index');
-$app->get('/indexold', 'App\Controllers\HomeController:indexold');
+//$app->get('/', 'App\Controllers\HomeController:index');
+//$app->get('/indexold', 'App\Controllers\HomeController:indexold');
 $app->get('/404', 'App\Controllers\HomeController:page404');
 $app->get('/405', 'App\Controllers\HomeController:page405');
 $app->get('/500', 'App\Controllers\HomeController:page500');
@@ -116,7 +172,7 @@ $app->group('/user', function () {
     $this->post('/ticket', 'App\Controllers\UserController:ticket_add');
     $this->get('/ticket/{id}/view', 'App\Controllers\UserController:ticket_view');
     $this->put('/ticket/{id}', 'App\Controllers\UserController:ticket_update');
-	
+    
     $this->post('/buy_invite', 'App\Controllers\UserController:buyInvite');
     $this->post('/custom_invite', 'App\Controllers\UserController:customInvite');
     $this->get('/edit', 'App\Controllers\UserController:edit');
@@ -173,6 +229,7 @@ $app->group('/payment', function () {
     $this->post('/status', 'App\Services\Payment:getStatus');
 });
 
+/**
 // Auth
 $app->group('/auth', function () {
     $this->get('/login', 'App\Controllers\AuthController:login');
@@ -186,6 +243,7 @@ $app->group('/auth', function () {
     $this->get('/telegram_oauth', 'App\Controllers\AuthController:telegram_oauth');
     $this->get('/login_getCaptcha', 'App\Controllers\AuthController:getCaptcha');
 })->add(new Guest());
+**/
 
 // Password
 $app->group('/password', function () {

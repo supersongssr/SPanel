@@ -113,6 +113,11 @@ class HomeController extends BaseController
     {
         return $this->view()->display('405.tpl');
     }
+
+    public function china($request, $response, $args)
+    {
+        return $this->view()->display('china.tpl');
+    }
     
     public function page500($request, $response, $args)
     {

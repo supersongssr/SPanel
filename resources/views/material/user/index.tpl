@@ -216,7 +216,7 @@
 
 															
 															<div><span class="icon icon-lg text-white">flash_auto</span> 单端口节点订阅地址：</div>
-															<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=1" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=1">点击复制</button><br></div>
+															<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=1" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=1">点击复制</button><br></div>
 															
                                                       <p><a href="/user/tutorial">点击这里查看Mac教程</a></p>
 													</div>
@@ -478,7 +478,7 @@
 														<p><span class="icon icon-lg text-white">filter_3</span> MAC端需要手动添加节点，配置信息可以在节点列表页面查看到。如果您不会手动添加的话，MAC推荐使用SR呢。</p>
 														<!-- <p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>-->
 														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://rss.okss.xyz/link/{$ssr_sub_token}?mu=2">点击复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_info">
 														{$v2_url_all = URL::getAllVMessUrl($user)}
