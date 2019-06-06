@@ -14,6 +14,9 @@ use App\Utils\Hash;
 use App\Utils\Tools;
 use App\Services\Config;
 //song
+use App\Models\NodeInfoLog;
+use App\Models\TrafficLog;
+//song
 use App\Models\Bought;
 use App\Models\Payback;
 use App\Models\Code;
@@ -208,6 +211,36 @@ class XCat
 
     public function autoCheckNodeStatus()
     {
+
+        //自动审计每天节点流量数据 song
+        $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的节点 
+        foreach ($nodes_vnstat as $node) {
+            # code...
+            $addn = $addn = explode('#', $node->node_ip);
+            if (empty($addn['1'])) {
+                # code...
+                $query = TrafficLog::query()->where('node_id','=', $ndoe->id)->where('user_id','!=','0')->where('log_time','>',(time()-86400))->get();   //获取过去24小时内的总数据 再求和
+                $total = $query->sum('u') + $query->sum('d');   //获取用户之和
+            }else{
+                $query = TrafficLog::query()->where('node_id','=', $ndoe->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->get();    //获取过去24小时内的总数据，再求和
+                $total = $query->sum('u') + $query->sum('d');   //获取用户之和
+            }
+
+            if ($node->type = 1 && $total < 16777216 ) {        //在线的节点 如果每日流量 少于 16G 就写一个 ·
+                # code...
+                $node->name .= '·';         //在节点名字后面加上 · 这个符号，多了就能看到了。
+                $node->save();
+            }
+            //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
+            $node_info = new NodeInfoLog();
+            $node_info->node_id = $node->id;
+            $node_info->uptime = $total;
+            $node_info->load = 0;
+            $node_info->log_time = time();
+            $node_info->save();
+        }
+
+        /**
         //song 自动获取每个节点的状态
         // 1 2 节点是预留节点不能用。只能获取2以上的节点
         $nodes_vnstat = Node::where('id','>',3)->get();
@@ -268,6 +301,7 @@ class XCat
                 echo $node->server;
             }
         }
+        **/
     }
 
     public function createAdmin()

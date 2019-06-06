@@ -5,6 +5,8 @@ namespace App\Controllers;
 use App\Models\InviteCode;
 use App\Models\Node;
 use App\Models\User;
+use App\Models\NodeOnlineLog;  //写入用户在线人数嘎嘎 
+use App\Models\Trafficlog;  //用于写入节点流量日志
 use App\Services\Factory;
 use App\Services\Config;
 use App\Utils\Tools;
@@ -160,5 +162,54 @@ class ApiController extends BaseController
         $res['msg'] = "ok";
         $res['data'] = $data;
         return $this->echoJson($response, $res);
+    }
+
+    public function ssn_sub($request, $response, $args)
+    {
+        $id = $args['id'];
+        $status = $request->getParam('status');
+        $traffic = $request->getParam('traffic');
+        $online = $request->getParam('online');
+        $id < 4 && exit;
+        //写入节点数据 状态 流量
+        $node = Node::find($id);
+        $traffic_mark = $node->node_bandwidth; //获取节点当前流量
+        $node->type = $status;
+        $node->node_bandwidth = $traffic;
+        $node->save();
+        //写入流量使用记录
+        $traffic_log = new TrafficLog();
+        $traffic_now = $traffic - $traffic_mark;    //两次流量差值
+        $traffic_now < 0 && $traffic_now = 1;   //如果流量差小于0 说明是流量重置了
+        $traffic_log->user_id = 0; //用于判断是否是节点上传的流量 用户是 0 
+        $traffic_log->u = 0;    //节点rx流量为0 
+        $traffic_log->d = $traffic_now; // 记录到节点流量
+        $traffic_log->node_id = $id; //节点ID
+        $traffic_log->rate = 0; //默认倍率为1
+        $traffic_log->traffic = $traffic; //记录当前的流量值
+        $traffic_log->log_time = time();
+        $traffic_log->save();
+        //写入节点在线人数 
+        $online_log = new NodeOnlineLog();
+        $online_log->node_id = $id;
+        $online_log->online_user = $online;
+        $online_log->log_time = time();
+        $online_log->save();
+        // 这样这个API就写好了，非常棒，Very Good!
+    }
+
+    public function ssn_v2($request, $response, $args)
+    {
+        $id = $args['id'];
+        $id < 64 && exit;  //ID 64以下是没有 V2节点的
+        $node = Node::find($id);
+        $addn = explode('#', $node->node_ip);
+        empty($addn['1']) && exit;  //如果ip判断为空，那么就退出脚本 防止错写
+        $v2 = $request->getParam('v2');
+        $s1 = $request->getParam('s1');
+        //写入节点数据 状态 流量
+        $node->sort == 0  && !empty($s1) && $node->node_ip = $s1;
+        $node->srot == 11 && !empty($v2) && $node->node_ip = $v2;
+        $node->save();
     }
 }

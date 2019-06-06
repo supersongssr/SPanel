@@ -374,6 +374,8 @@ $app->group('/api', function () {
     $this->get('/node', 'App\Controllers\ApiController:node')->add(new Api());
     $this->get('/user/{id}', 'App\Controllers\ApiController:userInfo')->add(new Api());
     $this->get('/sublink','App\Controllers\Client\ClientApiController:GetSubLink');
+    $this->post('/ssn_sub/{id}','App\Controllers\ApiController:ssn_sub'); // song 后端节点用于上报节点状态 流量的API
+    $this->post('/ssn_v2/{id}','App\Controllers\ApiController:ssn_v2'); // song 后端节点用于上报节点状态 流量的API
 });
 
 // mu

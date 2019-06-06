@@ -191,64 +191,29 @@ class Job
 
         }
 
-        //song 自动获取每个节点的状态
-        // 1 2 3 节点是预留节点不能用。只能获取3  以上的节点
-        $nodes_vnstat = Node::where('id','>',3)->get();
-        $file = "/www/wwwroot/ssp-uim/public/".date("md");
-        $node_line = '=====================================';
-        $node_error = 'can not connect';
-        $nodes_log = @file_put_contents($file, date("m-d H:i"));
+        //自动审计每天节点流量数据 song
+        $nodes_vnstat = Node::where('id','>',4)->where('type','=',1)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
             # code...
-            $addn = explode('#', $node->node_ip);
-            $server = $node->server ? $node->server : $addn['0'];
-            $server_ip = gethostbyname($server);
-            $addndesc = explode('@', $node->info);
-            $server_port = $addndesc['1'] ? $addndesc['1'] : 80 ;
-            $status_url = "http://".$server_ip.":".$server_port."/status";
-            $vnstat_url = "http://".$server_ip.":".$server_port."/vnstat";
-            $s1_url = "http://".$server_ip.":".$server_port."/s1"; // 增加自动获取v2脚本的配置信息
-            $v2_url = "http://".$server_ip.":".$server_port."/v2";
-            $status = @file_get_contents($status_url);
-            $vnstat = @file_get_contents($vnstat_url);
-            $s1 = @file_get_contents($s1_url);//增加自动获取v2脚本的配置信息 自动更新参数 
-            $v2 = @file_get_contents($v2_url);
-            if ($status == 7) {
+            $addn = $addn = explode('#', $node->node_ip);
+            if (empty($addn['1'])) {
                 # code...
-                $node->type = 1;
-                $node->save();
-                //将数据写入文件
-                $data = $node->name."#".$server."#".$server_ip."#".$node->type."\n".$node_line."\n".$node->info.$vnstat."\n\n\n";
-                $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
-            }elseif ($status == 4 ) {
-                # code...
-                $node->type = 0;
-                $node->save();
-                //将数据写入文件
-                $data = $node->name."#".$server."#".$server_ip."#".$node->type."\n".$node_line."\n".$node->info.$vnstat."\n\n\n";
-                $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
+                $query = TrafficLog::query()->where('node_id','=', $ndoe->id)->where('user_id','!=','0')->where('log_time','>',(time()-86400))->get();   //获取过去24小时内的总数据 再求和
+                $total = $query->sum('u') + $query->sum('d');   //获取用户之和
             }else{
-                # code...
-                $node->type = 0;
-                $node->save();
-                //获取不到运行状态 也写入数据
-                $data = $node->name."#".$server."#".$server_ip."#".$node->type.$node_error."\n".$node_line."\n".$node->info."\n\n\n";
-                $nodes_log = @file_put_contents($file, $data, FILE_APPEND);
-            } 
-            // 这里开始 通过获取后端的配置信息 来主动配置节点的单节点 到信息中           
-            if (!empty($addn['1'])) {
-                # code...
-                if ($node->sort == 0 && !empty($s1)) {
-                    # code...
-                    $node->node_ip = $s1;
-                    $node->save();
-                }
-                if ($node->sort == 11 && !empty($v2)) {
-                    # code...
-                    $node->node_ip = $v2;
-                    $node->save();
-                }
+                $query = TrafficLog::query()->where('node_id','=', $ndoe->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->get();    //获取过去24小时内的总数据，再求和
+                $total = $query->sum('u') + $query->sum('d');   //获取用户之和
             }
+            #在线节点，流量少于16G 的 隐藏 且加· 
+            $total < 16777216 && $node->name .= '·' && $node->type = 0;        //在节点名字后面加上 · 这个符号，多了就能看到了。
+            $node->save();
+            //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
+            $node_info = new NodeInfoLog();
+            $node_info->node_id = $node->id;
+            $node_info->uptime = $total;
+            $node_info->load = 0;
+            $node_info->log_time = time();
+            $node_info->save();
         }
 
 
