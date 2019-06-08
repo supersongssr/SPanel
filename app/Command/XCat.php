@@ -213,24 +213,28 @@ class XCat
     {
 
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的节点 
+        $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
             # code...
-            $addn = $addn = explode('#', $node->node_ip);
+            $addn = explode('#', $node->node_ip);
             if (empty($addn['1'])) {
                 # code...
-                $query = TrafficLog::query()->where('node_id','=', $ndoe->id)->where('user_id','!=','0')->where('log_time','>',(time()-86400))->get();   //获取过去24小时内的总数据 再求和
-                $total = $query->sum('u') + $query->sum('d');   //获取用户之和
+                $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
+                $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
+                $total = $sum_u + $sum_d;   //获取用户之和
             }else{
-                $query = TrafficLog::query()->where('node_id','=', $ndoe->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->get();    //获取过去24小时内的总数据，再求和
-                $total = $query->sum('u') + $query->sum('d');   //获取用户之和
+                $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
+                $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
+                $total = $sum_u + $sum_d;   //获取用户之和
             }
-
-            if ($node->type = 1 && $total < 16777216 ) {        //在线的节点 如果每日流量 少于 16G 就写一个 ·
-                # code...
-                $node->name .= '·';         //在节点名字后面加上 · 这个符号，多了就能看到了。
-                $node->save();
+            #在线节点，流量少于16G 的 隐藏 且加· 
+            if($total < 16777216 ){
+              $node->name .= '·' ;
+              $node->type = 0;        //在节点名字后面加上 · 这个符号，多了就能看到了。
             }
+            $node->info = floor($total / 1073741824) . ' ' . $node->info ;  //将每天统计的节点的数据写入到节点的备注中去
+            $node->info = substr($node->info, 0,128);             //截取字符串长度为128位 防止超出
+            $node->save();
             //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
             $node_info = new NodeInfoLog();
             $node_info->node_id = $node->id;

@@ -354,35 +354,15 @@ class URL
         $item['ps'] = $node->name;
         $item['add'] = $node->server;// addn ->server song 
         $item['port'] = $node_explode[1];
-        $item['id'] = $user->getUuid();
-        $item['aid'] = $node_explode[2];
-        $item['net'] = "tcp";
-        $item['type'] = "none";
-        if (count($node_explode) >= 4) {
-            $item['net'] = $node_explode[3];
-            if ($item['net'] == 'ws') {
-                $item['path'] = '/';
-            } else if ($item['net'] == 'tls') {
-                $item['tls'] = 'tls';
-            }
+        empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
+        $item['aid'] = $node_explode[3];
+        $item['net'] = $node_explode[4];
+        $item['type'] = $node_explode[5];
+        if (count($node_explode) > 8) {   //如果数量大于7的话，就是配置更多喽 由于结尾也有一个# 嘎嘎有点意思
+            $item['host'] = $node_explode[6];
+            $item['path'] = '/'.$node_explode[7];
+            empty($node_explode[8]) ? $item['tls'] = '' : $item['tls'] = 'tls';
         }
-        if (count($node_explode) >= 5 ) {
-            if (in_array($item['net'], array("kcp", "http"))){
-                $item['type'] = $node_explode[4];
-            } else if ($node_explode[4]=='ws'){
-                $item['net'] = 'ws';
-            }
-        }
-/**song 
-        if (count($node_explode) >= 6) {
-            $item = array_merge($item, URL::parse_args($node_explode[5]));
-        }
-**/
-#Song addnode V2
-        if (count($node_explode) >= 6) {
-            $item['id'] = $node_explode['5'];
-        }
-#end
         return "vmess://".base64_encode((json_encode($item, JSON_UNESCAPED_UNICODE)));
     }
     public static function getAllVMessUrl($user) {
@@ -599,7 +579,7 @@ class URL
         $return_array['port'] = $user->port;
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;
-        $return_array['remark'] = $node_name.'·x'.$node->traffic_rate.'·Lv.'.$node->node_class.'·#'.$node->id;
+        $return_array['remark'] = $node_name.' x'.$node->traffic_rate.' Lv.'.$node->node_class.' #'.$node->id;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;

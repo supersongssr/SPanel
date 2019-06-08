@@ -177,6 +177,9 @@ class ApiController extends BaseController
         $node->type = $status;
         $node->node_bandwidth = $traffic;
         $node->save();
+        //如果是正常节点 那么下面的就没必要了记录了
+        $addn = explode('#', $node->node_ip);
+        empty($addn['1']) && exit;
         //写入流量使用记录
         $traffic_log = new TrafficLog();
         $traffic_now = $traffic - $traffic_mark;    //两次流量差值
