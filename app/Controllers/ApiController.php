@@ -204,7 +204,7 @@ class ApiController extends BaseController
     public function ssn_v2($request, $response, $args)
     {
         $id = $args['id'];
-        $id < 64 && exit;  //ID 64以下是没有 V2节点的
+        $id < 3 && exit;  //ID 64以下是没有 V2节点的
         $node = Node::find($id);
         $addn = explode('#', $node->node_ip);
         empty($addn['1']) && exit;  //如果ip判断为空，那么就退出脚本 防止错写
@@ -212,7 +212,7 @@ class ApiController extends BaseController
         $s1 = $request->getParam('s1');
         //写入节点数据 状态 流量
         $node->sort == 0  && !empty($s1) && $node->node_ip = $s1;
-        $node->srot == 11 && !empty($v2) && $node->node_ip = $v2;
+        $node->sort == 11 && !empty($v2) && $node->node_ip = $v2;
         $node->save();
     }
 }

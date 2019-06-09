@@ -351,7 +351,7 @@ class URL
             'path'=>'',
             'tls'=>''
         ];
-        $item['ps'] = $node->name;
+        $item['ps'] = $node->name.' v'.$node->node_class.'x'.$node->traffic_rate.'#'.$node->id;
         $item['add'] = $node->server;// addn ->server song 
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
@@ -579,7 +579,7 @@ class URL
         $return_array['port'] = $user->port;
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;
-        $return_array['remark'] = $node_name.' x'.$node->traffic_rate.' Lv.'.$node->node_class.' #'.$node->id;
+        $return_array['remark'] = $node_name.' v'.$node->node_class.'x'.$node->traffic_rate.'#'.$node->id;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;
