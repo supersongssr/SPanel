@@ -6,7 +6,7 @@ use App\Models\InviteCode;
 use App\Models\Node;
 use App\Models\User;
 use App\Models\NodeOnlineLog;  //写入用户在线人数嘎嘎 
-use App\Models\Trafficlog;  //用于写入节点流量日志
+use App\Models\TrafficLog;  //用于写入节点流量日志
 use App\Services\Factory;
 use App\Services\Config;
 use App\Utils\Tools;

@@ -22,10 +22,12 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
-                                      <p><a href="http://t.cn/Ecs4fKQ" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="http://t.cn/Ecs4fKQ" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="http://t.cn/Ecs4fKQ" target="_blank">点此 捐赠/充值 510发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        重要的事情说三遍
+                                      <p><a href="http://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                        <a href="http://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                        <a href="http://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                        重要的事情说三遍<br>
+                                        <br>
+                                        <a href="http://t.cn/Ecs4fKQ" target="_blank">2019.6.12前510发卡查询卡密在这里</a><br>
                                   </p>
                                         <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p>
                                         <p>因余额不足而未能完成的自动续费，在余额足够时会自动划扣续费。</p>

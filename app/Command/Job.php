@@ -192,7 +192,7 @@ class Job
         }
 
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的在线节点 
+        $nodes_vnstat = Node::where('id','>',4)->where('type','=',1)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
             # code...
             $addn = explode('#', $node->node_ip);
@@ -206,8 +206,8 @@ class Job
                 $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
                 $total = $sum_u + $sum_d;   //获取用户之和
             }
-            #在线节点，流量少于16G 的 隐藏 且加· 
-            if($total < 16777216 ){
+            #在线节点，流量少于16G 的 隐藏 且加·  16 * 1024 * 1024 * 1024 记录中记录的时bytes 
+            if($total < 17179869184 ){
               $node->name .= '·' ;
               $node->type = 0;        //在节点名字后面加上 · 这个符号，多了就能看到了。
             }      

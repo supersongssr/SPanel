@@ -214,6 +214,21 @@ class XCat
 
         //自动审计每天节点流量数据 song
         $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的在线节点 
+        //将所有的V2节点变成 0.1倍率 和 等级1 
+        foreach ($$nodes_vnstat as $node) {
+            # code...
+            if ($node->type == 11) {
+                # code...
+                continue;
+            }
+            $addn = explode('#', $node->node_ip);
+            if (!empty($addn['1'])) {
+                # code...
+                $node->traffic_rate = 0.1;
+                $node->node_class = 1;
+            }
+        }
+        /**
         foreach ($nodes_vnstat as $node) {
             # code...
             $addn = explode('#', $node->node_ip);
@@ -243,6 +258,7 @@ class XCat
             $node_info->log_time = time();
             $node_info->save();
         }
+        **/
 
         /**
         //song 自动获取每个节点的状态

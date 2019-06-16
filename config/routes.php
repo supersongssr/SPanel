@@ -70,9 +70,9 @@ $isforbidden_china = true;
 if ($isforbidden_china) {
     # code...
     //先通过CF盾牌判断一次是否是中国IP
-    if ($_SERVER["HTTP_CF_IPCOUNTRY"] == 'CN') {
-        $is_china = true;
-    }
+    //if ($_SERVER["HTTP_CF_IPCOUNTRY"] == 'CN') {
+    //    $is_china = true;
+    //}
     //再通过IP所在的运营商来判断是否是中国IP
     $iplocation = new QQWry();
     $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
