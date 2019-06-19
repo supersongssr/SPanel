@@ -65,14 +65,14 @@ if ($debug == false) {
 }
 
 ## 是否开启禁止大陆IP访问
-$isforbidden_china = true;
+$isforbidden_china = false;
 #禁止中国大陆的IP 访问本站！
 if ($isforbidden_china) {
     # code...
     //先通过CF盾牌判断一次是否是中国IP
-    //if ($_SERVER["HTTP_CF_IPCOUNTRY"] == 'CN') {
-    //    $is_china = true;
-    //}
+    if ($_SERVER["HTTP_CF_IPCOUNTRY"] == 'CN') {
+        $is_china = true;
+    }
     //再通过IP所在的运营商来判断是否是中国IP
     $iplocation = new QQWry();
     $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);

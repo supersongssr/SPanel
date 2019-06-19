@@ -92,7 +92,7 @@ $System_Config['enable_email_verify']='false';		//是否启用注册邮箱验证
 $System_Config['email_verify_ttl']='3600';			//邮箱验证码有效期
 $System_Config['email_verify_iplimit']='10';		//验证码有效期内，单IP可请求验证码次数
 
-
+$System_Config['allow_email_list']='qq.com,163.com,gmail.com,foxmail.com,outlook.com,hotmail.com,126.com';		//邮箱白名单
 //已注册用户设置---------------------------------------------------------------------------------------
 #基础
 $System_Config['checkinMin'] = '1';				//用户签到最少流量 单位MB
