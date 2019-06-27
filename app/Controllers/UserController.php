@@ -257,23 +257,10 @@ class UserController extends BaseController
 
             if ($user->ref_by != "" && $user->ref_by != 0 && $user->ref_by != null) {
                 $gift_user = User::where("id", "=", $user->ref_by)->first();
-                $gift_user->money = ($gift_user->money + ($codeq->number * (Config::get('code_payback') / 100)));
-                //song 这里判断价格，如果价格高于20元，那么返利 用户返利的周期限制在用户注册账号的64天内。每个用户都有一个注册账号的时间呢。这个可以有。哇嘎嘎，非常棒。这个可以增加。
-                if ($codeq->number > 20 && $user->reg_date > time()-86400*64) {
-                    # code...  这是额外赠送的金额
-                    $gift_user->money = ($gift_user->money + Config::get('invite_gift_money'));
-                    //写入返利日志
-                    $Payback = new Payback();
-                    $Payback->total = Config::get('invite_gift_money');
-                    $Payback->userid = $this->user->id;
-                    $Payback->ref_by = $this->user->ref_by;
-                    $Payback->ref_get = Config::get('invite_gift_money');
-                    $Payback->datetime = time();
-                    $Payback->save();
-                }
-
+                $gift_user->money += ($codeq->number * (Config::get('code_payback') / 100));
                 $gift_user->save();
 
+                //写入返利日志
                 $Payback = new Payback();
                 $Payback->total = $codeq->number;
                 $Payback->userid = $this->user->id;
@@ -1130,6 +1117,16 @@ class UserController extends BaseController
         if (bccomp($user->money , $price,2)==-1) {
             $res['ret'] = 0;
             $res['msg'] = '喵喵喵~ 当前余额不足，总价为' . $price . '元。</br><a href="/user/code">点击进入充值界面</a>';
+            return $response->getBody()->write(json_encode($res));
+        }
+
+        //# 只允许购买 套餐等级 >= 用户等级的商品   这样就可以实现用户购买的套餐可以叠加了。只能向上叠加。
+        ##这里需要先 json_decode一下 商品中的 content内容
+        $shop_content = $content = json_decode($shop->content, true);
+        if ( $user->class > $shop_content['class']) {
+            # code...
+            $res['ret'] = 0;
+            $res['msg'] = "您已有用更高等级套餐！购买套餐等级不得低于用户等级！";
             return $response->getBody()->write(json_encode($res));
         }
 

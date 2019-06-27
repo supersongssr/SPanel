@@ -106,7 +106,7 @@ if ( $is_china ) {
         $this->get('/login_getCaptcha', 'App\Controllers\AuthController:getCaptcha');
     })->add(new Guest());
 }else{
-    $app->get('/', 'App\Controllers\HomeController:index');
+    $app->get('/', 'App\Controllers\HomeController:indexold');
     $app->get('/indexold', 'App\Controllers\HomeController:indexold');
     $app->group('/auth', function () {
         $this->get('/login', 'App\Controllers\AuthController:login');

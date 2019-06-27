@@ -159,7 +159,7 @@ class NodeController extends AdminController
         $node->node_bandwidth_limit=$request->getParam('node_bandwidth_limit')*1024*1024*1024;
         $node->bandwidthlimit_resetday=$request->getParam('bandwidthlimit_resetday');
         $node->save();
-        Telegram::Send("节点信息被修改~".$request->getParam('name'));
+        Telegram::Send("新增节点~~".$request->getParam('name').'#'.$id);
         $rs['ret'] = 1;
         $rs['msg'] = "修改成功";
         return $response->getBody()->write(json_encode($rs));

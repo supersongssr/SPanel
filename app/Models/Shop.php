@@ -200,20 +200,27 @@ class Shop extends Model
                     break;
                 case "expire":
                     if (time()>strtotime($user->expire_in)) {
-                        $user->expire_in=date("Y-m-d H:i:s", time()+$value*86400);
+                        $user->expire_in=date("Y-m-d H:i:s", time()+$value*86400);  #这里账号有效期叠加了
                     } else {
                         $user->expire_in=date("Y-m-d H:i:s", strtotime($user->expire_in)+$value*86400);
                     }
                     break;
                 case "class":
-                    $user->class=$value;
-                    $user->class_expire=date("Y-m-d H:i:s", time()+$content["class_expire"]*86400);
+                    ## song 这里  这里用户购买的套餐等级必须大于用户等级。所以，不用担心影响。
+                    $user->class=$value;     
+                    if ($value<3 || time()>strtotime($user->class_expire)) {
+                        # code...如果商品等级小于3 ，或者用户等级已过期 那么从当前时间加上套餐时间
+                        $user->class_expire=date("Y-m-d H:i:s", time()+$content["class_expire"]*86400);
+                    }else{
+                        #否则的话，就剩下 要么叠加等级有效期
+                        $user->class_expire=date("Y-m-d H:i:s", strtotime($user->class_expire)+$content["class_expire"]*86400);
+                    }
                     break;
                 case "speedlimit":
-                    $user->node_speedlimit=$value;
+                    $user->node_speedlimit=$value;          #网速值
                     break;
                 case "connector":
-                    $user->node_connector=$value;
+                    $user->node_connector=$value;       #客户端数量
                     break;
                 default:
             }

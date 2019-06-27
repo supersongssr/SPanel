@@ -192,7 +192,7 @@ class Job
         }
 
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',4)->where('type','=',1)->get();  // 只获取4以上的在线节点 
+        $nodes_vnstat = Node::where('id','>',5)->where('type','=',1)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
             # code...
             $addn = explode('#', $node->node_ip);

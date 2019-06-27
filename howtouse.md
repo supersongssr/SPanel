@@ -48,7 +48,7 @@ web环境配置好后
 cd /你的网站目录  例：cd /www/wwwroot/你的网站目录  
 yum update
 yum install git -y
-git clone -b master https://github.com/Anankke/ss-panel-v3-mod_Uim.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+git clone -b dev https://github.com/supersongssr/ssp-uim.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 chown -R root:root *
 chmod -R 755 *
 chown -R www:www storage
@@ -113,10 +113,10 @@ php xcat initdownload         //下载ssr程式
 执行 crontab -e命令, 添加以下四条
 
 ```
-30 22 * * * php /网站目录/xcat sendDiaryMail
-0 0 * * * php -n /网站目录/xcat dailyjob
-*/1 * * * * php /网站目录/xcat checkjob
-*/1 * * * * php /网站目录/xcat syncnode
+22 4 * * * php /www/wwwroot/ssp-uim/xcat sendDiaryMail
+58 3 * * * php -n /www/wwwroot/ssp-uim/xcat dailyjob
+*/10 * * * * php /www/wwwroot/ssp-uim/xcat checkjob
+###*/12 * * * * php /www/wwwroot/ssp-uim/xcat syncnode  #这个要不得，然后网站会出大问题的！主要是V2节点的IP会被重置！
 ```
 如果需要自动备份，可模仿以下两例，自行添加一条
 ```
