@@ -223,6 +223,14 @@ class Job
             $node_info->save();
         }
 
+        //Song 自动禁用 余额 少于 0 的账户
+        $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
+        foreach ($users_nomoney as $user) {
+            $user->enable = 0;
+            $user->save;
+        }
+        //就这么简单，只需要自动禁用余额少于0 ，但是依然可用的账户。
+
 
         $users = User::all();
         foreach ($users as $user) {

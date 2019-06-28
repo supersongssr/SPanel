@@ -22,6 +22,9 @@ use App\Utils\GA;
 use App\Utils\Geetest;
 use App\Utils\TelegramSessionManager;
 
+//song 
+use App\Models\Payback; //用于写入返利日志
+
 /**
  *  AuthController
  */
@@ -479,28 +482,37 @@ class AuthController extends BaseController
         $user->invite_num = Config::get('inviteNum');
         $user->auto_reset_day = Config::get('reg_auto_reset_day');
         $user->auto_reset_bandwidth = Config::get('reg_auto_reset_bandwidth');
-        $user->money = 0.66;
+        $user->money = Config::get('user_money_default');
 
         //dumplin：填写邀请人，写入邀请奖励
         $user->ref_by = 0;
+        //song 这里开始写入返利日志
         if ($c != null) {
             if ($c->user_id != 0) {
-                $gift_user = User::where("id", "=", $c->user_id)->first();
+                // song 这里只写入被邀请人的福利
                 $user->ref_by = $c->user_id;
                 $user->money = Config::get('invite_get_money');
-                $gift_user->transfer_enable = ($gift_user->transfer_enable + Config::get('invite_gift') * 1024 * 1024 * 1024);
-                //add gift money 5yuan
-                //check if qq.com hotmail.com 163.com 126.com gmail.com 等等常用邮箱，赠送
-                //$gift_email = explode(';', Config::get('gift_email_list'));
-                //$check_email = explode('@', $email);
-                //$gift_user->money = ($gift_user->money + Config::get('invite_gift_money'));
-                //if (in_array($check_email['1'], $gift_email)) {
-                    # code...
-                //}
+                // 这里保存一次，下面的 $user-id 才能获取到。可以有。嘎嘎 
+                $user->save();
+                $gift_user = User::where("id", "=", $c->user_id)->first();
+                $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1024 * 1024;
+                //song 增加gift user的 money 先赠送7元
+                $gift_user->money += Config::get('invite_gift_money');
                 $gift_user->invite_num -= 1;
                 $gift_user->save();
+
+                //song 写入新的返利日志 
+                //写入返利日志
+                $Payback = new Payback();
+                $Payback->total = -1;
+                $Payback->userid = $user->id;  //用户注册的ID 
+                $Payback->ref_by = $c->user_id;  //邀请人ID
+                $Payback->ref_get = Config::get('invite_gift_money');
+                $Payback->datetime = time();
+                $Payback->save();
             }
         }
+        
         //Song
         //$eduSupport = 'edu.cn';
         //if (in_array($usernameSuffix[1], $eduSupport)) {
@@ -619,5 +631,32 @@ class AuthController extends BaseController
         }
 
         return true; // Good to Go
+    }
+
+    //song reactive user
+    public function reactive($request, $response, $args)
+    {
+        $email =  $request->getParam('email');
+        // check limit
+
+        // send email
+        $user = User::where('email', $email)->first();
+        if ($user == null) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '此邮箱不存在.';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        if ($user->money < 0 && $user->enable == 0) {
+            $user->enable = 1;
+            $user->save();
+            $rs['ret'] = 1;
+            $rs['msg'] = '账号已临时激活！';
+        }else{
+            $rs['ret'] = 0;
+            $rs['msg'] = '无效请求，请联系管理员！';
+        }
+
+        return $response->getBody()->write(json_encode($rs));
     }
 }

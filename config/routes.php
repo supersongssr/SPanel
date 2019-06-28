@@ -133,6 +133,8 @@ $app->get('/yft/notify', 'App\Services\Gateway\YftPay:notify');//yft uses GET
 $app->get('/tos', 'App\Controllers\HomeController:tos');
 $app->get('/staff', 'App\Controllers\HomeController:staff');
 $app->post('/telegram_callback', 'App\Controllers\HomeController:telegram');
+//song 用户临时解封账号 
+$app->post('/reactive', 'App\Controllers\AuthController:reactive');
 
 // User Center
 $app->group('/user', function () {

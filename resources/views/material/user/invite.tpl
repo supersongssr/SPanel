@@ -45,11 +45,11 @@
 										<p>发送邀请链接给有需要的人，邀请他人注册时，请将以下邀请码发给被邀请者</p>
 										<div class="invite-link">
 											<input type="text" class="input form-control form-control-monospace cust-link" name="input1" readonly="" value="{$code->code}">
-											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="{$config["baseUrl"]}/auth/register?code={$code->code}">点击复制邀请码</button>				
+											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="{$code->code}">点击复制邀请码</button>				
 										</div>
 										<div class="invite-link">
-											<input type="text" class="input form-control form-control-monospace cust-link" name="input2" readonly="" value="{$config["baseUrl"]}/auth/register?code={$code->code}">
-											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="{$config["baseUrl"]}/#/auth/register?code={$code->code}">点击复制邀请链接</button>				
+											<input type="text" class="input form-control form-control-monospace cust-link" name="input2" readonly="" value="/auth/register?code={$code->code}">
+											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="/auth/register?code={$code->code}">点击复制邀请链接</button>				
 										</div>
 									</div>
 								</div>
@@ -127,16 +127,23 @@
 					
 												 <!--   <th>ID</th> -->
 													<th>ID</th>
+													<th>消费</th>
 													<th>被邀请用户ID</th>
 													<th>获得返利</th>
+													<th>UNIX时间</th>
 												</tr>
 												{foreach $paybacks as $payback}
 												<tr>
 					
 											  <!--       <td>#{$payback->id}</td> -->
 													<td>{$payback->id}</td>
+													<td>{if $payback->total == -1} 注册
+														{elseif $payback->total == -2} 注销
+														{else} {$payback->total}
+														{/if}</td>
 													<td>{$payback->userid}</td>
 													<td>{$payback->ref_get} 元</td>
+													<td>{$payback->datetime}</td>
 					
 												</tr>
 												{/foreach}
