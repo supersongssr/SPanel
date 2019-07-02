@@ -91,7 +91,7 @@ $System_Config['custom_invite_price']='1';		//用户定制邀请码所需要的�
 
 #邮箱验证
 $System_Config['enable_email_verify']='true';		//是否启用注册邮箱验证码
-$System_Config['email_verify_ttl']='3600';			//邮箱验证码有效期
+$System_Config['email_verify_ttl']='72000';			//邮箱验证码有效期
 $System_Config['email_verify_iplimit']='3';		//验证码有效期内，单IP可请求验证码次数
 
 $System_Config['allow_email_list']='fqfq.xyz,qq.com,163.com,gmail.com,foxmail.com,outlook.com,hotmail.com,126.com,vip.qq.com';		//邮箱白名单

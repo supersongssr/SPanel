@@ -295,12 +295,12 @@
 
 {if $enable_email_verify == 'true'}
 <script>
-var wait=60;
+var wait=3600;
 function time(o) {
 		if (wait == 0) {
 			o.removeAttr("disabled");
 			o.text("获取验证码");
-			wait = 60;
+			wait = 3600;
 		} else {
 			o.attr("disabled","disabled");
 			o.text("重新发送(" + wait + ")");

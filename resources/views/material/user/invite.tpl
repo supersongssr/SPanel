@@ -16,11 +16,13 @@
 								<div class="card-inner">
 									<div class="card-inner">
 										<p class="card-heading">说明</p>
-										<p>您每邀请1位用户注册：</p>
+										<p>您每邀请1位好友注册：</p>
+										<p>您会获得<code>6 ￥</code>余额奖励。</p>
 										<p>您会获得<code>{$config["invite_gift"]} G</code>流量奖励。</p>
 										<p>对方将获得<code>{$config["invite_get_money"]}</code>元奖励作为初始资金。</p>
 										<p>对方充值时您还会获得对方充值金额的 <code>{$config["code_payback"]} %</code> 的返利。</p>
 										<p>对方邀请的用户充值时您还会获得金额的 <code>{$config["code_payback"] / 2 }%</code> 的返利。</p>
+										<p><small>*滥用邀请，返利可能被收回！请确保您邀请到真实的好友！</small></p>
 										<p class="card-heading">已获得返利：<code>{$paybacks_sum}</code> 元 ;。</p>
 									</div>
 
@@ -48,8 +50,8 @@
 											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="{$code->code}">点击复制邀请码</button>				
 										</div>
 										<div class="invite-link">
-											<input type="text" class="input form-control form-control-monospace cust-link" name="input2" readonly="" value="/auth/register?code={$code->code}">
-											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="/auth/register?code={$code->code}">点击复制邀请链接</button>				
+											<input type="text" class="input form-control form-control-monospace cust-link" name="input2" readonly="" value="{$config["baseUrl"]}/auth/register?code={$code->code}">
+											<button class="copy-text btn btn-subscription" type="button" data-clipboard-text="{$config["baseUrl"]}/auth/register?code={$code->code}">点击复制邀请链接</button>				
 										</div>
 									</div>
 								</div>

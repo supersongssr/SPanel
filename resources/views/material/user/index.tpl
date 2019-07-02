@@ -163,7 +163,7 @@
 											<div class="tab-content">
 												<div class="tab-pane fade active in" id="all_ssr">
 													{$pre_user = URL::cloneUser($user)}
-													<p>S.R☆☆☆：TCP、UDP、Chain-a协议、支持与S.S V.2同时使用。</p>
+													<p><small>*鼠标请右键复制链接，手机请长按复制链接：</small><a href="{$subUrl}{$ssr_sub_token}?mu=1">备用SR订阅1</a>&nbsp;&nbsp;&nbsp;<a href="/link/{$ssr_sub_token}?mu=1">备用SR订阅2</a>&nbsp;&nbsp;&nbsp;<br>S.R☆☆☆：TCP、UDP、Chain-a协议、支持与S.S V.2同时使用。</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -324,7 +324,7 @@
 												</div>
 
 												<div class="tab-pane fade" id="all_ss">
-													<p>S.S☆：TCP、UDP、ahead加密、S.D订阅、V.2订阅。</p>
+													<p><small>*鼠标请右键复制链接，手机请长按复制链接：</small><a href="{$subUrl}{$ssr_sub_token}?mu=3">备用SS订阅1</a>&nbsp;&nbsp;&nbsp;<a href="/link/{$ssr_sub_token}?mu=3">备用SS订阅2</a>&nbsp;&nbsp;&nbsp;<br>S.S☆：TCP、UDP、ahead加密、S.D订阅、V.2订阅。</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -423,7 +423,7 @@
 												</div>
 
 												<div class="tab-pane fade" id="all_v2ray">
-													<p>V.2☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装。推荐使用；</p>
+													<p><small>*鼠标请右键复制链接，手机请长按复制链接：</small><a href="{$subUrl}{$ssr_sub_token}?mu=2">备用V2ray订阅1</a>&nbsp;&nbsp;&nbsp;<a href="/link/{$ssr_sub_token}?mu=2">备用V2ray订阅2</a>&nbsp;&nbsp;&nbsp;<br>V.2☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装。推荐使用；</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
