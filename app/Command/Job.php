@@ -738,22 +738,27 @@ class Job
             if (Config::get('account_expire_delete_days')>=0&&
                 strtotime($user->expire_in)+Config::get('account_expire_delete_days')*86400<time()
             ) {
-                $subject = Config::get('appName')."-您的用户账户已经被删除了";
-                $to = $user->email;
-                $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
-                /**
-                try {
-                    Mail::send($to, $subject, 'news/warn.tpl', [
-                        "user" => $user,"text" => $text
-                    ], [
-                    ]);
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
+                # 如果当前时间 - 过期时间 大于 用户余额的话， 1块钱=30天，所以：1元 = 2592000
+                # 如果过期 x 个月，且余额小于 1元=30 
+                if (  ( time() - $strotime($user->expire_in) ) > ($user->money * 30 * 24 * 3600) ) {
+                    # code...
+                    $subject = Config::get('appName')."-您的用户账户已经被删除了";
+                    $to = $user->email;
+                    $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
+                    /**
+                    try {
+                        Mail::send($to, $subject, 'news/warn.tpl', [
+                            "user" => $user,"text" => $text
+                        ], [
+                        ]);
+                    } catch (\Exception $e) {
+                        echo $e->getMessage();
+                    }
+                    **/
+                    
+                    $user->kill_user();
+                    continue;
                 }
-                **/
-                
-                $user->kill_user();
-                continue;
             }
 
             
