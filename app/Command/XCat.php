@@ -44,8 +44,8 @@ class XCat
                 //song
             case("banUsernoPay"):
                 return $this->banUsernoPay();
-            case("autoCheckNodeStatus"):
-                return $this->autoCheckNodeStatus();
+            case("test"):
+                return $this->test();
             case("createAdmin"):
                 return $this->createAdmin();
             case("resetTraffic"):
@@ -209,9 +209,31 @@ class XCat
 
     }
 
-    public function autoCheckNodeStatus()
+    public function test()
     {
+        $paybacklist = Payback::where('total','=',-2)->get();
+        foreach ($paybacklist as $payback) {
+            # code...
+            $pays = Payback::where('total','=',-2)->where('userid','=',$payback->userid)->where('ref_by','=', $payback->ref_by)->count();
+            if ($pays == 1 ) {
+                # code...
+                continue;
+            }
+            if ($pays >= 2 ) {
+                # code...
+                $payback->delete();
+                #
+                $user = User::where('id','=',$payback->ref_by)->first();
+                if ($user->id != null ) {
+                    # code...
+                    $user->money += 7;
+                    $user->save();
+                }
+            }
+        }
 
+
+        /**
         //自动审计每天节点流量数据 song
         $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的在线节点 
         //将所有的V2节点变成 0.1倍率 和 等级1 
@@ -228,6 +250,8 @@ class XCat
                 $node->node_class = 1;
             }
         }
+
+        **/
         /**
         foreach ($nodes_vnstat as $node) {
             # code...

@@ -120,12 +120,12 @@ class User extends Model
     {
         $uid = $this->attributes['id'];
         $code = new InviteCode();
-		while(true){
-			$temp_code=Tools::genRandomChar(4);
-			if(InviteCode::where('user_id', $uid)->count()==0){
-				break;
-			}
-		}
+        while(true){
+            $temp_code=Tools::genRandomChar(4);
+            if(InviteCode::where('user_id', $uid)->count()==0){
+                break;
+            }
+        }
         $code->code = $temp_code;
         $code->user_id = $uid;
         $code->save();
@@ -255,7 +255,7 @@ class User extends Model
     {
         $uid = $this->attributes['id'];
         $email = $this->attributes['email'];
-
+        /**
         //song 这里同时删除用户返利，然后写入返利 嘎嘎 
         //先确定 邀请人不是0 ，才继续
         if ($this->attributes['ref_by'] != 0) {
@@ -276,6 +276,7 @@ class User extends Model
                 $Payback->save();
             }
         }
+        **/
 
         Radius::Delete($email);
 

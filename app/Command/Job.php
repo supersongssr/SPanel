@@ -28,6 +28,7 @@ use App\Utils\Telegram;
 use CloudXNS\Api;
 use App\Models\Disconnect;
 use App\Models\UnblockIp;
+use App\Models\Payback;  // 原来是缺少这个 song 
 
 class Job
 {
@@ -652,7 +653,7 @@ class Job
             }
         }
 
-        $users = User::all();
+        $users = User::orderBy('id', 'desc')->get();
         foreach ($users as $user) {
             if (($user->transfer_enable<=$user->u+$user->d||$user->enable==0||(strtotime($user->expire_in)<time()&&strtotime($user->expire_in)>644447105))&&RadiusBan::where("userid", $user->id)->first()==null) {
                 $rb=new RadiusBan();
@@ -735,77 +736,8 @@ class Job
                 }
             }
 
-            if (Config::get('account_expire_delete_days')>=0&&
-                strtotime($user->expire_in)+Config::get('account_expire_delete_days')*86400<time() && ( time() - strtotime($user->expire_in) ) > ($user->money * 30 * 24 * 3600)
-            ) {
-                # 如果当前时间 - 过期时间 大于 用户余额的话， 1块钱=30天，所以：1元 = 2592000
-                # 如果过期 x 个月，且余额小于 1元=30 
-                $subject = Config::get('appName')."-您的用户账户已经被删除了";
-                $to = $user->email;
-                $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
-                /**
-                try {
-                    Mail::send($to, $subject, 'news/warn.tpl', [
-                        "user" => $user,"text" => $text
-                    ], [
-                    ]);
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
-                }
-                **/
-                
-                $user->kill_user();
-                continue;
-            }
-
-            
-            if (Config::get('auto_clean_uncheck_days')>0 && 
-                max($user->last_check_in_time, strtotime($user->reg_date)) + (Config::get('auto_clean_uncheck_days')*86400) < time() && 
-                $user->class == 0 && 
-                $user->money <= Config::get('auto_clean_min_money')
-            ) {
-                $subject = Config::get('appName')."-您的用户账户已经被删除了";
-                $to = $user->email;
-                $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_uncheck_days')." 天没签到了，帐号已经被删除。" ;
-                /**
-                try {
-                    Mail::send($to, $subject, 'news/warn.tpl', [
-                        "user" => $user,"text" => $text
-                    ], [
-                    ]);
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
-                }
-                **/
-                $user->kill_user();
-                continue;
-            }
-
-            if (Config::get('auto_clean_unused_days')>0 && 
-                max($user->t, strtotime($user->reg_date)) + (Config::get('auto_clean_unused_days')*86400) < time() && 
-                $user->class == 0 && 
-                $user->money <= Config::get('auto_clean_min_money')
-            ) {
-                $subject = Config::get('appName')."-您的用户账户已经被删除了";
-                $to = $user->email;
-                $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_unused_days')." 天没使用了，帐号已经被删除。" ;
-                /**
-                try {
-                    Mail::send($to, $subject, 'news/warn.tpl', [
-                        "user" => $user,"text" => $text
-                    ], [
-                    ]);
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
-                }
-                **/
-                $user->kill_user();
-                continue;
-            }
-
-            if ($user->class!=0 && 
-                strtotime($user->class_expire)<time() && 
-                strtotime($user->class_expire) > 1420041600
+            if ($user->class != 0 && 
+                strtotime($user->class_expire)<time()
             ){
 
   /**              //Song  账号过期不通知
@@ -829,7 +761,105 @@ class Job
                     echo $e->getMessage();
                 }
 **/
-                $user->class=0;
+                $user->class = 0;
+            }
+
+
+            // 这里开始检测用户账号是否到了被删除的时候
+            $iskilluser = false;
+            if (Config::get('account_expire_delete_days')>=0&&
+                strtotime($user->expire_in)+Config::get('account_expire_delete_days')*86400<time() && ( time() - strtotime($user->expire_in) ) > ($user->money * 30 * 24 * 3600)
+            ) {
+                # 如果当前时间 - 过期时间 大于 用户余额的话， 1块钱=30天，所以：1元 = 2592000
+                # 如果过期 x 个月，且余额小于 1元=30 
+                /**
+                $subject = Config::get('appName')."-您的用户账户已经被删除了";
+                $to = $user->email;
+                $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
+                
+                try {
+                    Mail::send($to, $subject, 'news/warn.tpl', [
+                        "user" => $user,"text" => $text
+                    ], [
+                    ]);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+                **/
+                $iskilluser = true;  // 这里加个参数是否kill user 
+                //$user->kill_user();
+                //continue;
+            }elseif (Config::get('auto_clean_uncheck_days')>0 && 
+                max($user->last_check_in_time, strtotime($user->reg_date)) + (Config::get('auto_clean_uncheck_days')*86400) < time() && 
+                $user->class == 0 && 
+                $user->money <= Config::get('auto_clean_min_money')
+            ) {
+                /**
+                $subject = Config::get('appName')."-您的用户账户已经被删除了";
+                $to = $user->email;
+                $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_uncheck_days')." 天没签到了，帐号已经被删除。" ;
+                
+                try {
+                    Mail::send($to, $subject, 'news/warn.tpl', [
+                        "user" => $user,"text" => $text
+                    ], [
+                    ]);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+                **/
+                $iskilluser = true;
+                //$user->kill_user();
+                //continue;
+            }elseif (Config::get('auto_clean_unused_days')>0 && 
+                max($user->t, strtotime($user->reg_date)) + (Config::get('auto_clean_unused_days')*86400) < time() && 
+                $user->class == 0 && 
+                $user->money <= Config::get('auto_clean_min_money')
+            ) {
+                /**
+                $subject = Config::get('appName')."-您的用户账户已经被删除了";
+                $to = $user->email;
+                $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_unused_days')." 天没使用了，帐号已经被删除。" ;
+                
+                try {
+                    Mail::send($to, $subject, 'news/warn.tpl', [
+                        "user" => $user,"text" => $text
+                    ], [
+                    ]);
+                } catch (\Exception $e) {
+                    echo $e->getMessage();
+                }
+                **/
+                $iskilluser = true;
+                //$user->kill_user();
+                //continue;
+            }
+
+            //song 如果返利扣除在这里扣除的话，会不会好一些？我觉得会好一些，不错的主意。嘎嘎 有点意思，嘿嘿 可以有 
+            if ( $iskilluser ) {
+                # code...
+                //先扣除邀请  如果账号注册时间小于128天再扣除
+                if ($user->ref_by != 0 && (( time() - strtotime($user->reg_date) ) < 11059200) ) {
+                    # code...
+                    $ref_user = User::find($user->ref_by);
+                    //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
+                    $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
+                    //先判断一下这个邀请人是否还存在
+                    if ($ref_user->id != null  && $ref_payback->ref_get != null) {    //如果存在
+                        $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
+                        $ref_user->save();
+                        //写入返利日志
+                        $Payback = new Payback();
+                        $Payback->total = -2;
+                        $Payback->userid = $user->id;  //用户注册的ID 
+                        $Payback->ref_by = $user->ref_by;  //邀请人ID
+                        $Payback->ref_get = - $ref_payback->ref_get;
+                        $Payback->datetime = time();
+                        $Payback->save();
+                    }
+                }
+                //然后再删除用户
+                $user->kill_user();
             }
 
             $user->save();
