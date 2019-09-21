@@ -170,7 +170,7 @@ class ApiController extends BaseController
         $status = $request->getParam('status');
         $traffic = $request->getParam('traffic');
         $online = $request->getParam('online');
-        $id < 4 && exit;
+        $id < 9 && exit;
         //写入节点数据 状态 流量
         $node = Node::find($id);
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
@@ -204,7 +204,7 @@ class ApiController extends BaseController
     public function ssn_v2($request, $response, $args)
     {
         $id = $args['id'];
-        $id < 3 && exit;  //ID 64以下是没有 V2节点的
+        $id < 9 && exit;  //ID 64以下是没有 V2节点的
         $node = Node::find($id);
         $addn = explode('#', $node->node_ip);
         empty($addn['1']) && exit;  //如果ip判断为空，那么就退出脚本 防止错写

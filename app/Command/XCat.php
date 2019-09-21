@@ -211,7 +211,17 @@ class XCat
 
     public function test()
     {
-        $paybacklist = Payback::where('total','=',-2)->get();
+        // 自动更改节点的 server 的域名
+        $nodes_vnstat = Node::where('id','>',150)->get();  // 只获取4以上的在线节点 
+        foreach ($nodes_vnstat as $node) {
+            # code...
+            $node->server = str_replace("okss.top","wewall.top",$node->server);
+            $node->save();
+        }
+
+
+        /** 自动清楚超额的返利
+        $paybacklist = Payback::where('total','=',-2)->orderBy('id', 'desc')->get();
         foreach ($paybacklist as $payback) {
             # code...
             $pays = Payback::where('total','=',-2)->where('userid','=',$payback->userid)->where('ref_by','=', $payback->ref_by)->count();
@@ -228,16 +238,19 @@ class XCat
                     # code...
                     $user->money += 7;
                     $user->save();
+                    echo $user->id;
+                    echo ' ';
                 }
             }
         }
+        **/
 
 
         /**
         //自动审计每天节点流量数据 song
         $nodes_vnstat = Node::where('id','>',4)->get();  // 只获取4以上的在线节点 
         //将所有的V2节点变成 0.1倍率 和 等级1 
-        foreach ($$nodes_vnstat as $node) {
+        foreach ($nodes_vnstat as $node) {
             # code...
             if ($node->type == 11) {
                 # code...

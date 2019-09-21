@@ -193,7 +193,7 @@ class Job
         }
 
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',5)->where('type','=',1)->get();  // 只获取4以上的在线节点 
+        $nodes_vnstat = Node::where('id','>',9)->where('type','=',1)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
             # code...
             $addn = explode('#', $node->node_ip);
@@ -653,8 +653,8 @@ class Job
             }
         }
 
-        $users = User::orderBy('id', 'desc')->get();
-        foreach ($users as $user) {
+        $delusers = User::orderBy('id', 'desc')->get();
+        foreach ($delusers as $user) {
             if (($user->transfer_enable<=$user->u+$user->d||$user->enable==0||(strtotime($user->expire_in)<time()&&strtotime($user->expire_in)>644447105))&&RadiusBan::where("userid", $user->id)->first()==null) {
                 $rb=new RadiusBan();
                 $rb->userid=$user->id;
@@ -844,12 +844,16 @@ class Job
                     $ref_user = User::find($user->ref_by);
                     //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
                     $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
-                    //先判断一下这个邀请人是否还存在
-                    if ($ref_user->id != null  && $ref_payback->ref_get != null) {    //如果存在
+                    //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量 
+                    $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
+                    //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
+                    if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
                         $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
                         $ref_user->save();
                         //写入返利日志
                         $Payback = new Payback();
+                        #echo $user->id;
+                        #echo ' ';
                         $Payback->total = -2;
                         $Payback->userid = $user->id;  //用户注册的ID 
                         $Payback->ref_by = $user->ref_by;  //邀请人ID
@@ -860,8 +864,8 @@ class Job
                 }
                 //然后再删除用户
                 $user->kill_user();
+                continue;
             }
-
             $user->save();
         }
 

@@ -34,7 +34,7 @@ git pull
 
 在宝塔面板中找到php，点击设置
 
-在**禁用函数**一栏找到 `system` `proc_open` `proc_get_status` 去除它
+在**禁用函数**一栏找到 `system` `proc_open` `proc_get_status` `putenv`去除它
 
 在**性能调整**中，把 PHP 运行模式设置为 **静态**
 
@@ -45,7 +45,7 @@ git pull
 web环境配置好后
 
 ```
-cd /你的网站目录  例：cd /www/wwwroot/你的网站目录  
+cd /www/wwwroot/你的网站 
 yum update
 yum install git -y
 git clone -b dev https://github.com/supersongssr/ssp-uim.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
@@ -85,7 +85,7 @@ location / {
 mysql -u root -p                                       // 这里需要输入密码
 mysql>CREATE DATABASE database_name;                   //新建数据库
 mysql>use database_name;                               // 选择数据库
-mysql>source /网站目录/sql/glzjin_all.sql;  // 导入.sql文件
+mysql>source /www/wwwroot/ssp-uim/sql/glzjin_all.sql;  // 导入.sql文件
 
 ```
 
@@ -115,7 +115,7 @@ php xcat initdownload         //下载ssr程式
 ```
 22 4 * * * php /www/wwwroot/ssp-uim/xcat sendDiaryMail
 58 3 * * * php -n /www/wwwroot/ssp-uim/xcat dailyjob
-*/10 * * * * php /www/wwwroot/ssp-uim/xcat checkjob
+17 */3 * * * php /www/wwwroot/ssp-uim/xcat checkjob
 ###*/12 * * * * php /www/wwwroot/ssp-uim/xcat syncnode  #这个要不得，然后网站会出大问题的！主要是V2节点的IP会被重置！
 ```
 如果需要自动备份，可模仿以下两例，自行添加一条

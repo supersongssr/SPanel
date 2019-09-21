@@ -351,7 +351,7 @@ class URL
             'path'=>'',
             'tls'=>''
         ];
-        $item['ps'] = $node->name.' '.$node->node_class.'☆ '.($node->traffic_rate *100).'% #'.$node->id;
+        $item['ps'] = $node->name.'v'.$node->node_class.'x'.$node->traffic_rate.'#'.$node->id;
         $item['add'] = $node->server;// addn ->server song 
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
@@ -579,7 +579,7 @@ class URL
         $return_array['port'] = $user->port;
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;
-        $return_array['remark'] = $node_name.' '.$node->node_class.'☆ '.($node->traffic_rate * 100).'% #'.$node->id;
+        $return_array['remark'] = $node_name.'v'.$node->node_class.'x'.$node->traffic_rate.'#'.$node->id;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;
@@ -615,9 +615,11 @@ class URL
     }
     public static function getUserTraffic($user, $is_mu = 0){
         $group_name = Config::get('appName');
+        /** song
         if(Config::get('mergeSub')!='true' and $is_mu == 1){
             $group_name .= ' - 单端口';
         }
+        **/
         if(strtotime($user->expire_in)>time()){
             if($user->transfer_enable==0){
                 $percent='0.00%';
@@ -633,9 +635,11 @@ class URL
     }
     public static function getUserClassExpiration($user, $is_mu = 0){
         $group_name = Config::get('appName');
+        /** song 
         if(Config::get('mergeSub')!='true' and $is_mu == 1){
             $group_name .= ' - 单端口';
         }
+        **/
         if(strtotime($user->expire_in)>time()){
             $ssurl = "www.google.com:2:auth_chain_a:chacha20:tls1.2_ticket_auth:YnJlYWt3YWxs/?obfsparam=&protoparam=&remarks=".Tools::base64_url_encode("过期时间：".$user->class_expire)."&group=".Tools::base64_url_encode($group_name);
         }else{

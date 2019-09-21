@@ -255,31 +255,7 @@ class User extends Model
     {
         $uid = $this->attributes['id'];
         $email = $this->attributes['email'];
-        /**
-        //song 这里同时删除用户返利，然后写入返利 嘎嘎 
-        //先确定 邀请人不是0 ，才继续
-        if ($this->attributes['ref_by'] != 0) {
-            $ref_user = User::find($this->attributes['ref_by']);
-            //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
-            $ref_payback = Payback::where('total','=',-1)->where('userid','=',$uid)->where('ref_by','=',$this->attributes['ref_by'])->first();
-            //先判断一下这个邀请人是否还存在
-            if ($ref_user->id != null  && $ref_payback->ref_get != null) {    //如果存在
-                $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
-                $ref_user->save();
-                //写入返利日志
-                $Payback = new Payback();
-                $Payback->total = -2;
-                $Payback->userid = $uid;  //用户注册的ID 
-                $Payback->ref_by = $ref_payback->ref_by;  //邀请人ID
-                $Payback->ref_get = - $ref_payback->ref_get;
-                $Payback->datetime = time();
-                $Payback->save();
-            }
-        }
-        **/
-
         Radius::Delete($email);
-
         RadiusBan::where('userid', '=', $uid)->delete();
         Disconnect::where('userid', '=', $uid)->delete();
         Bought::where('userid', '=', $uid)->delete();
@@ -295,9 +271,7 @@ class User extends Model
         TrafficLog::where('user_id', '=', $uid)->delete();
         Token::where('user_id', '=', $uid)->delete();
         PasswordReset::where('email', '=', $email)->delete();
-
         $this->delete();
-
         return true;
     }
 
