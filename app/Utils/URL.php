@@ -351,7 +351,7 @@ class URL
             'path'=>'',
             'tls'=>''
         ];
-        $item['ps'] = $node->name.'v'.$node->node_class.'x'.$node->traffic_rate.'#'.$node->id;
+        $item['ps'] = $node->name.'|V'.$node->node_class.'|R'.$node->traffic_rate.'|'.$node->id;
         $item['add'] = $node->server;// addn ->server song 
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
@@ -363,6 +363,52 @@ class URL
             $item['path'] = '/'.$node_explode[7];
             empty($node_explode[8]) ? $item['tls'] = '' : $item['tls'] = 'tls';
         }
+
+        #这里做个判断，如果 server 存在第二个值，那么就可以正常使用了！嘎嘎 嘿嘿不错的想法！ 
+        /**$server = explode(';', $node->server);
+        if ($server[1] != null ) {
+            # code...
+            $item['id'] = $user->getUuid();
+
+            $item['add'] = $server[0];
+            if ($server[1] == '0' || $server[1] == '') {
+                $item['port'] = 443;
+            } else {
+                $item['port'] = (int)$server[1];
+            }
+            $item['aid'] = (int)$server[2];
+            $item['net'] = 'tcp';
+            $item['type'] = 'none';
+            if (count($server) >= 4) {
+                $item['net'] = $server[3];
+                if ($item['net'] == 'ws') {
+                    $item['path'] = '/';
+                } elseif ($item['net'] == 'tls') {
+                    $item['tls'] = 'tls';
+                }
+            }
+            if (count($server) >= 5) {
+                if (in_array($item['net'], array('kcp', 'http'))) {
+                    $item['type'] = $server[4];
+                } elseif ($server[4] == 'ws') {
+                    $item['net'] = 'ws';
+                }
+            }
+            if (count($server) >= 6) {
+                $item = array_merge($item, URL::parse_args($server[5]));
+                if (array_key_exists('server', $item)) {
+                    $item['add'] = $item['server'];
+                    unset($item['server']);
+                }
+                if (array_key_exists('outside_port', $item)) {
+                    $item['port'] = (int)$item['outside_port'];
+                    unset($item['outside_port']);
+                }
+            }
+            #完成
+            
+        }**/
+
         return "vmess://".base64_encode((json_encode($item, JSON_UNESCAPED_UNICODE)));
     }
     public static function getAllVMessUrl($user) {
@@ -579,7 +625,7 @@ class URL
         $return_array['port'] = $user->port;
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;
-        $return_array['remark'] = $node_name.'v'.$node->node_class.'x'.$node->traffic_rate.'#'.$node->id;
+        $return_array['remark'] = $node_name.'|V'.$node->node_class.'|R'.$node->traffic_rate.'|'.$node->id;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;

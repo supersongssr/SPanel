@@ -270,6 +270,7 @@ class AuthController extends BaseController
             //$allow_email = explode(';', Config::get('allow_email_list'));
             $check_email = explode('@', $email);
             //song 判断是否在白名单中
+            /**
             //if (!in_array($check_email['1'], $allow_email)) {
             if (!stripos(Config::get('allow_email_list') , $check_email['1'])) {
                 # code...
@@ -277,6 +278,7 @@ class AuthController extends BaseController
                 $res['msg'] = "咦,邮箱地址不常见呢,联系管理员加入白名单！";
                 return $response->getBody()->write(json_encode($res));
             }
+            **/
 
             $user = User::where('email', '=', $email)->first();
             if ($user != null) {
@@ -520,12 +522,14 @@ class AuthController extends BaseController
             $user->money = 60;
             $user->remark = 'regEDU';
         }**/
+        /**
         //song 新版判断邮箱结尾是否为 edu.cn
         if (strrchr($email, 'edu.cn') == 'edu.cn') {
             # code...
             $user->money = 60;
             $user->remark = 'regEDU';
         }
+        **/
 
         $user->class_expire = date("Y-m-d H:i:s", time() + Config::get('user_class_expire_default') * 3600);
         $user->class = Config::get('user_class_default');

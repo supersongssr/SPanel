@@ -197,7 +197,7 @@ class Job
         foreach ($nodes_vnstat as $node) {
             # code...
             $addn = explode('#', $node->node_ip);
-            if (empty($addn['1'])) {
+            if (empty($addn['2'])) {
                 # code...
                 $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
                 $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
@@ -209,11 +209,13 @@ class Job
             }
             #在线节点，流量少于16G 的 隐藏 且加·  16 * 1024 * 1024 * 1024 记录中记录的时bytes 
             if($total < 17179869184 ){
-              $node->name .= '·' ;
+              $node->status = '* ' . $node->status ;
               $node->type = 0;        //在节点名字后面加上 · 这个符号，多了就能看到了。
             }      
             $node->info = floor($total / 1073741824) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
-            $node->info = substr($node->info, 0,128);             //截取字符串长度为128位 防止超出
+            $node->info = substr($node->info, 0,64);             //截取字符串长度为128位 防止超出
+            #总流量 * 64除以月流量 就是倍率
+            $node->traffic_rate = round( ($total * 64 / $node->node_bandwidth_limit) , 2) ;
             $node->save();
             //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
             $node_info = new NodeInfoLog();
@@ -228,7 +230,7 @@ class Job
         $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
         foreach ($users_nomoney as $user) {
             $user->enable = 0;
-            $user->save;
+            $user->save();
         }
         //就这么简单，只需要自动禁用余额少于0 ，但是依然可用的账户。
 
@@ -838,8 +840,11 @@ class Job
             //song 如果返利扣除在这里扣除的话，会不会好一些？我觉得会好一些，不错的主意。嘎嘎 有点意思，嘿嘿 可以有 
             if ( $iskilluser ) {
                 # code...
-                //先扣除邀请  如果账号注册时间小于128天再扣除
-                if ($user->ref_by != 0 && (( time() - strtotime($user->reg_date) ) < 11059200) ) {
+                //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
+                $used_time = floor( $user->reg_date / 86400 );
+                $used_data = floor( ($user->u + $user->d) / 1073741824 );
+
+                if ($user->ref_by != 0 && ( ($used_time + $used_data) < 128 )) {
                     # code...
                     $ref_user = User::find($user->ref_by);
                     //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
@@ -849,6 +854,8 @@ class Job
                     //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
                     if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
                         $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
+                        //扣除邀请的流量！
+                        $ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
                         $ref_user->save();
                         //写入返利日志
                         $Payback = new Payback();

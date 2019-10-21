@@ -23,6 +23,7 @@
 										<p>对方充值时您还会获得对方充值金额的 <code>{$config["code_payback"]} %</code> 的返利。</p>
 										<p>对方邀请的用户充值时您还会获得金额的 <code>{$config["code_payback"] / 2 }%</code> 的返利。</p>
 										<p><small>*滥用邀请，返利可能被收回！请确保您邀请到真实的好友！</small></p>
+										<p><small>*被邀请用户流量使用>10G，系统不会收回邀请返利！</small></p>
 										<p class="card-heading">已获得返利：<code>{$paybacks_sum}</code> 元 ;。</p>
 									</div>
 

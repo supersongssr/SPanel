@@ -13,11 +13,11 @@ class NodeController extends AdminController
 {
     public function index($request, $response, $args)
     {
-        $table_config['total_column'] = Array("op" => "操作", "id" => "ID", "name" => "节点名称",
-                            "type" => "显示与隐藏", "sort" => "类型",
+        $table_config['total_column'] = Array("op" => "操作", "id" => "ID", "name" => "名称",
+                            "type" => "显示", "sort" => "类型",
                             "server" => "节点地址", "node_ip" => "节点IP",
-                            "info" => "节点信息",
-                            "status" => "状态", "traffic_rate" => "流量比率", "node_group" => "节点群组",
+                            "status" => "状态","info" => "节点信息", "traffic_rate" => "流量比率", 
+                            "node_group" => "节点群组",
                             "node_class" => "节点等级", "node_speedlimit" => "节点限速/Mbps",
                             "node_bandwidth" => "已走流量/GB", "node_bandwidth_limit" => "流量限制/GB",
                             "bandwidthlimit_resetday" => "流量重置日", "node_heartbeat" => "上一次活跃时间",
@@ -159,7 +159,7 @@ class NodeController extends AdminController
         $node->node_bandwidth_limit=$request->getParam('node_bandwidth_limit')*1024*1024*1024;
         $node->bandwidthlimit_resetday=$request->getParam('bandwidthlimit_resetday');
         $node->save();
-        Telegram::Send("新增节点~~".$request->getParam('name').'#'.$id);
+        Telegram::Send("修改节点~~".$request->getParam('name').'#'.$id);
         $rs['ret'] = 1;
         $rs['msg'] = "修改成功";
         return $response->getBody()->write(json_encode($rs));
@@ -185,11 +185,11 @@ class NodeController extends AdminController
     public function ajax($request, $response, $args)
     {
         $datatables = new Datatables(new DatatablesHelper());
-        $total_column = Array("op" => "操作", "id" => "ID", "name" => "节点名称",
-                              "type" => "显示与隐藏", "sort" => "类型",
+        $total_column = Array("op" => "操作", "id" => "ID", "name" => "名称",
+                              "type" => "显示", "sort" => "类型",
+                              "status" => "状态",
                               "server" => "节点地址", "node_ip" => "节点IP",
-                              "info" => "节点信息",
-                              "status" => "状态", "traffic_rate" => "流量比率", "node_group" => "节点群组",
+                              "info" => "节点信息", "traffic_rate" => "流量比率", "node_group" => "节点群组",
                               "node_class" => "节点等级", "node_speedlimit" => "节点限速/Mbps",
                               "node_bandwidth" => "已走流量/GB", "node_bandwidth_limit" => "流量限制/GB",
                               "bandwidthlimit_resetday" => "流量重置日", "node_heartbeat" => "上一次活跃时间",
@@ -206,7 +206,7 @@ class NodeController extends AdminController
         $datatables->query('Select '.$key_str.' from ss_node');
         $datatables->edit('op', function ($data) {
             return '<a class="btn btn-brand" '.($data['sort'] == 999 ? 'disabled' : 'href="/admin/node/'.$data['id'].'/edit"').'>编辑</a>
-                    <a class="btn btn-brand-accent" '.($data['sort'] == 999 ? 'disabled' : 'id="delete" value="'.$data['id'].'" href="javascript:void(0);" onClick="delete_modal_show(\''.$data['id'].'\')"').'>删除</a>';
+                    <!-- <a class="btn btn-brand-accent" '.($data['sort'] == 999 ? 'disabled' : 'id="delete" value="'.$data['id'].'" href="javascript:void(0);" onClick="delete_modal_show(\''.$data['id'].'\')"').'>删除</a> -->';
         });
         $datatables->edit('node_bandwidth', function ($data) {
             return Tools::flowToGB($data['node_bandwidth']);
@@ -218,7 +218,7 @@ class NodeController extends AdminController
             $sort = '';
             switch($data['sort']) {
                 case 0:
-                  $sort = 'Shadowsocks';
+                  $sort = 'Sr';
                   break;
                 case 1:
                   $sort = 'VPN/Radius基础';
@@ -230,13 +230,13 @@ class NodeController extends AdminController
                   $sort = 'Anyconnect';
                   break;
                 case 9:
-                  $sort = 'Shadowsocks - 单端口多用户';
+                  $sort = 'Sr-单多';
                   break;
                 case 10:
-                  $sort = 'Shadowsocks - 中转';
+                  $sort = 'Ss-中转';
                   break;
                 case 11:
-                  $sort = 'V2Ray 节点';
+                  $sort = 'V2';
                   break;
                 default:
                   $sort = '系统保留';

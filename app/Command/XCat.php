@@ -211,14 +211,46 @@ class XCat
 
     public function test()
     {
+        
+        /**
+        //将所有节点的流量限制设置为 1000 这样方便计算
+        $nodes_vnstat = Node::where('id','>',9)->get();  // 只获取4以上的在线节点 
+        foreach ($nodes_vnstat as $node) {
+            # code...
+            $node->node_bandwidth_limit = 1000*1024*1024*1024;
+            $node->save();
+        }
+        **/
+
+/**
+        //自动替换节点中的一些不用的字
+        $nodes_vnstat = Node::where('id','>',9)->get();  // 只获取4以上的在线节点 
+        foreach ($nodes_vnstat as $node) {
+            # code...
+            $node->name = str_replace("|","",$node->name);
+            $node->save();
+        }
+        **/
+
+        /**
+        #将每个节点前面加两个字符
+        $nodes_vnstat = Node::where('sort','=', 11)->where('type','=',1)->get();  // 只获取4以上的在线节点 
+        foreach ($nodes_vnstat as $node) {
+            # code...
+            $node->name = '公益|'. $node->name;
+            $node->save();
+        }
+        **/
+
+        /**
         // 自动更改节点的 server 的域名
-        $nodes_vnstat = Node::where('id','>',150)->get();  // 只获取4以上的在线节点 
+        $nodes_vnstat = Node::where('id','>',9)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
             # code...
             $node->server = str_replace("okss.top","wewall.top",$node->server);
             $node->save();
         }
-
+    **/
 
         /** 自动清楚超额的返利
         $paybacklist = Payback::where('total','=',-2)->orderBy('id', 'desc')->get();
