@@ -196,7 +196,7 @@ class URL
                     $query->where('sort', 0)
                         ->orwhere('sort', 10);
                 }
-            )->where("type", "1")->orderBy("name")->get();
+            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
         } else {
             $nodes=Node::where(
                 function ($query) {
@@ -208,7 +208,7 @@ class URL
                     $query->where("node_group", "=", $user->node_group)
                         ->orWhere("node_group", "=", 0);
                 }
-            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("name")->get();
+            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
         }
         if($is_mu) {
             if ($user->is_admin) {
@@ -417,7 +417,7 @@ class URL
                 $query->where("node_group", "=", $user->node_group)
                     ->orWhere("node_group", "=", 0);
             }
-        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("name")->get();
+        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
         $result = "";
         foreach ($nodes as $node) {
             $result .= (URL::getV2Url($user, $node) . "\n");
@@ -461,7 +461,7 @@ class URL
             ->where(function ($func) use ($user){
                 $func->where('node_group', '=', $user->node_group)
                     ->orwhere('node_group', '=', 0);
-            })->orderBy('name')->get();
+            })->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
         $server_index=1;
         foreach($nodes as $node){
             $server=array();
