@@ -1024,7 +1024,7 @@ class UserController extends BaseController
 
     public function shop($request, $response, $args)
     {
-        $shops = Shop::where("status", 1)->orderBy("name")->get();
+        $shops = Shop::where("status", 1)->orderBy("price")->get();
         return $this->view()->assign('shops', $shops)->display('user/shop.tpl');
     }
 
@@ -1161,10 +1161,10 @@ class UserController extends BaseController
         //# 只允许购买 套餐等级 >= 用户等级的商品   这样就可以实现用户购买的套餐可以叠加了。只能向上叠加。
         ##这里需要先 json_decode一下 商品中的 content内容
         $shop_content = $content = json_decode($shop->content, true);
-        if ( $user->class > $shop_content['class']) {
+        if ( $shop_content['class'] <= $user->class) {
             # code...
             $res['ret'] = 0;
-            $res['msg'] = "您已有用更高等级套餐！购买套餐等级不得低于用户等级！";
+            $res['msg'] = "您是尊贵的VIP ".$user->class." ，推荐您购买VIP ".$user->class." 以上套餐。当前套餐等级为VIP ".$shop_content['class']." <您的VIP等级。";
             return $response->getBody()->write(json_encode($res));
         }
 
@@ -1371,7 +1371,7 @@ class UserController extends BaseController
                 }
             }
         }
-**/       
+   
         //Song 工单只有回复没有其他      
         if ($status == 1) {
             $adminUser = User::where("is_admin", "=", "1")->get();
@@ -1389,7 +1389,7 @@ class UserController extends BaseController
                 }
             }
         }
-
+**/    
         $antiXss = new AntiXSS();
 
         $ticket = new Ticket();
@@ -1399,6 +1399,7 @@ class UserController extends BaseController
         $ticket->userid = $this->user->id;
         $ticket->datetime = time();
         $ticket_main->status = $status;
+        $ticket_main->datetime = time();
 
         $ticket_main->save();
         $ticket->save();

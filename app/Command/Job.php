@@ -230,6 +230,13 @@ class Job
         $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
         foreach ($users_nomoney as $user) {
             $user->enable = 0;
+            $user->ban_times += 1;
+            // 其次被禁，就修改用户密码
+            if ($user->ban_times > 7) {
+                # code...
+                $user->pass = time();
+                $user->ban_times = 0;
+            }
             $user->save();
         }
         //就这么简单，只需要自动禁用余额少于0 ，但是依然可用的账户。
@@ -841,7 +848,7 @@ class Job
             if ( $iskilluser ) {
                 # code...
                 //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
-                $used_time = floor( $user->reg_date / 86400 );
+                $used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
                 $used_data = floor( ($user->u + $user->d) / 1073741824 );
 
                 if ($user->ref_by != 0 && ( ($used_time + $used_data) < 128 )) {

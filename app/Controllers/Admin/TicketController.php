@@ -20,11 +20,9 @@ class TicketController extends AdminController
 {
     public function index($request, $response, $args)
     {
-        $table_config['total_column'] = array("op" => "操作", "id" => "ID",
-                              "datetime" => "时间", "title" => "标题", "userid" => "用户ID",
-                              "user_name" => "用户名", "status" => "状态");
-        $table_config['default_show_column'] = array("op", "id",
-                                  "datetime", "title", "userid", "user_name", "status");
+        $table_config['total_column'] = array("op" => "操作", "status" => "状态", "title" => "标题", "id" => "ID", "userid" => "用户ID", "datetime" => "时间",  "user_name" => "用户名");
+        $table_config['default_show_column'] = array("op", "status","title","id" => "ID", 
+                                  "datetime",  "userid", "user_name");
         $table_config['ajax_url'] = 'ticket/ajax';
         return $this->view()->assign('table_config', $table_config)->display('admin/ticket/index.tpl');
     }
@@ -108,7 +106,7 @@ class TicketController extends AdminController
     public function ajax($request, $response, $args)
     {
         $datatables = new Datatables(new DatatablesHelper());
-        $datatables->query('Select ticket.id as op,ticket.id,ticket.datetime,ticket.title,ticket.userid,user.user_name,ticket.status from ticket,user where ticket.userid = user.id and ticket.rootid = 0');
+        $datatables->query('Select ticket.id as op,ticket.status,ticket.title,ticket.id,ticket.userid,ticket.datetime,user.user_name from ticket,user where ticket.userid = user.id and ticket.rootid = 0');
 
         $datatables->edit('op', function ($data) {
             return '<a class="btn btn-brand" href="/admin/ticket/'.$data['id'].'/view">查看</a>';

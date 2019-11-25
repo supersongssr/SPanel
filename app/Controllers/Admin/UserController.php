@@ -15,6 +15,7 @@ use App\Utils\Hash;
 use App\Utils\Radius;
 use App\Utils\QQWry;
 use App\Utils\Tools;
+use App\Models\Payback;  // 原来是缺少这个 song 
 
 class UserController extends AdminController
 {
@@ -215,6 +216,38 @@ class UserController extends AdminController
         $user = User::find($id);
 
         $email1=$user->email;
+
+                # code...
+        //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
+        $used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
+        $used_data = floor( ($user->u + $user->d) / 1073741824 );
+
+        if ($user->ref_by != 0 && ( ($used_time + $used_data) < 128 )) {
+            # code...
+            $ref_user = User::find($user->ref_by);
+            //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
+            $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
+            //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量 
+            $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
+            //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
+            if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
+                $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
+                //扣除邀请的流量！
+                $ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                $ref_user->save();
+                //写入返利日志
+                $Payback = new Payback();
+                #echo $user->id;
+                #echo ' ';
+                $Payback->total = -2;
+                $Payback->userid = $user->id;  //用户注册的ID 
+                $Payback->ref_by = $user->ref_by;  //邀请人ID
+                $Payback->ref_get = - $ref_payback->ref_get;
+                $Payback->datetime = time();
+                $Payback->save();
+            }
+        }
+
 
         if (!$user->kill_user()) {
             $rs['ret'] = 0;
