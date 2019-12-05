@@ -58,7 +58,7 @@
 											</div>
 											<div class="nodemiddle node-flex">
 												<div class="nodetype">
-													{$user->money} CNY
+													{$user->money} $
 												</div>
 											</div>
 										</div>
@@ -152,7 +152,7 @@
 													<a class="" data-toggle="tab" href="#all_ssr"><i class="icon icon-lg">airplanemode_active</i>&nbsp;S.R ★★★★★</a>
 												</li>
 												<li >
-													<a class="" data-toggle="tab" href="#all_v2ray"><i class="icon icon-lg">flight_land</i>&nbsp;V.2 ★★★</a>
+													<a class="" data-toggle="tab" href="#all_v2ray"><i class="icon icon-lg">flight_land</i>&nbsp;Vmess ★★★</a>
 												</li>
 												<li>
 													<a class="" data-toggle="tab" href="#all_ss"><i class="icon icon-lg">flight_takeoff</i>&nbsp;S.S ★</a>
@@ -163,7 +163,7 @@
 											<div class="tab-content">
 												<div class="tab-pane fade active in" id="all_ssr">
 													{$pre_user = URL::cloneUser($user)}
-													<p><small>*鼠标请右键复制链接，手机请长按复制链接：</small><a href="{$subUrl}{$ssr_sub_token}?mu=1">备用SR订阅1</a>&nbsp;&nbsp;&nbsp;<a href="/link/{$ssr_sub_token}?mu=1">备用SR订阅2</a>&nbsp;&nbsp;&nbsp;<br>S.R☆☆☆：TCP、UDP、Chain-a协议、支持与S.S V.2同时使用。</p>
+													<p>S.R☆☆☆：TCP、UDP、Chain-a协议、支持与S.S Vmess同时使用。</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -324,7 +324,7 @@
 												</div>
 
 												<div class="tab-pane fade" id="all_ss">
-													<p><small>*鼠标请右键复制链接，手机请长按复制链接：</small><a href="{$subUrl}{$ssr_sub_token}?mu=3">备用SS订阅1</a>&nbsp;&nbsp;&nbsp;<a href="/link/{$ssr_sub_token}?mu=3">备用SS订阅2</a>&nbsp;&nbsp;&nbsp;<br>S.S☆：TCP、UDP、ahead加密、S.D订阅、V.2订阅。</p>
+													<p>S.S☆：TCP、UDP、ahead加密、S.D订阅、Vmess订阅。</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -423,7 +423,7 @@
 												</div>
 
 												<div class="tab-pane fade" id="all_v2ray">
-													<p><small>*鼠标请右键复制链接，手机请长按复制链接：</small><a href="{$subUrl}{$ssr_sub_token}?mu=2">备用V2ray订阅1</a>&nbsp;&nbsp;&nbsp;<a href="/link/{$ssr_sub_token}?mu=2">备用V2ray订阅2</a>&nbsp;&nbsp;&nbsp;<br>V.2☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装。推荐使用；</p>
+													<p>Vmess☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装。推荐使用；</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -454,11 +454,11 @@
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_ios">
-														<p>IOS端推荐使用SR，不推荐使用V2</p>
-														<p><span class="icon icon-lg text-white">filter_1</span> 推荐安装：在非国区AppStore中搜索<code>kitsunebi</code>安装 </p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Kitsunebi，复制全部Vmess链接，粘贴到Kitsunebi中。</p>
-														<p><span class="icon icon-lg text-white">filter_1</span> 或者安装：<code>shadowrocket</code>,<a href="/ssr-download/Shadowrocket_2.1.12.ipa" class="btn-dl">点击下载</a>ipa安装文件,<a href="https://www.i4.cn/news_detail_3339.html" class="btn-dl" target="_blank">点击查看</a>爱思助手安装ipa文件教程 </p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 或者打开 Shadowrocket，点击右上角的 + 号，类型选择“Subscribe”，URL填写以下地址并点击右上角完成即可。或使用<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="v2sub"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键订阅</a> </p>
+														<p>IOS端新版小火箭已支持v2ray节点，需要在使用的vmess节点右滑点击编辑，将节点设置为允许不安全。（小火箭的奇葩设定）；kitsunbe请编辑使用的节点，将证书验证设置为0</p>
+														<p><span class="icon icon-lg text-white">filter_1</span> 推荐安装：在非国区AppStore中搜索<code>shadowrocket(小火箭)  或   kitsunebi</code>安装 ；<a href="/user/announcement/2">网站有提供免费的已购买过shadowrocket的苹果商店账号密码</a></p>
+														<p><span class="icon icon-lg text-white">filter_2</span> Kitsunebi教程：打开 Kitsunebi，添加下面订阅链接，更新订阅后使用。</p>
+														<p><span class="icon icon-lg text-white">filter_2</span> Shadowrocket教程：点击右上角的 + 号，类型选择“Subscribe”，URL填写以下地址并点击右上角完成即可。或使用<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="v2sub"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键订阅</a> </p>
+														<p><span class="icon icon-lg text-white">filter_2</span> Shadowrocket教程：由于小火箭独特的设置，当前版本中，您需要先选择您使用的节点，然后进入节点编辑（节点右边 i ），勾选 允许不安全 后才能正常使用！ </p>
 														<p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" id="v2sub" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>

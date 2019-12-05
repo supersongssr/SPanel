@@ -1145,6 +1145,23 @@ class UserController extends BaseController
         $price = $shop->price * ((100 - $credit) / 100);
         $user = $this->user;
 
+        // 这里进行判定，如果用户充值金额 < 套餐*0.1 的话，说明用户充值的太少了，就限制一下
+        if ($shop->price > 100) {
+            $codes=Code::where('userid',$user->id)->get();
+            $user_charge =0;
+            foreach($codes as $code){
+                $user_charge+=$code->number;
+            }
+            if ($user_charge < $shop->price * 0.1) {
+                $user->enable = 0 ;
+                $user->ban_times += 3;
+                $user->save();
+                $res['ret'] = 0;
+                $res['msg'] = "您可以盗版邀请受害者，系统已启用账号保护";
+                return $response->getBody()->write(json_encode($res));
+            }
+        }
+
         //song 这里价格进行优惠
         //if (in_array($usernameSuffix[1], $eduSupport)) {
         if (strrchr($user->email, 'edu.cn') == 'edu.cn') {
@@ -1870,4 +1887,81 @@ class UserController extends BaseController
         $newResponse = $response->withStatus(302)->withHeader('Location', $local);
         return $newResponse;
     }
+
+    //song reset user relevel
+    public function relevel($request, $response, $args)
+    {
+
+        // send email
+        $user = Auth::getUser();
+        if ($user == null) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '此邮箱不存在.';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        $codes=Code::where('userid',$user->id)->get();
+        $user_charge =0;
+        foreach($codes as $code){
+            $user_charge+=$code->number;
+        }
+
+        $bought = Bought::where("userid", $user->id)->orderBy("id", "desc")->first();
+
+        if ($user_charge < $bought->price / 2) {
+            # code...
+            $user->enable = 0;
+            $user->ban_times += 3;
+            #$user->pass = time();
+            $user->save();
+            $rs['ret'] = 0;
+            $rs['msg'] = '异常申请，账号保护！';
+        }else{
+            $shop = Shop::where("id",$bought->shopid)->first();
+            $content = json_decode($shop->content, true);
+            $user->class = $content['class'];
+            $rs['ret'] = 1;
+            $rs['msg'] = '矫正VIP'.$content['class'];
+            $user->save();
+        }
+
+        return $response->getBody()->write(json_encode($rs));
+    }
+
+    //song reset user relevel
+    public function uptopay($request, $response, $args)
+    {
+
+        // send email
+        $user = Auth::getUser();
+        if ($user == null) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '此用户不存在.';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        $codes=Code::where('userid',$user->id)->get();
+        $user_charge =0;
+        foreach($codes as $code){
+            $user_charge+=$code->number;
+        }
+
+        if ($user_charge < 200) {
+            # code...
+            $user->enable = 0;
+            $user->ban_times += 3;
+            #$user->pass = time();
+            $user->save();
+            $rs['ret'] = 0;
+            $rs['msg'] = '异常申请，账号保护！';
+        }else{
+            $user->class = 10;
+            $rs['ret'] = 1;
+            $rs['msg'] = '申请VIP10';
+            $user->save();
+        }
+
+        return $response->getBody()->write(json_encode($rs));
+    }
+
 }

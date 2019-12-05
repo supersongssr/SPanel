@@ -33,7 +33,7 @@
                                 <tr>
                                     <td>#{$order->id}</td>
                                     <td>{$order->yft_order}</td>
-                                    <td>{$order->price} 元</td>
+                                    <td>{$order->price} $</td>
                                     <td>{$order->create_time}</td>
                                     {if ($order->state == 1)}<td>已支付</td>{else}<td>未支付</td>{/if}
                                 </tr>

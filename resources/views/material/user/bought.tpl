@@ -22,9 +22,14 @@
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
-								<p>系统中您的购买记录。</p>
+								<p>系统中您的购买记录。<br><small>*等级矫正？系统会自动选择最近一条购买记录的等级来矫正您的用户等级。</small><br><small>*一旦您点击矫正等级，如果您的正常充值金额不足以购买当前套餐，您的账号会启动异常保护！ ———— 您的账号会被限制，同时密码可能会被系统重置！</small></p>
 							</div>
 						</div>
+						
+						<div class="card-inner">
+							<button id="relevel" type="submit" class="btn btn-block btn-brand ">等级矫正</button>
+						</div>
+						
 					</div>
 
 					<div class="card">
@@ -51,7 +56,7 @@
 										  <!--       <td>#{$shop->id}</td> -->
 												<td>{$shop->shop()->name}</td>
 												<td>{$shop->shop()->content()}</td>
-												<td>{$shop->price} 元</td>
+												<td>{$shop->price} $</td>
 												{if $shop->renew==0}
 												<td>不自动续费</td>
 												{else}
@@ -155,6 +160,32 @@ $(document).ready(function(){
 	
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("#relevel").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/relevel",
+                dataType: "json",
+                data: {
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+						$("#msg").html("申请 "+data.msg+" 成功");
+                    } else {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+					$("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
 
 
 

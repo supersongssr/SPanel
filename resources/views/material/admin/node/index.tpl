@@ -10,19 +10,91 @@
 		<div class="col-lg-12 col-sm-12">
 			<section class="content-inner margin-top-no">
 
+				
+
+				<div class="table-responsive">
+					{include file='table/table.tpl'}
+				</div>
+
+
 				<div class="card">
 					<div class="card-main">
 						<div class="card-inner">
-							<p>系统中所有节点的列表。</p>
-              <p>显示表项:
-                {include file='table/checkbox.tpl'}
-              </p>
+							<table class="table">
+								<tr>
+									<th>等级</th>
+									<th>总</th>
+									<th>Lv.10</th>
+									<th>Lv.9</th>
+									<th>Lv.8</th>
+									<th>Lv.7</th>
+									<th>Lv.6</th>
+									<th>Lv.5</th>
+									<th>Lv.4</th>
+									<th>Lv.3</th>
+									<th>Lv.2</th>
+									<th>Lv.1</th>
+									<th>Lv.0</th>
+								</tr>
+								<tr>
+									<td>用户</td>
+									<td>{$sts->getAllUser()}</td>
+									<td>{$sts->getV10User()}</td>
+									<td>{$sts->getV9User()}</td>
+									<td>{$sts->getV8User()}</td>
+									<td>{$sts->getV7User()}</td>
+									<td>{$sts->getV6User()}</td>
+									<td>{$sts->getV5User()}</td>
+									<td>{$sts->getV4User()}</td>
+									<td>{$sts->getV3User()}</td>
+									<td>{$sts->getV2User()}</td>
+									<td>{$sts->getV1User()}</td>
+									<td>{$sts->getV0User()}</td>
+								</tr>
+								<tr>
+									<td>节点</td>
+									<td>{$sts->getAllNode()}</td>
+									<td>{$sts->getV10Node()}</td>
+									<td>{$sts->getV9Node()}</td>
+									<td>{$sts->getV8Node()}</td>
+									<td>{$sts->getV7Node()}</td>
+									<td>{$sts->getV6Node()}</td>
+									<td>{$sts->getV5Node()}</td>
+									<td>{$sts->getV4Node()}</td>
+									<td>{$sts->getV3Node()}</td>
+									<td>{$sts->getV2Node()}</td>
+									<td>{$sts->getV1Node()}</td>
+									<td>{$sts->getV0Node()}</td>
+								</tr>
+								<tr>
+									<td>比率</td>
+									<td>{@floor($sts->getAllUser() / $sts->getAllNode())}</td>
+									<td>{@floor($sts->getV10User() / $sts->getV10Node())}</td>
+									<td>{@floor($sts->getV9User() / $sts->getV9Node())}</td>
+									<td>{@floor($sts->getV8User() / $sts->getV8Node())}</td>
+									<td>{@floor($sts->getV7User() / $sts->getV7Node())}</td>
+									<td>{@floor($sts->getV6User() / $sts->getV6Node())}</td>
+									<td>{@floor($sts->getV5User() / $sts->getV5Node())}</td>
+									<td>{@floor($sts->getV4User() / $sts->getV4Node())}</td>
+									<td>{@floor($sts->getV3User() / $sts->getV3Node())}</td>
+									<td>{@floor($sts->getV2User() / $sts->getV2Node())}</td>
+									<td>{@floor($sts->getV1User() / $sts->getV1Node())}</td>
+									<td>{@floor($sts->getV0User() / $sts->getV0Node())}</td>
+								</tr>
+							</table>
 						</div>
 					</div>
 				</div>
 
-				<div class="table-responsive">
-					{include file='table/table.tpl'}
+				<div class="card">
+					<div class="card-main">
+						<div class="card-inner">
+							<p>系统中所有节点的列表。</p>
+			              <p>显示表项:
+			                {include file='table/checkbox.tpl'}
+			              </p>
+						</div>
+					</div>
 				</div>
 
 				<div class="fbtn-container">

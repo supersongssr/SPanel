@@ -135,6 +135,9 @@ $app->get('/staff', 'App\Controllers\HomeController:staff');
 $app->post('/telegram_callback', 'App\Controllers\HomeController:telegram');
 //song 用户临时解封账号 
 $app->post('/reactive', 'App\Controllers\AuthController:reactive');
+$app->post('/relevel', 'App\Controllers\UserController:relevel');
+$app->post('/uptopay', 'App\Controllers\UserController:uptopay');
+
 
 // User Center
 $app->group('/user', function () {

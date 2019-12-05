@@ -209,7 +209,7 @@ class Job
             }
             #在线节点，流量少于16G 的 隐藏 且加·  16 * 1024 * 1024 * 1024 记录中记录的时bytes 
             if($total < 17179869184 ){
-              $node->status = '* ' . $node->status ;
+              $node->status .= '*';
               $node->type = 0;        //在节点名字后面加上 · 这个符号，多了就能看到了。
             }      
             $node->info = floor($total / 1073741824) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
@@ -849,9 +849,9 @@ class Job
                 # code...
                 //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
                 $used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
-                $used_data = floor( ($user->u + $user->d) / 1073741824 );
+                //$used_data = floor( ($user->u + $user->d) / 1073741824 );
 
-                if ($user->ref_by != 0 && ( ($used_time + $used_data) < 128 )) {
+                if ($user->ref_by != 0 &&  $used_time < 128 ) {
                     # code...
                     $ref_user = User::find($user->ref_by);
                     //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利

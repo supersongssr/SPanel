@@ -43,7 +43,7 @@ window.onload = function() {
     type = 'alipay';
 	$("#submit").click(function(){
 		var price = parseFloat($("#amount").val());
-		console.log("将要使用"+type+"方法充值"+price+"元");
+		console.log("将要使用"+type+"方法充值"+price+"$");
 		if(isNaN(price)){
 			$("#result").modal();
 			$("#msg").html("非法的金额!");

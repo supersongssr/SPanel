@@ -26,11 +26,8 @@
                                         <a href="http://www.910fk.com/liebiao/781E2C289EA77978" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
                                         <a href="http://www.910fk.com/liebiao/781E2C289EA77978" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
                                         重要的事情说三遍<br>
-                                        <br>
-                                        <a href="https://www.510ka.com/orderquery" target="_blank">2019.9.11日前卡密可在此查询</a><br>
                                   </p>
                                         <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p>
-                                        <p>因余额不足而未能完成的自动续费，在余额足够时会自动划扣续费。</p>
                                     {if $config["enable_admin_contact"] == 'true'}
                                         <p class="card-heading">如果没有到账请立刻联系管理员：</p>
                                         {if $config["admin_contact1"]!=null}
@@ -70,13 +67,29 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <div class="cardbtn-edit">
-											<div class="card-heading">充值码</div>
+											<div class="card-heading">充值码在这里充值余额</div>
 											<button class="btn btn-flat" id="code-update" ><span class="icon">favorite_border</span></button>
 									</div>
                                     <div class="form-group form-group-label">
-                                        <label class="floating-label" for="code">充值码</label>
+                                        <label class="floating-label" for="code">充值码填入这里可以充值余额</label>
                                         <input class="form-control maxwidth-edit" id="code" type="text">
                                     </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="card margin-bottom-no">
+                        <div class="card-main">
+                            <div class="card-inner">
+                                <div class="card-inner">
+                                    <p class="card-heading">Azure 600M VIP10</p>
+                                    <p>此页面累计充值满200，您可以申请 VIP10 Azure 600M节点。 <br>我们提供免费的VIP10专属的 Azure 600M节点供充值用户使用。<br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满200而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
+                                </div>
+                                <div class="card-inner">
+                                    <button id="uptopay" type="submit" class="btn btn-block btn-brand ">申请VIP10 Azure 600M节点</button>
                                 </div>
                             </div>
                         </div>
@@ -192,6 +205,32 @@
 })
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("#uptopay").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/uptopay",
+                dataType: "json",
+                data: {
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+                        $("#msg").html("申请 "+data.msg+" 成功");
+                    } else {
+                        $("#result").modal();
+                        $("#msg").html(data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+                    $("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
 
 
 

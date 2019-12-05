@@ -211,7 +211,46 @@ class XCat
 
     public function test()
     {
-        
+
+        $users = User::where("class","=",1)->get();
+        foreach ($users as $user) {
+            if ($user->node_connector != 1) {
+                $user->class = $user->node_connector;
+                $user->save();
+            }
+
+        }
+        /**
+        $usera=User::where("class","=",6)->get();
+        $userb=User::where("class","=",5)->get();
+        foreach ($usera as $user) {
+            $codes=Code::where('userid',$user->id)->get();
+            $user_charge =0;
+            foreach($codes as $code){
+                $user_charge+=$code->number;
+            }
+            if ($user_charge < 9) {
+                $user->enable =0;
+                $user->passwd = time();
+                $user->class = 1;
+                $user->save();
+            }
+        }
+        foreach ($userb as $user) {
+            $codes=Code::where('userid',$user->id)->get();
+            $user_charge =0;
+            foreach($codes as $code){
+                $user_charge+=$code->number;
+            }
+            if ($user_charge < 6) {
+                $user->enable =0;
+                $user->passwd = time();
+                $user->class = 1;
+                $user->save();
+            }
+        }
+        **/
+
         /**
         //将所有节点的流量限制设置为 1000 这样方便计算
         $nodes_vnstat = Node::where('id','>',9)->get();  // 只获取4以上的在线节点 

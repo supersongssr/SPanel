@@ -336,7 +336,7 @@
 												<button class="btn btn-flat" id="portreset"><span class="icon">autorenew</span>&nbsp;</button>
 										</div>
 										<p>对号码不满意？来摇号吧～！</p>
-										<p>随机更换一个端口使用，价格：<code>{$config['port_price']}</code>元/次</p>
+										<p>随机更换一个端口使用，价格：<code>{$config['port_price']}</code>$/次</p>
 										<p>重置后1分钟内生效</p>
 										<p>当前端口：<code id="ajax-user-port">{$user->port}</code></p>
 									</div>
@@ -349,7 +349,7 @@
 												<button class="btn btn-flat" id="portspecify"><span class="icon">call_made</span>&nbsp;</button>
 										</div>
 										<p>不想摇号？来钦定端口吧～！</p>
-										<p>价格：<code>{$config['port_price_specify']}</code>元/次</p>
+										<p>价格：<code>{$config['port_price_specify']}</code>$/次</p>
 										<p>端口范围：<code>{$config['min_port']}～{$config['max_port']}</code></p>
 										<div class="form-group form-group-label">
 											<label class="floating-label" for="port-specify">在这输入想钦定的端口号</label>

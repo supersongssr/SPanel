@@ -651,7 +651,7 @@ class AuthController extends BaseController
             return $response->getBody()->write(json_encode($rs));
         }
 
-        if ($user->money < 1 && $user->enable == 0) {
+        if ($user->enable == 0) {
             $user->enable = 1;
             $user->save();
             $rs['ret'] = 1;

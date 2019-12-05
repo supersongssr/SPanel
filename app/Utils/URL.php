@@ -196,7 +196,7 @@ class URL
                     $query->where('sort', 0)
                         ->orwhere('sort', 10);
                 }
-            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
+            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->limit(Config::get('node_get_limit'))->get();
         } else {
             $nodes=Node::where(
                 function ($query) {
@@ -208,7 +208,7 @@ class URL
                     $query->where("node_group", "=", $user->node_group)
                         ->orWhere("node_group", "=", 0);
                 }
-            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
+            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->limit(Config::get('node_get_limit'))->get();
         }
         if($is_mu) {
             if ($user->is_admin) {
@@ -417,7 +417,7 @@ class URL
                 $query->where("node_group", "=", $user->node_group)
                     ->orWhere("node_group", "=", 0);
             }
-        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
+        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->limit(Config::get('node_get_limit'))->get();
         $result = "";
         foreach ($nodes as $node) {
             $result .= (URL::getV2Url($user, $node) . "\n");

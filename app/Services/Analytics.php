@@ -13,6 +13,68 @@ class Analytics
         return User::count();
     }
 
+    public function getAllUser()
+    {
+        return User::where("enable","=",1)->count();
+    }
+
+    public function getV0User()
+    {
+        return User::where("enable","=",1)->where("class","=",0)->count();
+    }
+
+    public function getV1User()
+    {
+        return User::where("enable","=",1)->where("class","=",1)->count();
+    }
+
+    public function getV2User()
+    {
+        return User::where("enable","=",1)->where("class","=",2)->count();
+    }
+
+    public function getV3User()
+    {
+        return User::where("enable","=",1)->where("class","=",3)->count();
+    }
+
+    public function getV4User()
+    {
+        return User::where("enable","=",1)->where("class","=",4)->count();
+    }
+
+    public function getV5User()
+    {
+        return User::where("enable","=",1)->where("class","=",5)->count();
+    }
+
+    public function getV6User()
+    {
+        return User::where("enable","=",1)->where("class","=",6)->count();
+    }
+
+    public function getV7User()
+    {
+        return User::where("enable","=",1)->where("class","=",7)->count();
+    }
+
+    public function getV8User()
+    {
+        return User::where("enable","=",1)->where("class","=",8)->count();
+    }
+
+    public function getV9User()
+    {
+        return User::where("enable","=",1)->where("class","=",9)->count();
+    }
+
+    public function getV10User()
+    {
+        return User::where("enable","=",1)->where("class","=",10)->count();
+    }
+
+
+
     public function getCheckinUser()
     {
         return User::where('last_check_in_time', '>', 0)->count();
@@ -94,6 +156,66 @@ class Analytics
     public function getTotalNode()
     {
         return Node::count();
+    }
+
+    public function getAllNode()
+    {
+        return Node::where("type","=",1)->count();
+    }
+
+    public function getV0Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",0)->count();
+    }
+
+    public function getV1Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",1)->count();
+    }
+
+    public function getV2Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",2)->count();
+    }
+
+    public function getV3Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",3)->count();
+    }
+
+    public function getV4Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",4)->count();
+    }
+
+    public function getV5Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",5)->count();
+    }
+
+    public function getV6Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",6)->count();
+    }
+
+    public function getV7Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",7)->count();
+    }
+
+    public function getV8Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",8)->count();
+    }
+
+    public function getV9Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",9)->count();
+    }
+
+    public function getV10Node()
+    {
+        return Node::where("type","=",1)->where("node_class","=",10)->count();
     }
     
     public function getTotalNodes()

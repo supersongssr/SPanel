@@ -67,7 +67,7 @@
 								<br>
 								全球<code>300+</code>节点，<code>25Gbps</code>带宽，BGP CN2 HKBN PWWC NTT多线接入, 解锁 NetFlix HULU HBO
 								<br>
-								邀请好友返利<code>{$config["invite_gift_money"]}￥</code>/用户+<code>{$config["code_payback"]}%</code>消费提成+<code>{$config["invite_gift"]}G</code>流量
+								邀请好友返利<code>{$config["invite_gift_money"]}$</code>/用户+<code>{$config["code_payback"]}%</code>消费提成+<code>{$config["invite_gift"]}G</code>流量
 								签到送<code>1-5G</code>流量/天
 
 								<p>公益站点，节约账号资源，浪费可耻:)</p>

@@ -23,7 +23,7 @@
 
         var price = parseFloat($("#amount").val());
 
-        console.log("将要使用 "+ type + " 充值" + price + "元");
+        console.log("将要使用 "+ type + " 充值" + price + "$");
         if (isNaN(price)) {
             $("#readytopay").modal('hide');
             $("#result").modal();

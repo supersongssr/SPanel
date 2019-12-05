@@ -9,6 +9,9 @@ use App\Utils\CloudflareDriver;
 use App\Services\Config;
 use Ozdemir\Datatables\Datatables;
 use App\Utils\DatatablesHelper;
+use App\Services\Analytics;
+
+
 class NodeController extends AdminController
 {
     public function index($request, $response, $args)
@@ -25,7 +28,9 @@ class NodeController extends AdminController
                             "mu_only" => "只启用单端口多用户");
         $table_config['default_show_column'] = Array("op", "id", "name", "type", "status", "info", "traffic_rate");
         $table_config['ajax_url'] = 'node/ajax';
-        return $this->view()->assign('table_config', $table_config)->display('admin/node/index.tpl');
+
+        $sts = new Analytics();
+        return $this->view()->assign('table_config', $table_config)->assign('sts', $sts)->display('admin/node/index.tpl');
     }
     public function create($request, $response, $args)
     {

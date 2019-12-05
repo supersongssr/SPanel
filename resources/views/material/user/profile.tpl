@@ -132,7 +132,7 @@
 																</td>
 															{/if}
 															</td>
-															<td>{$payback->ref_get} 元</td>
+															<td>{$payback->ref_get} $</td>
 														</tr>
 													{/foreach}
 													</tbody>

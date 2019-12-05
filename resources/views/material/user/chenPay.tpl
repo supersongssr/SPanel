@@ -26,7 +26,7 @@
         <p>选择充值金额：</p>
         <div class="form-group form-group-label btnBox">
             {foreach $data as $key => $item}
-                <a class="btn btn-price {if $key == 0}active{/if}" price="{$item}" type="{$key}">{$item}元</a>
+                <a class="btn btn-price {if $key == 0}active{/if}" price="{$item}" type="{$key}">{$item}$</a>
             {/foreach}
             <input type="hidden" id="AliPayType" class="form-control" name="amount"/>
             {else}
