@@ -245,7 +245,7 @@
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span> 在 Safari 中<a class="btn-dl" href="itms-services://?action=download-manifest&url=https://raw.githubusercontent.com/xcxnig/ssr-download/master/potatso-lite.plist"><i class="material-icons">save_alt</i> 点击安装 Potatso Lite</a> 或在非国区AppStore中搜索<code>Shadowrocket</code>下载安装 </p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Potatso Lite，点击添加代理，点击右上角的 + 号，选择“订阅”，名字任意填写，开启自动更新，URL填写以下地址并保存即可</p> Song-->
 
-														<p><span class="icon icon-lg text-white">filter_1</span> 推荐安装：<code>shadowrocket</code>,<a href="https://ssrdownloads.oss-ap-southeast-1.aliyuncs.com/Shadowrocket_2.1.12.ipa" class="btn-dl">点击下载</a>ipa安装文件,<a href="https://www.i4.cn/news_detail_3339.html" class="btn-dl" target="_blank">点击查看</a>爱思助手安装ipa文件教程 （注意通过爱思助手安装IPA文件可以）</p>
+														<p><span class="icon icon-lg text-white">filter_1</span> 推荐使用美国账号，在苹果商店搜索 shadowrocket 下载。（网站帮助中心有提供相关的已购买的账号，请注意，账号只能用户登录商店，不能用于登录icloud！）</p>
 														<p><span class="icon icon-lg text-white">filter_2</span> 打开 Shadowrocket，点击右上角的 + 号，类型选择“Subscribe”，URL填写以下地址并点击右上角完成即可。或使用<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="sub0"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键{if !$mergeSub}普通{/if}端口订阅</a> {if !$mergeSub}<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="sub1"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键单端口订阅</a>{/if}</p>
 														
 														<div><span class="icon icon-lg text-white">flash_auto</span> 单端口节点订阅地址：</div>
@@ -254,7 +254,7 @@
                                                       <!-- <p><a href="/user/tutorial">点击这里查看iOS教程</a></p> -->
 													</div>
 													<div class="tab-pane fade" id="all_ssr_android">
-														<p><span class="icon icon-lg text-white">filter_1</span>点击下载<a href="/ssr-download/ssr-android.apk" class="btn-dl"><i class="material-icons">save_alt</i> S.R </a> 或 <a href="/ssr-download/ssrr-android.apk" class="btn-dl"><i class="material-icons">save_alt</i> S.RR </a> 并安装</p>
+														<p><span class="icon icon-lg text-white">filter_1</span>点击下载<a href="https://github.com/HMBSbige/ShadowsocksR-Android/releases/download/3.6.0/shadowsocksr-android-3.6.0-fix.apk" class="btn-dl"><i class="material-icons">save_alt</i> S.R </a> 并安装</p>
                                                       <p><span class="icon icon-lg text-white">filter_2</span> 打开App，点击右下角的<span class="icon icon-lg text-white">add</span>号图标</p>
                                                         <p><span class="icon icon-lg text-white">filter_3</span> 添加/升级 S.R订阅</p>
                                                           <p><span class="icon icon-lg text-white">filter_4</span> 添加订阅地址，输入下方订阅地址后确定</p>

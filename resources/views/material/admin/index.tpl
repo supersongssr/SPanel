@@ -62,18 +62,18 @@
 										</tr>
 										<tr>
 											<td>比率</td>
-											<td>{@floor($sts->getAllUser() / $sts->getAllNode())}</td>
-											<td>{@floor($sts->getV10User() / $sts->getV10Node())}</td>
-											<td>{@floor($sts->getV9User() / $sts->getV9Node())}</td>
-											<td>{@floor($sts->getV8User() / $sts->getV8Node())}</td>
-											<td>{@floor($sts->getV7User() / $sts->getV7Node())}</td>
-											<td>{@floor($sts->getV6User() / $sts->getV6Node())}</td>
-											<td>{@floor($sts->getV5User() / $sts->getV5Node())}</td>
-											<td>{@floor($sts->getV4User() / $sts->getV4Node())}</td>
-											<td>{@floor($sts->getV3User() / $sts->getV3Node())}</td>
-											<td>{@floor($sts->getV2User() / $sts->getV2Node())}</td>
-											<td>{@floor($sts->getV1User() / $sts->getV1Node())}</td>
-											<td>{@floor($sts->getV0User() / $sts->getV0Node())}</td>
+											<td>{floor($sts->getAllUser() / $sts->getAllNode())}</td>
+											<td>{floor($sts->getV10User() / $sts->getV10Node())}</td>
+											<td>{floor($sts->getV9User() / $sts->getV9Node())}</td>
+											<td>{floor($sts->getV8User() / $sts->getV8Node())}</td>
+											<td>{floor($sts->getV7User() / $sts->getV7Node())}</td>
+											<td>{floor($sts->getV6User() / $sts->getV6Node())}</td>
+											<td>{floor($sts->getV5User() / $sts->getV5Node())}</td>
+											<td>{floor($sts->getV4User() / $sts->getV4Node())}</td>
+											<td>{floor($sts->getV3User() / $sts->getV3Node())}</td>
+											<td>{floor($sts->getV2User() / $sts->getV2Node())}</td>
+											<td>{floor($sts->getV1User() / $sts->getV1Node())}</td>
+											<td>{floor($sts->getV0User() / $sts->getV0Node())}</td>
 										</tr>
 									</table>
 								</div>

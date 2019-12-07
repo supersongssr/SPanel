@@ -120,11 +120,11 @@
 
 						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_use">使用</a>
 						<ul class="menu-collapse collapse in" id="ui_menu_use">
-							<!-- <li>
+							<li>
 								<a href="/user/node">
 									<i class="icon icon-lg">airplanemode_active</i>&nbsp;节点列表
 								</a>
-							</li> -->
+							</li>
 							<li>
 								<a href="/user/announcement">
 									<i class="icon icon-lg">announcement</i>&nbsp;帮助中心

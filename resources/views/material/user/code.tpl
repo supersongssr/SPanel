@@ -22,9 +22,9 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
-                                      <p><a href="http://www.910fk.com/liebiao/781E2C289EA77978" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="http://www.910fk.com/liebiao/781E2C289EA77978" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="http://www.910fk.com/liebiao/781E2C289EA77978" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                      <p><a href="https://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                        <a href="https://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                        <a href="https://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
                                         重要的事情说三遍<br>
                                   </p>
                                         <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p>
