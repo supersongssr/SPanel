@@ -1153,11 +1153,10 @@ class UserController extends BaseController
                 $user_charge+=$code->number;
             }
             if ($user_charge < $shop->price * 0.1) {
-                $user->enable = 0 ;
                 $user->ban_times += 3;
                 $user->save();
                 $res['ret'] = 0;
-                $res['msg'] = "您是盗版邀请受害者，系统已启用账号保护；请充值$ ".$shop->price * 0.2 ." 购买此套餐";
+                $res['msg'] = "您可能是盗版邀请受害者，您充值少于 $".$shop->price * 0.1 ." 无法购买此套餐";
                 return $response->getBody()->write(json_encode($res));
             }
         }
