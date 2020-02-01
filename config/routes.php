@@ -78,10 +78,15 @@ if ($isforbidden_china) {
     $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
     //对字符的编码进行一次格式化，编码不同可能影响到判断
     $location['area'] = iconv('gbk', 'utf-8//IGNORE', $location['area']);
+    $location['country'] = iconv('gbk', 'utf-8//IGNORE', $location['country']);
     // 这里的 location['area'] 获取到的其实是 联通 电信 移动等网络
     if (in_array($location['area'], ['移动','电信','联通'])) {
         # code...
         $is_china = true;
+    }
+    if (in_array($location['country'], ['香港'])) {
+        # code...
+        $is_china = false;
     }
 }
 

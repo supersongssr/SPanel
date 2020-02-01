@@ -16,8 +16,9 @@
 									<p>您由于某些原因而被系统禁用了账户。</p>
 									<p>
 										可能原因如下：
-										<br>1、您的账号由于违反注册协议，被管理员禁用。
-										<br>2、您的账号余额 < 0，被系统自动禁用。
+										<br>1、您的账号使用异常，被系统临时保护。
+										<br>2、您的账号由于违反注册协议，被管理员禁用。
+										<br>3、您的账号余额 < 0，被系统自动禁用。
 										<br>* 什么情况下余额会 < 0? 可能是您邀请的用户未使用或违反注册协议被系统注销，系统自动收回用户注册的返利。
 										* 邀请好友注册获得的注册返利，会因为被邀请账号违反注册协议或者长期未使用导致账号被收回，被系统收回注册返利。请注意 20%的消费返利不会收回。
 										<br>
@@ -46,7 +47,7 @@
 								</div>
 							</div>
 							<div class="btn-auth auth-row">
-								<button id="reactive" type="submit" class="btn btn-block btn-brand waves-attach waves-light">申请解封账号</button>
+								<button id="reactive" type="submit" class="btn btn-block btn-brand waves-attach waves-light">解封账号</button>
 							</div>
 						</div>
 					</div>

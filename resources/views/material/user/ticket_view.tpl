@@ -11,7 +11,7 @@
 
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">查看工单</h1>
+				<h1 class="content-heading">查看工单 <small>如果您需要上传图片，您可以使用图床 <a href="https://imgchr.com/" target="_blank">路过图床 https://imgchr.com/</a></small> </h1>
 			</div>
 		</div>
 		<div class="container">

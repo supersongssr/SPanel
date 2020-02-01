@@ -655,7 +655,7 @@ class AuthController extends BaseController
             $user->enable = 1;
             $user->save();
             $rs['ret'] = 1;
-            $rs['msg'] = '账号已临时激活！';
+            $rs['msg'] = '账号已激活！';
         }else{
             $rs['ret'] = 0;
             $rs['msg'] = '无效请求，请联系管理员！';

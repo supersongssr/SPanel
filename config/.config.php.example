@@ -105,6 +105,7 @@ $System_Config['auto_clean_unused_days']='32';	//自动清理多少天没使用�
 $System_Config['auto_clean_min_money']='1';		//余额低于多少的0级用户可以被清理
 $System_Config['code_payback']='16';			//充值返利百分比
 $System_Config['invite_gift']='64';				//邀请新用户获得流量奖励，单位G
+$System_Config['node_get_limit']='32';				//用户限制获取的节点数量
 
 $System_Config['enable_bought_reset']='false';	//购买时是否重置流量
 $System_Config['port_price']='0.1';				//用户随机重置端口所需要的价格，价格小于0时视为不开放购买
