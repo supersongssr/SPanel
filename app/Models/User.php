@@ -107,6 +107,8 @@ class User extends Model
     public function updateSsPwd($pwd)
     {
         $this->passwd = $pwd;
+        // 修改密码的同时 修改 uuid
+        $this->v2ray_uuid = Uuid::uuid3(Uuid::NAMESPACE_DNS, $this->attributes['id']. '|' .$pwd)->toString();
         $this->save();
     }
 
@@ -165,20 +167,19 @@ class User extends Model
     }
     public function unusedTraffic()
     {
-        $total = $this->attributes['u'] + $this->attributes['d'];
-        $transfer_enable = $this->attributes['transfer_enable'];
-        return Tools::flowAutoShow($transfer_enable - $total);
+        $total = $this->attributes['transfer_enable'] - $this->attributes['u'] - $this->attributes['d'];
+        return Tools::flowAutoShow($total);
     }
 
     public function TodayusedTraffic()
     {
-        $total = $this->attributes['u'] + $this->attributes['d']-$this->attributes['last_day_t'];
+        $total = $this->attributes['d']-$this->attributes['last_day_t'];
         return Tools::flowAutoShow($total);
     }
 
     public function LastusedTraffic()
     {
-        $total = $this->attributes['last_day_t'];
+        $total = $this->attributes['last_day_t'] + $this->attributes['u'];
         return Tools::flowAutoShow($total);
     }
 

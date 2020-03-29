@@ -20,9 +20,9 @@ class TicketController extends AdminController
 {
     public function index($request, $response, $args)
     {
-        $table_config['total_column'] = array("op" => "操作", "status" => "状态", "title" => "标题", "id" => "ID", "userid" => "用户ID", "datetime" => "时间",  "user_name" => "用户名");
+        $table_config['total_column'] = array("op" => "操作", "status" => "状态", "title" => "标题", "id" => "ID", "userid" => "用户ID", "datetime" => "时间", "sort" => "等级", "user_name" => "用户名");
         $table_config['default_show_column'] = array("op", "status","title","id" => "ID", 
-                                  "datetime",  "userid", "user_name");
+                                  "datetime",  "sort","userid", "user_name");
         $table_config['ajax_url'] = 'ticket/ajax';
         return $this->view()->assign('table_config', $table_config)->display('admin/ticket/index.tpl');
     }
@@ -76,8 +76,10 @@ class TicketController extends AdminController
         $ticket->content=$antiXss->xss_clean($content);
         $ticket->rootid=$ticket_main->id;
         $ticket->userid=Auth::getUser()->id;
+        $ticket->sort = 0;
         $ticket->datetime=time();
         $ticket_main->status=$status;
+        $ticket_main->sort= 0;
 
         $ticket_main->save();
         $ticket->save();
@@ -96,17 +98,23 @@ class TicketController extends AdminController
             $pageNum = $request->getQueryParams()["page"];
         }
 
-
-        $ticketset=Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "desc")->paginate(5, ['*'], 'page', $pageNum);
+        $ticketset=Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "asc")->paginate(15, ['*'], 'page', $pageNum);
         $ticketset->setPath('/admin/ticket/'.$id."/view");
 
-        return $this->view()->assign('ticketset', $ticketset)->assign("id", $id)->display('admin/ticket/view.tpl');
+        $nexticket = Ticket::where('rootid','=','0')->where('id','!=',$id)->where('status','!=','0')->orderBy('sort','desc')->first();
+        $nextid = $nexticket->id;
+
+        return $this->view()->assign('ticketset', $ticketset)->assign("id", $id)->assign("nextid", $nextid)->display('admin/ticket/view.tpl');
     }
 
     public function ajax($request, $response, $args)
     {
         $datatables = new Datatables(new DatatablesHelper());
-        $datatables->query('Select ticket.id as op,ticket.status,ticket.title,ticket.id,ticket.userid,ticket.datetime,user.user_name from ticket,user where ticket.userid = user.id and ticket.rootid = 0');
+        $datatables->query('Select ticket.id as op,ticket.status,ticket.title,ticket.id,ticket.userid,ticket.datetime,ticket.sort,user.user_name from ticket,user where ticket.userid = user.id and ticket.rootid = 0');
+
+        $datatables->edit('userid', function ($data) {
+            return '<a href="/admin/user/'.$data['userid'].'/edit">'.$data['userid'].'</a>';
+        });
 
         $datatables->edit('op', function ($data) {
             return '<a class="btn btn-brand" href="/admin/ticket/'.$data['id'].'/view">查看</a>';

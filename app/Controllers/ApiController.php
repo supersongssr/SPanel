@@ -176,9 +176,21 @@ class ApiController extends BaseController
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
         $node->type = $status;
         $node->node_bandwidth = $traffic;
-        $node->save();
+        //
         //如果是正常节点 那么下面的就没必要了记录了
         $addn = explode('#', $node->node_ip);
+        #如果第三个没有数据，说明是 正常添加的节点
+        if ( empty($addn['2']) ) {
+            $node_online_log = NodeOnlineLog::where('node_id', $id)->orderBy('id', 'desc')->first(); 
+            if (!empty($node_online_log->online_user)) {
+                $online = $node_online_log->online_user;
+            }
+        }
+        //
+        $node->node_online = $online;
+        $node->node_oncost = round( ($online / $node->node_cost), 2);
+        $node->save();
+        //
         empty($addn['2']) && exit;
         //写入流量使用记录
         $traffic_log = new TrafficLog();

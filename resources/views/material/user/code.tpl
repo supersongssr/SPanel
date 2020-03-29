@@ -22,14 +22,14 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
-                                      <p><a href="https://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="https://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
-                                        <a href="https://www.910ka.com/liebiao/438AD11276ECB60A" target="_blank" >点此 捐赠/充值 910发卡 付款后会获得一个充值码 在本页面充值</a><br>
+                                      <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
+                                      <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
+                                      <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
                                         重要的事情说三遍<br>
                                   </p>
                                         <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p>
                                     {if $config["enable_admin_contact"] == 'true'}
-                                        <p class="card-heading">如果没有到账请立刻联系管理员：</p>
+                                        <p class="card-heading">如果没有到账请立刻提交工单or联系管理员：</p>
                                         {if $config["admin_contact1"]!=null}
                                             <li>{$config["admin_contact1"]}</li>
                                         {/if}
@@ -85,8 +85,27 @@
                         <div class="card-main">
                             <div class="card-inner">
                                 <div class="card-inner">
+                                    <p class="card-heading">账号升级 申请中转加速节点 </p>
+                                    <p>中转加速节点申请须同时满足以下条件：<code><br>1.当前页面累计充值金额 > 您套餐原价 * 0.15<br>2.并且您余额>0</code><br>*VIP10用户直接通过<br>点击此申请按钮代表您同意：
+                                        <code><br>1.如果您不符合上述条件，点击按钮您的账号会被禁用(您可以自助解封)
+                                        <br>2.请您务必检查自己当前页面的充值总额，以及您当前用户的等级</code>
+                                    </p>
+                                </div>
+                                <div class="card-inner">
+                                    <button id="uptocncdn" type="submit" class="btn btn-block btn-brand ">点击升级账号 申请 中转加速节点 </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="card margin-bottom-no">
+                        <div class="card-main">
+                            <div class="card-inner">
+                                <div class="card-inner">
                                     <p class="card-heading">Azure 600M VIP10</p>
-                                    <p>此页面累计充值满200，您可以申请 VIP10 Azure 600M节点。 <br>我们提供免费的VIP10专属的 Azure 600M节点供充值用户使用。<br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满200而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
+                                    <p>此页面累计充值满233，您可以申请 VIP10 Azure 600M节点。 <br>我们提供免费的VIP10专属的 Azure 600M节点供充值用户使用。<br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满223而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
                                 </div>
                                 <div class="card-inner">
                                     <button id="uptopay" type="submit" class="btn btn-block btn-brand ">申请VIP10 Azure 600M节点</button>
@@ -218,6 +237,33 @@
                     if (data.ret) {
                         $("#result").modal();
                         $("#msg").html("申请 "+data.msg+" 成功");
+                    } else {
+                        $("#result").modal();
+                        $("#msg").html(data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+                    $("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
+
+<script>
+    $(document).ready(function () {
+        $("#uptocncdn").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "/uptocncdn",
+                dataType: "json",
+                data: {
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+                        $("#msg").html("申请 "+data.msg+" 成功,在客户端更新订阅获取新节点");
                     } else {
                         $("#result").modal();
                         $("#msg").html(data.msg);

@@ -127,6 +127,8 @@ class Job
 
     public static function DailyJob()
     {
+
+        /**  这个不需要了。后端 会自己处理这个事情的
         $nodes = Node::all();
         foreach ($nodes as $node) {
             if ($node->sort == 0 || $node->sort == 10 || $node->sort == 11) {
@@ -136,16 +138,9 @@ class Job
                 }
             }
         }
+        **/
 
-        NodeInfoLog::where("log_time", "<", time()-86400*3)->delete();
-        NodeOnlineLog::where("log_time", "<", time()-86400*3)->delete();
-        TrafficLog::where("log_time", "<", time()-86400*3)->delete();
-        DetectLog::where("datetime", "<", time()-86400*3)->delete();
-        Speedtest::where("datetime", "<", time()-86400*3)->delete();
-        EmailVerify::where("expire_in", "<", time()-86400*3)->delete();
-         system("rm ".BASE_PATH."/storage/*.png", $ret);
-        Telegram::Send("姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~");
-
+/**
         //auto reset
         $boughts=Bought::all();
         foreach ($boughts as $bought) {
@@ -164,39 +159,53 @@ class Job
             }
 
             if($shop->reset() != 0 && $shop->reset_value() != 0 && $shop->reset_exp() != 0) {
-              if(time() - $shop->reset_exp() * 86400 < $bought->datetime) {
-                if(intval((time() - $bought->datetime) / 86400) % $shop->reset() == 0 && intval((time() - $bought->datetime) / 86400) != 0) {
-                  echo("流量重置-".$user->id."\n");
-                  $user->transfer_enable = Tools::toGB($shop->reset_value());
-                  $user->u = 0;
-                  $user->d = 0;
-                  $user->last_day_t = 0;
-                  $user->save();
-
-                  /** song
-                  $subject = Config::get('appName')."-您的流量被重置了";
-                  $to = $user->email;
-                  $text = "您好，根据您所订购的订单 ID:".$bought->id."，流量已经被重置为".$shop->reset_value().'GB' ;
-                  try {
-                      Mail::send($to, $subject, 'news/warn.tpl', [
-                          "user" => $user,"text" => $text
-                      ], [
-                      ]);
-                  } catch (\Exception $e) {
-                      echo $e->getMessage();
-                  }
-                  **/
+                if(time() - $shop->reset_exp() * 86400 < $bought->datetime) {
+                    if(intval((time() - $bought->datetime) / 86400) % $shop->reset() == 0 && intval((time() - $bought->datetime) / 86400) != 0) {
+                    echo("流量重置-".$user->id."\n");
+                    $user->transfer_enable = Tools::toGB($shop->reset_value());
+                    $user->u = 0;
+                    $user->d = 0;
+                    $user->last_day_t = 0;
+                    $user->save();
+       
+                      $subject = Config::get('appName')."-您的流量被重置了";
+                      $to = $user->email;
+                      $text = "您好，根据您所订购的订单 ID:".$bought->id."，流量已经被重置为".$shop->reset_value().'GB' ;
+                      try {
+                          Mail::send($to, $subject, 'news/warn.tpl', [
+                              "user" => $user,"text" => $text
+                          ], [
+                          ]);
+                      } catch (\Exception $e) {
+                          echo $e->getMessage();
+                      }
+                  
+                    }
                 }
-              }
             }
 
-        }
+    // song 按照用户等级，计算重置周期，1级时 1个月 100G   3级 3个月 300G  9级时 9个月 900G 以此类推
+//          // 用户等级小于1 的， 余额小于0 的， 账户被暂停的 都不重置这个数据
+            if ($user->class < 1 || $user->enable < 1 || $user->money < 0) {
+                continue;
+            }
 
+            if(intval((time() - $bought->datetime) / 86400) % ($user->class * 30) == 0) {
+                //把 用户的所有流量 放到 u ， d的流量不变
+                // 然后每天检测一次 这个数据的变化，来判断一次是否封号
+                $user->u = $user->u + $user->d;
+                $user->d = 0;
+                $user->save();
+            }
+        }
+**/
         //自动审计每天节点流量数据 song
         $nodes_vnstat = Node::where('id','>',9)->where('type','=',1)->get();  // 只获取4以上的在线节点 
         foreach ($nodes_vnstat as $node) {
+            //echo $node->id.' nodeid ';
             # code...
-            $addn = explode('#', $node->node_ip);
+            #$addn = explode('#', $node->node_ip);
+            /** 这是过期的计算方式，过时了
             if (empty($addn['2'])) {
                 # code...
                 $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
@@ -207,53 +216,94 @@ class Job
                 $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
                 $total = $sum_u + $sum_d;   //获取用户之和
             }
-            #在线节点，流量少于16G 的 隐藏 且加·  16 * 1024 * 1024 * 1024 记录中记录的时bytes 
-            if($total < 17179869184 ){
-              $node->status .= '*';
-              $node->type = 0;        //在节点名字后面加上 · 这个符号，多了就能看到了。
-            }      
-            $node->info = floor($total / 1073741824) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
-            $node->info = substr($node->info, 0,64);             //截取字符串长度为128位 防止超出
-            #总流量 * 64除以月流量 就是倍率
-            $node->traffic_rate = round( ($total * 64 / $node->node_bandwidth_limit) , 2) ;
+
+            **/
+            // 这里直接换算成 GB 保留两位小数
+            $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
+            // 如果 today < 8G 就会要求在一个数值上 +1  
+            if ($traffic_today < 8*1024*1024*1024) {
+                $node->node_sort += 1;
+                $node->type = 0;  
+            }
+
+            // 只有流量限制不为 0 ，且非流量重置日的时候，才会按照这个标准矫正倍率，其他时间不用管
+            // 就是 流量重置日 倍率不变
+            // 就是 如果流量限制为 0 ， 那么倍率就永久不变
+            if ($node->node_bandwidth_limit > 1 && $today != $node->bandwidthlimit_resetday) {
+                // 一个周期 32天计算， 
+                // 如果 5号到期   今天15号， 就是 32 + 15 - 5  = 43天，大于 32 ，减去 32 ，等于10天
+                // 如果 20号到期，今天5号，就是 32 + 5 - 20 = 17天 
+                $today = date('d');
+                $days = 32 + $today - $node->bandwidthlimit_resetday;
+                $days > 32 && $days -= 32;
+                // 倍率 =  流量使用的百分比 / 时间使用的百分比
+                // rate = (node_bandwidth / node_bandwidth_limit) / ( $today / days) 
+                $node->traffic_rate = round( ($node->node_bandwidth / $node->node_bandwidth_limit) / ( $days / 32)  ,2);
+                // 倍率 再 乘以 基准倍率  服务器价格 / 5美元
+                $node->traffic_rate = round( $node->traffic_rate * $node->node_cost / 5 , 1);
+            }
+
+            $node->info = floor($traffic_today/1024/1024/1024) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
+            $node->info = substr($node->info, 0,32);             //截取字符串长度为128位 防止超出
+            $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据
             $node->save();
             //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
             $node_info = new NodeInfoLog();
             $node_info->node_id = $node->id;
-            $node_info->uptime = $total;
+            $node_info->uptime = $traffic_today ;
             $node_info->load = 0;
             $node_info->log_time = time();
             $node_info->save();
         }
 
-        //Song 自动禁用 余额 少于 0 的账户
+        // 顺序是这样的：
+        // 禁用超过 32天没用的用户 ->  矫正所有到期的用户的列加流量 -> 所有enable用户 trasnfer_day变成今日  renew += 0.1  transferlimit + 3G -> 禁用余额为负 -> 禁用每日流量用超的用户 -> 禁用总流量用超的用户 
+
+
+        //就这么简单，只需要自动禁用余额少于0 ，但是依然可用的账户。
+
+        //自动禁用超过32天没有使用的用户 ,选取id>10的用户，防止那个 sr但端口的用户被禁用了导致节点无法用
+        $date_check = date('Y-m-d H:i:s',strtotime('-1 month'));
+        // 最近一个月内注册的不算
+        // 算一下 最近30天是啥
+        $nouse_time = time() - 32*86400;
+        // 选取 注册时间在1个月以上， 上次使用在一个月前， 等级 > 0的， enable = 1 的禁用。
+        $users_nouse = User::where('id','>',10)->where('enable','=',1)->where('class','>',0)->where('t','<',$nouse_time)->where("reg_date",'<',$date_check)->get();
+        foreach ($users_nouse as $user) {
+            $user->enable = 0;
+            $user->save();
+        }
+        //
+
+        // 余额少于 0 的用户 禁用掉 
         $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
         foreach ($users_nomoney as $user) {
             $user->enable = 0;
-            $user->ban_times += 1;
-            // 其次被禁，就修改用户密码
-            if ($user->ban_times > 7) {
-                # code...
-                $user->pass = time();
-                $user->ban_times = 0;
-            }
+            $user->ban_times += $user->class;
+            $user->ban_times > 16 && $user->pass = time();
             $user->save();
         }
-        //就这么简单，只需要自动禁用余额少于0 ，但是依然可用的账户。
+        // 这里也就意味着放弃了，余额小于 0 的用户，将没有那个流量重置周期。 永远没有的意思。 用超了就是用超了
 
 
-        $users = User::all();
+        // 这里把 每个用户的应该有的流量给叠加上。这个
+        // 这里只选取 等级大于0的用户  ，enable 为1的用户。 
+        $users = User::where('enable','>',0)->where('class','>',0)->get();
         foreach ($users as $user) {
-            $user->last_day_t=($user->u+$user->d);
+            // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
+            //$user->last_day_t=($user->u+$user->d);
+            $user->renew += 0.1;
+            $user->transfer_limit += 3*1024*1024*1024;
+            $user->last_day_t=$user->d;
             $user->save();
-
+/** song
             if (date("d") == $user->auto_reset_day) {
                 $user->u = 0;
                 $user->d = 0;
                 $user->last_day_t = 0;
                 $user->transfer_enable = $user->auto_reset_bandwidth*1024*1024*1024;
                 $user->save();
-                /** song
+                
                 $subject = Config::get('appName')."-您的流量被重置了";
                 $to = $user->email;
                 $text = "您好，根据管理员的设置，流量已经被重置为".$user->auto_reset_bandwidth.'GB' ;
@@ -266,10 +316,92 @@ class Job
                     echo $e->getMessage();
                 }
                 **/
+        }
+
+        //把所有的 renew 累加 周期到了的用户，重置流量限制
+        $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('renew','>','class')->get();
+        foreach ($users as $user) {
+            // 先重置流量数据
+            $user->u = $user->u + $user->d;
+            $user->d = 0;
+            // 再重置每日流量数据
+            $user->transfer_limit = $user->class *10*1024*1024*1024;
+            $user->renew = 0;
+        }
+
+        // 总流量使用超限的，禁用掉
+        $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
+        foreach ($users as $user) {
+            // 禁用这些用户
+            $user->enable = 0;
+            $user->ban_times += 1;
+            $user->ban_times > 16 && $user->pass = time();
+            $user->save();
+        }
+
+        // 单日超过 16G禁用掉
+        $users = User::where('enable','=',1)->where('d','>', 16*1024*1024*1024)->where('is_edu','=','0')->where('class','>',1)->get();
+        foreach ($users as $user) {
+            if ($user->d - $user->last_day_t > 32*1024*1024*1024) {
+                $user->enable = 0;
+                $user->ban_times += 1;
+                $user->ban_times > 16 && $user->pass = time();
+                $user->save();
             }
         }
 
+        // EDU 单日超过 8G 禁用掉
+        $users = User::where('enable','=',1)->where('d','>', 8*1024*1024*1024)->where('is_edu','=','1')->where('class','>',1)->get();
+        foreach ($users as $user) {
+            if ($user->d - $user->last_day_t > 16*1024*1024*1024) {
+                $user->enable = 0;
+                $user->ban_times += 1;
+                $user->ban_times > 16 && $user->pass = time();
+                $user->save();
+            }
+        }
+        
+        //将余额 小于 0 的用户，请空邀请人，收回邀请返利
+        // 选取 余额 <0  邀请人不为0 的情况
+        $users = User::where('money','<',0)->where('ref_by','!=',0)->get();
+        foreach ($users as $user) {
+            $ref_user = User::find($user->ref_by);
+            //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
+            $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
+            //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量 
+            $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
+            //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
+            if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
+                $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
+                //扣除邀请的流量！
+                $ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                $ref_user->save();
+                //写入返利日志
+                $Payback = new Payback();
+                #echo $user->id;
+                #echo ' ';
+                $Payback->total = -2;
+                $Payback->userid = $user->id;  //用户注册的ID 
+                $Payback->ref_by = $user->ref_by;  //邀请人ID
+                $Payback->ref_get = - $ref_payback->ref_get;
+                $Payback->datetime = time();
+                $Payback->save();
+            }
+            //这里把这个用户的 ref_by 也清空一下,这样避免下次重复计算
+            $user->ref_by = 0;
+            $user->enable = 0;
+            $user->save();
+        }
 
+        // 把清空日志放到这里来
+        NodeInfoLog::where("log_time", "<", time()-86400*3)->delete();
+        NodeOnlineLog::where("log_time", "<", time()-86400*3)->delete();
+        TrafficLog::where("log_time", "<", time()-86400*3)->delete();
+        DetectLog::where("datetime", "<", time()-86400*3)->delete();
+        Speedtest::where("datetime", "<", time()-86400*3)->delete();
+        EmailVerify::where("expire_in", "<", time()-86400*3)->delete();
+         system("rm ".BASE_PATH."/storage/*.png", $ret);
+        Telegram::Send("姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~");
 
         #https://github.com/shuax/QQWryUpdate/blob/master/update.php
 

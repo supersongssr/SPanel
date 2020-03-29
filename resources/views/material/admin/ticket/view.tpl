@@ -8,6 +8,29 @@
 		</div>
 		<div class="container">
 			<div class="col-lg-12 col-sm-12">
+				
+					
+					{$ticketset->render()}
+					{foreach $ticketset as $ticket}
+					<div class="card">
+						<aside class="card-side pull-left"><img alt="alt text for John Smith avatar" src="{$ticket->User()->gravatar}"></span></br>{$ticket->User()->user_name}</aside>
+						<div class="card-main">
+							<div class="card-inner">
+								{if $ticket->rootid == 0}
+								标题： {$ticket->title}
+								<hr>
+								{/if}
+								{$ticket->content}
+							</div>
+							<div class="card-action"> {$ticket->datetime()}</div>
+						</div>
+					</div>
+					{/foreach}
+					{$ticketset->render()}
+					
+					
+					{include file='dialog.tpl'}
+
 				<section class="content-inner margin-top-no">
 				
 					<div class="card">
@@ -50,32 +73,15 @@
 									<div class="row">
 										<div class="col-md-10 col-md-push-1">
 											<button id="submit" type="submit" class="btn btn-block btn-brand waves-attach waves-light">添加</button>
+											<button id="show" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">添加并展示</button>
                                             <button id="close" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">添加并关闭</button>
-                                            <button id="close_directly" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">直接关闭</button>
-											<a class="btn btn-block btn-brand waves-attach waves-light" id="changetouser" href="javascript:void(0);" onClick="changetouser_modal_show()">切换为该用户</a>
+                                            <button id="close_directly" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">直接关闭</button> 	<a class="btn btn-block btn-brand waves-attach waves-light" id="changetouser" href="javascript:void(0);" onClick="changetouser_modal_show()">切换为该用户</a>
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-					
-					{$ticketset->render()}
-					{foreach $ticketset as $ticket}
-					<div class="card">
-						<aside class="card-side pull-left"><img alt="alt text for John Smith avatar" src="{$ticket->User()->gravatar}"></span></br>{$ticket->User()->user_name}</aside>
-						<div class="card-main">
-							<div class="card-inner">
-								{$ticket->content}
-							</div>
-							<div class="card-action"> {$ticket->datetime()}</div>
-						</div>
-					</div>
-					{/foreach}
-					{$ticketset->render()}
-					
-					
-					{include file='dialog.tpl'}
 
 			</div>
 
@@ -105,7 +111,8 @@
                     if (data.ret) {
                         $("#result").modal();
                         $$.getElementById('msg').innerHTML = data.msg;
-                        window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
+                        //window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
+                        window.location.href = "/admin/ticket/{$nextid}/view";
                     } else {
                         $("#result").modal();
                         $$.getElementById('msg').innerHTML = data.msg;
@@ -120,6 +127,11 @@
 
         $$.getElementById('submit').addEventListener('click', () => {
             status = 1;
+            submit();
+        });
+
+        $$.getElementById('show').addEventListener('click', () => {
+            status = 3;
             submit();
         });
 
@@ -144,7 +156,8 @@
                     if (data.ret) {
                         $("#result").modal();
                         $$.getElementById('msg').innerHTML = data.msg;
-                        window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
+                        //window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
+                        window.location.href = "/admin/ticket/{$nextid}/view";
                     } else {
                         $("#result").modal();
                         $$.getElementById('msg').innerHTML = data.msg;

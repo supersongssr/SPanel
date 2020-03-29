@@ -12,25 +12,66 @@
 	<main class="content">
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">工单</h1>
+				<h1 class="content-heading">工单 & 客服 & 技术支持</h1>
 			</div>
 		</div>
 		<div class="container">
 			<div class="col-lg-12 col-sm-12">
 				<section class="content-inner margin-top-no">
-					
+
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
-								<p>请先参考下面常见问题的解决方案；点击右下角红色<code>+</code>号创建工单。</p>
-								<p><code>#0</code>请尽量详细描述您所遇到的问题，以帮助您快速解决</p>
-                              	<p><code>#1 </code>所有节点不能用：账号是否过期？IP是否被禁（网站-设置中查看）？换个设备试试？换个网络试试？4G网请开关飞行模式试试？宽带请重启光猫试试？</p>
-                              	<p><code>#2 </code>网速慢：节点很多，请找到网速好的节点使用；不同节点不同地区不同网络网速不同。</p>
-								<p><code>#3 </code>部分节点不能用：网站-节点列表-在线人数，有人在线就说明节点能用；或者 http://www.okss.xyz 查看节点是否绿色对勾。</p>
-                          		<p><code>#4 </code>软件: SS/SR/V.2使用软件不同，推荐使用V.2和SR，教程在个人首页。</p>
-                             	<p><code>#5 </code>更改网站设置后，请删除软件中所有节点再重新导入节点，否则可能会导致ip被封。</p>
-                              	<p><code>#6 </code>安卓设置无法连接，有可能是后台掉了，重新开启软件试试；电脑无法连接，请检查是否开启了负载均衡；</p>
-                              	<p><code>#7 </code>提交工单，请告知您使用的设备、节点、网络环境。优先回复描述详细的工单。优先回复VIP用户工单。</p>
+								<p><code>*这里列举了常见的工单内容，方便您快速参考别人的问题的解决方案。</code></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-main">
+							<div class="card-inner">
+								<div class="card-table">
+									<div class="table-responsive table-user">
+										{$opentickets->render()}
+										<table class="table">
+											<tr>
+											  <!--  <th>ID</th>   -->
+												<th>操作</th>
+												<th>工单标题</th>
+												<th>工单状态</th>
+												<th>发起日期</th>
+											   
+											</tr>
+											{foreach $opentickets as $ticket}
+												<tr>
+													
+												 <!--   <td>#{$ticket->id}</td>  -->
+													<td>
+														<a class="btn btn-brand" href="/user/ticket/{$ticket->id}/openview">查看</a>
+													</td>
+													<td>{$ticket->title}</td>
+													{if $ticket->status==3}
+													<td>常见问题</td>
+													{else}
+													<td>出错了</td>
+													{/if}
+													<td>{$ticket->datetime()}</td>
+													 
+												</tr>
+											{/foreach}
+										</table>
+										{$opentickets->render()}
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+
+					<div class="card">
+						<div class="card-main">
+							<div class="card-inner">
+								<p>创建工单请点击右下角红色<code>+</code>号。</p>
+								<p>快速解决问题？请先阅读 <a href="/user/announcement/7">网站公告</a> 、 <a href="/user/announcement/1">常见问题</a><br><code>*您的工单可能被公开，如果公开工单触犯了您的隐私，请回复一次或关闭工单工单，即可关闭公开展示。</code><br>*请您注意，提交工单将扣除 1.0余额/次 回复工单将扣除 0.1余额/次，用于遏制脚本程序的工单提交，恢复正常用户的工单服务。<br><code>*我们为VIP客户提供专业的技术支持。</code>  提问的智慧：<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md"><code>*点我查看提问的智慧*</code></a></p>
 							</div>
 						</div>
 					</div>
@@ -57,9 +98,11 @@
 													<td>{$ticket->datetime()}</td>
 													<td>{$ticket->title}</td>
 													{if $ticket->status==1}
-													<td>工单服务中</td>
+													<td>服务中</td>
+													{elseif $ticket->status==3}
+													<td>公开工单</td>
 													{else}
-													<td>工单已结束</td>
+													<td>已完成</td>
 													{/if}
 													 <td>
 														<a class="btn btn-brand" href="/user/ticket/{$ticket->id}/view">查看</a>
@@ -75,6 +118,7 @@
 					</div>
 					
 					
+
 					<div class="fbtn-container">
 						<div class="fbtn-inner">
 							<a class="fbtn fbtn-lg fbtn-brand-accent" href="/user/ticket/create">+</a>

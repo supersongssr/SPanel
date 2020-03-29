@@ -5,6 +5,9 @@ use App\Models\Node;
 use App\Models\Relay;
 use App\Services\Config;
 use App\Controllers\LinkController;
+
+use App\Models\Cncdn;
+
 class URL
 {
     /*
@@ -112,11 +115,12 @@ class URL
                 $query->where("node_group", "=", $user->node_group)
                     ->orWhere("node_group", "=", 0);
             }
-        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("name")->get();
+        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
         foreach ($v2ray_nodes as $v2ray_node) {
-            $node_explode = explode(';', $v2ray_node->node_ip); // sever -> node_ip song
+            $node_explode = explode('#', $v2ray_node->node_ip); // sever -> node_ip song
             $docs = [
-                "name" => $v2ray_node->name,
+                //"name" => $v2ray_node->name.' '.$v2ray_node->node_class.'|'.$v2ray_node->traffic_rate.'|'.($v2ray_node->node_oncost * 20).'%',
+                "name" => $v2ray_node->name.' '.$v2ray_node->traffic_rate.'|'.($v2ray_node->node_oncost*10).'% #'.$v2ray_node->id,
                 "type" => "vmess",
                 "server" => $v2ray_node->server,//song -> server
                 "port" => $node_explode[1],
@@ -196,7 +200,7 @@ class URL
                     $query->where('sort', 0)
                         ->orwhere('sort', 10);
                 }
-            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->limit(Config::get('node_get_limit'))->get();
+            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
         } else {
             $nodes=Node::where(
                 function ($query) {
@@ -208,7 +212,7 @@ class URL
                     $query->where("node_group", "=", $user->node_group)
                         ->orWhere("node_group", "=", 0);
                 }
-            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->limit(Config::get('node_get_limit'))->get();
+            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->limit($user->sub_limit)->get();
         }
         if($is_mu) {
             if ($user->is_admin) {
@@ -343,7 +347,7 @@ class URL
             return $ssurl;
         }
     }
-    public static function getV2Url($user, $node){
+    public static function getV2Url($user, $node, $arrout = 0){
         $node_explode = explode('#', $node->node_ip);//server ->node_ip song 
         $item = [
             'v'=>'2',
@@ -351,8 +355,26 @@ class URL
             'path'=>'',
             'tls'=>''
         ];
-        $item['ps'] = $node->name.'|V'.$node->node_class.'|R'.$node->traffic_rate.'|'.$node->id;
-        $item['add'] = $node->server;// addn ->server song 
+        $node_warm = '';
+
+        //增加 CNCDN自选节点功能
+        $node_server = $node->server;
+        if ($user->cncdn) {
+            $cncdn = Cncdn::where('status','=','1')->where('server','=',$node->server)->where('areaid','=',$user->cncdn)->first();
+            if (!empty($cncdn->cdnip)) {
+                $node_server = $cncdn->cdnip;
+            }
+        }
+
+        // 增加 cfcdn自选节点功能
+        if ($user->cfcdn && $node->server == 'cf.cfcn.xyz') {
+            $node_server = $user->cfcdn;
+        }
+
+        //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
+        //$item['ps'] = $node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm;
+        $item['ps'] = $node->name.' '.$node->traffic_rate.'|'.($node->node_oncost*10).'% #'.$node->id;
+        $item['add'] = $node_server;// addn ->server song 
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
         $item['aid'] = $node_explode[3];
@@ -408,19 +430,81 @@ class URL
             #完成
             
         }**/
+        if ($arrout == 0) {
+            return 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
+        }else{
+            return $item;
+        }
 
-        return "vmess://".base64_encode((json_encode($item, JSON_UNESCAPED_UNICODE)));
     }
-    public static function getAllVMessUrl($user) {
-        $nodes = Node::where('sort', 11)->where(
-            function ($query) use ($user){
-                $query->where("node_group", "=", $user->node_group)
-                    ->orWhere("node_group", "=", 0);
+
+    public static function getIOSV2Url($user, $node){
+        $node_explode = explode('#', $node->node_ip);//server ->node_ip song 
+
+        //增加 CNCDN自选节点功能
+        $node_server = $node->server;
+        if ($user->cncdn != '0' ) {
+            $cncdn = Cncdn::where('status','=','1')->where('server','=',$node->server)->where('areaid','=',$user->cncdn)->first();
+            if (!empty($cncdn->cdnip)) {
+                $node_server = $cncdn->cdnip;
             }
-        )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->limit(Config::get('node_get_limit'))->get();
+        }
+
+        // 增加 cfcdn自选节点功能
+        if ($user->cfcdn && $node->server == 'cf.cfcn.xyz') {
+            $node_server = $user->cfcdn;
+        }
+
+        $item = 'auto:'.(empty($node_explode[2]) ? $user->getUuid() : $node_explode[2]).'@'.$node_server.':'.$node_explode[1];
+        $node_warm = '';
+        //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
+
+        //$item = base64_encode($item).'?remarks='.urlencode($node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
+        $item = base64_encode($item).'?remarks='.urlencode($node->name.' '.$node->traffic_rate.'|'.($node->node_oncost*10).'% #'.$node->id).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
+        return "vmess://".$item;
+    }
+
+    public static function getAllVMessUrl($user, $arrout = 0) {
+        if ($user->is_admin) {
+            $nodes = Node::where('sort', 11)->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
+        }else{
+            $nodes = Node::where('sort', 11)->where(
+                function ($query) use ($user){
+                    $query->where("node_group", "=", $user->node_group)
+                        ->orWhere("node_group", "=", 0);
+                }
+            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->limit($user->sub_limit)->get();
+        }
+        
+        if ($arrout == 0) {
+            $result = '';
+            foreach ($nodes as $node) {
+                $result .= (URL::getV2Url($user, $node, $arrout) . "\n");
+            }
+        } else {
+            $result = [];
+            foreach ($nodes as $node) {
+                $result[] = URL::getV2Url($user, $node, $arrout);
+            }
+        }
+        return $result;
+    }
+
+    public static function getIOSVMessUrl($user) {
+        if ($user->is_admin) {
+            $nodes = Node::where('sort', 11)->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
+        }else{
+            $nodes = Node::where('sort', 11)->where(
+                function ($query) use ($user){
+                    $query->where("node_group", "=", $user->node_group)
+                        ->orWhere("node_group", "=", 0);
+                }
+            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->limit($user->sub_limit)->get();
+        }
+        
         $result = "";
         foreach ($nodes as $node) {
-            $result .= (URL::getV2Url($user, $node) . "\n");
+            $result .= (URL::getIOSV2Url($user, $node) . "\n");
         }
         return $result;
     }
@@ -461,7 +545,7 @@ class URL
             ->where(function ($func) use ($user){
                 $func->where('node_group', '=', $user->node_group)
                     ->orwhere('node_group', '=', 0);
-            })->orderBy("node_class","DESC")->orderBy("traffic_rate","ASC")->get();
+            })->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
         $server_index=1;
         foreach($nodes as $node){
             $server=array();
@@ -625,7 +709,10 @@ class URL
         $return_array['port'] = $user->port;
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;
-        $return_array['remark'] = $node_name.'|V'.$node->node_class.'|R'.$node->traffic_rate.'|'.$node->id;
+        $node_warm = '';
+        //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
+        //$return_array['remark'] = $node_name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 100).'%'.$node_warm;
+        $return_array['remark'] = $node_name.' '.$node->traffic_rate.'|'.($node->node_oncost*10).'% #'.$node->id;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;

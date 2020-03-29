@@ -6,7 +6,7 @@
 
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">用户中心 ★ {$config["appName"]}</h1>
+				<h1 class="content-heading">用户中心 ★ </h1>
 			</div>
 		</div>
 		<div class="container">
@@ -151,11 +151,11 @@
 												<li class="active">
 													<a class="" data-toggle="tab" href="#all_v2ray"><i class="icon icon-lg">flight_land</i>&nbsp;Vmess ★★★★★</a>
 												</li>
-												<li >
-													<a class="" data-toggle="tab" href="#all_ssr"><i class="icon icon-lg">airplanemode_active</i>&nbsp;S.R ★★★</a>
-												</li>
 												<li>
-													<a class="" data-toggle="tab" href="#all_ss"><i class="icon icon-lg">flight_takeoff</i>&nbsp;S.S ★</a>
+													<a class="" data-toggle="tab" href="#all_ss"><i class="icon icon-lg">flight_takeoff</i>&nbsp;S.S ★★</a>
+												</li>
+												<li >
+													<a class="" data-toggle="tab" href="#all_ssr"><i class="icon icon-lg">airplanemode_active</i>&nbsp;S.R ★</a>
 												</li>
 											</ul>
 										</nav>
@@ -163,7 +163,7 @@
 											<div class="tab-content">
 												<div class="tab-pane fade " id="all_ssr">
 													{$pre_user = URL::cloneUser($user)}
-													<p>S.R☆☆☆：TCP、UDP、Chain-a协议、支持与S.S Vmess同时使用。</p>
+													<p><small>S.R☆☆：SR技术于207年底停止更新，已经是过时的技术了。</small></p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -206,7 +206,7 @@
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=1" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=1">点击复制</button><br></div>
 														
 
-                                                       <p><a href="/user/tutorial">点击这里查看Windows教程</a></p>
+                                                       <p><a href="/user/tutorial">点击这里查看Windows版 sr图文教程</a></p>
 													</div>
 													<div class="tab-pane fade" id="all_ssr_mac">
 															<p><span class="icon icon-lg text-white">filter_1</span><a href="/ssr-download/ssr-mac.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载ShadowsocksX-NG-R8</a>，安装并启动</p>                                
@@ -423,7 +423,7 @@
 												</div>
 
 												<div class="tab-pane fade active in" id="all_v2ray">
-													<p>Vmess☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装。推荐使用；</p>
+													<p>Vmess☆☆☆☆☆：KCP、TCP、UDP、Vmess协议、混淆、伪装、中转、TLS，首推使用！</p>
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
@@ -444,41 +444,37 @@
 														</ul>
 													</nav>
 													<div class="tab-pane fade active in" id="all_v2ray_windows">
-														<p><span class="icon icon-lg text-white">filter_1</span><a href="https://github.com/2dust/v2rayN/releases/download/3.5/v2rayN.zip" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V.2.rayN（版本V3.5）</a>，解压至任意磁盘并运行</p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 双击任务栏右下角V.2.rayN图标->订阅->订阅设置->添加->填入下方的地址，点击确定</p>
-														<p><span class="icon icon-lg text-white">filter_3</span> 再次点击订阅->更新订阅，右击任务栏右下角V.2.rayN图标->启动Http代理</p>
-														<p><span class="icon icon-lg text-white">filter_4</span> 自行选择“Http代理模式”和“服务器”</p>
-														<p> 也可以使用ClashX进行连接，<a href="/ssr-download/Clash-Windows.7z" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 ClashX</a></p>
-														<p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>
-														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
+														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="https://github.com/2dust/v2rayN/releases/download/3.5/v2rayN.zip" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载V2rayN</a>→解压→运行<code>V2rayN.exe</code>；</p>
+														<p><span class="icon icon-lg text-white">filter_2</span>订阅节点：双击任务栏右下角<code>V2rayN</code>图标→订阅→订阅设置→添加→备注：<code>{$config["appName"]}</code>→地址：<code>{$subUrl}{$ssr_sub_token}?mu=2</code>→确定；订阅→ 更新订阅→等待获取节点；</p>
+														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：右键点击任意节点→设为活动服务器；右键点击右下角图标→HTTP代理→全局模式；打开浏览器上网；</p>
+														<p><span class="icon icon-lg text-white">filter_4</span>图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement/3">点击查看图文教程</a></p>
+														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_ios">
-														<p>IOS端新版小火箭已支持v2ray节点，需要在使用的vmess节点右滑点击编辑，将节点设置为允许不安全。（小火箭的奇葩设定）；kitsunbe请编辑使用的节点，将证书验证设置为0</p>
-														<p><span class="icon icon-lg text-white">filter_1</span> 推荐安装：在非国区AppStore中搜索<code>shadowrocket(小火箭)  或   kitsunebi</code>安装 ；<a href="/user/announcement/2">网站有提供免费的已购买过shadowrocket的苹果商店账号密码</a></p>
-														<p><span class="icon icon-lg text-white">filter_2</span> Kitsunebi教程：打开 Kitsunebi，添加下面订阅链接，更新订阅后使用。</p>
-														<p><span class="icon icon-lg text-white">filter_2</span> Shadowrocket教程：点击右上角的 + 号，类型选择“Subscribe”，URL填写以下地址并点击右上角完成即可。或使用<a href="javascript:void(0);" class="btn-dl" style="margin-left: 5px;" data-onekeyfor="v2sub"><i class="material-icons icon-sm">how_to_vote</i>小火箭一键订阅</a> </p>
-														<p><span class="icon icon-lg text-white">filter_2</span> Shadowrocket教程：由于小火箭独特的设置，当前版本中，您需要先选择您使用的节点，然后进入节点编辑（节点右边 i ），勾选 允许不安全 后才能正常使用！ </p>
-														<p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>
-														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" id="v2sub" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
+														<p><small>*小火箭专用订阅地址 mu=5 *</small> </p>
+														<p><span class="icon icon-lg text-white">filter_1</span> 获取软件：在<code>非国区</code>AppStore中搜索<code>shadowrocket</code>购买→安装;<a href="/user/announcement/2">点击查看免费账号密码</a></p>
+														<p><span class="icon icon-lg text-white">filter_2</span> 订阅节点：打开Shadowrocket→点击右上角 <code>+</code>→ 类型:<code>Subscribe</code>→URL：<code>{$subUrl}{$ssr_sub_token}?mu=5</code>→备注：<code>{$config["appName"]}</code>→完成；获取节点</p>
+														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：点击任意节点→点击上方小火箭图标/或者开启连接；<small>*如遇到提示是否允许小火箭使用代理，点击ALLOW*</small>打开浏览器上网；</p>
+														<p><span class="icon icon-lg text-white">filter_4</span>图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement/4">点击查看图文教程</a></p>
+														<div><span class="icon icon-lg text-white">flash_auto</span> 小火箭专用订阅</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" id="v2sub" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=5">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_android">
-														<p><span class="icon icon-lg text-white">filter_1</span><a href="https://github.com/2dust/v2rayNG/releases/download/1.1.15/v2rayNG_1.1.15.apk" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V.2.rayNG</a>并安装</p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 点击左上角菜单按钮展开菜单->订阅设置->点击右上角“+”，URL填写以下地址并点击右上角“√”保存</p>
-														<p><span class="icon icon-lg text-white">filter_3</span> 回到软件主界面->点击右上角“更多”按钮->更新订阅</p>
-														<p><span class="icon icon-lg text-white">filter_4</span> 选择一个节点，点击右下角按钮订阅</p>
-														<p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>
-														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
+														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="https://github.com/2dust/v2rayNG/releases/download/1.1.15/v2rayNG_1.1.15.apk" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V2rayNG</a>→安装</p>
+														<p><span class="icon icon-lg text-white">filter_2</span>订阅节点：打开软件→右滑→订阅设置→点击右上角<code>+</code>→备注：<code>{$config["appName"]}</code>→地址：<code>{$subUrl}{$ssr_sub_token}?mu=2</code>→返回主界面→点击右上角三个点→更新订阅；获取节点；</p>
+														<p><span class="icon icon-lg text-white">filter_3</span> 使用节点：选择任意节点→点击右下角灰色图标→连接</p>
+														<p><span class="icon icon-lg text-white">filter_4</span> 图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement">点击查看图文教程</a></p>
+														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2_mac">
-														<p><span class="icon icon-lg text-white">filter_1</span><a href="https://github.com/Cenmrev/V2RayX/releases/download/v1.5.1/V2RayX.app.zip" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V.2.rayX</a>并解压</p>
-														<p><span class="icon icon-lg text-white">filter_2</span> 将 V.2.rayX.app 复制到 程序 文件夹，运行V.2RayX</p>
-														<p><span class="icon icon-lg text-white">filter_3</span> MAC端需要手动添加节点，配置信息可以在节点列表页面查看到。如果您不会手动添加的话，MAC推荐使用SR呢。</p>
-														<!-- <p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>-->
-														<div><span class="icon icon-lg text-white">flash_auto</span> 节点订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">点击复制</button><br></div>
+														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="https://github.com/yanue/V2rayU/releases/download/2.0.0/V2rayU.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V2rayU</a>→在<code>安装界面</code>将<code>v2rayU</code>拖到<code>Applications</code>文件夹→打开启动台，找到v2rayU→点击启动；<small>*首次打开会有安全提示，点击 好*</small></p>
+														<p><span class="icon icon-lg text-white">filter_2</span>订阅节点：右键状态栏v2rayU图标→订阅设置/Subscribe→URL/地址:<code>{$subUrl}{$ssr_sub_token}?mu=2</code>→remark/备注：<code>{$config["appName"]}</code>→add/添加 →update servers/更新；获取节点</p>
+														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：随意选择节点→右键任务栏图标→GlobalMode/全局模式→Turn V2ray-Core:On → 打开浏览器使用</p>
+														<p><span class="icon icon-lg text-white">filter_4</span> 图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement">点击查看图文教程</a></p>
+														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_info">
 														{$v2_url_all = URL::getAllVMessUrl($user)}
@@ -504,7 +500,7 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ {$config["appName"]} </p>
+                                    <p class="card-heading"> <i class="icon icon-md">notifications_active</i>公告栏 ★ </p>
 										{if $ann != null}
 										<p>{$ann->content}</p>
 										<br/>
@@ -646,10 +642,10 @@
 													dataPoints: [
 														{if $user->transfer_enable != 0}
 														{
-															y: {$user->last_day_t/$user->transfer_enable*100},label: "过去已用", legendText:"过去已用 {number_format($user->last_day_t/$user->transfer_enable*100,2)}% {$user->LastusedTraffic()}", indexLabel: "过去已用 {number_format($user->last_day_t/$user->transfer_enable*100,2)}% {$user->LastusedTraffic()}"
+															y: {$user->last_day_t/$user->transfer_enable*100},label: "过去已用", legendText:"过去已用 {number_format(($user->last_day_t + $user->u)/$user->transfer_enable*100,2)}% {$user->LastusedTraffic()}", indexLabel: "过去已用 {number_format(($user->last_day_t + $user->u)/$user->transfer_enable*100,2)}% {$user->LastusedTraffic()}"
 														},
 														{
-															y: {($user->u+$user->d-$user->last_day_t)/$user->transfer_enable*100},label: "今日已用", legendText:"今日已用 {number_format(($user->u+$user->d-$user->last_day_t)/$user->transfer_enable*100,2)}% {$user->TodayusedTraffic()}", indexLabel: "今日已用 {number_format(($user->u+$user->d-$user->last_day_t)/$user->transfer_enable*100,2)}% {$user->TodayusedTraffic()}"
+															y: {($user->u+$user->d-$user->last_day_t)/$user->transfer_enable*100},label: "今日已用", legendText:"今日已用 {number_format(($user->d-$user->last_day_t)/$user->transfer_enable*100,2)}% {$user->TodayusedTraffic()}", indexLabel: "今日已用 {number_format(($user->d-$user->last_day_t)/$user->transfer_enable*100,2)}% {$user->TodayusedTraffic()}"
 														},
 														{
 															y: {($user->transfer_enable-($user->u+$user->d))/$user->transfer_enable*100},label: "剩余可用", legendText:"剩余可用 {number_format(($user->transfer_enable-($user->u+$user->d))/$user->transfer_enable*100,2)}% {$user->unusedTraffic()}", indexLabel: "剩余可用 {number_format(($user->transfer_enable-($user->u+$user->d))/$user->transfer_enable*100,2)}% {$user->unusedTraffic()}"

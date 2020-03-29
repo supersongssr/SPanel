@@ -81,7 +81,7 @@ class TelegramProcess
 
             }
         } else {
-            $bot->sendMessage($message->getChat()->getId(), "叔叔，请到网站" . Config::get('appName') . "资料编辑中 按照提示绑定Telegram呦。", $parseMode = null, $disablePreview = false, $replyToMessageId = $reply_to);
+            $bot->sendMessage($message->getChat()->getId(), "叔叔，请到网站" . Config::get('appName') . "个人设定 中 滑倒页面最下方 按照提示绑定Telegram呦。", $parseMode = null, $disablePreview = false, $replyToMessageId = $reply_to);
         }
     }
 
@@ -92,7 +92,7 @@ class TelegramProcess
 
         if ($message->getChat()->getId() > 0) {
             //个人
-            $commands = array("ping", "chat", "traffic", "checkin", "help", "rss");
+            $commands = array("ping", "chat", "traffic", "checkin", "help", "rss"  , "bind");
             if (in_array($command, $commands)) {
                 $bot->sendChatAction($message->getChat()->getId(), 'typing');
             }
@@ -101,7 +101,11 @@ class TelegramProcess
                     $bot->sendMessage($message->getChat()->getId(), 'Pong!这个群组的 ID 是 ' . $message->getChat()->getId() . '!');
                     break;
                 case 'chat':
-                    $bot->sendMessage($message->getChat()->getId(), Tuling::chat($message->getFrom()->getId(), substr($message->getText(), 5)));
+                // 这个变成 联系管理员
+                // 变成一个客套的回复
+                    //$bot->sendMessage($message->getChat()->getId(), Tuling::chat($message->getFrom()->getId(), substr($message->getText(), 5)));
+                    $chat = "TG群不提供任何技术支持。需要专业的技术支持？请在网站提交工单。请勿将您的账号密码充值码分享给任何群成员，避免上当受骗，所以问题请提交工单。TG群仅做用户交流聊天使用，请保持友好礼貌。网站不为TG群行为负任何责任！";
+                    $bot->sendMessage($message->getChat()->getId(), $chat);
                     break;
                 case 'traffic':
                     TelegramProcess::needbind_method($bot, $message, $command, $user);
@@ -116,6 +120,7 @@ class TelegramProcess
                     TelegramProcess::needbind_method($bot, $message, $command, $user, $message->getMessageId());
                     break;
                 case 'help':
+                /**
                     $help_list = "命令列表：
 						/ping  获取群组ID
 						/traffic 查询流量
@@ -126,8 +131,28 @@ class TelegramProcess
 						您可以在面板里点击 资料编辑 ，滑到页面最下方，就可以看到 Telegram 绑定指示了，绑定您的账号，更多精彩功能等着您去发掘。
 					          ";
                     $bot->sendMessage($message->getChat()->getId(), $help_list);
+                **/
+                    $help = "TG群不提供任何技术支持。需要专业的技术支持？请在网站提交工单。请勿将您的账号密码充值码分享给任何群成员，避免上当受骗，所以问题请提交工单。TG群仅做用户交流聊天使用，请保持友好礼貌。网站不为TG群行为负任何责任！";
+                    $bot->sendMessage($message->getChat()->getId(), $help);
                     break;
+                case 'bind':
+                    if (!is_numeric($message->getText()) && strlen($message->getText()) == 22) {
+                        $uid = TelegramSessionManager::verify_bind_session(substr($message->getText(), 6));
+                        if ($uid != 0) {
+                            $user = User::where('id', $uid)->first();
+                            $user->telegram_id = $message->getFrom()->getId();
+                            $user->im_type = 4;
+                            $user->im_value = $message->getFrom()->getUsername();
+                            $user->save();
+                            $bot->sendMessage($message->getChat()->getId(), "绑定成功。邮箱：" . $user->email);
+                        } else {
+                            $bot->sendMessage($message->getChat()->getId(), "绑定失败，绑定码已过期。" . substr($qrcode_text, 11));
+                        }
+                        break;
+                    }
                 default:
+                    //$bot->sendMessage($message->getChat()->getId(), "发送测试");
+                /**
                     if ($message->getPhoto() != null) {
                         $bot->sendMessage($message->getChat()->getId(), "正在解码，请稍候。。。");
                         $bot->sendChatAction($message->getChat()->getId(), 'typing');
@@ -216,13 +241,45 @@ class TelegramProcess
                         }
                         $bot->sendMessage($message->getChat()->getId(), Tuling::chat($message->getFrom()->getId(), $message->getText()));
                     }
+                **/
+                    if ($message->getPhoto() == null) {
+                        // 账号绑定
+                        if (!is_numeric($message->getText()) && strlen($message->getText()) == 16) {
+                            $uid = TelegramSessionManager::verify_bind_session($message->getText());
+                            if ($uid != 0) {
+                                $user = User::where('id', $uid)->first();
+                                $user->telegram_id = $message->getFrom()->getId();
+                                $user->im_type = 4;
+                                $user->im_value = $message->getFrom()->getUsername();
+                                $user->save();
+                                $bot->sendMessage($message->getChat()->getId(), "绑定成功。邮箱：" . $user->email);
+                            } else {
+                                $bot->sendMessage($message->getChat()->getId(), "绑定失败，绑定码过期。" . substr($qrcode_text, 11));
+                            }
+                            break;
+                        }
+                        // 数字登录 
+                        if (is_numeric($message->getText()) && strlen($message->getText()) == 6) {
+                            if ($user != null) {
+                                $uid = TelegramSessionManager::verify_login_number($message->getText(), $user->id);
+                                if ($uid != 0) {
+                                    $bot->sendMessage($message->getChat()->getId(), "登录验证成功。邮箱：" . $user->email);
+                                } else {
+                                    $bot->sendMessage($message->getChat()->getId(), "登录验证失败，数字过期。");
+                                }
+                            } else {
+                                $bot->sendMessage($message->getChat()->getId(), "登录验证失败，您未绑定本站账号。");
+                            }
+                            break;
+                        }
+                   }
             }
         } else {
             //群组
             if (Config::get('telegram_group_quiet') == 'true') {
                 return;
             }
-            $commands = array("ping", "chat", "traffic", "checkin", "help");
+            $commands = array("ping", "chat", "traffic", "checkin", "help" ,"checkme");
             if (in_array($command, $commands)) {
                 $bot->sendChatAction($message->getChat()->getId(), 'typing');
             }
@@ -231,11 +288,15 @@ class TelegramProcess
                     $bot->sendMessage($message->getChat()->getId(), 'Pong!这个群组的 ID 是 ' . $message->getChat()->getId() . '!', $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
                     break;
                 case 'chat':
+                /**
                     if ($message->getChat()->getId() == Config::get('telegram_chatid')) {
                         $bot->sendMessage($message->getChat()->getId(), Tuling::chat($message->getFrom()->getId(), substr($message->getText(), 5)), $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
                     } else {
                         $bot->sendMessage($message->getChat()->getId(), '不约，叔叔我们不约。', $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
                     }
+                    **/
+                    $chat = "TG群不提供任何技术支持。需要专业的技术支持？请在网站提交工单。请勿将您的账号密码充值码分享给任何群成员，避免上当受骗，所以问题请提交工单。TG群仅做用户交流聊天使用，请保持友好礼貌。网站不为TG群行为负任何责任！";
+                    $bot->sendMessage($message->getChat()->getId(), $chat, $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
                     break;
                 case 'traffic':
                     TelegramProcess::needbind_method($bot, $message, $command, $user, $message->getMessageId());
@@ -247,6 +308,7 @@ class TelegramProcess
                     TelegramProcess::needbind_method($bot, $message, $command, $user, $message->getMessageId());
                     break;
                 case 'help':
+                /**
                     $help_list_group = "命令列表：
 						/ping  获取群组ID
 						/traffic 查询流量
@@ -254,11 +316,19 @@ class TelegramProcess
 						/help 获取帮助信息
 						/rss 获取节点订阅
 
-						您可以在面板里点击 资料编辑 ，滑到页面最下方，就可以看到 Telegram 绑定指示了，绑定您的账号，更多精彩功能等着您去发掘。
+						您可以在面板里点击 个人设定 ，滑到页面最下方，就可以看到 Telegram 绑定指示了，绑定您的账号，更多精彩功能等着您去发掘。
 					";
                     $bot->sendMessage($message->getChat()->getId(), $help_list_group, $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
+                **/
+                    $help = "TG群不提供任何技术支持。需要专业的技术支持？请在网站提交工单。请勿将您的账号密码充值码分享给任何群成员，避免上当受骗，所以问题请提交工单。TG群仅做用户交流聊天使用，请保持友好礼貌。网站不为TG群行为负任何责任！";
+                    $bot->sendMessage($message->getChat()->getId(), $help, $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
+                    break;
+                case 'checkme':
+                    $help = "功能开发中，作死按钮，点击白嫖自爆";
+                    $bot->sendMessage($message->getChat()->getId(), $help, $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
                     break;
                 default:
+                /**
                     if ($message->getText() != null) {
                         if ($message->getChat()->getId() == Config::get('telegram_chatid')) {
                             $bot->sendMessage($message->getChat()->getId(), Tuling::chat($message->getFrom()->getId(), $message->getText()), $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
@@ -266,6 +336,7 @@ class TelegramProcess
                             $bot->sendMessage($message->getChat()->getId(), '不约，叔叔我们不约。', $parseMode = null, $disablePreview = false, $replyToMessageId = $message->getMessageId());
                         }
                     }
+                    **/
                     if ($message->getNewChatMember() != null && Config::get('enable_welcome_message') == 'true') {
                         $bot->sendMessage($message->getChat()->getId(), "欢迎 " . $message->getNewChatMember()->getFirstName() . " " . $message->getNewChatMember()->getLastName(), $parseMode = null, $disablePreview = false);
                     }
@@ -282,7 +353,7 @@ class TelegramProcess
             // or initialize with botan.io tracker api key
             // $bot = new \TelegramBot\Api\Client('YOUR_BOT_API_TOKEN', 'YOUR_BOTAN_TRACKER_API_KEY');
 
-            $command_list = array("ping", "chat", "traffic", "help", "prpr", "checkin", "rss");
+            $command_list = array("ping", "chat", "traffic", "help", "prpr", "checkin", "rss" ,"bind" ,"checkme");
             foreach ($command_list as $command) {
                 $bot->command($command, function ($message) use ($bot, $command) {
                     TelegramProcess::telegram_process($bot, $message, $command);

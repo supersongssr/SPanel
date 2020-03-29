@@ -3,11 +3,13 @@
 {include file='admin/main.tpl'}
 
 	<main class="content">
+		<!-- 
 		<div class="content-header ui-content-header">
 			<div class="container">
 				<h1 class="content-heading">编辑节点 #{$node->id}</h1>
 			</div>
 		</div>
+	-->
 		<div class="container">
 			<div class="col-lg-12 col-sm-12">
 				<section class="content-inner margin-top-no">
@@ -16,21 +18,20 @@
 							<div class="card-main">
 								<div class="card-inner">
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="name">节点名称</label>
+										<label class="floating-label" for="name">节点名称  #{$node->id}</label>
 										<input class="form-control maxwidth-edit" id="name" name="name" type="text" value="{$node->name}">
 									</div>
 
 
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="server">节点地址</label>
+										<label class="floating-label" for="server">节点地址   #{$node->id}</label>
 										<input class="form-control maxwidth-edit" id="server" name="server" type="text" value="{$node->server}">
-										<p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP</p>
+										<!-- <p class="form-control-guide"><i class="material-icons">info</i>如果填写为域名，“节点IP”会自动设置为解析的IP</p> -->
 									</div>
 
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="server">节点IP</label>
 										<input class="form-control maxwidth-edit" id="node_ip" name="node_ip" type="text" value="{$node->node_ip}">
-										<p class="form-control-guide"><i class="material-icons">info</i>如果“节点地址”填写为域名，则此处的值会被忽视</p>
 									</div>
 
 									<div class="form-group form-group-label" hidden="hidden">
@@ -39,10 +40,24 @@
 									</div>
 
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="rate">流量比例</label>
-										<input class="form-control maxwidth-edit" id="rate" name="rate" type="text" value="{$node->traffic_rate}">
+										<label class="floating-label" for="status">节点状态</label>
+										<input class="form-control maxwidth-edit" id="status" name="status" type="text" value="{$node->status}">
 									</div>
 
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="class">节点等级</label>
+										<input class="form-control maxwidth-edit" id="class" name="class" type="text" value="{$node->node_class}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="group">节点群组</label>
+										<input class="form-control maxwidth-edit" id="group" name="group" type="text" value="{$node->node_group}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="cost">节点成本</label>
+										<input class="form-control maxwidth-edit" id="cost" name="cost" type="text" value="{$node->node_cost}">
+									</div>
 
 									<div class="form-group form-group-label" hidden="hidden">
 										<div class="checkbox switch">
@@ -60,17 +75,6 @@
 										</div>
 									</div>
 
-									<div class="form-group form-group-label">
-										<label for="mu_only">
-											<label class="floating-label" for="sort">单端口多用户启用</label>
-											<select id="mu_only" class="form-control maxwidth-edit" name="is_multi_user">
-												<option value="0" {if $node->mu_only==0}selected{/if}>单端口多用户与普通端口并存</option>
-												<option value="-1" {if $node->mu_only==-1}selected{/if}>只启用普通端口</option>
-												<option value="1" {if $node->mu_only==1}selected{/if}>只启用单端口多用户</option>
-											</select>
-										</label>
-									</div>
-
 
 								</div>
 							</div>
@@ -79,6 +83,12 @@
 						<div class="card">
 							<div class="card-main">
 								<div class="card-inner">
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="node_bandwidth_limit">节点流量上限（GB）</label>
+										<input class="form-control maxwidth-edit" id="node_bandwidth_limit" name="node_bandwidth_limit" type="text" value="{$node->node_bandwidth_limit/1024/1024/1024}">
+										<p class="form-control-guide"><i class="material-icons">info</i>不设上限请填0</p>
+									</div>
 									<div class="form-group form-group-label">
 										<div class="checkbox switch">
 											<label for="type">
@@ -88,8 +98,18 @@
 									</div>
 
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="status">节点状态</label>
-										<input class="form-control maxwidth-edit" id="status" name="status" type="text" value="{$node->status}">
+										<label class="floating-label" for="info">节点描述</label>
+										<input class="form-control maxwidth-edit" id="info" name="info" type="text" value="{$node->info}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="rate">流量比例</label>
+										<input class="form-control maxwidth-edit" id="rate" name="rate" type="text" value="{$node->traffic_rate}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="node_sort">故障排序</label>
+										<input class="form-control maxwidth-edit" id="node_sort" name="node_sort" type="text" value="{$node->node_sort}">
 									</div>
 
 									<div class="form-group form-group-label">
@@ -108,32 +128,19 @@
 									</div>
 
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="info">节点描述</label>
-										<input class="form-control maxwidth-edit" id="info" name="info" type="text" value="{$node->info}">
-									</div>
-
-									<div class="form-group form-group-label">
-										<label class="floating-label" for="class">节点等级</label>
-										<input class="form-control maxwidth-edit" id="class" name="class" type="text" value="{$node->node_class}">
-										<p class="form-control-guide"><i class="material-icons">info</i>不分级请填0，分级填写相应数字</p>
-									</div>
-
-									<div class="form-group form-group-label">
-										<label class="floating-label" for="group">节点群组</label>
-										<input class="form-control maxwidth-edit" id="group" name="group" type="text" value="{$node->node_group}">
-										<p class="form-control-guide"><i class="material-icons">info</i>分组为数字，不分组请填0</p>
-									</div>
-
-
-									<div class="form-group form-group-label">
-										<label class="floating-label" for="node_bandwidth_limit">节点流量上限（GB）</label>
-										<input class="form-control maxwidth-edit" id="node_bandwidth_limit" name="node_bandwidth_limit" type="text" value="{$node->node_bandwidth_limit/1024/1024/1024}">
-										<p class="form-control-guide"><i class="material-icons">info</i>不设上限请填0</p>
-									</div>
-
-									<div class="form-group form-group-label">
 										<label class="floating-label" for="bandwidthlimit_resetday">节点流量上限清空日</label>
 										<input class="form-control maxwidth-edit" id="bandwidthlimit_resetday" name="bandwidthlimit_resetday" type="text" value="{$node->bandwidthlimit_resetday}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label for="mu_only">
+											<label class="floating-label" for="sort">单端口多用户启用</label>
+											<select id="mu_only" class="form-control maxwidth-edit" name="is_multi_user">
+												<option value="0" {if $node->mu_only==0}selected{/if}>单端口多用户与普通端口并存</option>
+												<option value="-1" {if $node->mu_only==-1}selected{/if}>只启用普通端口</option>
+												<option value="1" {if $node->mu_only==1}selected{/if}>只启用单端口多用户</option>
+											</select>
+										</label>
 									</div>
 
 									<div class="form-group form-group-label">
@@ -183,11 +190,13 @@
             server: {required: true},
             method: {required: true},
             rate: {required: true},
+            cost: {required: true},
             info: {required: true},
             group: {required: true},
             status: {required: true},
             node_speedlimit: {required: true},
             sort: {required: true},
+            node_sort: {required: true},
             node_bandwidth_limit: {required: true},
             bandwidthlimit_resetday: {required: true}
 		},
@@ -225,11 +234,13 @@
                     method: $$getValue('method'),
                     custom_method,
                     rate: $$getValue('rate'),
+                    cost: $$getValue('cost'),
                     info: $$getValue('info'),
                     type,
                     group: $$getValue('group'),
                     status: $$getValue('status'),
                     sort: $$getValue('sort'),
+                    node_sort: $$getValue('node_sort'),
                     node_speedlimit: $$getValue('node_speedlimit'),
                     class: $$getValue('class'),
                     node_bandwidth_limit: $$getValue('node_bandwidth_limit'),

@@ -57,10 +57,10 @@
 										
 									</button>
 									<ul class="dropdown-menu" aria-labelledby="imtype">
-										<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="imtype">微信</a></li>
-										<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="imtype">QQ</a></li>
+										<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="imtype">Telegram(EDU用户必选)</a></li>
 										<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="imtype">Facebook</a></li>
-										<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="imtype">Telegram</a></li>
+										<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="imtype">Wechat</a></li>
+										<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="imtype">QQ</a></li>
 									</ul>
 								</div>
 							</div>

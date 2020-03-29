@@ -70,21 +70,21 @@
 						<ul class="menu-collapse collapse in" id="ui_menu_me">
 							<li>
 								<a href="/user">
-									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户中心
+									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户面板
 								</a>
 							</li>
-
+							<li>
+								<a href="/user/edit">
+									<i class="icon icon-lg">sync_problem</i>&nbsp;个人设定
+								</a>
+							</li>
 							<li>
 								<a href="/user/invite">
 									<i class="icon icon-lg">loyalty</i>&nbsp;邀请返利
 								</a>
 							</li>
 
-                            <li>
-								<a href="/user/ticket">
-									<i class="icon icon-lg">question_answer</i>&nbsp;工单
-								</a>
-							</li>
+                            
 							                          
 							
 						</ul>
@@ -131,12 +131,11 @@
 								</a>
 							</li>
 							<li>
-								<a href="/user/announcement/1">
-									<i class="icon icon-lg">announcement</i>&nbsp;常见问题汇总
+								<a href="/user/ticket">
+									<i class="icon icon-lg">question_answer</i>&nbsp;工单客服
 								</a>
 							</li>
 						</ul>
-
 						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_detect">账户</a>
 						<ul class="menu-collapse collapse in" id="ui_menu_detect">
 
@@ -146,11 +145,7 @@
 								</a>
 							</li>
 
-							<li>
-								<a href="/user/edit">
-									<i class="icon icon-lg">sync_problem</i>&nbsp;资料编辑
-								</a>
-							</li>
+							
 							<li>
 								<a href="/user/relay">
 									<i class="icon icon-lg">compare_arrows</i>&nbsp;中转规则
@@ -158,16 +153,27 @@
 							</li>
 
 							<li>
+								<a href="/user/cncdnlooking">
+									<i class="icon icon-lg">visibility</i>&nbsp;加速入口观察窗
+								</a>
+							</li>
+							<li>
+								<a href="/user/cfcdnlooking">
+									<i class="icon icon-lg">visibility</i>&nbsp;优化IP观察窗
+								</a>
+							</li>
+							<li>
+								<a href="/user/lookingglass">
+									<i class="icon icon-lg">visibility</i>&nbsp;节点网速
+								</a>
+							</li>
+							<li>
 								<a href="/user/trafficlog">
 									<i class="icon icon-lg">hourglass_empty</i>&nbsp;流量记录
 								</a>
 							</li>
 
-							<li>
-								<a href="/user/lookingglass">
-									<i class="icon icon-lg">visibility</i>&nbsp;延迟检测
-								</a>
-							</li>
+							
 							<li><a href="/user/detect"><i class="icon icon-lg">account_balance</i>&nbsp;审计规则</a></li>
 							<li><a href="/user/detect/log"><i class="icon icon-lg">assignment_late</i>&nbsp;审计记录</a></li>
 						</ul>

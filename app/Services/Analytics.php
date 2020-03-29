@@ -18,63 +18,43 @@ class Analytics
         return User::where("enable","=",1)->count();
     }
 
-    public function getV0User()
+    public function getAllLiveUser()
     {
-        return User::where("enable","=",1)->where("class","=",0)->count();
+        return User::where("enable","=",1)->where('t','>',(time()-600))->count();
     }
 
-    public function getV1User()
+    public function getVIPUser($vip)
     {
-        return User::where("enable","=",1)->where("class","=",1)->count();
+        return User::where("enable","=",1)->where("class","=",$vip)->count();
     }
 
-    public function getV2User()
+    public function getVIPLiveUser($vip)
     {
-        return User::where("enable","=",1)->where("class","=",2)->count();
+        return User::where("enable","=",1)->where("class","=",$vip)->where('t','>',(time()-600))->count();
     }
 
-    public function getV3User()
+    public function getGroupLiveUser($group)
     {
-        return User::where("enable","=",1)->where("class","=",3)->count();
+        #24小时内 各等级 分组在线人数
+        return User::where("enable","=",1)->where("node_group","=",$group)->where('t','>',(time()-600))->count();
     }
 
-    public function getV4User()
+    public function getGroupUser($group)
     {
-        return User::where("enable","=",1)->where("class","=",4)->count();
+        return User::where("enable","=",1)->where('class','>',0)->where("node_group","=",$group)->count();
     }
 
-    public function getV5User()
+    public function getVIPGroupUser($vip,$group)
     {
-        return User::where("enable","=",1)->where("class","=",5)->count();
+        return User::where("enable","=",1)->where('class','=',$vip)->where("node_group","=",$group)->count();
     }
 
-    public function getV6User()
+    public function getVIPGroupLiveUser($vip,$group)
     {
-        return User::where("enable","=",1)->where("class","=",6)->count();
+        return User::where("enable","=",1)->where('class','=',$vip)->where("node_group","=",$group)->where('t','>',(time()-600))->count();
     }
 
-    public function getV7User()
-    {
-        return User::where("enable","=",1)->where("class","=",7)->count();
-    }
-
-    public function getV8User()
-    {
-        return User::where("enable","=",1)->where("class","=",8)->count();
-    }
-
-    public function getV9User()
-    {
-        return User::where("enable","=",1)->where("class","=",9)->count();
-    }
-
-    public function getV10User()
-    {
-        return User::where("enable","=",1)->where("class","=",10)->count();
-    }
-
-
-
+    
     public function getCheckinUser()
     {
         return User::where('last_check_in_time', '>', 0)->count();
@@ -163,60 +143,46 @@ class Analytics
         return Node::where("type","=",1)->count();
     }
 
-    public function getV0Node()
+    public function getCostAllNode()
     {
-        return Node::where("type","=",1)->where("node_class","=",0)->count();
+        return Node::where("type","=",1)->sum('node_cost');
     }
 
-    public function getV1Node()
+    public function getVIPNode($vip)
     {
-        return Node::where("type","=",1)->where("node_class","=",1)->count();
+        return Node::where("type","=",1)->where('node_class','=',$vip)->count();
     }
 
-    public function getV2Node()
+    public function getCostVIPNode($vip)
     {
-        return Node::where("type","=",1)->where("node_class","=",2)->count();
+        return Node::where("type","=",1)->where('node_class','=',$vip)->sum('node_cost');
     }
 
-    public function getV3Node()
+    public function getCostVIPGroupNode($vip,$group)
     {
-        return Node::where("type","=",1)->where("node_class","=",3)->count();
+        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->sum('node_cost');
     }
 
-    public function getV4Node()
+    public function getCostGroupNode($group)
     {
-        return Node::where("type","=",1)->where("node_class","=",4)->count();
+        return Node::where("type","=",1)->where('node_group','=',$group)->sum('node_cost');
     }
 
-    public function getV5Node()
+    public function getGroupNode($group)
     {
-        return Node::where("type","=",1)->where("node_class","=",5)->count();
+        return Node::where("type","=",1)->where("node_group","=",$group)->count();
     }
 
-    public function getV6Node()
+    public function getVIPGroupNode($vip,$group)
     {
-        return Node::where("type","=",1)->where("node_class","=",6)->count();
+        return Node::where("type","=",1)->where('node_class','=',$vip)->where("node_group","=",$group)->count();
     }
 
-    public function getV7Node()
+    public function getOncostVIPGroupNode($vip,$group)
     {
-        return Node::where("type","=",1)->where("node_class","=",7)->count();
+        return round(Node::where("type","=",1)->where('node_class','=',$vip)->where("node_group","=",$group)->sum('node_oncost') , 1);
     }
 
-    public function getV8Node()
-    {
-        return Node::where("type","=",1)->where("node_class","=",8)->count();
-    }
-
-    public function getV9Node()
-    {
-        return Node::where("type","=",1)->where("node_class","=",9)->count();
-    }
-
-    public function getV10Node()
-    {
-        return Node::where("type","=",1)->where("node_class","=",10)->count();
-    }
     
     public function getTotalNodes()
     {

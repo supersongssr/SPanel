@@ -85,7 +85,7 @@
                                     <div class="nodecheck node-flex">
                                         <i class="material-icons node-icon">network_check</i><span>x{$node['traffic_rate']}</span>
                                     </div>
-                                    <div class="nodeband node-flex"><i class="material-icons node-icon">flash_on</i><span>{if {$node['bandwidth']}==0}N/A{else}{$node['bandwidth']}{/if}</span></div>
+                                    <div class="nodeband node-flex"><i class="material-icons node-icon">flash_on</i><span>{if {$node['bandwidth']}==0}N/A{else}{$node['bandwidth']*100}%{/if}</span></div>
                                 </div>
                             </div>
                             <div class="nodestatus">
@@ -201,7 +201,7 @@
 														<span class="node-icon"><i class="icon icon-lg">flight_takeoff</i></span>
 														  <strong><b><span class="node-alive">{if $node['online_user'] == -1}N/A{else}{$node['online_user']}{/if}</span></b></strong> 
 											            | <span class="node-icon"><i class="icon icon-lg">cloud</i></span>
-														<span class="node-load">负载：{if $node['latest_load'] == -1}N/A{else}{$node['latest_load']}%{/if}</span> 
+														<span class="node-load">负载：{if $node['latest_load'] == -1}N/A{else}{$node['latest_load']*100}%{/if}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">import_export</i></span>
 														<span class="node-mothed">{$node['bandwidth']}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">equalizer</i></span>

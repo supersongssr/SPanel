@@ -25,6 +25,7 @@ use App\Utils\TelegramSessionManager;
 //song 
 use App\Models\Payback; //用于写入返利日志
 
+
 /**
  *  AuthController
  */
@@ -127,14 +128,13 @@ class AuthController extends BaseController
 
         if ($user == null) {
             $rs['ret'] = 0;
-            $rs['msg'] = "邮箱或者密码错误";
+            $rs['msg'] = "账号在虚无之地，请尝试重新注册";
             return $response->getBody()->write(json_encode($rs));
         }
 
         if (!Hash::checkPassword($user->pass, $passwd)) {
             $rs['ret'] = 0;
-            $rs['msg'] = "邮箱或者密码错误.";
-
+            $rs['msg'] = "忘记密码了？请尝试重置密码";
 
             $loginip = new LoginIp();
             $loginip->ip = $_SERVER["REMOTE_ADDR"];
@@ -148,7 +148,7 @@ class AuthController extends BaseController
         // @todo
         $time = 3600 * 24;
         if ($rememberMe) {
-            $time = 3600 * 24 * 7;
+            $time = 3600 * 24 * 32;
         }
 
         if ($user->ga_enable == 1) {
@@ -191,7 +191,14 @@ class AuthController extends BaseController
 
 
         // Handle Login
-        $user = User::where('id', '=', $ret)->first();
+        //$user = User::where('id', '=', $ret)->first();
+        // 这里只允许状态为 enable > 0 的用户登录 禁用被禁用的用户登录，防止密码被篡改的用户去改密码
+        $user = User::where('id', '=', $ret)->where('enable','>',0)->first();
+        if (empty($user->id)) {
+            $res['ret'] = 0;
+            $res['msg'] = "账号被保护，请使用密码登录激活账号。";
+            return $response->getBody()->write(json_encode($res));
+        }
         // @todo
         $time = 3600 * 24;
 
@@ -485,7 +492,10 @@ class AuthController extends BaseController
         $user->auto_reset_day = Config::get('reg_auto_reset_day');
         $user->auto_reset_bandwidth = Config::get('reg_auto_reset_bandwidth');
         $user->money = Config::get('user_money_default');
-
+        //先保存，再获取 uuid 
+        $user->save();
+        $user->v2ray_uuid = $user->getUuid();
+        
         //dumplin：填写邀请人，写入邀请奖励
         $user->ref_by = 0;
         //song 这里开始写入返利日志
@@ -497,7 +507,7 @@ class AuthController extends BaseController
                 // 这里保存一次，下面的 $user-id 才能获取到。可以有。嘎嘎 
                 $user->save();
                 $gift_user = User::where("id", "=", $c->user_id)->first();
-                $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1024 * 1024;
+                $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1000 * 1000;
                 //song 增加gift user的 money 先赠送7元
                 $gift_user->money += Config::get('invite_gift_money');
                 $gift_user->invite_num -= 1;
@@ -522,14 +532,11 @@ class AuthController extends BaseController
             $user->money = 60;
             $user->remark = 'regEDU';
         }**/
-        /**
-        //song 新版判断邮箱结尾是否为 edu.cn
+        // 写入用户是否edu用户这个选项
+        $user->is_edu = 0;
         if (strrchr($email, 'edu.cn') == 'edu.cn') {
-            # code...
-            $user->money = 60;
-            $user->remark = 'regEDU';
+            $user->is_edu = 1;
         }
-        **/
 
         $user->class_expire = date("Y-m-d H:i:s", time() + Config::get('user_class_expire_default') * 3600);
         $user->class = Config::get('user_class_default');

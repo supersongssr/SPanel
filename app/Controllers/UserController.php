@@ -27,6 +27,9 @@ use App\Models\DetectRule;
 
 use voku\helper\AntiXSS;
 
+// cncdn 
+use App\Models\Cncdn;
+
 use App\Models\User;
 use App\Models\Code;
 use App\Models\Ip;
@@ -100,6 +103,7 @@ class UserController extends BaseController
     public function lookingglass($request, $response, $args)
     {
         $Speedtest = Speedtest::where("datetime", ">", time() - Config::get('Speedtest_duration') * 3600)->orderBy('datetime', 'desc')->get();
+        #$Speedtest = Speedtest::where("datetime", ">", time() - 24 * 3600)->orderBy('datetime', 'desc')->get();
 
         return $this->view()->assign('speedtest', $Speedtest)->assign('hour', Config::get('Speedtest_duration'))->display('user/lookingglass.tpl');
     }
@@ -457,7 +461,8 @@ class UserController extends BaseController
     public function node($request, $response, $args)
     {
         $user = Auth::getUser();
-        $nodes = Node::where('type', 1)->orderBy('node_class')->orderBy('name')->get();
+        //$nodes = Node::where('type', 1)->orderBy('node_class')->orderBy('name')->get();
+        $nodes = Node::where('node_group','=',$user->node_group)->orwhere('node_group','=',0)->where('id','>',3)->where('type', 1)->orderBy('node_class')->orderBy('traffic_rate')->get();
         $relay_rules = Relay::where('user_id', $this->user->id)->orwhere('user_id', 0)->orderBy('id', 'asc')->get();
         if (!Tools::is_protocol_relay($user)) {
             $relay_rules = array();
@@ -525,7 +530,7 @@ class UserController extends BaseController
             }
             **/
 
-            $array_node['online_user']=-1;
+            $array_node['online_user']=$node->node_online;
 
             /**
             $nodeLoad = $node->getNodeLoad();
@@ -537,7 +542,7 @@ class UserController extends BaseController
             }
             **/
 
-            $array_node['latest_load'] = -1;
+            $array_node['latest_load'] = $node->node_oncost;
 
 /**
             $array_node['traffic_used'] = (int)Tools::flowToGB($node->node_bandwidth);
@@ -554,7 +559,7 @@ class UserController extends BaseController
             **/
             $array_node['traffic_used'] = (int)Tools::flowToGB($node->node_bandwidth);
             $array_node['traffic_limit'] = (int)Tools::flowToGB($node->node_bandwidth_limit);
-            $array_node['bandwidth']=0;
+            $array_node['bandwidth']=$node->node_oncost;
 
             $array_node['traffic_rate']=$node->traffic_rate;
             $array_node['status']=$node->status;
@@ -826,15 +831,72 @@ class UserController extends BaseController
         return $this->view()->assign("userip", $userip)->assign("userloginip", $userloginip)->assign("paybacks", $paybacks)->display('user/profile.tpl');
     }
 
+    public function cncdnlooking($request, $response, $args)
+    {
+        /**
+        $pageNum = 1;
+        if (isset($request->getQueryParams()["page"])) {
+            $pageNum = $request->getQueryParams()["page"];
+        }
+        $cncdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->paginate(25, ['*'], 'page', $pageNum);
+        $cncdns->setPath('/user/cncdnlooking');
+        **/
+        $cncdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->limit('100')->get();
+
+
+        $iplocation = new QQWry();
+
+        foreach ($cncdns as $cncdn) {
+            $location = $iplocation->getlocation($cncdn->rss_ip);
+            $cncdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
+            $area = Cncdn::where('areaid','=',$cncdn->cncdn)->where('status','=',1)->first();
+            $cncdn->area = $area->area;
+        }
+
+        return $this->view()->assign("cncdns", $cncdns)->display('user/cncdnlooking.tpl');
+    }
+
+    public function cfcdnlooking($request, $response, $args)
+    {
+        /**
+        $pageNum = 1;
+        if (isset($request->getQueryParams()["page"])) {
+            $pageNum = $request->getQueryParams()["page"];
+        }
+        $cfcdns = User::where('cfcdn_count','>',7)->orderBy("cfcdn_count", "desc")->paginate(25, ['*'], 'page', $pageNum);
+        $cfcdns->setPath('/user/cfcdnlooking');
+**/
+
+        $cfcdns = User::where('cfcdn_count','>',7)->orderBy("cfcdn_count", "desc")->limit('100')->get();
+
+        $iplocation = new QQWry();
+
+        foreach ($cfcdns as $cfcdn) {
+            $location = $iplocation->getlocation($cfcdn->rss_ip);
+            $cfcdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
+        }
+
+        return $this->view()->assign("cfcdns", $cfcdns)->display('user/cfcdnlooking.tpl');
+    }
+
 
     public function announcement($request, $response, $args)
     {   
         if (empty($args['id'])) {        //Song
             # code...
             $Anns = Ann::orderBy('date', 'desc')->get();
+            foreach ($Anns as $Ann) {
+                $title = explode('#',$Ann->markdown);
+                $Ann->markdown = $title['1'];
+                $Ann->content = '';
+            }
         }else{
             $id = $args['id'];
             $Anns = Ann::where("id", "=", $id)->get();
+            foreach ($Anns as $Ann) {
+                $title = explode('#',$Ann->markdown);
+                $Ann->markdown = $title['1'];
+            }
         }
         
         return $this->view()->assign("anns", $Anns)->display('user/announcement.tpl');
@@ -850,6 +912,16 @@ class UserController extends BaseController
     {
         $themes = Tools::getDir(BASE_PATH . "/resources/views");
 
+        //增加一个cdn的选项
+        $cncdns = Cncdn::where('status',1)->where('show',1)->get();
+        
+        $user = $this->user;
+        //$user_area = '自动优化(默认)';
+        //if ($user->cncdn != 0) {
+            $usercncdn = Cncdn::where('status','=',1)->where('areaid','=',$user->cncdn)->first();
+            $user_area = $usercncdn->area;
+        //}
+        
         $BIP = BlockIp::where("ip", $_SERVER["REMOTE_ADDR"])->first();
         if ($BIP == null) {
             $Block = "IP: " . $_SERVER["REMOTE_ADDR"] . " 没有被封";
@@ -863,7 +935,7 @@ class UserController extends BaseController
 
         $config_service = new Config();
 
-        return $this->view()->assign('user', $this->user)->assign('themes', $themes)->assign('isBlock', $isBlock)->assign('Block', $Block)->assign('bind_token', $bind_token)->assign('telegram_bot', Config::get('telegram_bot'))->assign('config_service', $config_service)
+        return $this->view()->assign('user', $this->user)->assign('user_area', $user_area)->assign('cncdns', $cncdns)->assign('themes', $themes)->assign('isBlock', $isBlock)->assign('Block', $Block)->assign('bind_token', $bind_token)->assign('telegram_bot', Config::get('telegram_bot'))->assign('config_service', $config_service)
             ->registerClass("URL", "App\Utils\URL")->display('user/edit.tpl');
     }
 
@@ -1146,7 +1218,7 @@ class UserController extends BaseController
         $user = $this->user;
 
         // 这里进行判定，如果用户充值金额 < 套餐*0.1 的话，说明用户充值的太少了，就限制一下
-        if ($shop->price > 100) {
+        if ($shop->price > 1) {
             $codes=Code::where('userid',$user->id)->get();
             $user_charge =0;
             foreach($codes as $code){
@@ -1156,7 +1228,7 @@ class UserController extends BaseController
                 $user->ban_times += 3;
                 $user->save();
                 $res['ret'] = 0;
-                $res['msg'] = "亲，充值 ".$shop->price * 0.1 ." 就能购买本套餐了";
+                $res['msg'] = "亲，充值满 ".$shop->price * 0.1 ." ￥就能购买本套餐了";
                 return $response->getBody()->write(json_encode($res));
             }
         }
@@ -1174,13 +1246,15 @@ class UserController extends BaseController
             return $response->getBody()->write(json_encode($res));
         }
 
+
+
         //# 只允许购买 套餐等级 >= 用户等级的商品   这样就可以实现用户购买的套餐可以叠加了。只能向上叠加。
         ##这里需要先 json_decode一下 商品中的 content内容
-        $shop_content = $content = json_decode($shop->content, true);
-        if ( $shop_content['class'] <= $user->class) {
+        //$shop_content = $content = json_decode($shop->content, true);
+        if ( $shop->user_class() <= $user->class) {
             # code...
             $res['ret'] = 0;
-            $res['msg'] = "您是尊贵的VIP ".$user->class." ，推荐您购买VIP ".$user->class." 以上套餐。当前套餐等级为VIP ".$shop_content['class']." <您的VIP等级。";
+            $res['msg'] = "您是尊贵的VIP ".$user->class." ，推荐您购买VIP ".$user->class." 以上套餐。当前套餐等级为VIP ".$shop->user_class()." <您的VIP等级。";
             return $response->getBody()->write(json_encode($res));
         }
 
@@ -1259,7 +1333,6 @@ class UserController extends BaseController
         return $response->getBody()->write(json_encode($rs));
     }
 
-
     public function ticket($request, $response, $args)
     {
         if (Config::get('enable_ticket') != 'true') {
@@ -1269,10 +1342,13 @@ class UserController extends BaseController
         if (isset($request->getQueryParams()["page"])) {
             $pageNum = $request->getQueryParams()["page"];
         }
-        $tickets = Ticket::where("userid", $this->user->id)->where("rootid", 0)->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
+        $tickets = Ticket::where("userid", $this->user->id)->where("rootid", 0)->orderBy("datetime", "desc")->paginate(5, ['*'], 'page', $pageNum);
         $tickets->setPath('/user/ticket');
 
-        return $this->view()->assign('tickets', $tickets)->display('user/ticket.tpl');
+        $opentickets = Ticket::where("status", 3)->where("rootid", 0)->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
+        $opentickets->setPath('/user/ticket');
+
+        return $this->view()->assign('tickets', $tickets)->assign('opentickets', $opentickets)->display('user/ticket.tpl');
     }
 
     public function ticket_create($request, $response, $args)
@@ -1285,6 +1361,7 @@ class UserController extends BaseController
         $title = $request->getParam('title');
         $content = $request->getParam('content');
 
+        $user = $this->user;
 
         if ($title == "" || $content == "") {
             $res['ret'] = 0;
@@ -1298,6 +1375,17 @@ class UserController extends BaseController
             return $this->echoJson($response, $res);
         }
 
+        if ($user->class < 1) {
+            $res['ret'] = 0;
+            $res['msg'] = "等级 < 1，无法提交工单";
+            return $this->echoJson($response, $res);
+        }
+
+        if ($user->money < 1) {
+            $res['ret'] = 0;
+            $res['msg'] = "余额 < 1 无法提交工单";
+            return $this->echoJson($response, $res);
+        }
 
         $ticket = new Ticket();
 
@@ -1308,7 +1396,12 @@ class UserController extends BaseController
         $ticket->rootid = 0;
         $ticket->userid = $this->user->id;
         $ticket->datetime = time();
+        $ticket->sort += $this->user->class;
         $ticket->save();
+
+        // 每个新工单扣除1元余额
+        $user->money -= 1;
+        $user->save();
         //新工单不再邮件提醒
 /** 
         $adminUser = User::where("is_admin", "=", "1")->get();
@@ -1337,6 +1430,8 @@ class UserController extends BaseController
         $content = $request->getParam('content');
         $status = $request->getParam('status');
 
+        $user = $this->user;
+
         if ($content == "" || $status == "") {
             $res['ret'] = 0;
             $res['msg'] = "非法输入";
@@ -1349,6 +1444,17 @@ class UserController extends BaseController
             return $this->echoJson($response, $res);
         }
 
+        if ($user->class < 1) {
+            $res['ret'] = 0;
+            $res['msg'] = "等级 < 1，无法提交工单";
+            return $this->echoJson($response, $res);
+        }
+
+        if ($user->money < 0.1) {
+            $res['ret'] = 0;
+            $res['msg'] = "余额 < 0.1 无法提交工单";
+            return $this->echoJson($response, $res);
+        }
 
         $ticket_main = Ticket::where("id", "=", $id)->where("rootid", "=", 0)->first();
         if ($ticket_main->userid != $this->user->id) {
@@ -1413,12 +1519,20 @@ class UserController extends BaseController
         $ticket->content = $antiXss->xss_clean($content);
         $ticket->rootid = $ticket_main->id;
         $ticket->userid = $this->user->id;
+        $ticket->sort = 0;
         $ticket->datetime = time();
         $ticket_main->status = $status;
-        $ticket_main->datetime = time();
+        $ticket_main->sort += $this->user->class;
+        //$ticket_main->sort = 0;
+        // 这里可能用户会直接关闭工单，这里就不再显示用户工单了，没必要我再关闭一次。当然，也是可以我再关闭一次的
+        //$status != 0 && $ticket_main->sort += $this->user->class;
 
         $ticket_main->save();
         $ticket->save();
+
+        // 如果工单状态 != 0 就会扣除1余额
+        $status != 0 && $user->money -= 0.1;
+        $user->save();
 
 
         $res['ret'] = 1;
@@ -1440,12 +1554,30 @@ class UserController extends BaseController
             $pageNum = $request->getQueryParams()["page"];
         }
 
-
-        $ticketset = Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "desc")->paginate(5, ['*'], 'page', $pageNum);
+ 
+        $ticketset = Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
         $ticketset->setPath('/user/ticket/' . $id . "/view");
 
 
         return $this->view()->assign('ticketset', $ticketset)->assign("id", $id)->display('user/ticket_view.tpl');
+    }
+
+    public function ticket_openview($request, $response, $args)
+    {
+        $id = $args['id'];
+        $ticket_main = Ticket::where("id", "=", $id)->where('status',3)->where("rootid", "=", 0)->first();
+        
+        $pageNum = 1;
+        if (isset($request->getQueryParams()["page"])) {
+            $pageNum = $request->getQueryParams()["page"];
+        }
+
+ 
+        $ticketset = Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "asc")->paginate(15, ['*'], 'page', $pageNum);
+        $ticketset->setPath('/user/ticket/' . $id . "/openview");
+
+
+        return $this->view()->assign('ticketset', $ticketset)->assign("id", $id)->display('user/ticket_openview.tpl');
     }
 
 
@@ -1571,8 +1703,28 @@ class UserController extends BaseController
         $res['msg'] = "设置成功";
         return $this->echoJson($response, $res);
     }
+/**
+    public function updateGroup($request, $response, $args)
+    {
+        $group = $request->getParam('group');
 
+        $user = $this->user;
 
+        if ($group == "") {
+            $res['ret'] = 0;
+            $res['msg'] = "非法输入";
+            return $response->getBody()->write(json_encode($res));
+        }
+
+        $user->node_group = $group;
+        $user->save();
+
+        $res['ret'] = 1;
+        $res['msg'] = "设置成功";
+        return $this->echoJson($response, $res);
+    }
+
+**/
     public function updateMail($request, $response, $args)
     {
         $mail = $request->getParam('mail');
@@ -1644,6 +1796,28 @@ class UserController extends BaseController
         return $this->echoJson($response, $res);
     }
 
+    public function updateSubLimit($request, $response, $args)
+    {
+        $user = Auth::getUser();
+        $sub_limit = $request->getParam('sub_limit');
+
+        if ($sub_limit > ($user->class * 8 + 8)) {
+            $res['ret'] = 0;
+            $res['msg'] = "等级不够";
+            return $response->getBody()->write(json_encode($res));
+        }elseif ($sub_limit < 4) {
+            $res['ret'] = 0;
+            $res['msg'] = "节点获取设置这么少，会获取不到节点的呦";
+            return $response->getBody()->write(json_encode($res));
+        }else{
+            $user->sub_limit = $sub_limit;
+            $user->save();
+            $res['ret'] = 1;
+            return $this->echoJson($response, $res);
+        }
+
+    }
+
     public function updateMethod($request, $response, $args)
     {
         $user = Auth::getUser();
@@ -1694,6 +1868,48 @@ class UserController extends BaseController
         $res['msg'] = "设置成功，您可自由选用两种客户端来进行连接。";
         return $this->echoJson($response, $res);
     }
+
+
+    public function updateCncdn($request, $response, $args)
+    {
+        $user = Auth::getUser();
+        $cncdn = $request->getParam('cncdn');
+        $cncdn = strtolower($cncdn);
+
+        if ($cncdn == "") {
+            $res['ret'] = 0;
+            $res['msg'] = "非法输入";
+            return $response->getBody()->write(json_encode($res));
+        }
+
+        $user->cncdn = $cncdn;
+        // 在更换的时候，自动把这个数据重置为 0 ；
+        $user->cncdn_count = 0;
+        $user->save();
+
+        $res['ret'] = 1;
+        $res['msg'] = "设置成功，请客户端更新节点。";
+        return $this->echoJson($response, $res);
+    }
+
+
+    public function updateCfcdn($request, $response, $args)
+    {
+        $user = Auth::getUser();
+        $cfcdn = $request->getParam('cfcdn');
+        $cfcdn = trim($cfcdn);
+
+        //empty($cfcdn) && $cfcdn = 0;
+        $user->cfcdn = $cfcdn;
+        // 在更换的时候，自动把这个数据重置为 0 ；
+        $user->cfcdn_count = 0;
+        $user->save();
+
+        $res['ret'] = 1;
+        $res['msg'] = "优化节点自定义IP ".$user->cfcdn." 设置成功，请客户端更新节点。";
+        return $this->echoJson($response, $res);
+    }
+
 
     public function logout($request, $response, $args)
     {
@@ -1910,17 +2126,17 @@ class UserController extends BaseController
         if ($user_charge < $bought->price / 2) {
             # code...
             $user->enable = 0;
-            $user->ban_times += 3;
+            $user->ban_times += $user->class;
             #$user->pass = time();
             $user->save();
             $rs['ret'] = 0;
             $rs['msg'] = '异常申请，账号保护！';
         }else{
             $shop = Shop::where("id",$bought->shopid)->first();
-            $content = json_decode($shop->content, true);
-            $user->class = $content['class'];
+            $user->class = $shop->user_class();
+            //$user->transfer_enable = $shop->bandwidth() * 1024 * 1024 * 1024;
             $rs['ret'] = 1;
-            $rs['msg'] = '矫正VIP'.$content['class'];
+            $rs['msg'] = '套餐矫正成功';
             $user->save();
         }
 
@@ -1945,7 +2161,7 @@ class UserController extends BaseController
             $user_charge+=$code->number;
         }
 
-        if ($user_charge < 200) {
+        if ($user_charge < 230) {
             # code...
             $user->enable = 0;
             $user->ban_times += 3;
@@ -1958,6 +2174,78 @@ class UserController extends BaseController
             $rs['ret'] = 1;
             $rs['msg'] = '申请VIP10';
             $user->save();
+        }
+
+        return $response->getBody()->write(json_encode($rs));
+    }
+
+    //song reset user relevel
+    public function uptocncdn($request, $response, $args)
+    {
+
+        // send email
+        $user = Auth::getUser();
+        if ($user == null) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '此用户不存在.';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        if ($user->node_group > 2) {
+            $rs['ret'] = 1;
+            $rs['msg'] = '您已经成功申请了';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        if ($user->money < 0) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '余额小于零';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        if($user->class == 10){
+            $user->node_group = 3;
+            $rs['ret'] = 1;
+            $rs['msg'] = '尊贵的VIP10用户，申请成功，请在客户端更新节点';
+            $user->save();
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        $codes=Code::where('userid',$user->id)->get();
+        $user_charge =0;
+        foreach($codes as $code){
+            $user_charge+=$code->number;
+        }
+
+        $setcncdn = false;
+        if ($user->class == 9 && $user_charge > 76) {
+            $setcncdn = true;
+        }elseif ($user->class == 8 && $user_charge > 47) {
+            $setcncdn = true;
+        }elseif ($user->class == 7 && $user_charge > 29) {
+            $setcncdn = true;
+        }elseif ($user->class == 6 && $user_charge > 18) {
+            $setcncdn = true;
+        }elseif ($user->class == 5 && $user_charge > 11) {
+            $setcncdn = true;
+        }elseif ($user->class == 4 && $user_charge > 6) {
+            $setcncdn = true;
+        }elseif ($user->class == 3 && $user_charge > 1) {
+            $setcncdn = true;
+        }
+
+        if ($setcncdn == true ) {
+            $user->node_group = 3;
+            $rs['ret'] = 1;
+            $rs['msg'] = '申请中转加速节点成功,请在客户端更新节点';
+            $user->save();
+        }else{
+            $user->enable = 0;
+            $user->ban_times += $user->class;
+            #$user->pass = time();
+            $user->save();
+            $rs['ret'] = 0;  
+            $rs['msg'] = '异常申请，账号保护！';
         }
 
         return $response->getBody()->write(json_encode($rs));

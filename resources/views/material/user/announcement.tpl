@@ -14,7 +14,7 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-										<p class="card-heading"><a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a><a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a><a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a></p>
+										<p class="card-heading"><a href="/user/announcement" class="btn btn-brand">返回所有文章</a>&nbsp;&nbsp;&nbsp;<a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a></p>
 										<div class="card-table">
 											<div class="table-responsive">
 												<table class="table">
@@ -22,13 +22,13 @@
 														<th>ID</th>
 														<th>日期</th>
 														<th>内容</th>
-													</tr> song-->
+													</tr> -->
 													{foreach $anns as $ann}
-														<tr>
-															<!--<td>#{$ann->id}</td> 
-															<td>{$ann->date}</td> song-->
-															<td>#{$ann->id}#{$ann->date}#{$ann->content}</td>
-														</tr>
+													<tr>
+														<!--<td>#{$ann->id}</td> 
+														<td>{$ann->date}</td> song-->
+														<td>{$ann->date}&nbsp;&nbsp;<a href="/user/announcement/{$ann->id}" class="btn btn-brand">{$ann->markdown}</a><br>{$ann->content}</td>
+													</tr>
 													{/foreach}
 												</table>
 											</div>
@@ -47,6 +47,5 @@
 			</section>
 		</div>
 	</main>
-
 
 {include file='user/footer.tpl'}

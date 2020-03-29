@@ -12,7 +12,7 @@
 	<main class="content">
 		<div class="content-header ui-content-header">
 			<div class="container">
-				<h1 class="content-heading">创建工单 - 详细描述您的问题</h1>
+				<h1 class="content-heading">创建工单 - 精确描述您的问题</h1>
 			</div>
 		</div>
 		<div class="container">
@@ -23,15 +23,23 @@
 						<div class="card-main">
 							<div class="card-inner">
 								<div class="form-group form-group-label">
-									<label class="floating-label" for="title">标题 - 工单36H内回复 VIP24H内回复</label>
+									<label class="floating-label" for="title">标题 - 您的核心问题</label>
 									<input class="form-control maxwidth-edit" id="title" type="text" >
 								</div>
-								
-								
 							</div>
 						</div>
 					</div>
-					
+					<div class="card">
+						<div class="card-main">
+							<div class="card-inner">
+								<div class="form-group form-group-label">
+									<div>
+										<p><code>我是否已阅读</code><a href="/user/announcement/7" target="_blank"> 网站公告</a>？<br><code>我可以上传图片，来表现更多信息</code>><a href="https://imgchr.com/" target="_blank">点击上传免费图片</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
@@ -59,7 +67,7 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-10 col-md-push-1">
-											<button id="submit" type="submit" class="btn btn-block btn-brand">添加</button>
+											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 -1.0￥</button>
 										</div>
 									</div>
 								</div>

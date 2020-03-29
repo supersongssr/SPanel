@@ -16,6 +16,7 @@ use App\Services\Config;
 //song
 use App\Models\NodeInfoLog;
 use App\Models\TrafficLog;
+use App\Models\Cncdn;
 //song
 use App\Models\Bought;
 use App\Models\Payback;
@@ -212,6 +213,129 @@ class XCat
     public function test()
     {
 
+        //$users = User::whereColumn('id','<','class')->get();
+        $users = User::where('class','>',0)->get();
+        foreach ($users as $user) {
+            $user->u = $user->u + $user->d;
+            $user->d = 0;
+            $user->transfer_limit = $user->class * 10 * 1024 * 1024 * 1024;
+            $user->renew = 0;
+            $user->save();
+            echo $user->id.' ';
+        }
+/**
+
+            // 这里直接换算成 GB 保留两位小数
+            $today = $node->node_bandwidth - $node->node_bandwidth_lastday;
+
+            // 计算基准的流量比率 今日流量/ 30 这样计算 
+            $rate = round($today / ($node->node_bandwidth_limit / 32),2);
+            $today < 0 && $rate = 1;
+
+            if ($rate < 0.5) {
+                $node->status .= '*';
+                $node->type = 0;  
+            }
+
+            // 再加上这个基准的倍率 乘以价格 / 5 
+            $rate = round( $rate * $node->node_cost / 5 , 1);
+
+            $node->info = floor($today/1024/1024/1024) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
+            $node->info = substr($node->info, 0,32);             //截取字符串长度为128位 防止超出
+            $node->traffic_rate = $rate;
+            $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据
+            $node->save();
+            //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
+            $node_info = new NodeInfoLog();
+            $node_info->node_id = $node->id;
+            $node_info->uptime = $today * 1024*1024*1024;
+            $node_info->load = 0;
+            $node_info->log_time = time();
+            $node_info->save();
+        }
+**/
+/**
+        //将余额 小于 0 的用户，请空邀请人，收回邀请返利
+        // 选取 余额 <0  邀请人不为0 的情况
+        $users = User::where('money','<',0)->where('ref_by','!=',0)->get();
+        foreach ($users as $user) {
+            $ref_user = User::find($user->ref_by);
+            
+            //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
+            $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
+            
+            //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量 
+            $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
+            //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
+            if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
+                $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
+                //扣除邀请的流量！
+                $ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                $ref_user->save();
+                //写入返利日志
+                $Payback = new Payback();
+                #echo $user->id;
+                #echo ' ';
+                $Payback->total = -2;
+                $Payback->userid = $user->id;  //用户注册的ID 
+                $Payback->ref_by = $user->ref_by;  //邀请人ID
+                $Payback->ref_get = - $ref_payback->ref_get;
+                $Payback->datetime = time();
+                $Payback->save();
+            }
+            $user->ref_by = 0;
+            $user->enable = 0;
+            $user->save();
+            echo $user->id.' ';
+        }
+
+**/
+/**
+        $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
+        foreach ($users_nomoney as $user) {
+            $user->enable = 0;
+            $user->ban_times += 4;
+            // 其次被禁，就修改用户密码
+            if ($user->ban_times > 7) {
+                # code...
+                $user->pass = time();
+                $user->ban_times = 0;
+            }
+            $user->save();
+        }
+        **/
+/**
+        $users = User::where('id','>',10)->where('node_group','!=',4)->get();       
+        $i= 0;
+        foreach ($users as $user) {
+            if ($i < 2048) {
+                $user->node_group = 1;
+            }elseif ($i < 4096) {
+                $user->node_group = 2;
+            }elseif ($i < 6144) {
+                $user->node_group = 3;
+            }
+            if ($user->enable = 1 && $user->money >= 0 && $user->class > 2 ) {
+                $i += 1;
+            }
+            $user->save();
+            echo $user->id.'--'.$i.' - ';
+        }
+**/
+
+/**
+
+        $nodes = Node::where('id','>',9)->get();
+        foreach ($nodes as $node) {
+            $node->node_bandwidth_lastday = $node->node_bandwidth;
+            $node->save();
+            echo $node->id.' ';
+        }
+        //echo count($users);
+        
+        //echo $users;
+**/
+/**
         $users = User::where("class","=",1)->get();
         foreach ($users as $user) {
             if ($user->node_connector != 1) {
@@ -220,6 +344,7 @@ class XCat
             }
 
         }
+        **/
         /**
         $usera=User::where("class","=",6)->get();
         $userb=User::where("class","=",5)->get();
@@ -507,7 +632,9 @@ class XCat
     public function setTelegram()
     {
         $bot = new \TelegramBot\Api\BotApi(Config::get('telegram_token'));
-        if ($bot->setWebhook(Config::get('baseUrl')."/telegram_callback?token=".Config::get('telegram_request_token')) == 1) {
+        //if ($bot->setWebhook(Config::get('baseUrl')."/telegram_callback?token=".Config::get('telegram_request_token')) == 1) {
+        // 这里 网站屏蔽了 所有国外的ip，所以只能使用 ssn这个域名来访问了
+        if ($bot->setWebhook("https://ssp-ssn.freessr.bid/telegram_callback?token=".Config::get('telegram_request_token')) == 1) {
             echo("设置成功！");
         }
     }

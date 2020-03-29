@@ -15,6 +15,85 @@
 
 
 					<div class="col-xx-12 col-sm-6">
+
+						<div class="card margin-bottom-no">
+							<div class="card-main">
+								<div class="card-inner">
+									<div class="card-inner">
+										<div class="cardbtn-edit">
+												<div class="card-heading"><code>加速</code>节点入口选择</div>
+												<button class="btn btn-flat" id="cncdn-update"><span class="icon">check</span>&nbsp;</button>
+										</div>
+										<!-- <p>当前入口：<code id="ajax-user-cncdn" data-default="cncdn"></code></p> -->
+										<div class="form-group form-group-label control-highlight-custom dropdown">
+											<label class="floating-label" for="cncdn">当前入口：{$user_area}</label>
+											<button id="cncdn" class="form-control maxwidth-edit" data-toggle="dropdown" value="0">{$user_area}</button>
+											<ul class="dropdown-menu" aria-labelledby="cncdn">
+												{foreach $cncdns as $cncdn}
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="{$cncdn->areaid}" data="cncdn">{$cncdn->area}</a></li>
+												{/foreach}
+											</ul>
+										</div>
+										<p>修改后，请在客户端更新节点后，生效 <code><br>*联通 > 移动 > 电信<br>*不会选？选联通！选择后youtube测速，不满意再换</code></p>
+									</div>
+								</div>
+							</div>
+						</div>  
+
+						<div class="card margin-bottom-no">
+							<div class="card-main">
+								<div class="card-inner">
+									<div class="card-inner">
+										<div class="cardbtn-edit">
+												<div class="card-heading"><code>优化</code>节点优化IP自定义</div>
+												<button class="btn btn-flat" id="cfcdn-update"><span class="icon">check</span>&nbsp;</button>
+										</div>
+										{if $user->cfcdn}
+										<div class="form-group form-group-label">
+											<label class="floating-label" for="cfcdn">当前优化IP：(为空或0，为自动优化)</label>
+											<input class="form-control maxwidth-edit" id="cfcdn" value="{$user->cfcdn}" type="text">
+										</div>
+										{else}
+										<div class="form-group form-group-label">
+											<label class="floating-label" for="cfcdn">当前优化IP：(为空或0，为自动优化)</label>
+											<input class="form-control maxwidth-edit" id="cfcdn" value="自动优化(默认)" type="text">
+										</div>
+										{/if}
+										<p>修改后，请在客户端更新节点后，生效 <code>*此修改仅对 节点名字带有 优化字样的节点有效 <br>*为空 或者 0，变成自动优化 </code><br>*选择哪个优化ip？<a href="/user/announcement/5" target="_blank">点我参考教程</a></p>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						
+
+						<!--
+						<div class="card margin-bottom-no">
+							<div class="card-main">
+								<div class="card-inner">
+									<div class="card-inner">
+										<div class="cardbtn-edit">
+												<div class="card-heading">分组选择</div>
+												<button class="btn btn-flat" id="group-update"><span class="icon">check</span>&nbsp;</button>
+										</div>
+										<p>当前分组：<code data-default="group">{$user->node_group} 组</code>，您可以使用当前分组的节点，分组间节点不互通。 您可以自由选择分组。</p>
+										<div class="form-group form-group-label control-highlight-custom dropdown">
+											<label class="floating-label" for="group">请选择您的分组</label>
+											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
+												
+											</button>
+											<ul class="dropdown-menu" aria-labelledby="mail">
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">A: 1 组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">B: 2 组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">C: 3 组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="group">D: 4 组</a></li>
+											</ul>
+										</div>
+							        </div>
+						        </div>
+					        </div> 
+				        </div> 
+-->
 						<div class="card margin-bottom-no">
 							<div class="card-main">
 								<div class="card-inner">
@@ -48,22 +127,39 @@
 								<div class="card-inner">
 									<div class="card-inner">
 										<div class="cardbtn-edit">
-												<div class="card-heading">节点连接密码修改</div>
+												<div class="card-heading">订阅获取节点数量设置</div>
+												<button class="btn btn-flat" id="sub_limit_update"><span class="icon">check</span>&nbsp;</button>
+										</div>
+										
+										<p>当前数量：<code id="ajax-user-passwd">{$user->sub_limit}</code>；等级越高，通过订阅获取的节点数越多，您可以在这里自定义订阅获取的节点数量。</p>
+										<div class="form-group form-group-label">
+											<label class="floating-label" for="sub_limit">等级越高，订阅越多</label>
+											<input class="form-control maxwidth-edit" id="sub_limit" type="text">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+
+						<div class="card margin-bottom-no">
+							<div class="card-main">
+								<div class="card-inner">
+									<div class="card-inner">
+										<div class="cardbtn-edit">
+												<div class="card-heading">节点密码、V2ray密码修改</div>
 												<button class="btn btn-flat" id="ss-pwd-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
 										
 										<p>当前连接密码：<code id="ajax-user-passwd">{$user->passwd}</code><button class="kaobei copy-text btn btn-subscription" type="button" data-clipboard-text="{$user->passwd}">点击拷贝</button></p>
 										<div class="form-group form-group-label">
-											<label class="floating-label" for="sspwd">新连接密码</label>
+											<label class="floating-label" for="sspwd">新连接密码（修改后ss sr v2ray连接配置将会改变，请客户端更新节点）</label>
 											<input class="form-control maxwidth-edit" id="sspwd" type="text">
 										</div>
 									</div>
 								</div>
 							</div>
 						</div>
-                      
                     
-                      
 <!-- song
 
 						<div class="card margin-bottom-no">
@@ -197,11 +293,6 @@
 								</div>
 							</div>
 						</div>  
-
-
-
-
-
 -->
 
 						<div class="card margin-bottom-no">
@@ -224,11 +315,13 @@
 												{/foreach}
 											</ul>
 										</div>
-								        </div>
 							        </div>
-						        </div> 
-                            </div>
-				        </div>  
+						        </div>
+					        </div> 
+                        </div> 
+
+						
+			        </div>
 
 
 					<div class="col-xx-12 col-sm-6">
@@ -276,6 +369,43 @@
 						</div>
 
 -->
+						{if $config['port_price']>=0 || $config['port_price_specify']>=0}
+						<div class="card margin-bottom-no">
+							<div class="card-main">
+								<div class="card-inner">
+									{if $config['port_price']>=0}
+									<div class="card-inner">
+										<div class="cardbtn-edit">
+												<div class="card-heading">重置端口</div>
+												<button class="btn btn-flat" id="portreset"><span class="icon">autorenew</span>&nbsp;</button>
+										</div>
+										<p>对号码不满意？来摇号吧～！</p>
+										<p>随机更换一个端口使用，价格：<code>{$config['port_price']}</code>$/次</p>
+										<p>重置后1分钟内生效</p>
+										<p>当前端口：<code id="ajax-user-port">{$user->port}</code></p>
+									</div>
+									{/if}
+
+									{if $config['port_price_specify']>=0}
+									<div class="card-inner">
+										<div class="cardbtn-edit">
+												<div class="card-heading">钦定端口</div>
+												<button class="btn btn-flat" id="portspecify"><span class="icon">call_made</span>&nbsp;</button>
+										</div>
+										<p>不想摇号？来钦定端口吧～！</p>
+										<p>价格：<code>{$config['port_price_specify']}</code>$/次</p>
+										<p>端口范围：<code>{$config['min_port']}～{$config['max_port']}</code></p>
+										<div class="form-group form-group-label">
+											<label class="floating-label" for="port-specify">在这输入想钦定的端口号</label>
+											<input class="form-control maxwidth-edit" id="port-specify" type="num">
+										</div>
+									</div>
+									
+									{/if}
+								</div>
+							</div>
+						</div>
+						{/if}
 
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -325,44 +455,7 @@
 							</div>
 						</div>    
 
-						{if $config['port_price']>=0 || $config['port_price_specify']>=0}
-						<div class="card margin-bottom-no">
-							<div class="card-main">
-								<div class="card-inner">
-									{if $config['port_price']>=0}
-									<div class="card-inner">
-										<div class="cardbtn-edit">
-												<div class="card-heading">重置端口</div>
-												<button class="btn btn-flat" id="portreset"><span class="icon">autorenew</span>&nbsp;</button>
-										</div>
-										<p>对号码不满意？来摇号吧～！</p>
-										<p>随机更换一个端口使用，价格：<code>{$config['port_price']}</code>$/次</p>
-										<p>重置后1分钟内生效</p>
-										<p>当前端口：<code id="ajax-user-port">{$user->port}</code></p>
-									</div>
-									{/if}
-
-									{if $config['port_price_specify']>=0}
-									<div class="card-inner">
-										<div class="cardbtn-edit">
-												<div class="card-heading">钦定端口</div>
-												<button class="btn btn-flat" id="portspecify"><span class="icon">call_made</span>&nbsp;</button>
-										</div>
-										<p>不想摇号？来钦定端口吧～！</p>
-										<p>价格：<code>{$config['port_price_specify']}</code>$/次</p>
-										<p>端口范围：<code>{$config['min_port']}～{$config['max_port']}</code></p>
-										<div class="form-group form-group-label">
-											<label class="floating-label" for="port-specify">在这输入想钦定的端口号</label>
-											<input class="form-control maxwidth-edit" id="port-specify" type="num">
-										</div>
-									</div>
-									
-									{/if}
-								</div>
-							</div>
-						</div>
-						{/if}
-
+						
 						{if $config['enable_telegram'] == 'true'}
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -374,10 +467,10 @@
 												<div><a class="btn btn-flat btn-brand-accent" href="/user/telegram_reset"><span class="icon">not_interested</span>&nbsp;</a></div>
 										</div>{/if}
                                       {if $user->telegram_id == 0}
-										<p>Telegram 添加机器人账号 <a href="https://t.me/{$telegram_bot}">@{$telegram_bot}</a>，拍下下面这张二维码发给它。</p>
+										<p>Telegram 添加机器人账号 <a href="https://t.me/{$telegram_bot}">@{$telegram_bot}</a>，发送下面绑定码给对方。</p>
 										<div class="form-group form-group-label">
 											<div class="text-center">
-												<div id="telegram-qr" class="qr-center"></div>
+												<code>/bind {$bind_token}</code>
 												{elseif $user->telegram_id != 0}
 												当前绑定Telegram账户：<a href="https://t.me/{$user->im_value}">@{$user->im_value}</a>
 												{/if}
@@ -389,7 +482,6 @@
 					    </div>
 						{/if}
 					
-
 
 
 
@@ -765,6 +857,36 @@ $(".copy-text").click(function () {
     })
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("#sub_limit_update").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "sublimit",
+                dataType: "json",
+                data: {
+                    sub_limit: $("#sub_limit").val()
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+						$("#ajax-user-passwd").html($("#sspwd").val());
+						$("#msg").html("恭喜，贺喜，设定成功");
+						window.setTimeout("location.href='/user/edit'", {$config['jump_delay']});
+                    } else {
+                        $("#result").modal();
+						$("#msg").html(data.msg+"，设定失败");
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+					$("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
+
 
 <script>
     $(document).ready(function () {
@@ -824,6 +946,35 @@ $(".copy-text").click(function () {
     })
 </script>
 
+<script>
+    $(document).ready(function () {
+        $("#group-update").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "group",
+                dataType: "json",
+                data: {
+                    group: $("#group").val()
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+						window.setTimeout("location.href='/user/edit'", {$config['jump_delay']});
+                    } else {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+					$("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
+
 
 
 <script>
@@ -841,6 +992,68 @@ $(".copy-text").click(function () {
                     if (data.ret) {
                         $("#result").modal();
 						$("#msg").html("修改成功");
+                    } else {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+					$("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
+
+
+<script>
+    $(document).ready(function () {
+        $("#cncdn-update").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "cncdn",
+                dataType: "json",
+                data: {
+                    cncdn: $("#cncdn").val()
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+						window.setTimeout("location.href='/user/edit'", {$config['jump_delay']});
+                    } else {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+                    }
+                },
+                error: function (jqXHR) {
+                    $("#result").modal();
+					$("#msg").html(data.msg+"     出现了一些错误。");
+                }
+            })
+        })
+    })
+</script>
+
+
+
+
+<script>
+    $(document).ready(function () {
+        $("#cfcdn-update").click(function () {
+            $.ajax({
+                type: "POST",
+                url: "cfcdn",
+                dataType: "json",
+                data: {
+                    cfcdn: $("#cfcdn").val()
+                },
+                success: function (data) {
+                    if (data.ret) {
+                        $("#result").modal();
+						$("#msg").html(data.msg);
+						window.setTimeout("location.href='/user/edit'", {$config['jump_delay']});
                     } else {
                         $("#result").modal();
 						$("#msg").html(data.msg);

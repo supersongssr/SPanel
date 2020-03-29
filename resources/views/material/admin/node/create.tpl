@@ -42,6 +42,15 @@
 										<input class="form-control maxwidth-edit" id="rate" type="text" name="rate" value="1">
 									</div>
 
+
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="cost">节点成本</label>
+										<input class="form-control maxwidth-edit" id="cost" name="cost" type="text" value="{$node->node_cost}">
+										<p class="form-control-guide"><i class="material-icons">info</i>默认5美元，请填写节点1T流量成本价格</p>
+									</div>
+
+
 									<div class="form-group form-group-label" hidden="hidden">
 										<div class="checkbox switch">
 											<label for="custom_method">
@@ -186,6 +195,7 @@
             name: {required: true},
             method: {required: true},
             rate: {required: true},
+            cost: {required: true},
             info: {required: true},
             group: {required: true},
             status: {required: true},
@@ -225,6 +235,7 @@
                     method: $$getValue('method'),
                     custom_method,
                     rate: $$getValue('rate'),
+                    cost: $$getValue('cost'),
                     info: $$getValue('info'),
                     type,
                     group: $$getValue('group'),

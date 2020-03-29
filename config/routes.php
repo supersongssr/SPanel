@@ -142,6 +142,7 @@ $app->post('/telegram_callback', 'App\Controllers\HomeController:telegram');
 $app->post('/reactive', 'App\Controllers\AuthController:reactive');
 $app->post('/relevel', 'App\Controllers\UserController:relevel');
 $app->post('/uptopay', 'App\Controllers\UserController:uptopay');
+$app->post('/uptocncdn', 'App\Controllers\UserController:uptocncdn');
 
 
 // User Center
@@ -158,6 +159,8 @@ $app->group('/user', function () {
     $this->get('/node/{id}', 'App\Controllers\UserController:nodeInfo');
     $this->get('/node/{id}/ajax', 'App\Controllers\UserController:nodeAjax');
     $this->get('/profile', 'App\Controllers\UserController:profile');
+    $this->get('/cncdnlooking', 'App\Controllers\UserController:cncdnlooking');
+    $this->get('/cfcdnlooking', 'App\Controllers\UserController:cfcdnlooking');
     $this->get('/invite', 'App\Controllers\UserController:invite');
 
     $this->get('/detect', 'App\Controllers\UserController:detect_index');
@@ -181,6 +184,7 @@ $app->group('/user', function () {
     $this->get('/ticket/create', 'App\Controllers\UserController:ticket_create');
     $this->post('/ticket', 'App\Controllers\UserController:ticket_add');
     $this->get('/ticket/{id}/view', 'App\Controllers\UserController:ticket_view');
+    $this->get('/ticket/{id}/openview', 'App\Controllers\UserController:ticket_openview');
     $this->put('/ticket/{id}', 'App\Controllers\UserController:ticket_update');
     
     $this->post('/buy_invite', 'App\Controllers\UserController:buyInvite');
@@ -190,9 +194,13 @@ $app->group('/user', function () {
     $this->post('/wechat', 'App\Controllers\UserController:updateWechat');
     $this->post('/ssr', 'App\Controllers\UserController:updateSSR');
     $this->post('/theme', 'App\Controllers\UserController:updateTheme');
+    $this->post('/group', 'App\Controllers\UserController:updateGroup');
     $this->post('/mail', 'App\Controllers\UserController:updateMail');
     $this->post('/sspwd', 'App\Controllers\UserController:updateSsPwd');
+    $this->post('/sublimit', 'App\Controllers\UserController:updateSubLimit');
     $this->post('/method', 'App\Controllers\UserController:updateMethod');
+    $this->post('/cncdn', 'App\Controllers\UserController:updateCncdn');
+    $this->post('/cfcdn', 'App\Controllers\UserController:updateCfcdn');
     $this->post('/hide', 'App\Controllers\UserController:updateHide');
     $this->get('/sys', 'App\Controllers\UserController:sys');
     $this->get('/trafficlog', 'App\Controllers\UserController:trafficLog');
@@ -272,6 +280,7 @@ $app->group('/admin', function () {
     $this->post('/trafficlog/ajax', 'App\Controllers\AdminController:ajax_trafficLog');
     // Node Mange
     $this->get('/node', 'App\Controllers\Admin\NodeController:index');
+    $this->get('/nodectl', 'App\Controllers\Admin\NodeController:nodectl');
 
     $this->get('/node/create', 'App\Controllers\Admin\NodeController:create');
     $this->post('/node', 'App\Controllers\Admin\NodeController:add');

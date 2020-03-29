@@ -132,6 +132,7 @@
 								<div class="form-group form-group-label">
 									<label class="floating-label" for="usedTraffic">已用流量</label>
 									<input class="form-control maxwidth-edit" id="usedTraffic" type="text" value="{$edit_user->usedTraffic()}" readonly>
+									<p class="form-control-guide"><i class="material-icons">info</i>U：{$edit_user->u / 1000000000}; D:{$edit_user->d / 1000000000} ;Limit: {$edit_user->transfer_limit /1000000000}</p>
 								</div>
 							</div>
 						</div>
@@ -143,6 +144,7 @@
 								<div class="form-group form-group-label">
 									<label class="floating-label" for="auto_reset_day">自动重置流量日</label>
 									<input class="form-control maxwidth-edit" id="auto_reset_day" type="number" value="{$edit_user->auto_reset_day}">
+									<p class="form-control-guide"><i class="material-icons">info</i>resetDay:  {$edit_user->renew} Class:{$edit_user->class}</p>
 								</div>
 
 								<div class="form-group form-group-label">
