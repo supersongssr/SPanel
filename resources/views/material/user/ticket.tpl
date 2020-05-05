@@ -71,7 +71,7 @@
 						<div class="card-main">
 							<div class="card-inner">
 								<p>创建工单请点击右下角红色<code>+</code>号。</p>
-								<p>快速解决问题？请先阅读 <a href="/user/announcement/7">网站公告</a> 、 <a href="/user/announcement/1">常见问题</a><br><code>*您的工单可能被公开，如果公开工单触犯了您的隐私，请回复一次或关闭工单工单，即可关闭公开展示。</code><br>*请您注意，提交工单将扣除 1.0余额/次 回复工单将扣除 0.1余额/次，用于遏制脚本程序的工单提交，恢复正常用户的工单服务。<br><code>*我们为VIP客户提供专业的技术支持。</code>  提问的智慧：<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md"><code>*点我查看提问的智慧*</code></a></p>
+								<p>快速解决问题？请先阅读 <a href="/user/announcement/7">网站公告</a> 、 <a href="/user/announcement/1">常见问题</a><br><code>*您的工单可能被公开，如果公开工单触犯了您的隐私，请回复一次或关闭工单工单，即可关闭公开展示。</code><br>*请您注意，提交工单将扣除 0.5￥挂号费 回复工单将扣除 0.2￥就诊费，用于遏制脚本程序。<br><code>*我们为VIP客户提供专业的技术支持,工单按用户等级排队回复,高等级优先回复。</code>  提问的智慧：<a href="https://github.com/ryanhanwu/How-To-Ask-Questions-The-Smart-Way/blob/master/README-zh_CN.md"><code>*点我查看提问的智慧*</code></a></p>
 							</div>
 						</div>
 					</div>

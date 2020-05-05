@@ -134,6 +134,11 @@
 									<input class="form-control maxwidth-edit" id="usedTraffic" type="text" value="{$edit_user->usedTraffic()}" readonly>
 									<p class="form-control-guide"><i class="material-icons">info</i>U：{$edit_user->u / 1000000000}; D:{$edit_user->d / 1000000000} ;Limit: {$edit_user->transfer_limit /1000000000}</p>
 								</div>
+
+								<div class="form-group form-group-label">
+									<label class="floating-label" for="transfer_limit">流量限制</label>
+									<input class="form-control maxwidth-edit" id="transfer_limit" type="text" value="{$edit_user->transfer_limit}">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -307,6 +312,7 @@
                 group: $$getValue('group'),
                 passwd: $$getValue('passwd'),
                 transfer_enable: $$getValue('transfer_enable'),
+                transfer_limit: $$getValue('transfer_limit'),
                 invite_num: $$getValue('invite_num'),
                 node_speedlimit: $$getValue('node_speedlimit'),
                 method: $$getValue('method'),

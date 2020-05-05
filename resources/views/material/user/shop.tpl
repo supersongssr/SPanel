@@ -25,7 +25,7 @@
 							<div class="card-inner">
 								<p>商品可以叠加。时间叠加、等级、端口速率、客户端数量取最大值</p>
 								<p>购买新套餐时，系统会自动帮您关闭旧套餐的自动续费！</p>
-								<p>当前余额：<code>{$user->money}</code> 捐赠</p>
+								<p>当前余额：<code>{$user->money}</code> 捐赠  <a href="/user/code">点此前往充值余额</a></p>
 							</div>
 						</div>
 					</div>
@@ -79,9 +79,9 @@
 
 								</div>
 								<div class="shop-content">
-									<div class="shop-content-left">账号有效期:</div><div class="shop-content-right">{$shop->expire()}<span>天</span></div>
-									<div class="shop-content-left">重置周期:</div><div class="shop-content-right">{if {$shop->reset()} == '0' }N / A{else}{$shop->reset_exp()}<span>天</span>{/if}</div>
-									<div class="shop-content-left">重置频率:</div><div class="shop-content-right">{if {$shop->reset()} == '0' }N / A{else}{$shop->reset_value()}<span>G</span> / {$shop->reset()}<span>天</span>{/if}</div>
+									<div class="shop-content-left">账号 +=</div><div class="shop-content-right">{$shop->expire()}<span>天</span></div>
+									<div class="shop-content-left">等级 +=</div><div class="shop-content-right">Lv.{$shop->user_class()} & {$shop->class_expire()}<span>天</span></div>
+									<div class="shop-content-left">流量 +=</div><div class="shop-content-right">{if {$shop->reset()} == '0' }N / A{else}{$shop->reset_value()}<span>G</span> / {$shop->reset()}<span>天</span>{/if}</div>
 								</div>
 								<div class="shop-content-extra">
 									{foreach $shop->content_extra() as $service}
@@ -116,13 +116,11 @@
 						<a class="btn btn-brand-accent shop-btn" href="javascript:void(0);" onClick="buy('{$shop->id}',{$shop->auto_renew})">购买</a>
 						
 						<div class="shop-drop dropdown-area">
-							<div class="card-tag tag-black">账号有效期</div> <div class="card-tag tag-blue">{$shop->expire()} 天</div>
-							{if {$shop->reset()} == '0' }
-							<div class="card-tag tag-black">重置周期</div> <div class="card-tag tag-blue">N/A</div>
-							{else}
-							<div class="card-tag tag-black">重置周期</div> <div class="card-tag tag-blue">{$shop->reset_exp()} 天</div>
-							<div class="card-tag tag-black">重置频率</div><div class="card-tag tag-blue">{$shop->reset_value()}G/{$shop->reset()}天</div>
-							{/if}
+							<div class="card-tag tag-black">账号 +=</div> <div class="card-tag tag-blue">{$shop->expire()} 天</div>
+							
+							<div class="card-tag tag-black">等级 +=</div> <div class="card-tag tag-blue">Lv.{$shop->user_class()} & {$shop->class_expire()} 天</div>
+							<div class="card-tag tag-black">流量 +=</div><div class="card-tag tag-blue">{$shop->reset_value()}G/{$shop->reset()}天</div>
+							
 								{if {$shop->speedlimit()} == '0' }
 								<div class="card-tag tag-black">端口速率</div> <div class="card-tag tag-blue">无限制</div>
 								{else}

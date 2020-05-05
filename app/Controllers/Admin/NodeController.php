@@ -53,8 +53,9 @@ class NodeController extends AdminController
         $node->node_speedlimit = $request->getParam('node_speedlimit');
         $node->status = $request->getParam('status');
         $node->sort = $request->getParam('sort');
-        $req_node_ip = trim($request->getParam('node_ip'));
-        if($req_node_ip==""){
+        $node->node_ip=trim($request->getParam('node_ip'));
+        empty($node->node_ip) && $node->node_ip = $node->server;
+        /*if($req_node_ip==""){
             $req_node_ip=$node->server;
         }
                   
@@ -81,7 +82,7 @@ class NodeController extends AdminController
         }
         if ($node->sort==1) {
             Radius::AddNas($node->node_ip, $request->getParam('server'));
-        }
+        }*/
         $node->node_class=$request->getParam('class');
         $node->node_bandwidth_limit=$request->getParam('node_bandwidth_limit')*1024*1024*1024;
         $node->bandwidthlimit_resetday=$request->getParam('bandwidthlimit_resetday');
@@ -133,27 +134,16 @@ class NodeController extends AdminController
         $node->type = $request->getParam('type');
         $node->sort = $request->getParam('sort');
         $node->node_sort = $request->getParam('node_sort');
-        $req_node_ip=trim($request->getParam('node_ip'));
-        if($req_node_ip==""){
-            $req_node_ip=$node->server;
-        }
-        $success=true;
-        if ($node->sort == 11) {
-            //$server_list = explode("#", $node->server);
-            //if(!Tools::is_ip($server_list[0])){
-            //    $success=$node->changeNodeIp($server_list[0]);
-            //}else{
-                $success=$node->changeNodeIp($req_node_ip);
-            //}
-        } else if ($node->sort == 0 || $node->sort == 1 || $node->sort == 10){
+        $node->node_ip=trim($request->getParam('node_ip'));
+        empty($node->node_ip) && $node->node_ip = $node->server;
+        /*$success=true;
+        if ($node->sort == 0 || $node->sort == 1 || $node->sort == 10){
             //if(!Tools::is_ip($node->server)){
             //    $success=$node->changeNodeIp($node->server);
             //}else{
                 $success=$node->changeNodeIp($req_node_ip);
             //}
-        } else {
-            $node->node_ip="";
-        }       
+        }   
         if (!$success) {
             $rs['ret'] = 0;
             $rs['msg'] = "更新节点IP失败，请检查您输入的节点地址是否正确！";
@@ -162,7 +152,7 @@ class NodeController extends AdminController
         
         if ($node->sort == 0 || $node->sort == 10) {
             Tools::updateRelayRuleIp($node);
-        }
+        }*/
         if ($node->sort==1) {
             $SS_Node=Node::where('sort', '=', 0)->where('server', '=', $request->getParam('server'))->first();
             if ($SS_Node!=null) {

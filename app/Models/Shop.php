@@ -208,7 +208,7 @@ class Shop extends Model
                 case "class":
                     ## song 这里  这里用户购买的套餐等级必须大于用户等级。所以，不用担心影响。
                     $user->class=$value;     
-                    if ($value<3 || time()>strtotime($user->class_expire)) {
+                    if (time()>strtotime($user->class_expire)) {
                         # code...如果商品等级小于3 ，或者用户等级已过期 那么从当前时间加上套餐时间
                         $user->class_expire=date("Y-m-d H:i:s", time()+$content["class_expire"]*86400);
                     }else{
@@ -218,6 +218,8 @@ class Shop extends Model
                     // 这里，购买新套餐，会把相应的等级的流量，加入 transfer_limit 这个参数里。防止出现流量用超无法使用的情况
                     // 加上 每个等级 * 10 倍的流量 
                     $user->transfer_limit += $user->class * 10*1024*1024*1024;
+                    $groups=explode(",", Config::get('ramdom_group'));
+                    $user->node_group=$groups[array_rand($groups)];   // 购买套餐，会自动变成 新用户分组
                     break;
                 case "speedlimit":
                     $user->node_speedlimit=$value;          #网速值

@@ -21,20 +21,21 @@
 								<div class="card-inner">
 									<div class="card-inner">
 										<div class="cardbtn-edit">
-												<div class="card-heading"><code>加速</code>节点入口选择</div>
+												<div class="card-heading">中转加速技术 <a href="/user/cncdnlooking" >教程</a></div>
 												<button class="btn btn-flat" id="cncdn-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
 										<!-- <p>当前入口：<code id="ajax-user-cncdn" data-default="cncdn"></code></p> -->
 										<div class="form-group form-group-label control-highlight-custom dropdown">
-											<label class="floating-label" for="cncdn">当前入口：{$user_area}</label>
-											<button id="cncdn" class="form-control maxwidth-edit" data-toggle="dropdown" value="0">{$user_area}</button>
+											<label class="floating-label" for="cncdn">当前加速入口：{$user->cncdn}</label>
+											<button id="cncdn" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->cncdn}">{$user->cncdn}</button>
 											<ul class="dropdown-menu" aria-labelledby="cncdn">
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="" data="cncdn">默认稳定</a></li>
 												{foreach $cncdns as $cncdn}
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="{$cncdn->areaid}" data="cncdn">{$cncdn->area}</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="{$cncdn->area}" data="cncdn">{$cncdn->area}</a></li>
 												{/foreach}
 											</ul>
 										</div>
-										<p>修改后，请在客户端更新节点后，生效 <code><br>*联通 > 移动 > 电信<br>*不会选？选联通！选择后youtube测速，不满意再换</code></p>
+										<p><code>不会选？ 移动电信选联通 :) * 切换后，记得软件中更新节点</code></p>
 									</div>
 								</div>
 							</div>
@@ -45,21 +46,15 @@
 								<div class="card-inner">
 									<div class="card-inner">
 										<div class="cardbtn-edit">
-												<div class="card-heading"><code>优化</code>节点优化IP自定义</div>
+												<div class="card-heading">网络优化技术 <a href="/user/cfcdnlooking">教程</a></div>
 												<button class="btn btn-flat" id="cfcdn-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
-										{if $user->cfcdn}
+										
 										<div class="form-group form-group-label">
-											<label class="floating-label" for="cfcdn">当前优化IP：(为空或0，为自动优化)</label>
+											<label class="floating-label" for="cfcdn">网络优化： </label>
 											<input class="form-control maxwidth-edit" id="cfcdn" value="{$user->cfcdn}" type="text">
 										</div>
-										{else}
-										<div class="form-group form-group-label">
-											<label class="floating-label" for="cfcdn">当前优化IP：(为空或0，为自动优化)</label>
-											<input class="form-control maxwidth-edit" id="cfcdn" value="自动优化(默认)" type="text">
-										</div>
-										{/if}
-										<p>修改后，请在客户端更新节点后，生效 <code>*此修改仅对 节点名字带有 优化字样的节点有效 <br>*为空 或者 0，变成自动优化 </code><br>*选择哪个优化ip？<a href="/user/announcement/5" target="_blank">点我参考教程</a></p>
+										<p><code>*选择延迟最低的ip填入，可以优化网络。*修改后无法联网？请留空！</code></p>
 									</div>
 								</div>
 							</div>

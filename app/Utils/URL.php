@@ -120,7 +120,7 @@ class URL
             $node_explode = explode('#', $v2ray_node->node_ip); // sever -> node_ip song
             $docs = [
                 //"name" => $v2ray_node->name.' '.$v2ray_node->node_class.'|'.$v2ray_node->traffic_rate.'|'.($v2ray_node->node_oncost * 20).'%',
-                "name" => $v2ray_node->name.' '.$v2ray_node->traffic_rate.'|'.($v2ray_node->node_oncost*10).'% #'.$v2ray_node->id,
+                "name" => $v2ray_node->name.' '.$v2ray_node->traffic_rate.'#'.$v2ray_node->id.'|'.($v2ray_node->node_oncost*100).'%',
                 "type" => "vmess",
                 "server" => $v2ray_node->server,//song -> server
                 "port" => $node_explode[1],
@@ -357,23 +357,23 @@ class URL
         ];
         $node_warm = '';
 
-        //增加 CNCDN自选节点功能
+        //增加 cncdn 自选 和 cfcdn网络优化
         $node_server = $node->server;
-        if ($user->cncdn) {
-            $cncdn = Cncdn::where('status','=','1')->where('server','=',$node->server)->where('areaid','=',$user->cncdn)->first();
-            if (!empty($cncdn->cdnip)) {
-                $node_server = $cncdn->cdnip;
+        if ($user->cncdn && $node->sort == 12) {
+            $cdn_server = strstr($node_server, '.');
+            $cdn_server = substr($cdn_server, 1);
+            $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
+            if (!empty($cncdn->ipmd5)) {
+                $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
             }
-        }
-
-        // 增加 cfcdn自选节点功能
-        if ($user->cfcdn && $node->server == 'cf.cfcn.xyz') {
+        }elseif ($user->cfcdn) {
             $node_server = $user->cfcdn;
         }
 
-        //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
+        $node_warm = Config::get("appName");
+        $node->node_class < 2 && $node_warm .= '|公益节点';
         //$item['ps'] = $node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm;
-        $item['ps'] = $node->name.' '.$node->traffic_rate.'|'.($node->node_oncost*10).'% #'.$node->id;
+        $item['ps'] = $node->name.'#'.$node->id.'|等级'.$node->node_class.'|倍率'.$node->traffic_rate.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
         $item['add'] = $node_server;// addn ->server song 
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
@@ -441,34 +441,44 @@ class URL
     public static function getIOSV2Url($user, $node){
         $node_explode = explode('#', $node->node_ip);//server ->node_ip song 
 
-        //增加 CNCDN自选节点功能
+        //增加 cncdn 自选 和 cfcdn网络优化
         $node_server = $node->server;
-        if ($user->cncdn != '0' ) {
-            $cncdn = Cncdn::where('status','=','1')->where('server','=',$node->server)->where('areaid','=',$user->cncdn)->first();
-            if (!empty($cncdn->cdnip)) {
-                $node_server = $cncdn->cdnip;
+        if ($user->cncdn && $node->sort == 12) {
+            $cdn_server = strstr($node_server, '.');
+            $cdn_server = substr($cdn_server, 1);
+            $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
+            if (!empty($cncdn->ipmd5)) {
+                $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
             }
-        }
-
-        // 增加 cfcdn自选节点功能
-        if ($user->cfcdn && $node->server == 'cf.cfcn.xyz') {
+        }elseif ($user->cfcdn) {
             $node_server = $user->cfcdn;
         }
 
         $item = 'auto:'.(empty($node_explode[2]) ? $user->getUuid() : $node_explode[2]).'@'.$node_server.':'.$node_explode[1];
-        $node_warm = '';
+        $node_warm = Config::get("appName");
+        $node->node_class < 2 && $node_warm .= '|公益节点';
         //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
 
         //$item = base64_encode($item).'?remarks='.urlencode($node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
-        $item = base64_encode($item).'?remarks='.urlencode($node->name.' '.$node->traffic_rate.'|'.($node->node_oncost*10).'% #'.$node->id).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
+        $item = base64_encode($item).'?remarks='.urlencode($node->name.'#'.$node->id.'|等级'.$node->node_class.'|倍率'.$node->traffic_rate.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
         return "vmess://".$item;
     }
 
     public static function getAllVMessUrl($user, $arrout = 0) {
         if ($user->is_admin) {
-            $nodes = Node::where('sort', 11)->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
+            $nodes = Node::where(
+                function ($query) {
+                    $query->where('sort', 11)
+                        ->orwhere('sort', 12);
+                }
+            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
         }else{
-            $nodes = Node::where('sort', 11)->where(
+            $nodes = Node::where(
+                function ($query) {
+                    $query->where('sort', 11)
+                        ->orwhere('sort', 12);
+                }
+            )->where(
                 function ($query) use ($user){
                     $query->where("node_group", "=", $user->node_group)
                         ->orWhere("node_group", "=", 0);
@@ -492,9 +502,19 @@ class URL
 
     public static function getIOSVMessUrl($user) {
         if ($user->is_admin) {
-            $nodes = Node::where('sort', 11)->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
+            $nodes = Node::where(
+                function ($query) {
+                    $query->where('sort', 11)
+                        ->orwhere('sort', 12);
+                }
+            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
         }else{
-            $nodes = Node::where('sort', 11)->where(
+            $nodes = Node::where(
+                function ($query) {
+                    $query->where('sort', 11)
+                        ->orwhere('sort', 12);
+                }
+            )->where(
                 function ($query) use ($user){
                     $query->where("node_group", "=", $user->node_group)
                         ->orWhere("node_group", "=", 0);
@@ -709,10 +729,11 @@ class URL
         $return_array['port'] = $user->port;
         $return_array['passwd'] = $user->passwd;
         $return_array['method'] = $user->method;
-        $node_warm = '';
+        $node_warm = Config::get("appName");
+        $node->node_class < 2 && $node_warm .= '|公益节点';
         //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
         //$return_array['remark'] = $node_name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 100).'%'.$node_warm;
-        $return_array['remark'] = $node_name.' '.$node->traffic_rate.'|'.($node->node_oncost*10).'% #'.$node->id;
+        $return_array['remark'] = $node->name.'#'.$node->id.'|等级'.$node->node_class.'|倍率'.$node->traffic_rate.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;

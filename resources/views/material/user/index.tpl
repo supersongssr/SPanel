@@ -439,7 +439,7 @@
 																<a class="" data-toggle="tab" href="#all_v2_mac"><i class="icon icon-lg">laptop_mac</i>&nbsp;MacOS</a>
 															</li>
 															<li>
-																<a class="" data-toggle="tab" href="#all_v2ray_info"><i class="icon icon-lg">info_outline</i>&nbsp;连接信息</a>
+																<a class="" data-toggle="tab" href="#all_v2ray_info"><i class="icon icon-lg">info_outline</i>&nbsp;API、Clash、Quanx、SurF</a>
 															</li>
 														</ul>
 													</nav>
@@ -458,7 +458,7 @@
 														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：点击任意节点→点击上方小火箭图标/或者开启连接；<small>*如遇到提示是否允许小火箭使用代理，点击ALLOW*</small>打开浏览器上网；</p>
 														<p><span class="icon icon-lg text-white">filter_4</span>图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement/4">点击查看图文教程</a></p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 小火箭专用订阅</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" id="v2sub" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=5">复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" id="v2sub" readonly value="{$subUrl}{$ssr_sub_token}?mu=5" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=5">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_android">
 														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="https://github.com/2dust/v2rayNG/releases/download/1.1.15/v2rayNG_1.1.15.apk" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V2rayNG</a>→安装</p>
@@ -471,21 +471,42 @@
 													<div class="tab-pane fade" id="all_v2_mac">
 														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="https://github.com/yanue/V2rayU/releases/download/2.0.0/V2rayU.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 点击下载 V2rayU</a>→在<code>安装界面</code>将<code>v2rayU</code>拖到<code>Applications</code>文件夹→打开启动台，找到v2rayU→点击启动；<small>*首次打开会有安全提示，点击 好*</small></p>
 														<p><span class="icon icon-lg text-white">filter_2</span>订阅节点：右键状态栏v2rayU图标→订阅设置/Subscribe→URL/地址:<code>{$subUrl}{$ssr_sub_token}?mu=2</code>→remark/备注：<code>{$config["appName"]}</code>→add/添加 →update servers/更新；获取节点</p>
-														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：随意选择节点→右键任务栏图标→GlobalMode/全局模式→Turn V2ray-Core:On → 打开浏览器使用</p>
+														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：随意选择节点→右键任务栏图标→GlobalMode/全局模式→Turn V2ray-Core:On → 打开浏览器使用（重点：加速节点和优化节点，请编辑节点，复制 host地址，粘贴到 tls servername处，保存即可正常使用节点。）</p>
 														<p><span class="icon icon-lg text-white">filter_4</span> 图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement">点击查看图文教程</a></p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_info">
-														{$v2_url_all = URL::getAllVMessUrl($user)}
-														<p><a class="copy-text btn-dl" data-clipboard-text="{$v2_url_all}"><i class="material-icons icon-sm">how_to_vote</i>点击这里复制全部 VMess 链接</a></p>
-														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
+														<div><a class='btn' href="https://sub.cfssr.xyz" target="_blank">点此前往 官方API转换地址 sub.cfssr.xyz：</a> </div>
+														<br>
+														<div><span class="icon icon-lg text-white">flash_auto</span> Clash订阅：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://api.cfssr.xyz/sub?target=clash&url={$subUrl}{$ssr_sub_token}?mu=2&scv=true" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://api.cfssr.xyz/sub?target=clash&url={$subUrl}{$ssr_sub_token}?mu=2&scv=true">
+															点击复制
+														</button>
+														</div>
+														<br>
+														<div><span class="icon icon-lg text-white">flash_auto</span> Quan-X订阅：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://api.cfssr.xyz/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true&list=true" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://api.cfssr.xyz/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true&list=true">
+															点击复制
+														</button>
+														</div>
+														<br>
+														<div><span class="icon icon-lg text-white">flash_auto</span> Surfboard订阅：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://api.cfssr.xyz/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://api.cfssr.xyz/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true">
+															点击复制
+														</button>
+														</div>
+														<br>
+														<div><span class="icon icon-lg text-white">flash_auto</span> 默认V2ray订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true" />
 														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">
 															点击复制
 														</button>
-														<br>
 														</div>
+														<br>
 													</div>
 												</div>
 											</div>
@@ -701,7 +722,11 @@
 
 
 
-
+{if empty($user->cncdn)}
+<script>
+alert("请设置您的 中转加速入口 加速您的网络 ");  
+</script>
+{/if}
 
 
 

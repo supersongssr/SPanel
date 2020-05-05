@@ -67,7 +67,7 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-10 col-md-push-1">
-											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 -1.0￥</button>
+											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 -0.5￥挂号费</button>
 										</div>
 									</div>
 								</div>

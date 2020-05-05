@@ -22,12 +22,13 @@
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
-								<p>系统中您的购买记录。<br><small>*套餐和当前显示不准？系统会自动选择最近一条购买记录的等级来矫正您的套餐。</small><br><small>*一旦您点击矫正，如果您的正常充值金额不足以购买当前套餐，您的账号会启动异常保护！ ———— 您的账号会被禁(您可以自助解封)！</small></p>
+								<p>系统中您的购买记录。<br><small>*账户当前的：等级Lv{$user->class},流量:{$user->transfer_enable},速度:{$user->node_speedlimit},设备:{$user->node_connector}</small><br><small>*点击矫正后：等级Lv{$rebought['class']},流量:{$rebought['bandwidth']},速度:{$rebought['speedlimit']},设备:{$rebought['connector']}</small><br><small>*对比一下，别手贱乱点，出问题工单处理麻烦！</small></p>
+								<p><code>*流量信息： 已用流量 {floor(($user->u + $user->d)/1024/1024/1024)}G / {floor($user->transfer_enable / 1024/1024/1024)}G ； 您在最近 {$user->renew * 10} 天内，使用了 {floor($user->d / 1024/1024/1024)}G （ 超过{floor($user->transfer_limit / 1024/1024/1024)}G 等级自动降低 ，提醒用户使用低倍率节点）；  </code></p> 
 							</div>
 						</div>
 						
 						<div class="card-inner">
-							<button id="relevel" type="submit" class="btn btn-block btn-brand ">等级矫正</button>
+							<button id="relevel" type="submit" class="btn btn-block btn-brand ">套餐矫正</button>
 						</div>
 						
 					</div>
@@ -45,6 +46,7 @@
 												<th>商品名称</th>
 												<th>内容</th>
 												<th>价格</th>
+												<th>购买时间</th>
 												<th>续费时间</th>
 												<th>续费时重置流量</th>
 												<th>操作</th>
@@ -57,6 +59,7 @@
 												<td>{$shop->shop()->name}</td>
 												<td>{$shop->shop()->content()}</td>
 												<td>{$shop->price} $</td>
+												<td>{date('Y-m-d' ,$shop->datetime)}</td>
 												{if $shop->renew==0}
 												<td>不自动续费</td>
 												{else}

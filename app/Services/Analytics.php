@@ -180,7 +180,7 @@ class Analytics
 
     public function getOncostVIPGroupNode($vip,$group)
     {
-        return round(Node::where("type","=",1)->where('node_class','=',$vip)->where("node_group","=",$group)->sum('node_oncost') , 1);
+        return Node::where("type","=",1)->where('node_class','=',$vip)->where("node_group","=",$group)->sum('node_oncost');
     }
 
     

@@ -13,7 +13,7 @@
 						<div class="card">
 							<div class="card-main">
 								<div class="card-inner">
-									<p>您由于某些原因而被系统禁用了账户。</p>
+									<p>您被系统启用了账户保护。</p>
 									<p>
 										可能原因如下：
 										<br>1、账号长期未使用，需要重新激活。
@@ -21,19 +21,15 @@
 										<br>3、账号流量异常，启用账号保护。
 										<br>4、账号ip数异常，启用账号保护。
 										<br>5、您的账号余额 < 0，被系统自动禁用。
-										<br>6、其他违反注册协议的行为。
+										<br>6、其他违反注册协议的行为，疑似被盗。
 									</p>
-									{if $config["enable_admin_contact"] == 'true'}
-										<p>管理员联系方式：</p>
-										{if $config["admin_contact1"]!=null}
-										<li>{$config["admin_contact1"]}</li>
-										{/if}
-										{if $config["admin_contact2"]!=null}
-										<li>{$config["admin_contact2"]}</li>
-										{/if}
-										{if $config["admin_contact3"]!=null}
-										<li>{$config["admin_contact3"]}</li>
-										{/if}
+									<p>您可以自助解除账号保护</p>
+									<p><small>*您当前累计账号保护积分为 {$user->ban_times}， 当积分超过16分，系统会强制要求您验证账号！</small></p>
+									{if $user->money < 0}
+									<li> 您的余额小于 0 ，请尽快补充余额 > 0，以保障用户正常可用</li>
+									{/if}
+									{if $user->d > $user->transfer_limit}
+									<li> 您在 {$user->renew * 10}天内使用了 {ceil($user->d / 1024/1024)}M 下行流量，建议您在 {$user->renew * 10}天内使用下行流量不要超过 {floor($user->transfer_limit / 1024/1024)}M ；如果您有大流量需求，建议您使用低倍率节点！ 网站禁止滥用网站资源。 如果在正常使用下需求更多流量，请提交工单申请</li>
 									{/if}
 								</div>
 							</div>
@@ -46,7 +42,7 @@
 								</div>
 							</div>
 							<div class="btn-auth auth-row">
-								<button id="reactive" type="submit" class="btn btn-block btn-brand waves-attach waves-light">解封账号</button>
+								<button id="reactive" type="submit" class="btn btn-block btn-brand waves-attach waves-light">取消账户保护</button>
 							</div>
 						</div>
 					</div>

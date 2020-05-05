@@ -21,14 +21,33 @@
                         <div class="card-main">
                             <div class="card-inner">
                                 <div class="card-inner">
-                                    <p class="card-heading">注意!注意!购买流程：进入下面发卡网站 - 付款 - 获取捐赠码(卡密) - 本页面充值 - 商店购买商品；<br>注意！如捐赠码失效，请提交工单获取技术支持。</p>
+                                    <div class="cardbtn-edit">
+                                            <div class="card-heading">充值码在这里充值余额</div>
+                                            <button class="btn btn-flat" id="code-update" ><span class="icon">favorite_border</span></button>
+                                    </div>
+                                    <div class="form-group form-group-label">
+                                        <label class="floating-label" for="code">充值码填入这里可以充值余额</label>
+                                        <input class="form-control maxwidth-edit" id="code" type="text">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-12 col-md-12">
+                    <div class="card margin-bottom-no">
+                        <div class="card-main">
+                            <div class="card-inner">
+                                <div class="card-inner">
+                                    <p class="card-heading">购买充值码：。</p>
                                       <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
                                       <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
                                       <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
                                         重要的事情说三遍<br>
                                   </p>
                                         <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p>
-                                    {if $config["enable_admin_contact"] == 'true'}
+                                    <!-- {if $config["enable_admin_contact"] == 'true'}
                                         <p class="card-heading">如果没有到账请立刻提交工单or联系管理员：</p>
                                         {if $config["admin_contact1"]!=null}
                                             <li>{$config["admin_contact1"]}</li>
@@ -40,7 +59,7 @@
                                             <li>{$config["admin_contact3"]}</li>
                                         {/if}
                                     {/if}
-                                    <br/>
+                                    <br/> -->
                                     <p><i class="icon icon-lg">attach_money</i>当前余额：<font color="#399AF2" size="5">{$user->money}</font> 捐赠</p>
                                 </div>
                             </div>
@@ -61,25 +80,8 @@
                     </div>
                 {/if}
 
-                <div class="col-lg-12 col-md-12">
-                    <div class="card margin-bottom-no">
-                        <div class="card-main">
-                            <div class="card-inner">
-                                <div class="card-inner">
-                                    <div class="cardbtn-edit">
-											<div class="card-heading">充值码在这里充值余额</div>
-											<button class="btn btn-flat" id="code-update" ><span class="icon">favorite_border</span></button>
-									</div>
-                                    <div class="form-group form-group-label">
-                                        <label class="floating-label" for="code">充值码填入这里可以充值余额</label>
-                                        <input class="form-control maxwidth-edit" id="code" type="text">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                
+<!-- 
                 <div class="col-lg-12 col-md-12">
                     <div class="card margin-bottom-no">
                         <div class="card-main">
@@ -98,14 +100,14 @@
                         </div>
                     </div>
                 </div>
-
+-->
                 <div class="col-lg-12 col-md-12">
                     <div class="card margin-bottom-no">
                         <div class="card-main">
                             <div class="card-inner">
                                 <div class="card-inner">
-                                    <p class="card-heading">Azure 600M VIP10</p>
-                                    <p>此页面累计充值满233，您可以申请 VIP10 Azure 600M节点。 <br>我们提供免费的VIP10专属的 Azure 600M节点供充值用户使用。<br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满223而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
+                                    <p class="card-heading">VIP10</p>
+                                    <p>此页面累计充值满233，您可以申请 VIP10 。 <br>我们提供免费的VIP10专属的 Azure 600M节点供充值用户使用。<br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满223而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
                                 </div>
                                 <div class="card-inner">
                                     <button id="uptopay" type="submit" class="btn btn-block btn-brand ">申请VIP10 Azure 600M节点</button>

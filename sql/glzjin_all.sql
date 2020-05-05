@@ -724,8 +724,10 @@ CREATE TABLE IF NOT EXISTS `cncdn` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `area` varchar(128) NOT NULL COMMENT '地区',
   `areaid` varchar(128) NOT NULL COMMENT '地区的编号',
-  `server` varchar(64) NOT NULL COMMENT '域名',
-  `cdnip` varchar(128) NOT NULL COMMENT 'CDN地区的ip',
+  `server` varchar(64) NOT NULL COMMENT 'cdn域名',
+  `cdnip` varchar(64) NOT NULL COMMENT 'CDN地区的ip',
+  `ipmd5` varchar(64) NOT NULL COMMENT 'ip的md5值，方便做域名解析',
+  `host` varchar(64) NOT NULL COMMENT '解析的域名',
   `show` int(11) NOT NULL Default '1' COMMENT '是否用户页面展示',
   `status` int(11) NOT NULL Default '1' COMMENT '是否启用 1为启用 0为不启用',
   primary key (id)
@@ -755,3 +757,10 @@ ALTER TABLE `user` ADD `transfer_limit` BIGINT(20) DEFAULT '1073741824' COMMENT 
 # node 增加 到期时间 和 节点的 排序选项，按照错误的次数排序 这个还是可以的。因为倍率可能变得不再重要了。 因为倍率变稳定了。
 ALTER TABLE `ss_node` ADD `node_sort` INT(11) DEFAULT '0' COMMENT '节点故障排序' AFTER `node_oncost`;
 ALTER TABLE `ss_node` ADD `node_date` INT(11) DEFAULT '0' COMMENT '节点到期时间 ' AFTER `node_sort`;
+
+
+# user 增加用户打分表 score ，用来判断用户是否会被清理掉
+ALTER TABLE `user` ADD `score` INT(8) DEFAULT '0' COMMENT '用户打分' AFTER `ref_by`;
+
+#增加 CNCDN选项
+ALTER TABLE `ss_node` ADD `cncdn` TINYINT(4) AFTER `server`;

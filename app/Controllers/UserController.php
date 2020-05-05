@@ -841,19 +841,17 @@ class UserController extends BaseController
         $cncdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->paginate(25, ['*'], 'page', $pageNum);
         $cncdns->setPath('/user/cncdnlooking');
         **/
-        $cncdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->limit('100')->get();
-
+        $cncdns = Cncdn::where('status',1)->where('show',1)->get();
+        $usercdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->limit('100')->get();
 
         $iplocation = new QQWry();
 
-        foreach ($cncdns as $cncdn) {
-            $location = $iplocation->getlocation($cncdn->rss_ip);
-            $cncdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
-            $area = Cncdn::where('areaid','=',$cncdn->cncdn)->where('status','=',1)->first();
-            $cncdn->area = $area->area;
+        foreach ($usercdns as $usercdn) {
+            $location = $iplocation->getlocation($usercdn->rss_ip);
+            $usercdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
         }
 
-        return $this->view()->assign("cncdns", $cncdns)->display('user/cncdnlooking.tpl');
+        return $this->view()->assign("user", $this->user)->assign("cncdns", $cncdns)->assign("usercdns", $usercdns)->display('user/cncdnlooking.tpl');
     }
 
     public function cfcdnlooking($request, $response, $args)
@@ -876,7 +874,7 @@ class UserController extends BaseController
             $cfcdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
         }
 
-        return $this->view()->assign("cfcdns", $cfcdns)->display('user/cfcdnlooking.tpl');
+        return $this->view()->assign("user", $this->user)->assign("cfcdns", $cfcdns)->display('user/cfcdnlooking.tpl');
     }
 
 
@@ -915,12 +913,12 @@ class UserController extends BaseController
         //增加一个cdn的选项
         $cncdns = Cncdn::where('status',1)->where('show',1)->get();
         
-        $user = $this->user;
+       /* $user = $this->user;
         //$user_area = '自动优化(默认)';
         //if ($user->cncdn != 0) {
             $usercncdn = Cncdn::where('status','=',1)->where('areaid','=',$user->cncdn)->first();
             $user_area = $usercncdn->area;
-        //}
+        //}*/
         
         $BIP = BlockIp::where("ip", $_SERVER["REMOTE_ADDR"])->first();
         if ($BIP == null) {
@@ -956,9 +954,19 @@ class UserController extends BaseController
         if (!$paybacks_sum = Payback::where("ref_by", $this->user->id)->sum('ref_get')) {
             $paybacks_sum = 0;
         }
+        if (!$aff_paybacks_sum = Payback::where('total','<',0)->where("ref_by", $this->user->id)->sum('ref_get')) {
+            $aff_paybacks_sum = 0;
+        }
+        if (!$ref_paybacks_sum = Payback::where('total','>',0)->where("ref_by", $this->user->id)->sum('ref_get')) {
+            $ref_paybacks_sum = 0;
+        }
+        $user = $this->user;
+        $good_user = User::where('ref_by','=',$this->user->id)->where('score','>=',32)->count();
+        $bad_user = User::where('ref_by','=',$this->user->id)->where('score','<',32)->count();
+
         $paybacks->setPath('/user/invite');
 
-        return $this->view()->assign('code', $code)->assign('paybacks', $paybacks)->assign('paybacks_sum', $paybacks_sum)->display('user/invite.tpl');
+        return $this->view()->assign('code', $code)->assign('paybacks', $paybacks)->assign('paybacks_sum', $paybacks_sum)->assign('aff_paybacks_sum', $aff_paybacks_sum)->assign('ref_paybacks_sum', $ref_paybacks_sum)->assign('user', $user)->assign('good_user', $good_user)->assign('bad_user', $bad_user)->display('user/invite.tpl');
     }
 
     public function buyInvite($request, $response, $args)
@@ -1096,7 +1104,7 @@ class UserController extends BaseController
 
     public function shop($request, $response, $args)
     {
-        $shops = Shop::where("status", 1)->orderBy("price")->get();
+        $shops = Shop::where("status", 1)->orderBy("price",'asc')->get();
         return $this->view()->assign('shops', $shops)->display('user/shop.tpl');
     }
 
@@ -1217,21 +1225,21 @@ class UserController extends BaseController
         $price = $shop->price * ((100 - $credit) / 100);
         $user = $this->user;
 
-        // 这里进行判定，如果用户充值金额 < 套餐*0.1 的话，说明用户充值的太少了，就限制一下
+/*        // 这里进行判定，如果用户充值金额 < 套餐*0.1 的话，说明用户充值的太少了，就限制一下
         if ($shop->price > 1) {
             $codes=Code::where('userid',$user->id)->get();
             $user_charge =0;
             foreach($codes as $code){
                 $user_charge+=$code->number;
             }
-            if ($user_charge < $shop->price * 0.1) {
+            if ($user_charge < $shop->price * 0.2) {
                 $user->ban_times += 3;
                 $user->save();
                 $res['ret'] = 0;
-                $res['msg'] = "亲，充值满 ".$shop->price * 0.1 ." ￥就能购买本套餐了";
+                $res['msg'] = "亲，累计充值满 ".ceil($shop->price * 0.2 )." ￥就能购买本套餐了";
                 return $response->getBody()->write(json_encode($res));
             }
-        }
+        }*/
 
         //song 这里价格进行优惠
         //if (in_array($usernameSuffix[1], $eduSupport)) {
@@ -1304,8 +1312,31 @@ class UserController extends BaseController
         }
         $shops = Bought::where("userid", $this->user->id)->orderBy("id", "desc")->paginate(15, ['*'], 'page', $pageNum);
         $shops->setPath('/user/bought');
+        $user = Auth::getUser();
 
-        return $this->view()->assign('shops', $shops)->display('user/bought.tpl');
+        $boughts = Bought::where("userid", $user->id)->orderBy("id", "desc")->get();
+        $rebought['class'] = 0; // 等级
+        $rebought['bandwidth'] = 0; //流量
+        $rebought['speedlimit'] = 0; //限速
+        $rebought['connector'] = 0; //设备数
+        if (!empty($boughts)) {
+            foreach ($boughts as $bought) {
+                $shop = Shop::where("id",$bought->shopid)->first();
+                if ( ($bought->datetime + $shop->class_expire()*24*3600) > time() ) {  //套餐未过期的话 矫正等级
+                    $rebought['class'] < $shop->user_class() && $rebought['class'] = $shop->user_class(); // 等级
+                }
+                $rebought['bandwidth'] += $shop->bandwidth() ;  // 流量叠加
+                $rebought['speedlimit'] < $shop->speedlimit() && $rebought['speedlimit'] = $shop->speedlimit() ; //限速取最大值
+                $rebought['connector'] < $shop->connector() && $rebought['connector'] = $shop->connector() ;  // 连接数取最大值
+            }
+        }
+        $rebought['class'] < $user->class && $rebought['class'] = $user->class;
+        $rebought['bandwidth'] = $rebought['bandwidth'] * 1024 * 1024 * 1024;
+        $rebought['bandwidth'] < $user->transfer_enable && $rebought['bandwidth'] = $user->transfer_enable;
+        $rebought['speedlimit'] < $user->node_speedlimit && $rebought['speedlimit'] = $user->node_speedlimit;
+        $rebought['connector'] < $user->node_connector && $rebought['connector'] = $user->node_connector;
+
+        return $this->view()->assign('shops', $shops)->assign('user', $user)->assign('rebought', $rebought)->display('user/bought.tpl');
     }
 
     public function deleteBoughtGet($request, $response, $args)
@@ -1399,8 +1430,8 @@ class UserController extends BaseController
         $ticket->sort += $this->user->class;
         $ticket->save();
 
-        // 每个新工单扣除1元余额
-        $user->money -= 1;
+        // 每个新工单扣除0.7元余额
+        $user->money -= 0.7;
         $user->save();
         //新工单不再邮件提醒
 /** 
@@ -1530,8 +1561,8 @@ class UserController extends BaseController
         $ticket_main->save();
         $ticket->save();
 
-        // 如果工单状态 != 0 就会扣除1余额
-        $status != 0 && $user->money -= 0.1;
+        // 如果工单状态 != 0 就会扣除 0.2 余额
+        $status != 0 && $user->money -= 0.2;
         $user->save();
 
 
@@ -1899,14 +1930,17 @@ class UserController extends BaseController
         $cfcdn = $request->getParam('cfcdn');
         $cfcdn = trim($cfcdn);
 
-        //empty($cfcdn) && $cfcdn = 0;
-        $user->cfcdn = $cfcdn;
+        if (filter_var($cfcdn, FILTER_VALIDATE_IP)) {
+            $user->cfcdn = $cfcdn;
+        }else{
+            $user->cfcdn = '';
+        }
         // 在更换的时候，自动把这个数据重置为 0 ；
         $user->cfcdn_count = 0;
         $user->save();
 
         $res['ret'] = 1;
-        $res['msg'] = "优化节点自定义IP ".$user->cfcdn." 设置成功，请客户端更新节点。";
+        $res['msg'] = "直连优化IP ".$user->cfcdn." 设置成功，请客户端更新节点。";
         return $this->echoJson($response, $res);
     }
 
@@ -2034,7 +2068,8 @@ class UserController extends BaseController
 
     public function disable($request, $response, $args)
     {
-        return $this->view()->display('user/disable.tpl');
+        $user = $this->user;
+        return $this->view()->assign('user', $user)->display('user/disable.tpl');
     }
 
     public function telegram_reset($request, $response, $args)
@@ -2109,49 +2144,55 @@ class UserController extends BaseController
 
         // send email
         $user = Auth::getUser();
-        if ($user == null) {
+
+        $boughts = Bought::where("userid", $user->id)->orderBy("id", "desc")->get();
+        $class = 0; // 等级
+        $bandwidth = 0; //流量
+        $speedlimit = 0; //限速
+        $connector = 3; //设备数
+
+        if (empty($boughts)) {
             $rs['ret'] = 0;
-            $rs['msg'] = '此邮箱不存在.';
+            $rs['msg'] = '似乎您没有购买套餐呢';
             return $response->getBody()->write(json_encode($rs));
         }
 
-        $codes=Code::where('userid',$user->id)->get();
-        $user_charge =0;
-        foreach($codes as $code){
-            $user_charge+=$code->number;
-        }
-
-        $bought = Bought::where("userid", $user->id)->orderBy("id", "desc")->first();
-
-        if ($user_charge < $bought->price / 2) {
-            # code...
-            $user->enable = 0;
-            $user->ban_times += $user->class;
-            #$user->pass = time();
-            $user->save();
-            $rs['ret'] = 0;
-            $rs['msg'] = '异常申请，账号保护！';
-        }else{
+        foreach ($boughts as $bought) {
             $shop = Shop::where("id",$bought->shopid)->first();
-            $user->class = $shop->user_class();
-            //$user->transfer_enable = $shop->bandwidth() * 1024 * 1024 * 1024;
-            $rs['ret'] = 1;
-            $rs['msg'] = '套餐矫正成功';
-            $user->save();
+            if ( ($bought->datetime + $shop->class_expire()*24*3600) > time() ) {  //套餐未过期的话 矫正等级
+                $class < $shop->user_class() && $class = $shop->user_class(); // 等级
+            }
+            $bandwidth += $shop->bandwidth() ;  // 流量叠加
+            $speedlimit < $shop->speedlimit() && $speedlimit = $shop->speedlimit() ; //限速取最大值
+            $connector < $shop->connector() && $connector = $shop->connector() ;  // 连接数取最大值
         }
 
+        $user->class < $class && $user->class = $class ;
+        $user->transfer_enable < $bandwidth*1024*1024*1024 && $user->transfer_enable = $bandwidth*1024*1024*1024;
+        $user->node_speedlimit < $speedlimit && $user->node_speedlimit = $speedlimit;
+        $user->node_connector < $connector && $user->node_connector = $connector;
+
+        $rs['ret'] = 1;
+        $rs['msg'] = '套餐矫正成功';
+        $user->save();
+        
         return $response->getBody()->write(json_encode($rs));
     }
 
     //song reset user relevel
     public function uptopay($request, $response, $args)
     {
-
         // send email
         $user = Auth::getUser();
         if ($user == null) {
             $rs['ret'] = 0;
-            $rs['msg'] = '此用户不存在.';
+            $rs['msg'] = '此用户不存在';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        if ($user->class < 5) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '您需要至少购买一个年付套餐';
             return $response->getBody()->write(json_encode($rs));
         }
 

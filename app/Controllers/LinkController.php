@@ -10,6 +10,8 @@ use App\Models\Smartline;
 use App\Utils\ConfRender;
 use App\Utils\Tools;
 use App\Utils\URL;
+#song 
+use App\Utils\QQWry;
 
 /**
  *  HomeController
@@ -69,10 +71,19 @@ class LinkController extends BaseController
         }
 
         //上传用户订阅ip
-        $user->rss_ip = $_SERVER["REMOTE_ADDR"];
-        $user->cncdn && $user->cncdn_count += 1;
-        !empty($user->cfcdn) && $user->cfcdn_count += 1;
-        $user->save();
+        $iplocation = new QQWry();
+        $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
+        //对字符的编码进行一次格式化，编码不同可能影响到判断
+        $location['area'] = iconv('gbk', 'utf-8//IGNORE', $location['area']);
+        $location['country'] = iconv('gbk', 'utf-8//IGNORE', $location['country']);
+        // 这里的 location['area'] 获取到的其实是 联通 电信 移动等网络
+        if (in_array($location['area'], ['移动','电信','联通'])) {
+            # code...
+            $user->rss_ip = $_SERVER["REMOTE_ADDR"];
+            $user->cncdn && $user->cncdn_count += 1;
+            $user->cfcdn && $user->cfcdn_count += 1;
+            $user->save();
+        }
 
         $mu = 0;
         if (isset($request->getQueryParams()['mu'])) {

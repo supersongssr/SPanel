@@ -22,10 +22,9 @@
 										<p>对方将获得<code>{$config["invite_get_money"]}</code>$奖励作为初始资金。</p>
 										<p>对方充值时您还会获得对方充值金额的 <code>{$config["code_payback"]} %</code> 的返利。</p>
 										<p>对方邀请的用户充值时您还会获得金额的 <code>{$config["code_payback"] / 2 }%</code> 的返利。</p>
-										<p><small>*滥用邀请，返利可能被收回！请确保您邀请到真实的好友！</small></p>
-										<p><small>*被邀请用户使用 低倍率流量 - 高倍率流量 < 8G ，系统可能会收回返利！
-											<br><small>*倍率 > 2的节点产生的流量 为 高倍率流量，反之为低倍率流量。</small></small></p>
-										<p class="card-heading">已获得返利：<code>{$paybacks_sum}</code> $ ;。</p>
+										<p><small>* 满足邀请注册奖励 6$余额的条件： score = (user_used_days - ban_times) / 10 > 3.2 </small>
+										<br><small>* score=用户使用积分 user_used_day=用户使用天数 ban_times=用户封禁次数 </small><br><small>* 我当前的使用积分score = {$user->score / 10} *如果 score小于3.2 您的邀请人可能得不到 邀请注册返利</small></p>
+										<p class="card-heading">已获得返利：{$paybacks_sum}$ <code>* 邀请奖励为 {$aff_paybacks_sum}$ , 消费返利为 {$ref_paybacks_sum}$ , 有 {$good_user}人满足邀请奖励标准 , 有 {$bad_user}人还未达到邀请奖励标准</code></p>
 									</div>
 
 								</div>

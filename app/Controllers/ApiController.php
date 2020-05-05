@@ -218,13 +218,18 @@ class ApiController extends BaseController
         $id = $args['id'];
         $id < 9 && exit;  //ID 64以下是没有 V2节点的
         $node = Node::find($id);
-        $addn = explode('#', $node->node_ip);
-        empty($addn['1']) && exit;  //如果ip判断为空，那么就退出脚本 防止错写
-        $v2 = $request->getParam('v2');
-        $s1 = $request->getParam('s1');
         //写入节点数据 状态 流量
-        $node->sort == 0  && !empty($s1) && $node->node_ip = $s1;
-        $node->sort == 11 && !empty($v2) && $node->node_ip = $v2;
+        !empty($request->getParam('name')) && $node->name = $request->getParam('name');
+        !empty($request->getParam('server')) && $node->server = $request->getParam('server');
+        !empty($request->getParam('node_ip')) && $node->node_ip = $request->getParam('node_ip');
+        !empty($request->getParam('node_status')) && $node->status = $request->getParam('node_status');
+        !empty($request->getParam('node_class')) && $node->node_class = $request->getParam('node_class');
+        !empty($request->getParam('node_group')) && $node->node_group = $request->getParam('node_group');
+        !empty($request->getParam('node_cost')) && $node->node_cost = $request->getParam('node_cost');
+        !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
+        !empty($request->getParam('node_bandwidth_limit')) && $node->node_bandwidth_limit = $request->getParam('node_bandwidth_limit')*1024*1024*1024;
+        !empty($request->getParam('bandwidthlimit_resetday')) && $node->bandwidthlimit_resetday = $request->getParam('bandwidthlimit_resetday');
+        $node->node_sort=0;   // 故障排序设置为0 
         $node->save();
     }
 }

@@ -221,7 +221,8 @@ class Job
             // 这里直接换算成 GB 保留两位小数
             $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
             // 如果 today < 8G 就会要求在一个数值上 +1  
-            if ($traffic_today < 8*1024*1024*1024) {
+            //这里取绝对值， 代表如果是负数的话，也不用担心。
+            if (abs($traffic_today) < 8*1024*1024*1024) {
                 $node->node_sort += 1;
                 $node->type = 0;  
             }
@@ -281,10 +282,22 @@ class Job
             $user->enable = 0;
             $user->ban_times += $user->class;
             $user->ban_times > 16 && $user->pass = time();
+            $user->score -= 1;   //用户积分 - 1
             $user->save();
         }
         // 这里也就意味着放弃了，余额小于 0 的用户，将没有那个流量重置周期。 永远没有的意思。 用超了就是用超了
 
+        //把所有的 renew 累加 周期到了的用户，重置流量限制  
+        $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('renew','>','class')->get();
+        foreach ($users as $user) {
+            // 先重置流量数据
+            $user->u = $user->u + $user->d;
+            $user->d = 0;
+            // 再重置每日流量数据
+            $user->transfer_limit = $user->class *10*1024*1024*1024;
+            $user->renew = 0;
+            $user->save();
+        }
 
         // 这里把 每个用户的应该有的流量给叠加上。这个
         // 这里只选取 等级大于0的用户  ，enable 为1的用户。 
@@ -293,8 +306,8 @@ class Job
             // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
             //$user->last_day_t=($user->u+$user->d);
             $user->renew += 0.1;
-            $user->transfer_limit += 3*1024*1024*1024;
-            $user->last_day_t=$user->d;
+            $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
+            $user->last_day_t = $user->d;     // 重置每日流量统计
             $user->save();
 /** song
             if (date("d") == $user->auto_reset_day) {
@@ -315,55 +328,30 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                **/
+**/
         }
 
-        //把所有的 renew 累加 周期到了的用户，重置流量限制
-        $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('renew','>','class')->get();
-        foreach ($users as $user) {
-            // 先重置流量数据
-            $user->u = $user->u + $user->d;
-            $user->d = 0;
-            // 再重置每日流量数据
-            $user->transfer_limit = $user->class *10*1024*1024*1024;
-            $user->renew = 0;
-        }
-
-        // 总流量使用超限的，禁用掉
+        // 总流量使用超限的，扣一分   同时发配到 1组去 那里没有流量限制
         $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
         foreach ($users as $user) {
-            // 禁用这些用户
-            $user->enable = 0;
-            $user->ban_times += 1;
-            $user->ban_times > 16 && $user->pass = time();
+            // 积分 - 1
+            $user->score -= 1;
+            $user->node_group != 1 && $user->node_group = 1;  // 把流量超限的用户 发配到1组去。 1组提供很多流量很便宜的节点。
+            $user->class > 1 && $user->class -= 1; // 流量用超的用户，等级降低1 . 这个不错的想法。可以保障用户的等级在降低 节点会变少。
             $user->save();
         }
 
-        // 单日超过 16G禁用掉
-        $users = User::where('enable','=',1)->where('d','>', 16*1024*1024*1024)->where('is_edu','=','0')->where('class','>',1)->get();
+        # 用户每使用1天 增加1 积分 ; 所有流量用超的不加分
+        $time_last24hours = time() - 24*3600;
+        $users = User::where('enable','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
         foreach ($users as $user) {
-            if ($user->d - $user->last_day_t > 32*1024*1024*1024) {
-                $user->enable = 0;
-                $user->ban_times += 1;
-                $user->ban_times > 16 && $user->pass = time();
-                $user->save();
-            }
+            $user->score += 1; // 积分加1 
+            $user->save();
         }
-
-        // EDU 单日超过 8G 禁用掉
-        $users = User::where('enable','=',1)->where('d','>', 8*1024*1024*1024)->where('is_edu','=','1')->where('class','>',1)->get();
-        foreach ($users as $user) {
-            if ($user->d - $user->last_day_t > 16*1024*1024*1024) {
-                $user->enable = 0;
-                $user->ban_times += 1;
-                $user->ban_times > 16 && $user->pass = time();
-                $user->save();
-            }
-        }
-        
+       
         //将余额 小于 0 的用户，请空邀请人，收回邀请返利
-        // 选取 余额 <0  邀请人不为0 的情况
-        $users = User::where('money','<',0)->where('ref_by','!=',0)->get();
+        // 选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 16才行
+        $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',32)->get();  // 使用积分小于 32 且 money 小于 0 会被清理 
         foreach ($users as $user) {
             $ref_user = User::find($user->ref_by);
             //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
@@ -624,7 +612,7 @@ class Job
         Ip::where("datetime", "<", time()-300)->delete();
         UnblockIp::where("datetime", "<", time()-300)->delete();
         BlockIp::where("datetime", "<", time()-86400)->delete();
-        TelegramSession::where("datetime", "<", time()-900)->delete();
+        TelegramSession::where("datetime", "<", time()-3600)->delete();
 
         $adminUser = User::where("is_admin", "=", "1")->get();
                 
@@ -983,7 +971,7 @@ class Job
                 //$used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
                 //$used_data = floor( ($user->u + $user->d) / 1073741824 );
 
-                if ($user->ref_by != 0 ) {
+                if ($user->ref_by != 0 && $user->score < 32) {  //存在邀请，且用户 使用积分 < 32 
                     # code...
                     $ref_user = User::find($user->ref_by);
                     //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利

@@ -182,6 +182,7 @@ class UserController extends AdminController
         $user->obfs_param = $request->getParam('obfs_param');
         $user->is_multi_user = $request->getParam('is_multi_user');
         $user->transfer_enable = Tools::toGB($request->getParam('transfer_enable'));
+        $user->transfer_limit = $request->getParam('transfer_limit');
         $user->invite_num = $request->getParam('invite_num');
         $user->method = $request->getParam('method');
         $user->node_speedlimit = $request->getParam('node_speedlimit');
@@ -217,12 +218,8 @@ class UserController extends AdminController
 
         $email1=$user->email;
 
-                # code...
-        //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
-        $used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
-        $used_data = floor( ($user->u + $user->d) / 1073741824 );
-
-        if ($user->ref_by != 0 && ( ($used_time + $used_data) < 128 )) {
+        # code...
+        if ($user->ref_by != 0 && $user->score < 32) {
             # code...
             $ref_user = User::find($user->ref_by);
             //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
