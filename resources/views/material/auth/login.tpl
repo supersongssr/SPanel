@@ -138,11 +138,11 @@
 {include file='dialog.tpl'}
 
 {include file='footer.tpl'}
-<!-- 
+
 <script>
   alert("书签 \n家： {$config["appName"]} \n{$config["admin_contact1"]} \n{$config["admin_contact2"]} \n{$config["admin_contact3"]}");
 </script>  
--->
+
 </div>
 {literal}
 <script>

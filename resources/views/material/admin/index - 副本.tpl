@@ -117,7 +117,6 @@
 											<th>3</th>
 											<th>2</th>
 											<th>1</th>
-											<th>0</th>
 										</tr>
 										<tr>
 											<td>Usr</td>
@@ -132,7 +131,6 @@
 											<td>{$sts->getVIPUser(3)}</td>
 											<td>{$sts->getVIPUser(2)}</td>
 											<td>{$sts->getVIPUser(1)}</td>
-											<td>{$sts->getVIPUser(0)}</td>
 										</tr>
 										<tr>
 											<td>ALL</td>
@@ -147,7 +145,6 @@
 											<td>{$sts->getCostVIPNode(3)}|{$sts->getVIPLiveUser(3)}</td>
 											<td>{$sts->getCostVIPNode(2)}|{$sts->getVIPLiveUser(2)}</td>
 											<td>{$sts->getCostVIPNode(1)}|{$sts->getVIPLiveUser(1)}</td>
-											<td>{$sts->getCostVIPNode(0)}|{$sts->getVIPLiveUser(0)}</td>
 										</tr>
 										<tr>
 											<td>1组</td>
@@ -162,7 +159,6 @@
 											<td>{$sts->getCostVIPGroupNode(3,1)}|{$sts->getVIPGroupLiveUser(3,1)}</td>
 											<td>{$sts->getCostVIPGroupNode(2,1)}|{$sts->getVIPGroupLiveUser(2,1)}</td>
 											<td>{$sts->getCostVIPGroupNode(1,1)}|{$sts->getVIPGroupLiveUser(1,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(0,1)}|{$sts->getVIPGroupLiveUser(0,1)}</td>
 										</tr>
 										<tr>
 											<td>2组</td>
@@ -177,7 +173,6 @@
 											<td>{$sts->getCostVIPGroupNode(3,2)}|{$sts->getVIPGroupLiveUser(3,2)}</td>
 											<td>{$sts->getCostVIPGroupNode(2,2)}|{$sts->getVIPGroupLiveUser(2,2)}</td>
 											<td>{$sts->getCostVIPGroupNode(1,2)}|{$sts->getVIPGroupLiveUser(1,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(0,2)}|{$sts->getVIPGroupLiveUser(0,2)}</td>
 										</tr>
 										<tr>
 											<td>3组</td>
@@ -192,7 +187,6 @@
 											<td>{$sts->getCostVIPGroupNode(3,3)}|{$sts->getVIPGroupLiveUser(3,3)}</td>
 											<td>{$sts->getCostVIPGroupNode(2,3)}|{$sts->getVIPGroupLiveUser(2,3)}</td>
 											<td>{$sts->getCostVIPGroupNode(1,3)}|{$sts->getVIPGroupLiveUser(1,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(0,3)}|{$sts->getVIPGroupLiveUser(0,3)}</td>
 										</tr>
 										<tr>
 											<td>4组</td>
@@ -207,7 +201,6 @@
 											<td>{$sts->getCostVIPGroupNode(3,4)}|{$sts->getVIPGroupLiveUser(3,4)}</td>
 											<td>{$sts->getCostVIPGroupNode(2,4)}|{$sts->getVIPGroupLiveUser(2,4)}</td>
 											<td>{$sts->getCostVIPGroupNode(1,4)}|{$sts->getVIPGroupLiveUser(1,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(0,4)}|{$sts->getVIPGroupLiveUser(0,4)}</td>
 										</tr>
 
 										<tr>
@@ -223,7 +216,6 @@
 											<td>{$sts->getCostVIPGroupNode(3,5)}|{$sts->getVIPGroupLiveUser(3,5)}</td>
 											<td>{$sts->getCostVIPGroupNode(2,5)}|{$sts->getVIPGroupLiveUser(2,5)}</td>
 											<td>{$sts->getCostVIPGroupNode(1,5)}|{$sts->getVIPGroupLiveUser(1,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(0,5)}|{$sts->getVIPGroupLiveUser(0,5)}</td>
 										</tr>
 										
 									</table>

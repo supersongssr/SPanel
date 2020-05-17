@@ -441,7 +441,7 @@ class Job
 
     public static function CheckJob()
     {
-        //在线人数检测
+        /*//在线人数检测
         $users = User::where('node_connector', '>', 0)->get();
 
         $full_alive_ips = Ip::where("datetime", ">=", time()-60)->orderBy("ip")->get();
@@ -492,8 +492,8 @@ class Job
                     }
                 }
             }
-        }
-
+        }*/
+/*
         //解封
         $disconnecteds = Disconnect::where("datetime", "<", time()-300)->get();
         foreach ($disconnecteds as $disconnected) {
@@ -541,7 +541,7 @@ class Job
                 $subject = Config::get('appName')."-续费失败";
                     $to = $user->email;
                     $text = "您好，系统为您自动续费商品时，发现该商品已被下架，为能继续正常使用，建议您登录用户面板购买新的商品。" ;
-                    /** song 
+                    song 
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -550,7 +550,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
-                    **/
+                    
                 continue;
             }
             if ($user->money >= $shop->price) {    
@@ -572,7 +572,7 @@ class Job
                 $subject = Config::get('appName')."-续费成功";
                 $to = $user->email;
                 $text = "您好，系统已经为您自动续费，商品名：".$shop->name.",金额:".$shop->price." 元。" ;
-                /**
+                
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -581,7 +581,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                **/
+                
 
                 if (file_exists(BASE_PATH."/storage/".$bought->id.".renew")) {
                     unlink(BASE_PATH."/storage/".$bought->id.".renew");
@@ -591,8 +591,7 @@ class Job
                     $subject = Config::get('appName')."-续费失败";
                     $to = $user->email;
                     $text = "您好，系统为您自动续费商品名：".$shop->name.",金额:".$shop->price." 元 时，发现您余额不足，请及时充值。充值后请稍等系统便会自动为您续费。" ;
-                    /**
-                    try {
+                                        try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
                         ], [
@@ -600,7 +599,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
-                    **/
+                    
                     $myfile = fopen(BASE_PATH."/storage/".$bought->id.".renew", "w+") or die("Unable to open file!");
                     $txt = "1";
                     fwrite($myfile, $txt);
@@ -608,14 +607,14 @@ class Job
                 }
             }
         }
-
+*/
         Ip::where("datetime", "<", time()-300)->delete();
         UnblockIp::where("datetime", "<", time()-300)->delete();
         BlockIp::where("datetime", "<", time()-86400)->delete();
         TelegramSession::where("datetime", "<", time()-3600)->delete();
-
+/*  
         $adminUser = User::where("is_admin", "=", "1")->get();
-                
+              
         //节点掉线检测
         if (Config::get("enable_detect_offline")=="true") {
             $nodes = Node::all();
@@ -627,7 +626,7 @@ class Job
                         $subject = Config::get('appName')."-系统警告";
                         $to = $user->email;
                         $text = "管理员您好，系统发现节点 ".$node->name." 掉线了，请您及时处理。" ;
-                        /**
+                        
                         try {
                             Mail::send($to, $subject, 'news/warn.tpl', [
                                 "user" => $user,"text" => $text
@@ -636,7 +635,7 @@ class Job
                         } catch (\Exception $e) {
                             echo $e->getMessage();
                         }
-                        **/
+                       
 
                         if (Config::get('enable_cloudxns')=='true' && ($node->sort==0 || $node->sort==10)) {
                             $api=new Api();
@@ -692,7 +691,7 @@ class Job
                     $subject = Config::get('appName')."-系统提示";
                     $to = $user->email;
                     $text = "管理员您好，系统发现节点 ".$node->name." 恢复上线了。" ;
-                    /**
+                    
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -701,7 +700,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
-                    **/
+                    
 
                     if (Config::get('enable_cloudxns')=='true'&& ($node->sort==0 || $node->sort==10)) {
                         $api=new Api();
@@ -739,9 +738,9 @@ class Job
                 }
             }
         }
-
+*/
         
-
+/*
         //登录地检测
         if (Config::get("login_warn")=="true") {
             $iplocation = new QQWry();
@@ -782,7 +781,19 @@ class Job
             }
         }
 
-        $delusers = User::orderBy('id', 'desc')->get();
+*/
+        
+        // 将即将到期的用户的等级重置为 0 
+        $timeNow = date("Y-m-d H:i:s", time() );
+        $classOverUsers = User::where('class','>',0)->where('class_expire','<', $timeNow);
+        foreach ($classOverUsers as $user) {
+            $user->class = 0;
+            echo ' resetUserClass-'.$user->id;
+            $user->save();
+        }
+
+        //要删除的用户，只是1级的，这样比较好一些。 而且使用时间也要有要求
+        $delusers = User::where('class','<',1)->orderBy('id', 'desc')->get();
         foreach ($delusers as $user) {
             if (($user->transfer_enable<=$user->u+$user->d||$user->enable==0||(strtotime($user->expire_in)<time()&&strtotime($user->expire_in)>644447105))&&RadiusBan::where("userid", $user->id)->first()==null) {
                 $rb=new RadiusBan();
@@ -792,7 +803,7 @@ class Job
             }
 
             if (strtotime($user->expire_in) < time()&&!file_exists(BASE_PATH."/storage/".$user->id.".expire_in")) {
-                /** song 用户过期
+                /* song 用户过期
                 $user->transfer_enable = 0;
                 $user->u = 0;
                 $user->d = 0;
@@ -809,7 +820,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                **/
+                */
                 $myfile = fopen(BASE_PATH."/storage/".$user->id.".expire_in", "w+") or die("Unable to open file!");
                 $txt = "1";
                 fwrite($myfile, $txt);
@@ -819,7 +830,7 @@ class Job
                 unlink(BASE_PATH."/storage/".$user->id.".expire_in");
             }
 
-
+/*
             //余量不足检测
             if(!file_exists(BASE_PATH."/storage/traffic_notified/")){
                 mkdir(BASE_PATH."/storage/traffic_notified/");
@@ -864,12 +875,12 @@ class Job
                     }
                 }
             }
-
+*/
             if ($user->class != 0 && 
                 strtotime($user->class_expire)<time()
             ){
 
-  /**              //Song  账号过期不通知
+  /*             //Song  账号过期不通知
                 $text = '您好，系统发现您的账号等级已经过期了。';
                 $reset_traffic=Config::get('class_expire_reset_traffic');
                 if($reset_traffic>=0){
@@ -889,7 +900,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-**/
+*/
                 $user->class = 0;
             }
 
@@ -901,7 +912,7 @@ class Job
             ) {
                 # 如果当前时间 - 过期时间 大于 用户余额的话， 1块钱=30天，所以：1元 = 2592000
                 # 如果过期 x 个月，且余额小于 1元=30 
-                /**
+                /*
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
@@ -914,7 +925,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                **/
+                */
                 $iskilluser = true;  // 这里加个参数是否kill user 
                 //$user->kill_user();
                 //continue;
@@ -970,7 +981,7 @@ class Job
                 //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
                 //$used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
                 //$used_data = floor( ($user->u + $user->d) / 1073741824 );
-
+                echo ' deluser-'.$user->id;
                 if ($user->ref_by != 0 && $user->score < 32) {  //存在邀请，且用户 使用积分 < 32 
                     # code...
                     $ref_user = User::find($user->ref_by);

@@ -23,7 +23,7 @@
 						<div class="card-main">
 							<div class="card-inner">
 								<p>系统中您的购买记录。<br><small>*账户当前的：等级Lv{$user->class},流量:{$user->transfer_enable},速度:{$user->node_speedlimit},设备:{$user->node_connector}</small><br><small>*点击矫正后：等级Lv{$rebought['class']},流量:{$rebought['bandwidth']},速度:{$rebought['speedlimit']},设备:{$rebought['connector']}</small><br><small>*对比一下，别手贱乱点，出问题工单处理麻烦！</small></p>
-								<p><code>*流量信息： 已用流量 {floor(($user->u + $user->d)/1024/1024/1024)}G / {floor($user->transfer_enable / 1024/1024/1024)}G ； 您在最近 {$user->renew * 10} 天内，使用了 {floor($user->d / 1024/1024/1024)}G （ 超过{floor($user->transfer_limit / 1024/1024/1024)}G 等级自动降低 ，提醒用户使用低倍率节点）；  </code></p> 
+								<p><code>*流量信息： 已用流量 {floor(($user->u + $user->d)/1024/1024/1024)}G / {floor($user->transfer_enable / 1024/1024/1024)}G ； 您在最近 {$user->renew * 10} 天内，使用了 {floor($user->d / 1024/1024/1024)}G 流量 {if $user->d > $user->transfer_limit }（ 超过{floor($user->transfer_limit / 1024/1024/1024)}G 等级自动降低 ，提醒使用低倍率节点）{/if}  </code></p> 
 							</div>
 						</div>
 						

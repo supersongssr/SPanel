@@ -19,6 +19,7 @@ $System_Config['debug'] =  'false';								//正式环境请确保为 false
 $System_Config['appName'] = 'www.abc.xyz';							//站点名称
 $System_Config['baseUrl'] = 'https://abc.xyz';					//站点地址
 $System_Config['subUrl'] = 'https://rss.abc.xyz/link/';	//订阅地址，如需和站点名称相同，请不要修改
+$System_Config['payUrl'] = 'https://pay.abc.xyz/link/';	//pay支付用的
 $System_Config['muKey'] = 'glzjin';								//用于校验ss-go mu的请求，可以随意修改，但请保持前后端一致
 $System_Config['db_driver'] = 'mysql';							//数据库程序
 $System_Config['db_host'] = '123.123.123.123';						//数据库地址
@@ -103,7 +104,8 @@ $System_Config['checkinMax'] = '5120';			//用户签到最多流量
 $System_Config['auto_clean_uncheck_days']='32';	//自动清理多少天没签到的0级用户，小于等于0时关闭
 $System_Config['auto_clean_unused_days']='32';	//自动清理多少天没使用的0级用户，小于等于0时关闭
 $System_Config['auto_clean_min_money']='1';		//余额低于多少的0级用户可以被清理
-$System_Config['code_payback']='16';			//充值返利百分比
+$System_Config['code_payback']='10';			//充值返利百分比
+$System_Config['code_payback_too']='5';			//邀请用户再返利 100%比值
 $System_Config['invite_gift']='64';				//邀请新用户获得流量奖励，单位G
 $System_Config['node_get_limit']='32';				//用户限制获取的节点数量
 
@@ -167,8 +169,12 @@ $System_Config['enable_checkin_captcha'] = 'false';	//启用签到验证码
 
 
 //支付系统设置----------------------------------------------------------------------------------------
-#取值 none | codepay | trimepay | f2fpay | yftpay | chenAlipay | paymentwall | spay
+#取值 none | codepay | trimepay | f2fpay | yftpay | chenAlipay | paymentwall | spay | paytaro
 $System_Config['payment_system']='none';
+
+# paytaro 参数 
+$System_Config['paytaro_app_id'] = 'vOc1odjdFs';
+$System_Config['paytaro_app_secret'] = 'aa57b6c5a67ecbc5133d3bc7b4f8cbac';
 
 #codepay码支付
 #wiki地址:https://goo.gl/dRwRDi  http://t.cn/RnsWjtB

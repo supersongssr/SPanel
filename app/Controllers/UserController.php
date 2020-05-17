@@ -272,6 +272,22 @@ class UserController extends BaseController
                 $Payback->ref_get = $codeq->number * (Config::get('code_payback') / 100);
                 $Payback->datetime = time();
                 $Payback->save();
+
+                // 二级返利
+                if ($gift_user->ref_by != 0 && $gift_user->ref_by != null) {
+                    $gift_user2 = User::where("id", "=", $gift_user->ref_by)->first();
+                    $gift_user2->money += ($codeq->number * (Config::get('code_payback2') / 100));
+                    $gift_user2->save();
+
+                    //写入返利日志
+                    $Payback = new Payback();
+                    $Payback->total = $codeq->number;
+                    $Payback->userid = $gitf_user->id;
+                    $Payback->ref_by = $gitf_user->ref_by;
+                    $Payback->ref_get = $codeq->number * (Config::get('code_payback2') / 100);
+                    $Payback->datetime = time();
+                    $Payback->save();
+                }
             }
 
             $res['ret'] = 1;

@@ -13,7 +13,7 @@
 					{$ticketset->render()}
 					{foreach $ticketset as $ticket}
 					<div class="card">
-						<aside class="card-side pull-left"><img alt="alt text for John Smith avatar" src="{$ticket->User()->gravatar}"></span></br>{$ticket->User()->user_name}</aside>
+						<aside class="card-side pull-left"><img alt="alt text for John Smith avatar" src="{$ticket->User()->gravatar}"></span></br><a href="/admin/user/{$ticket->userid}/edit" target="_blank">{$ticket->User()->user_name}</a> </aside>
 						<div class="card-main">
 							<div class="card-inner">
 								{if $ticket->rootid == 0}

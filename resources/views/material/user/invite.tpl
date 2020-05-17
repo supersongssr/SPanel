@@ -17,14 +17,14 @@
 									<div class="card-inner">
 										<p class="card-heading">说明</p>
 										<p>您每邀请1位好友注册：</p>
-										<p>您会获得<code>6 $</code>余额奖励。</p>
+										<p>您会获得<code>{$config["invite_gift_money"]} ￥</code>余额奖励。</p>
 										<p>您会获得<code>{$config["invite_gift"]} G</code>流量奖励。</p>
-										<p>对方将获得<code>{$config["invite_get_money"]}</code>$奖励作为初始资金。</p>
+										<p>对方将获得<code>{$config["invite_get_money"]}</code>￥奖励作为初始资金。</p>
 										<p>对方充值时您还会获得对方充值金额的 <code>{$config["code_payback"]} %</code> 的返利。</p>
-										<p>对方邀请的用户充值时您还会获得金额的 <code>{$config["code_payback"] / 2 }%</code> 的返利。</p>
-										<p><small>* 满足邀请注册奖励 6$余额的条件： score = (user_used_days - ban_times) / 10 > 3.2 </small>
-										<br><small>* score=用户使用积分 user_used_day=用户使用天数 ban_times=用户封禁次数 </small><br><small>* 我当前的使用积分score = {$user->score / 10} *如果 score小于3.2 您的邀请人可能得不到 邀请注册返利</small></p>
-										<p class="card-heading">已获得返利：{$paybacks_sum}$ <code>* 邀请奖励为 {$aff_paybacks_sum}$ , 消费返利为 {$ref_paybacks_sum}$ , 有 {$good_user}人满足邀请奖励标准 , 有 {$bad_user}人还未达到邀请奖励标准</code></p>
+										<p>对方邀请的用户充值时您还会获得金额的 <code>{$config["code_payback2"]}%</code> 的返利。</p>
+										<p><small>* 满足邀请注册奖励{$config["invite_gift_money"]} ￥余额的条件： score = (user_used_days - ban_times) / 10 > 3.2 </small>
+										<br><small>* score=用户使用积分 user_used_day=用户使用天数 ban_times=用户封禁次数 </small><br><small>* 我当前的使用积分score = {$user->score / 10} </small></p>
+										<p class="card-heading">已获得返利：{$paybacks_sum}￥ <br><small><code>* 邀请奖励为 {$aff_paybacks_sum}￥ , 消费返利为 {$ref_paybacks_sum}￥ , 有 {$good_user}人满足邀请奖励标准 , 有 {$bad_user}人还未达到邀请奖励标准</code></small></p>
 									</div>
 
 								</div>

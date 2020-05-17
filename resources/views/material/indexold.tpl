@@ -4,9 +4,9 @@
 	html5up.net | @ajlkn
 	Free for personal and commercial use under the CCA 3.0 license (html5up.net/license)
 -->
-{if $config['appName'] == '跑路'}
+<!-- {if $config['appName'] == '跑路'}
 <script>window.location.href='{$config["baseUrl"]}/paolu.html';</script>
-{/if}
+{/if} -->
 <html>
 	<head>
 		<title>{$config["appName"]}</title>
@@ -61,14 +61,11 @@
                               <div class="content">
 							<div class="inner">
 								<h1>{$config["appName"]}</h1>
-                              	<p>支持：<code>V.2</code><code>S$</code><code>S$D</code><code>S$R</code><code>S$RR</code>
-                              		<br>
-								公告：注册送<code>32G</code>流量，<code>32</code>次邀请码，免费网速<code>1-3M</code>带宽，捐赠用户网速<code>10Mbps-100Mbps</code>
+								公告：注册送<code>32G</code>流量，<code>0.66￥</code>余额，<code>32</code>次邀请码，免费网速<code>1-10M</code>带宽，捐赠用户网速<code>16Mbps-1000Mbps</code>
 								<br>
-								全球<code>300+</code>节点，<code>25Gbps</code>带宽，BGP CN2 HKBN PWWC NTT多线接入, 解锁 NetFlix HULU HBO
+								全球<code>500+</code>节点，<code>50Gbps</code>总带宽，BGP CN2 HKBN PWWC NTT多线接入, 解锁 NetFlix HULU HBO
 								<br>
-								邀请好友返利<code>{$config["invite_gift_money"]}$</code>/用户+<code>{$config["code_payback"]}%</code>消费提成+<code>{$config["invite_gift"]}G</code>流量
-								签到送<code>1-5G</code>流量/天
+								推广返利:<code>{$config["invite_gift_money"]}￥</code>金额+<code>{$config["code_payback"]}%</code>提成+<code>{$config["invite_gift"]}G</code>流量+<code>{$config["code_payback2"]}%</code>二级提成+<code>1-8G</code>每天签到流量
 
 								<p>公益站点，节约账号资源，浪费可耻:)</p>
 								<!--
@@ -92,7 +89,7 @@
                       <!--标签1开始-->
                       <article id="1">
                       <h2 class="major">简介</h2>
-                      <p>我变秃了，也变强了。<br>本站支持SS、SSD、SSR、SSRR、V2Ray同时使用。<br>本站提供超多节点和G口带宽。<br>本站现已服务超3万用户，安全高速上网。<br>请节约账号资源，浪费可耻。</p></article>
+                      <p>我变秃了，也变强了。<br>首家免费V2ray服务，支持SS SR V2Ray。<br>提供百+节点和G口带宽。<br>所有捐赠全部用于网站建设，非营利站点。<br>请节约账号资源，浪费可耻。</p></article>
 					  <!--
 					  简介修改示例: 
 					  <p> 123</p>
@@ -115,11 +112,10 @@
 	                        <article id="5">
 							<h2 class="major">软件下载</h2>
 							<ul>
-							  <li><a href="/ssr-download/ssr-win.7z" class="icon fa-windows"><span class="label"></span> Windows</a></li>
-							  <li><a href="/ssr-download/ssr-mac.dmg" class="icon fa-apple"><span class="label">Mac</span> Mac</a></li>
-							  <li><a href="https://github.com/HMBSbige/ShadowsocksR-Android/releases/download/3.6.0/shadowsocksr-android-3.6.0-fix.apk" class="icon fa-android"><span class="label">Android</span> Android</a></li>
+							  <li><a href="https://github.com/2dust/v2rayN/releases/download/3.18/v2rayN-Core.zip" class="icon fa-windows"><span class="label"></span> Windows V2rayN</a></li>
+							  <li><a href="https://github.com/yanue/V2rayU/releases/download/2.1.0/V2rayU.dmg" class="icon fa-apple"><span class="label">Mac</span> Mac V2rayU</a></li>
+							  <li><a href="https://github.com/2dust/v2rayNG/releases/download/1.2.6/v2rayNG_1.2.6.apk" class="icon fa-android"><span class="label">Android</span> Android V2rayNG</a></li>
 							  <li><a href="#ios" class="icon fa-apple"><span class="label">iOS</span> iOS</a></li>
-                              <li><a href="/ssr-download/SSTap.7z" class="icon fa-gamepad"><span class="label">Win游戏专用</span> Win游戏专用</a></li>
                             
 	                         </ul>
                              </article>

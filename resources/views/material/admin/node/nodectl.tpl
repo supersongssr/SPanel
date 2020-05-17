@@ -27,14 +27,16 @@
 											<table class="table table-fixed">
 												<tr>
 													<th>编辑</th>
-													<th>节点</th>
 													<th>名字</th>
+													<th>节点</th>
+													<th>流量</th>
 												</tr>
 												{foreach $nodes as $node}
 													<tr>
 														<td><a class="btn btn-brand" href="/admin/node/{$node->id}/edit">编辑</a> #{$node->id}</td>
-														<td>{$node->node_class} 级 {$node->node_group} 组 {$node->traffic_rate} 倍</td>
 														<td>{$node->name}</td>
+														<td>{$node->node_class} 级 {$node->node_group} 组 {$node->traffic_rate} 倍</td>
+														<td>{$node->info}</td>
 													</tr>
 												{/foreach}
 											</table>

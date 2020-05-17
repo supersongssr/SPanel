@@ -20,7 +20,7 @@ class Analytics
 
     public function getAllLiveUser()
     {
-        return User::where("enable","=",1)->where('t','>',(time()-600))->count();
+        return User::where("enable","=",1)->where('t','>',(time()-3600))->count();
     }
 
     public function getVIPUser($vip)
@@ -30,13 +30,13 @@ class Analytics
 
     public function getVIPLiveUser($vip)
     {
-        return User::where("enable","=",1)->where("class","=",$vip)->where('t','>',(time()-600))->count();
+        return User::where("enable","=",1)->where("class","=",$vip)->where('t','>',(time()-3600))->count();
     }
 
     public function getGroupLiveUser($group)
     {
         #24小时内 各等级 分组在线人数
-        return User::where("enable","=",1)->where("node_group","=",$group)->where('t','>',(time()-600))->count();
+        return User::where("enable","=",1)->where("node_group","=",$group)->where('t','>',(time()-3600))->count();
     }
 
     public function getGroupUser($group)
@@ -51,7 +51,7 @@ class Analytics
 
     public function getVIPGroupLiveUser($vip,$group)
     {
-        return User::where("enable","=",1)->where('class','=',$vip)->where("node_group","=",$group)->where('t','>',(time()-600))->count();
+        return User::where("enable","=",1)->where('class','=',$vip)->where("node_group","=",$group)->where('t','>',(time()-3600))->count();
     }
 
     
@@ -180,7 +180,7 @@ class Analytics
 
     public function getOncostVIPGroupNode($vip,$group)
     {
-        return Node::where("type","=",1)->where('node_class','=',$vip)->where("node_group","=",$group)->sum('node_oncost');
+        return round(Node::where("type","=",1)->where('node_class','=',$vip)->where("node_group","=",$group)->sum('node_oncost') , 1);
     }
 
     
