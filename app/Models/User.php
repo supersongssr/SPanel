@@ -260,16 +260,16 @@ class User extends Model
         RadiusBan::where('userid', '=', $uid)->delete();
         Disconnect::where('userid', '=', $uid)->delete();
         Bought::where('userid', '=', $uid)->delete();
-        Bought::where('userid', '=', $uid)->delete();
-        Ip::where('userid', '=', $uid)->delete();
+        //Bought::where('userid', '=', $uid)->delete();
+        //Ip::where('userid', '=', $uid)->delete();
         Code::where('userid', '=', $uid)->delete();
-        DetectLog::where('user_id', '=', $uid)->delete();
+        //DetectLog::where('user_id', '=', $uid)->delete();
         Link::where('userid', '=', $uid)->delete();
         LoginIp::where('userid', '=', $uid)->delete();
         InviteCode::where('user_id', '=', $uid)->delete();
-        TelegramSession::where('user_id', '=', $uid)->delete();
-        UnblockIp::where('userid', '=', $uid)->delete();
-        TrafficLog::where('user_id', '=', $uid)->delete();
+        //TelegramSession::where('user_id', '=', $uid)->delete();
+        //UnblockIp::where('userid', '=', $uid)->delete();
+        //TrafficLog::where('user_id', '=', $uid)->delete();  // 导致数据库查询变慢
         Token::where('user_id', '=', $uid)->delete();
         PasswordReset::where('email', '=', $email)->delete();
         $this->delete();

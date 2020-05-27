@@ -220,11 +220,13 @@ class Job
             **/
             // 这里直接换算成 GB 保留两位小数
             $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
-            // 如果 today < 8G 就会要求在一个数值上 +1  
+            // 如果 today < 16G 就会要求在一个数值上 -1  
             //这里取绝对值， 代表如果是负数的话，也不用担心。
-            if (abs($traffic_today) < 8*1024*1024*1024) {
-                $node->node_sort += 1;
+            if (abs($traffic_today) < 16*1024*1024*1024) {
+                $node->node_sort -= 1;
                 $node->type = 0;  
+            }elseif (abs($traffic_today) > 32*1024*1024*1024) {
+                $node->node_sort += 1;
             }
 
             // 只有流量限制不为 0 ，且非流量重置日的时候，才会按照这个标准矫正倍率，其他时间不用管
@@ -361,8 +363,8 @@ class Job
             //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
             if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
                 $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
-                //扣除邀请的流量！
-                $ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                //不再扣除流量 扣除邀请的流量！
+                //$ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
                 $ref_user->save();
                 //写入返利日志
                 $Payback = new Payback();
@@ -785,7 +787,7 @@ class Job
         
         // 将即将到期的用户的等级重置为 0 
         $timeNow = date("Y-m-d H:i:s", time() );
-        $classOverUsers = User::where('class','>',0)->where('class_expire','<', $timeNow);
+        $classOverUsers = User::where('class','>',0)->where('class_expire','<', $timeNow)->get();
         foreach ($classOverUsers as $user) {
             $user->class = 0;
             echo ' resetUserClass-'.$user->id;
@@ -992,8 +994,8 @@ class Job
                     //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
                     if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
                         $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
-                        //扣除邀请的流量！
-                        $ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                        //扣除邀请的流量！ 不再扣除邀请流量
+                        //$ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
                         $ref_user->save();
                         //写入返利日志
                         $Payback = new Payback();

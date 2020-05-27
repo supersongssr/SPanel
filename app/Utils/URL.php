@@ -373,7 +373,7 @@ class URL
         $node_warm = Config::get("appName");
         $node->node_class < 2 && $node_warm .= '|公益节点';
         //$item['ps'] = $node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm;
-        $item['ps'] = $node->name.'#'.$node->id.'|等级'.$node->node_class.'|倍率'.$node->traffic_rate.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
+        $item['ps'] = $node->name.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$user->class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
         $item['add'] = $node_server;// addn ->server song 
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
@@ -460,7 +460,7 @@ class URL
         //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
 
         //$item = base64_encode($item).'?remarks='.urlencode($node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
-        $item = base64_encode($item).'?remarks='.urlencode($node->name.'#'.$node->id.'|等级'.$node->node_class.'|倍率'.$node->traffic_rate.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
+        $item = base64_encode($item).'?remarks='.urlencode($node->name.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$user->class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
         return "vmess://".$item;
     }
 
@@ -733,7 +733,7 @@ class URL
         $node->node_class < 2 && $node_warm .= '|公益节点';
         //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
         //$return_array['remark'] = $node_name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 100).'%'.$node_warm;
-        $return_array['remark'] = $node->name.'#'.$node->id.'|等级'.$node->node_class.'|倍率'.$node->traffic_rate.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
+        $return_array['remark'] = $node->name.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$user->class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
         $return_array['protocol'] = $user->protocol;
         $return_array['protocol_param'] = $user->protocol_param;
         $return_array['obfs'] = $user->obfs;

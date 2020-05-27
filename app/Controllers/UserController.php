@@ -1922,12 +1922,12 @@ class UserController extends BaseController
         $user = Auth::getUser();
         $cncdn = $request->getParam('cncdn');
         $cncdn = strtolower($cncdn);
-
+/*
         if ($cncdn == "") {
             $res['ret'] = 0;
             $res['msg'] = "非法输入";
             return $response->getBody()->write(json_encode($res));
-        }
+        }*/
 
         $user->cncdn = $cncdn;
         // 在更换的时候，自动把这个数据重置为 0 ；

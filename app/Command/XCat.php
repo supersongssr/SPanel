@@ -218,12 +218,12 @@ class XCat
         $user = User::wehre('id','=',1)->first();
         $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();*/
 
-        $nodes = Node::where('server','xj.cfcn.xyz')->get();
+        $nodes = Node::all();
         foreach ($nodes as $node) {
-            $node_explode = explode('#', $node->node_ip);//server ->node_ip song 
-            $node->server = $node_explode[6];
+            $node->node_sort = 0;
             $node->save();
         }
+
     }
 
     public function createAdmin()
