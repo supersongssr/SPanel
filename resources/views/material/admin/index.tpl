@@ -13,96 +13,7 @@
 						<div class="card margin-bottom-no">
 							<div class="card-main">
 								<div class="card-inner">
-									<p>节点负载</p>
-									<table class="table">
-										<tr>
-											<th>数据</th>
-											<th>10</th>
-											<th>9</th>
-											<th>8</th>
-											<th>7</th>
-											<th>6</th>
-											<th>5</th>
-											<th>4</th>
-											<th>3</th>
-											<th>2</th>
-											<th>1</th>
-											<th>0</th>
-										</tr>
-										<tr>
-											<tr>
-											<td>1组</td>
-											<td>{$sts->getVIPGroupNode(10,1) - $sts->getOncostVIPGroupNode(10,1)}</td>
-											<td>{$sts->getVIPGroupNode(9,1) - $sts->getOncostVIPGroupNode(9,1)}</td>
-											<td>{$sts->getVIPGroupNode(8,1) - $sts->getOncostVIPGroupNode(8,1)}</td>
-											<td>{$sts->getVIPGroupNode(7,1) - $sts->getOncostVIPGroupNode(7,1)}</td>
-											<td>{$sts->getVIPGroupNode(6,1) - $sts->getOncostVIPGroupNode(6,1)}</td>
-											<td>{$sts->getVIPGroupNode(5,1) - $sts->getOncostVIPGroupNode(5,1)}</td>
-											<td>{$sts->getVIPGroupNode(4,1) - $sts->getOncostVIPGroupNode(4,1)}</td>
-											<td>{$sts->getVIPGroupNode(3,1) - $sts->getOncostVIPGroupNode(3,1)}</td>
-											<td>{$sts->getVIPGroupNode(2,1) - $sts->getOncostVIPGroupNode(2,1)}</td>
-											<td>{$sts->getVIPGroupNode(1,1) - $sts->getOncostVIPGroupNode(1,1)}</td>
-											<td>{$sts->getVIPGroupNode(0,1) - $sts->getOncostVIPGroupNode(0,1)}</td>
-										</tr>
-										<tr>
-											<td>2组</td>
-											<td>{$sts->getVIPGroupNode(10,2) - $sts->getOncostVIPGroupNode(10,2)}</td>
-											<td>{$sts->getVIPGroupNode(9,2) - $sts->getOncostVIPGroupNode(9,2)}</td>
-											<td>{$sts->getVIPGroupNode(8,2) - $sts->getOncostVIPGroupNode(8,2)}</td>
-											<td>{$sts->getVIPGroupNode(7,2) - $sts->getOncostVIPGroupNode(7,2)}</td>
-											<td>{$sts->getVIPGroupNode(6,2) - $sts->getOncostVIPGroupNode(6,2)}</td>
-											<td>{$sts->getVIPGroupNode(5,2) - $sts->getOncostVIPGroupNode(5,2)}</td>
-											<td>{$sts->getVIPGroupNode(4,2) - $sts->getOncostVIPGroupNode(4,2)}</td>
-											<td>{$sts->getVIPGroupNode(3,2) - $sts->getOncostVIPGroupNode(3,2)}</td>
-											<td>{$sts->getVIPGroupNode(2,2) - $sts->getOncostVIPGroupNode(2,2)}</td>
-											<td>{$sts->getVIPGroupNode(1,2) - $sts->getOncostVIPGroupNode(1,2)}</td>
-											<td>{$sts->getVIPGroupNode(0,2) - $sts->getOncostVIPGroupNode(0,2)}</td>
-										</tr>
-										<tr>
-											<td>3组</td>
-											<td>{$sts->getVIPGroupNode(10,3) - $sts->getOncostVIPGroupNode(10,3)}</td>
-											<td>{$sts->getVIPGroupNode(9,3) - $sts->getOncostVIPGroupNode(9,3)}</td>
-											<td>{$sts->getVIPGroupNode(8,3) - $sts->getOncostVIPGroupNode(8,3)}</td>
-											<td>{$sts->getVIPGroupNode(7,3) - $sts->getOncostVIPGroupNode(7,3)}</td>
-											<td>{$sts->getVIPGroupNode(6,3) - $sts->getOncostVIPGroupNode(6,3)}</td>
-											<td>{$sts->getVIPGroupNode(5,3) - $sts->getOncostVIPGroupNode(5,3)}</td>
-											<td>{$sts->getVIPGroupNode(4,3) - $sts->getOncostVIPGroupNode(4,3)}</td>
-											<td>{$sts->getVIPGroupNode(3,3) - $sts->getOncostVIPGroupNode(3,3)}</td>
-											<td>{$sts->getVIPGroupNode(2,3) - $sts->getOncostVIPGroupNode(2,3)}</td>
-											<td>{$sts->getVIPGroupNode(1,3) - $sts->getOncostVIPGroupNode(1,3)}</td>
-											<td>{$sts->getVIPGroupNode(0,3) - $sts->getOncostVIPGroupNode(0,3)}</td>
-										</tr>
-										<tr>
-											<td>4组</td>
-											<td>{$sts->getVIPGroupNode(10,4) - $sts->getOncostVIPGroupNode(10,4)}</td>
-											<td>{$sts->getVIPGroupNode(9,4) - $sts->getOncostVIPGroupNode(9,4)}</td>
-											<td>{$sts->getVIPGroupNode(8,4) - $sts->getOncostVIPGroupNode(8,4)}</td>
-											<td>{$sts->getVIPGroupNode(7,4) - $sts->getOncostVIPGroupNode(7,4)}</td>
-											<td>{$sts->getVIPGroupNode(6,4) - $sts->getOncostVIPGroupNode(6,4)}</td>
-											<td>{$sts->getVIPGroupNode(5,4) - $sts->getOncostVIPGroupNode(5,4)}</td>
-											<td>{$sts->getVIPGroupNode(4,4) - $sts->getOncostVIPGroupNode(4,4)}</td>
-											<td>{$sts->getVIPGroupNode(3,4) - $sts->getOncostVIPGroupNode(3,4)}</td>
-											<td>{$sts->getVIPGroupNode(2,4) - $sts->getOncostVIPGroupNode(2,4)}</td>
-											<td>{$sts->getVIPGroupNode(1,4) - $sts->getOncostVIPGroupNode(1,4)}</td>
-											<td>{$sts->getVIPGroupNode(0,4) - $sts->getOncostVIPGroupNode(0,4)}</td>
-										</tr>
-										<tr>
-											<td>5组</td>
-											<td>{$sts->getVIPGroupNode(10,5) - $sts->getOncostVIPGroupNode(10,5)}</td>
-											<td>{$sts->getVIPGroupNode(9,5) - $sts->getOncostVIPGroupNode(9,5)}</td>
-											<td>{$sts->getVIPGroupNode(8,5) - $sts->getOncostVIPGroupNode(8,5)}</td>
-											<td>{$sts->getVIPGroupNode(7,5) - $sts->getOncostVIPGroupNode(7,5)}</td>
-											<td>{$sts->getVIPGroupNode(6,5) - $sts->getOncostVIPGroupNode(6,5)}</td>
-											<td>{$sts->getVIPGroupNode(5,5) - $sts->getOncostVIPGroupNode(5,5)}</td>
-											<td>{$sts->getVIPGroupNode(4,5) - $sts->getOncostVIPGroupNode(4,5)}</td>
-											<td>{$sts->getVIPGroupNode(3,5) - $sts->getOncostVIPGroupNode(3,5)}</td>
-											<td>{$sts->getVIPGroupNode(2,5) - $sts->getOncostVIPGroupNode(2,5)}</td>
-											<td>{$sts->getVIPGroupNode(1,5) - $sts->getOncostVIPGroupNode(1,5)}</td>
-											<td>{$sts->getVIPGroupNode(0,5) - $sts->getOncostVIPGroupNode(0,5)}</td>
-										</tr>
-										
-									</table>
-									<p>节点应该加在哪</p>
+
 									<table class="table">
 										<tr>
 											<th>数据</th>
@@ -132,92 +43,92 @@
 											<td>{$sts->getVIPUser(2)}</td>
 											<td>{$sts->getVIPUser(1)}</td>
 										</tr>
-										<tr>
+										<!-- <tr>
 											<td>ALL</td>
 											<td>{$sts->getCostALLNode()}|{$sts->getALLLiveUser()}</td>
-											<td>{$sts->getCostVIPNode(10)}|{$sts->getVIPLiveUser(10)}</td>
-											<td>{$sts->getCostVIPNode(9)}|{$sts->getVIPLiveUser(9)}</td>
-											<td>{$sts->getCostVIPNode(8)}|{$sts->getVIPLiveUser(8)}</td>
-											<td>{$sts->getCostVIPNode(7)}|{$sts->getVIPLiveUser(7)}</td>
-											<td>{$sts->getCostVIPNode(6)}|{$sts->getVIPLiveUser(6)}</td>
-											<td>{$sts->getCostVIPNode(5)}|{$sts->getVIPLiveUser(5)}</td>
-											<td>{$sts->getCostVIPNode(4)}|{$sts->getVIPLiveUser(4)}</td>
-											<td>{$sts->getCostVIPNode(3)}|{$sts->getVIPLiveUser(3)}</td>
-											<td>{$sts->getCostVIPNode(2)}|{$sts->getVIPLiveUser(2)}</td>
-											<td>{$sts->getCostVIPNode(1)}|{$sts->getVIPLiveUser(1)}</td>
-										</tr>
+											<td>{$sts->getCostVIPNode(10)-$sts->getVIPLiveUser(10)}</td>
+											<td>{$sts->getCostVIPNode(9)-$sts->getVIPLiveUser(9)}</td>
+											<td>{$sts->getCostVIPNode(8)-$sts->getVIPLiveUser(8)}</td>
+											<td>{$sts->getCostVIPNode(7)-$sts->getVIPLiveUser(7)}</td>
+											<td>{$sts->getCostVIPNode(6)-$sts->getVIPLiveUser(6)}</td>
+											<td>{$sts->getCostVIPNode(5)-$sts->getVIPLiveUser(5)}</td>
+											<td>{$sts->getCostVIPNode(4)-$sts->getVIPLiveUser(4)}</td>
+											<td>{$sts->getCostVIPNode(3)-$sts->getVIPLiveUser(3)}</td>
+											<td>{$sts->getCostVIPNode(2)-$sts->getVIPLiveUser(2)}</td>
+											<td>{$sts->getCostVIPNode(1)-$sts->getVIPLiveUser(1)}</td>
+										</tr> -->
 										<tr>
 											<td>1组</td>
 											<td>{$sts->getCostGroupNode(1)}|{$sts->getGroupLiveUser(1)}</td>
-											<td>{$sts->getCostVIPGroupNode(10,1)}|{$sts->getVIPGroupLiveUser(10,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(9,1)}|{$sts->getVIPGroupLiveUser(9,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(8,1)}|{$sts->getVIPGroupLiveUser(8,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(7,1)}|{$sts->getVIPGroupLiveUser(7,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(6,1)}|{$sts->getVIPGroupLiveUser(6,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(5,1)}|{$sts->getVIPGroupLiveUser(5,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(4,1)}|{$sts->getVIPGroupLiveUser(4,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(3,1)}|{$sts->getVIPGroupLiveUser(3,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(2,1)}|{$sts->getVIPGroupLiveUser(2,1)}</td>
-											<td>{$sts->getCostVIPGroupNode(1,1)}|{$sts->getVIPGroupLiveUser(1,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(10,1)-$sts->getVIPGroupLiveUser(10,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(9,1)-$sts->getVIPGroupLiveUser(9,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(8,1)-$sts->getVIPGroupLiveUser(8,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(7,1)-$sts->getVIPGroupLiveUser(7,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(6,1)-$sts->getVIPGroupLiveUser(6,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(5,1)-$sts->getVIPGroupLiveUser(5,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(4,1)-$sts->getVIPGroupLiveUser(4,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(3,1)-$sts->getVIPGroupLiveUser(3,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(2,1)-$sts->getVIPGroupLiveUser(2,1)}</td>
+											<td>{$sts->getCostVIPGroupNode(1,1)-$sts->getVIPGroupLiveUser(1,1)}</td>
 										</tr>
 										<tr>
 											<td>2组</td>
 											<td>{$sts->getCostGroupNode(2)}|{$sts->getGroupLiveUser(2)}</td>
-											<td>{$sts->getCostVIPGroupNode(10,2)}|{$sts->getVIPGroupLiveUser(10,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(9,2)}|{$sts->getVIPGroupLiveUser(9,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(8,2)}|{$sts->getVIPGroupLiveUser(8,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(7,2)}|{$sts->getVIPGroupLiveUser(7,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(6,2)}|{$sts->getVIPGroupLiveUser(6,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(5,2)}|{$sts->getVIPGroupLiveUser(5,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(4,2)}|{$sts->getVIPGroupLiveUser(4,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(3,2)}|{$sts->getVIPGroupLiveUser(3,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(2,2)}|{$sts->getVIPGroupLiveUser(2,2)}</td>
-											<td>{$sts->getCostVIPGroupNode(1,2)}|{$sts->getVIPGroupLiveUser(1,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(10,2)-$sts->getVIPGroupLiveUser(10,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(9,2)-$sts->getVIPGroupLiveUser(9,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(8,2)-$sts->getVIPGroupLiveUser(8,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(7,2)-$sts->getVIPGroupLiveUser(7,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(6,2)-$sts->getVIPGroupLiveUser(6,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(5,2)-$sts->getVIPGroupLiveUser(5,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(4,2)-$sts->getVIPGroupLiveUser(4,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(3,2)-$sts->getVIPGroupLiveUser(3,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(2,2)-$sts->getVIPGroupLiveUser(2,2)}</td>
+											<td>{$sts->getCostVIPGroupNode(1,2)-$sts->getVIPGroupLiveUser(1,2)}</td>
 										</tr>
 										<tr>
 											<td>3组</td>
 											<td>{$sts->getCostGroupNode(3)}|{$sts->getGroupLiveUser(3)}</td>
-											<td>{$sts->getCostVIPGroupNode(10,3)}|{$sts->getVIPGroupLiveUser(10,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(9,3)}|{$sts->getVIPGroupLiveUser(9,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(8,3)}|{$sts->getVIPGroupLiveUser(8,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(7,3)}|{$sts->getVIPGroupLiveUser(7,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(6,3)}|{$sts->getVIPGroupLiveUser(6,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(5,3)}|{$sts->getVIPGroupLiveUser(5,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(4,3)}|{$sts->getVIPGroupLiveUser(4,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(3,3)}|{$sts->getVIPGroupLiveUser(3,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(2,3)}|{$sts->getVIPGroupLiveUser(2,3)}</td>
-											<td>{$sts->getCostVIPGroupNode(1,3)}|{$sts->getVIPGroupLiveUser(1,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(10,3)-$sts->getVIPGroupLiveUser(10,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(9,3)-$sts->getVIPGroupLiveUser(9,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(8,3)-$sts->getVIPGroupLiveUser(8,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(7,3)-$sts->getVIPGroupLiveUser(7,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(6,3)-$sts->getVIPGroupLiveUser(6,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(5,3)-$sts->getVIPGroupLiveUser(5,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(4,3)-$sts->getVIPGroupLiveUser(4,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(3,3)-$sts->getVIPGroupLiveUser(3,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(2,3)-$sts->getVIPGroupLiveUser(2,3)}</td>
+											<td>{$sts->getCostVIPGroupNode(1,3)-$sts->getVIPGroupLiveUser(1,3)}</td>
 										</tr>
 										<tr>
 											<td>4组</td>
 											<td>{$sts->getCostGroupNode(4)}|{$sts->getGroupLiveUser(4)}</td>
-											<td>{$sts->getCostVIPGroupNode(10,4)}|{$sts->getVIPGroupLiveUser(10,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(9,4)}|{$sts->getVIPGroupLiveUser(9,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(8,4)}|{$sts->getVIPGroupLiveUser(8,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(7,4)}|{$sts->getVIPGroupLiveUser(7,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(6,4)}|{$sts->getVIPGroupLiveUser(6,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(5,4)}|{$sts->getVIPGroupLiveUser(5,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(4,4)}|{$sts->getVIPGroupLiveUser(4,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(3,4)}|{$sts->getVIPGroupLiveUser(3,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(2,4)}|{$sts->getVIPGroupLiveUser(2,4)}</td>
-											<td>{$sts->getCostVIPGroupNode(1,4)}|{$sts->getVIPGroupLiveUser(1,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(10,4)-$sts->getVIPGroupLiveUser(10,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(9,4)-$sts->getVIPGroupLiveUser(9,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(8,4)-$sts->getVIPGroupLiveUser(8,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(7,4)-$sts->getVIPGroupLiveUser(7,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(6,4)-$sts->getVIPGroupLiveUser(6,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(5,4)-$sts->getVIPGroupLiveUser(5,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(4,4)-$sts->getVIPGroupLiveUser(4,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(3,4)-$sts->getVIPGroupLiveUser(3,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(2,4)-$sts->getVIPGroupLiveUser(2,4)}</td>
+											<td>{$sts->getCostVIPGroupNode(1,4)-$sts->getVIPGroupLiveUser(1,4)}</td>
 										</tr>
 
 										<tr>
 											<td>5组</td>
 											<td>{$sts->getCostGroupNode(5)}|{$sts->getGroupLiveUser(5)}</td>
-											<td>{$sts->getCostVIPGroupNode(10,5)}|{$sts->getVIPGroupLiveUser(10,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(9,5)}|{$sts->getVIPGroupLiveUser(9,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(8,5)}|{$sts->getVIPGroupLiveUser(8,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(7,5)}|{$sts->getVIPGroupLiveUser(7,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(6,5)}|{$sts->getVIPGroupLiveUser(6,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(5,5)}|{$sts->getVIPGroupLiveUser(5,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(4,5)}|{$sts->getVIPGroupLiveUser(4,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(3,5)}|{$sts->getVIPGroupLiveUser(3,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(2,5)}|{$sts->getVIPGroupLiveUser(2,5)}</td>
-											<td>{$sts->getCostVIPGroupNode(1,5)}|{$sts->getVIPGroupLiveUser(1,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(10,5)-$sts->getVIPGroupLiveUser(10,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(9,5)-$sts->getVIPGroupLiveUser(9,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(8,5)-$sts->getVIPGroupLiveUser(8,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(7,5)-$sts->getVIPGroupLiveUser(7,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(6,5)-$sts->getVIPGroupLiveUser(6,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(5,5)-$sts->getVIPGroupLiveUser(5,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(4,5)-$sts->getVIPGroupLiveUser(4,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(3,5)-$sts->getVIPGroupLiveUser(3,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(2,5)-$sts->getVIPGroupLiveUser(2,5)}</td>
+											<td>{$sts->getCostVIPGroupNode(1,5)-$sts->getVIPGroupLiveUser(1,5)}</td>
 										</tr>
-										
+
 									</table>
 
 									<table class="table">
@@ -239,7 +150,94 @@
 										</tr>
 									</table>
 
-									
+									<table class="table">
+										<tr>
+											<th>数据</th>
+											<th>10</th>
+											<th>9</th>
+											<th>8</th>
+											<th>7</th>
+											<th>6</th>
+											<th>5</th>
+											<th>4</th>
+											<th>3</th>
+											<th>2</th>
+											<th>1</th>
+											<th>0</th>
+										</tr>
+										<tr>
+											<tr>
+											<td>1组</td>
+											<td>{$sts->getVIPGroupNode(10,1) - $sts->getOncostVIPGroupNode(10,1)}</td>
+											<td>{$sts->getVIPGroupNode(9,1) - $sts->getOncostVIPGroupNode(9,1)}</td>
+											<td>{$sts->getVIPGroupNode(8,1) - $sts->getOncostVIPGroupNode(8,1)}</td>
+											<td>{$sts->getVIPGroupNode(7,1) - $sts->getOncostVIPGroupNode(7,1)}</td>
+											<td>{$sts->getVIPGroupNode(6,1) - $sts->getOncostVIPGroupNode(6,1)}</td>
+											<td>{$sts->getVIPGroupNode(5,1) - $sts->getOncostVIPGroupNode(5,1)}</td>
+											<td>{$sts->getVIPGroupNode(4,1) - $sts->getOncostVIPGroupNode(4,1)}</td>
+											<td>{$sts->getVIPGroupNode(3,1) - $sts->getOncostVIPGroupNode(3,1)}</td>
+											<td>{$sts->getVIPGroupNode(2,1) - $sts->getOncostVIPGroupNode(2,1)}</td>
+											<td>{$sts->getVIPGroupNode(1,1) - $sts->getOncostVIPGroupNode(1,1)}</td>
+											<td>{$sts->getVIPGroupNode(0,1)}|{$sts->getOncostVIPGroupNode(0,1)}</td>
+										</tr>
+										<tr>
+											<td>2组</td>
+											<td>{$sts->getVIPGroupNode(10,2) - $sts->getOncostVIPGroupNode(10,2)}</td>
+											<td>{$sts->getVIPGroupNode(9,2) - $sts->getOncostVIPGroupNode(9,2)}</td>
+											<td>{$sts->getVIPGroupNode(8,2) - $sts->getOncostVIPGroupNode(8,2)}</td>
+											<td>{$sts->getVIPGroupNode(7,2) - $sts->getOncostVIPGroupNode(7,2)}</td>
+											<td>{$sts->getVIPGroupNode(6,2) - $sts->getOncostVIPGroupNode(6,2)}</td>
+											<td>{$sts->getVIPGroupNode(5,2) - $sts->getOncostVIPGroupNode(5,2)}</td>
+											<td>{$sts->getVIPGroupNode(4,2) - $sts->getOncostVIPGroupNode(4,2)}</td>
+											<td>{$sts->getVIPGroupNode(3,2) - $sts->getOncostVIPGroupNode(3,2)}</td>
+											<td>{$sts->getVIPGroupNode(2,2) - $sts->getOncostVIPGroupNode(2,2)}</td>
+											<td>{$sts->getVIPGroupNode(1,2) - $sts->getOncostVIPGroupNode(1,2)}</td>
+											<td>{$sts->getVIPGroupNode(0,2)}|{$sts->getOncostVIPGroupNode(0,2)}</td>
+										</tr>
+										<tr>
+											<td>3组</td>
+											<td>{$sts->getVIPGroupNode(10,3) - $sts->getOncostVIPGroupNode(10,3)}</td>
+											<td>{$sts->getVIPGroupNode(9,3) - $sts->getOncostVIPGroupNode(9,3)}</td>
+											<td>{$sts->getVIPGroupNode(8,3) - $sts->getOncostVIPGroupNode(8,3)}</td>
+											<td>{$sts->getVIPGroupNode(7,3) - $sts->getOncostVIPGroupNode(7,3)}</td>
+											<td>{$sts->getVIPGroupNode(6,3) - $sts->getOncostVIPGroupNode(6,3)}</td>
+											<td>{$sts->getVIPGroupNode(5,3) - $sts->getOncostVIPGroupNode(5,3)}</td>
+											<td>{$sts->getVIPGroupNode(4,3) - $sts->getOncostVIPGroupNode(4,3)}</td>
+											<td>{$sts->getVIPGroupNode(3,3) - $sts->getOncostVIPGroupNode(3,3)}</td>
+											<td>{$sts->getVIPGroupNode(2,3) - $sts->getOncostVIPGroupNode(2,3)}</td>
+											<td>{$sts->getVIPGroupNode(1,3) - $sts->getOncostVIPGroupNode(1,3)}</td>
+											<td>{$sts->getVIPGroupNode(0,3)}|{$sts->getOncostVIPGroupNode(0,3)}</td>
+										</tr>
+										<tr>
+											<td>4组</td>
+											<td>{$sts->getVIPGroupNode(10,4) - $sts->getOncostVIPGroupNode(10,4)}</td>
+											<td>{$sts->getVIPGroupNode(9,4) - $sts->getOncostVIPGroupNode(9,4)}</td>
+											<td>{$sts->getVIPGroupNode(8,4) - $sts->getOncostVIPGroupNode(8,4)}</td>
+											<td>{$sts->getVIPGroupNode(7,4) - $sts->getOncostVIPGroupNode(7,4)}</td>
+											<td>{$sts->getVIPGroupNode(6,4) - $sts->getOncostVIPGroupNode(6,4)}</td>
+											<td>{$sts->getVIPGroupNode(5,4) - $sts->getOncostVIPGroupNode(5,4)}</td>
+											<td>{$sts->getVIPGroupNode(4,4) - $sts->getOncostVIPGroupNode(4,4)}</td>
+											<td>{$sts->getVIPGroupNode(3,4) - $sts->getOncostVIPGroupNode(3,4)}</td>
+											<td>{$sts->getVIPGroupNode(2,4) - $sts->getOncostVIPGroupNode(2,4)}</td>
+											<td>{$sts->getVIPGroupNode(1,4) - $sts->getOncostVIPGroupNode(1,4)}</td>
+											<td>{$sts->getVIPGroupNode(0,4)}|{$sts->getOncostVIPGroupNode(0,4)}</td>
+										</tr>
+										<tr>
+											<td>5组</td>
+											<td>{$sts->getVIPGroupNode(10,5) - $sts->getOncostVIPGroupNode(10,5)}</td>
+											<td>{$sts->getVIPGroupNode(9,5) - $sts->getOncostVIPGroupNode(9,5)}</td>
+											<td>{$sts->getVIPGroupNode(8,5) - $sts->getOncostVIPGroupNode(8,5)}</td>
+											<td>{$sts->getVIPGroupNode(7,5) - $sts->getOncostVIPGroupNode(7,5)}</td>
+											<td>{$sts->getVIPGroupNode(6,5) - $sts->getOncostVIPGroupNode(6,5)}</td>
+											<td>{$sts->getVIPGroupNode(5,5) - $sts->getOncostVIPGroupNode(5,5)}</td>
+											<td>{$sts->getVIPGroupNode(4,5) - $sts->getOncostVIPGroupNode(4,5)}</td>
+											<td>{$sts->getVIPGroupNode(3,5) - $sts->getOncostVIPGroupNode(3,5)}</td>
+											<td>{$sts->getVIPGroupNode(2,5) - $sts->getOncostVIPGroupNode(2,5)}</td>
+											<td>{$sts->getVIPGroupNode(1,5) - $sts->getOncostVIPGroupNode(1,5)}</td>
+											<td>{$sts->getVIPGroupNode(0,5)}|{$sts->getOncostVIPGroupNode(0,5)}</td>
+										</tr>
+									</table>
+
 								</div>
 							</div>
 						</div>
@@ -247,16 +245,16 @@
 				</div>
 				<div class="ui-card-wrap">
 					<div class="row">
-					
+
 						<div class="col-xx-12 col-sm-6">
-						
-						
+
+
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner">
-									
+
 										<div id="check_chart" style="height: 300px; width: 100%;"></div>
-										
+
 										<script src="//cdn.jsdelivr.net/gh/SuicidalCat/canvasjs.js@v2.3.1/canvasjs.min.js"></script>
                                         <script>
 											var chart = new CanvasJS.Chart("check_chart",
@@ -322,19 +320,19 @@
                                                 chart.ctx.shadowColor = "transparent";
                                             }
 										</script>
-										
+
 									</div>
-									
+
 								</div>
 							</div>
-							
-							
+
+
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner">
-									
+
 										<div id="alive_chart" style="height: 300px; width: 100%;"></div>
-										
+
 										<script src="//cdn.jsdelivr.net/gh/YihanH/canvasjs.js@v2.2/canvasjs.min.js"></script>
 										<script type="text/javascript">
 											var chart = new CanvasJS.Chart("alive_chart",
@@ -382,25 +380,25 @@
 
 											chart.render();
 										</script>
-										
+
 									</div>
-									
+
 								</div>
 							</div>
-						
-						
+
+
 						</div>
-						
-						
+
+
 						<div class="col-xx-12 col-sm-6">
-						
-						
+
+
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner">
-									
+
 										<div id="node_chart" style="height: 300px; width: 100%;"></div>
-										
+
 										<script src="//cdn.jsdelivr.net/gh/YihanH/canvasjs.js@v2.2/canvasjs.min.js"></script>
 										<script type="text/javascript">
 											var chart = new CanvasJS.Chart("node_chart",
@@ -441,19 +439,19 @@
 
 											chart.render();
 										</script>
-										
+
 									</div>
-									
+
 								</div>
 							</div>
-							
-							
+
+
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner">
-									
+
 										<div id="traffic_chart" style="height: 300px; width: 100%;"></div>
-										
+
 										<script src="//cdn.jsdelivr.net/gh/YihanH/canvasjs.js@v2.2/canvasjs.min.js"></script>
 										<script type="text/javascript">
 											var chart = new CanvasJS.Chart("traffic_chart",
@@ -497,15 +495,15 @@
 
 											chart.render();
 										</script>
-										
+
 									</div>
-									
+
 								</div>
 							</div>
-						
-						
+
+
 						</div>
-						
+
 					</div>
 				</div>
 			</section>

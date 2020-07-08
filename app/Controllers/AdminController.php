@@ -63,7 +63,7 @@ class AdminController extends UserController
         $table_config['ajax_url'] = 'payback/ajax';
         return $this->view()->assign('table_config', $table_config)->display('admin/invite.tpl');
     }
-	
+
     public function addInvite($request, $response, $args)
     {
         $num = $request->getParam('num');
@@ -126,11 +126,11 @@ class AdminController extends UserController
 		}
 
 		if($generate_type==1){
-			if(Coupon::where('code',$final_code)->count()!=0){
-				$res['ret'] = 0;
-				$res['msg'] = "优惠码已存在";
-				return $response->getBody()->write(json_encode($res));
-			}
+			// if(Coupon::where('code',$final_code)->count()!=0){
+			// 	$res['ret'] = 0;
+			// 	$res['msg'] = "优惠码已存在";
+			// 	return $response->getBody()->write(json_encode($res));
+			// }
 		}
 		else{
 			while(true){

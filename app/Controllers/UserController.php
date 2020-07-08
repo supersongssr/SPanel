@@ -27,7 +27,7 @@ use App\Models\DetectRule;
 
 use voku\helper\AntiXSS;
 
-// cncdn 
+// cncdn
 use App\Models\Cncdn;
 
 use App\Models\User;
@@ -895,7 +895,7 @@ class UserController extends BaseController
 
 
     public function announcement($request, $response, $args)
-    {   
+    {
         if (empty($args['id'])) {        //Song
             # code...
             $Anns = Ann::orderBy('date', 'desc')->get();
@@ -912,7 +912,7 @@ class UserController extends BaseController
                 $Ann->markdown = $title['1'];
             }
         }
-        
+
         return $this->view()->assign("anns", $Anns)->display('user/announcement.tpl');
     }
 
@@ -928,14 +928,14 @@ class UserController extends BaseController
 
         //增加一个cdn的选项
         $cncdns = Cncdn::where('status',1)->where('show',1)->get();
-        
+
        /* $user = $this->user;
         //$user_area = '自动优化(默认)';
         //if ($user->cncdn != 0) {
             $usercncdn = Cncdn::where('status','=',1)->where('areaid','=',$user->cncdn)->first();
             $user_area = $usercncdn->area;
         //}*/
-        
+
         $BIP = BlockIp::where("ip", $_SERVER["REMOTE_ADDR"])->first();
         if ($BIP == null) {
             $Block = "IP: " . $_SERVER["REMOTE_ADDR"] . " 没有被封";
@@ -1030,7 +1030,7 @@ class UserController extends BaseController
             $res['ret'] = 0;
             $res['msg'] = "此后缀名被抢注了";
             return $response->getBody()->write(json_encode($res));
-        } 
+        }
 
         $user = $this->user;
         if ($user->money < $price) {
@@ -1156,7 +1156,8 @@ class UserController extends BaseController
             return $response->getBody()->write(json_encode($res));
         }
 
-        $coupon = Coupon::where("code", $coupon)->first();
+        // 这里 按照排序，选择最后一个 有效的 优惠码。这个方便做更改优惠码的方式
+        $coupon = Coupon::where("code", $coupon)->orderBy("id",DESC)->first();
 
         if ($coupon == null) {
             $res['ret'] = 0;
@@ -1213,7 +1214,7 @@ class UserController extends BaseController
         if ($coupon == "") {
             $credit = 0;
         } else {
-            $coupon = Coupon::where("code", $coupon)->first();
+            $coupon = Coupon::where("code", $coupon)->orderBy("id",DESC)->first();
 
             if ($coupon == null) {
                 $credit = 0;
@@ -1450,7 +1451,7 @@ class UserController extends BaseController
         $user->money -= 0.7;
         $user->save();
         //新工单不再邮件提醒
-/** 
+/**
         $adminUser = User::where("is_admin", "=", "1")->get();
         foreach ($adminUser as $user) {
             $subject = Config::get('appName') . "-新工单被开启";
@@ -1540,8 +1541,8 @@ class UserController extends BaseController
                 }
             }
         }
-   
-        //Song 工单只有回复没有其他      
+
+        //Song 工单只有回复没有其他
         if ($status == 1) {
             $adminUser = User::where("is_admin", "=", "1")->get();
             foreach ($adminUser as $user) {
@@ -1558,7 +1559,7 @@ class UserController extends BaseController
                 }
             }
         }
-**/    
+**/
         $antiXss = new AntiXSS();
 
         $ticket = new Ticket();
@@ -1601,7 +1602,7 @@ class UserController extends BaseController
             $pageNum = $request->getQueryParams()["page"];
         }
 
- 
+
         $ticketset = Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
         $ticketset->setPath('/user/ticket/' . $id . "/view");
 
@@ -1613,13 +1614,13 @@ class UserController extends BaseController
     {
         $id = $args['id'];
         $ticket_main = Ticket::where("id", "=", $id)->where('status',3)->where("rootid", "=", 0)->first();
-        
+
         $pageNum = 1;
         if (isset($request->getQueryParams()["page"])) {
             $pageNum = $request->getQueryParams()["page"];
         }
 
- 
+
         $ticketset = Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "asc")->paginate(15, ['*'], 'page', $pageNum);
         $ticketset->setPath('/user/ticket/' . $id . "/openview");
 
@@ -2191,7 +2192,7 @@ class UserController extends BaseController
         $rs['ret'] = 1;
         $rs['msg'] = '套餐矫正成功';
         $user->save();
-        
+
         return $response->getBody()->write(json_encode($rs));
     }
 
@@ -2301,7 +2302,7 @@ class UserController extends BaseController
             $user->ban_times += $user->class;
             #$user->pass = time();
             $user->save();
-            $rs['ret'] = 0;  
+            $rs['ret'] = 0;
             $rs['msg'] = '异常申请，账号保护！';
         }
 
