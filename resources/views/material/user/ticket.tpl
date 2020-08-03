@@ -40,11 +40,11 @@
 												<th>工单标题</th>
 												<th>工单状态</th>
 												<th>发起日期</th>
-											   
+
 											</tr>
 											{foreach $opentickets as $ticket}
 												<tr>
-													
+
 												 <!--   <td>#{$ticket->id}</td>  -->
 													<td>
 														<a class="btn btn-brand" href="/user/ticket/{$ticket->id}/openview">查看</a>
@@ -56,7 +56,7 @@
 													<td>出错了</td>
 													{/if}
 													<td>{$ticket->datetime()}</td>
-													 
+
 												</tr>
 											{/foreach}
 										</table>
@@ -75,7 +75,7 @@
 							</div>
 						</div>
 					</div>
-					
+
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
@@ -84,7 +84,7 @@
 										{$tickets->render()}
 										<table class="table">
 											<tr>
-												
+
 											  <!--  <th>ID</th>   -->
 												<th>发起日期</th>
 												<th>工单标题</th>
@@ -93,7 +93,7 @@
 											</tr>
 											{foreach $tickets as $ticket}
 												<tr>
-													
+
 												 <!--   <td>#{$ticket->id}</td>  -->
 													<td>{$ticket->datetime()}</td>
 													<td>{$ticket->title}</td>
@@ -116,21 +116,21 @@
 							</div>
 						</div>
 					</div>
-					
+
 					
 
 					<div class="fbtn-container">
 						<div class="fbtn-inner">
 							<a class="fbtn fbtn-lg fbtn-brand-accent" href="/user/ticket/create">+</a>
-							
+
 						</div>
 					</div>
 
-							
+
 			</div>
-			
-			
-			
+
+
+
 		</div>
 	</main>
 
@@ -140,13 +140,3 @@
 
 
 {include file='user/footer.tpl'}
-
-
-
-
-
-
-
-
-
-

@@ -16,22 +16,22 @@
         <section class="content-inner margin-top-no">
             <div class="row">
 
-                
+
                 <div class="col-lg-12 col-md-12">
                     <div class="card margin-bottom-no">
                         <div class="card-main">
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <!-- <p class="card-heading">购买充值码：。</p>
-                                      <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
+
                                       <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
                                       <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
                                         重要的事情说三遍<br>
                                   </p>
                                         <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p> -->
                                     {if $config["enable_admin_contact"] == 'true'}
-                                        <p class="card-heading">如果没有到账请立刻 <a href="/user/ticket">提交工单</a> </p>
-                                        <!-- {if $config["admin_contact1"]!=null}
+                                        <p class="card-heading">充值遇到问题？联系站长 或者 <a href="/user/ticket">提交工单</a> </p>
+                                        {if $config["admin_contact1"]!=null}
                                             <li>{$config["admin_contact1"]}</li>
                                         {/if}
                                         {if $config["admin_contact2"]!=null}
@@ -39,7 +39,7 @@
                                         {/if}
                                         {if $config["admin_contact3"]!=null}
                                             <li>{$config["admin_contact3"]}</li>
-                                        {/if} -->
+                                        {/if}
                                     {/if}
                                     <p><i class="icon icon-lg">attach_money</i>当前余额：<font color="#399AF2" size="5">{$user->money}</font> </p>
                                 </div>
@@ -67,11 +67,13 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <div class="cardbtn-edit">
-                                            <div class="card-heading">充值码 充值</div>
+                                            <div class="card-heading">充值码/卡密/卡号 充值余额</div>
                                             <button class="btn btn-flat" id="code-update" ><span class="icon">favorite_border</span></button>
                                     </div>
+                                    <p><a type="button" class="btn fbtn-brand-accent btn-sm " href="https://www.juzifaka.com/details/9E84042F" target="_blank" >10￥充值码 购买 （商品名已做安全处理，拍下即为充值码） </a> * 购买多个充值码可叠加充值。为支付安全，商品名已做安全处理，请忽略商品名，拍下后获取充值码/卡号，在本页面充值即可。。</p>
+
                                     <div class="form-group form-group-label">
-                                        <label class="floating-label" for="code">充值码填入这里 点心心 或 回车</label>
+                                        <label class="floating-label" for="code">充值码填入这里 点右边心心符号 </label>
                                         <input class="form-control maxwidth-edit" id="code" type="text">
                                     </div>
                                 </div>
@@ -80,8 +82,8 @@
                     </div>
                 </div>
 
-                
-<!-- 
+
+<!--
                 <div class="col-lg-12 col-md-12">
                     <div class="card margin-bottom-no">
                         <div class="card-main">
@@ -121,7 +123,7 @@
                     <div class="card margin-bottom-no">
                         <div class="card-main">
                             <div class="card-inner">
-                               
+
                                     <div class="card-table">
                                         <div class="table-responsive table-user">
                                             {$codes->render()}
@@ -171,7 +173,7 @@
                                             {$codes->render()}
                                         </div>
                                     </div>
-                                
+
 
                             </div>
                         </div>
