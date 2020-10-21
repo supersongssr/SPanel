@@ -348,7 +348,7 @@ class URL
         }
     }
     public static function getV2Url($user, $node, $arrout = 0){
-        $node_explode = explode('#', $node->node_ip);//server ->node_ip song 
+        $node_explode = explode('#', $node->node_ip);//server ->node_ip song
         $item = [
             'v'=>'2',
             'host'=>'',
@@ -359,22 +359,41 @@ class URL
 
         //增加 cncdn 自选 和 cfcdn网络优化
         $node_server = $node->server;
-        if ($user->cncdn && $node->sort == 12) {
-            $cdn_server = strstr($node_server, '.');
-            $cdn_server = substr($cdn_server, 1);
-            $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
-            if (!empty($cncdn->ipmd5)) {
-                $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
+        $cdn_area = '';  // CDN名字
+        if ($node->sort == 12) {
+            if ($user->cncdn) {
+                $cdn_server = strstr($node_server, '.');
+                $cdn_server = substr($cdn_server, 1);
+                $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
+                if (!empty($cncdn->ipmd5)) {
+                    $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
+                    $cdn_area = '->'.$user->cncdn;
+                }
+                //$cdn_area = $user->cncdn;
+            }else{
+                $cdn_server = strstr($node_server, '.');
+                $cdn_server = substr($cdn_server, 1);
+                //$cdn_area_array = array("武汉联通","郑州联通","天津联通","重庆联通","济南联通","广州联通","石家庄联通","东莞电信","天津移动","广州移动","无锡移动","西安电信","青岛电信","株洲电信","苏州电信","宁波电信","南宁电信","天津电信","上海电信");
+                $cdn_area_array = array("武汉联通","郑州联通","天津联通","重庆联通","济南联通","广州联通","石家庄联通","天津移动","广州移动","无锡移动");
+                $cdn_area_choice = $cdn_area_array[array_rand($cdn_area_array,1)];
+                $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$cdn_area_choice)->orderBy('id','desc')->first();
+                //$cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->orderBy('rand()')->select();
+                if (!empty($cncdn->ipmd5)) {
+                    $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
+                    $cdn_area = '->'.$cdn_area_choice;
+                }
             }
+
         }elseif ($user->cfcdn) {
             $node_server = $user->cfcdn;
+            $cdn_area = $user->cfcdn;
         }
 
         $node_warm = Config::get("appName");
         $node->node_class < 2 && $node_warm .= '|公益节点';
-        //$item['ps'] = $node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm;
-        $item['ps'] = $node->name.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$user->class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
-        $item['add'] = $node_server;// addn ->server song 
+        //$item['ps'] = $node->name.$cdn_area.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$user->class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
+        $item['ps'] = $node->name.$cdn_area.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$node->node_class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
+        $item['add'] = $node_server;// addn ->server song
         $item['port'] = $node_explode[1];
         empty($node_explode[2]) ? $item['id'] = $user->getUuid() : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
         $item['aid'] = $node_explode[3];
@@ -386,7 +405,7 @@ class URL
             empty($node_explode[8]) ? $item['tls'] = '' : $item['tls'] = 'tls';
         }
 
-        #这里做个判断，如果 server 存在第二个值，那么就可以正常使用了！嘎嘎 嘿嘿不错的想法！ 
+        #这里做个判断，如果 server 存在第二个值，那么就可以正常使用了！嘎嘎 嘿嘿不错的想法！
         /**$server = explode(';', $node->server);
         if ($server[1] != null ) {
             # code...
@@ -428,7 +447,7 @@ class URL
                 }
             }
             #完成
-            
+
         }**/
         if ($arrout == 0) {
             return 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
@@ -439,19 +458,38 @@ class URL
     }
 
     public static function getIOSV2Url($user, $node){
-        $node_explode = explode('#', $node->node_ip);//server ->node_ip song 
+        $node_explode = explode('#', $node->node_ip);//server ->node_ip song
 
         //增加 cncdn 自选 和 cfcdn网络优化
         $node_server = $node->server;
-        if ($user->cncdn && $node->sort == 12) {
-            $cdn_server = strstr($node_server, '.');
-            $cdn_server = substr($cdn_server, 1);
-            $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
-            if (!empty($cncdn->ipmd5)) {
-                $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
+        $cdn_area = '';  // CDN名字
+        if ($node->sort == 12) {
+            if ($user->cncdn) {
+                $cdn_server = strstr($node_server, '.');
+                $cdn_server = substr($cdn_server, 1);
+                $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
+                if (!empty($cncdn->ipmd5)) {
+                    $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
+                    $cdn_area = '->'.$user->cncdn;
+                }
+                //$cdn_area = $user->cncdn;
+            }else{
+                $cdn_server = strstr($node_server, '.');
+                $cdn_server = substr($cdn_server, 1);
+                //$cdn_area_array = array("武汉联通","郑州联通","天津联通","重庆联通","济南联通","广州联通","石家庄联通","东莞电信","天津移动","广州移动","无锡移动","西安电信","青岛电信","株洲电信","苏州电信","宁波电信","南宁电信","天津电信","上海电信");
+                $cdn_area_array = array("武汉联通","郑州联通","天津联通","重庆联通","济南联通","广州联通","石家庄联通","天津移动","广州移动","无锡移动");
+                $cdn_area_choice = $cdn_area_array[array_rand($cdn_area_array,1)];
+                $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$cdn_area_choice)->orderBy('id','desc')->first();
+                //$cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->orderBy('rand()')->select();
+                if (!empty($cncdn->ipmd5)) {
+                    $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
+                    $cdn_area = '->'.$cdn_area_choice;
+                }
             }
+
         }elseif ($user->cfcdn) {
             $node_server = $user->cfcdn;
+            $cdn_area = $user->cfcdn;
         }
 
         $item = 'auto:'.(empty($node_explode[2]) ? $user->getUuid() : $node_explode[2]).'@'.$node_server.':'.$node_explode[1];
@@ -460,7 +498,7 @@ class URL
         //$node->traffic_rate < 0.3 && $node_warm = '|Fuck me';
 
         //$item = base64_encode($item).'?remarks='.urlencode($node->name.' '.$node->node_class.'#'.$node->id.'|'.$node->traffic_rate.'|'.($node->node_oncost * 20).'%'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
-        $item = base64_encode($item).'?remarks='.urlencode($node->name.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$user->class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
+        $item = base64_encode($item).'?remarks='.urlencode($node->name.$cdn_area.'#'.$node->id.'|倍率'.$node->traffic_rate.'|等级'.$node->node_class.'|在线'.$node->node_online.'人|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
         return "vmess://".$item;
     }
 
@@ -485,7 +523,7 @@ class URL
                 }
             )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->limit($user->sub_limit)->get();
         }
-        
+
         if ($arrout == 0) {
             $result = '';
             foreach ($nodes as $node) {
@@ -521,7 +559,7 @@ class URL
                 }
             )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->limit($user->sub_limit)->get();
         }
-        
+
         $result = "";
         foreach ($nodes as $node) {
             $result .= (URL::getIOSV2Url($user, $node) . "\n");
@@ -572,7 +610,7 @@ class URL
             $server['id']=$server_index;
             $server['server']=$node->server;
             //song  addnode ssd
-            $addn = explode('#', $node->node_ip);//server -> node_ip song 
+            $addn = explode('#', $node->node_ip);//server -> node_ip song
             if (!empty($addn['1'])) {
                 # code...
                 $server['server']=$node->server;//addn -> server
@@ -739,18 +777,18 @@ class URL
         $return_array['obfs'] = $user->obfs;
         $return_array['obfs_param'] = $user->obfs_param;
         $return_array['group'] = Config::get('appName');
-        
-        /** song 
+
+        /** song
         if($mu_port != 0 && Config::get('mergeSub')!='true') {
             $return_array['group'] .= ' - 单端口';
         }
-        **/ 
+        **/
 //song  check if addnode ;about server  ip#port#pass#method#SS/SR
         $return_array['addn'] = '';
-        $addn = explode('#', $node->node_ip);//server ->node_ip song 
+        $addn = explode('#', $node->node_ip);//server ->node_ip song
         if (!empty($addn['1'])) {
             # code...
-            $return_array['address'] = $node->server;//addn ->server 
+            $return_array['address'] = $node->server;//addn ->server
             $return_array['port'] = $addn['1'];
             $return_array['passwd'] = $addn['2'];
             $return_array['method'] = $addn['3'];
@@ -789,7 +827,7 @@ class URL
     }
     public static function getUserClassExpiration($user, $is_mu = 0){
         $group_name = Config::get('appName');
-        /** song 
+        /** song
         if(Config::get('mergeSub')!='true' and $is_mu == 1){
             $group_name .= ' - 单端口';
         }

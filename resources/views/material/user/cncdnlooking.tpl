@@ -29,10 +29,10 @@
 										</div>
 										<!-- <p>当前入口：<code id="ajax-user-cncdn" data-default="cncdn"></code></p> -->
 										<div class="form-group form-group-label control-highlight-custom dropdown">
-											<label class="floating-label" for="cncdn">当前加速入口：{$user->cncdn}</label>
-											<button id="cncdn" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->cncdn}">{$user->cncdn}</button>
+											<!-- <label class="floating-label" for="cncdn">当前加速入口：</label> -->
+											<button id="cncdn" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->cncdn}">{if $user->cncdn}{$user->cncdn}{else}默认随机{/if}</button>
 											<ul class="dropdown-menu" aria-labelledby="cncdn">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="" data="cncdn">默认稳定</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="" data="cncdn">默认随机</a></li>
 												{foreach $cncdns as $cncdn}
 												<li><a href="#" class="dropdown-option" onclick="return false;" val="{$cncdn->area}" data="cncdn">{$cncdn->area}</a></li>
 												{/foreach}
@@ -42,7 +42,7 @@
 									</div>
 								</div>
 							</div>
-						</div>  
+						</div>
 
 
 						<div class="card">

@@ -477,25 +477,32 @@
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 													</div>
 													<div class="tab-pane fade" id="all_v2ray_info">
-														<div><a class='btn' href="https://sub.cfssr.xyz" target="_blank">点此前往 官方API转换地址 sub.cfssr.xyz：</a> </div>
+														<div><a class='btn' href="https://bianyuan.xyz" target="_blank">点此前往 订阅API地址转换器 bianyuan.xyz：</a> </div>
 														<br>
-														<div><span class="icon icon-lg text-white">flash_auto</span> Clash订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://api.cfssr.xyz/sub?target=clash&url={$subUrl}{$ssr_sub_token}?mu=2&scv=true" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://api.cfssr.xyz/sub?target=clash&url={$subUrl}{$ssr_sub_token}?mu=2&scv=true">
+														<div><span class="icon icon-lg text-white">flash_auto</span> Clash新版订阅：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://subcon.dlj.tf/sub?target=clash&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://subcon.dlj.tf/sub?target=clash&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+															点击复制
+														</button>
+														</div>
+														<br>
+														<div><span class="icon icon-lg text-white">flash_auto</span> ClashR新版订阅：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://subcon.dlj.tf/sub?target=clashr&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://subcon.dlj.tf/sub?target=clashr&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> Quan-X订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://api.cfssr.xyz/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true&list=true" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://api.cfssr.xyz/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true&list=true">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://subcon.dlj.tf/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://subcon.dlj.tf/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> Surfboard订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://api.cfssr.xyz/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://api.cfssr.xyz/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&emoji=true&fdn=true">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://subcon.dlj.tf/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://subcon.dlj.tf/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
@@ -722,11 +729,11 @@
 
 
 
-{if empty($user->cncdn)}
+<!-- {if empty($user->cncdn)}
 <script>
 alert("请设置您的 中转加速入口 加速您的网络 ");
 </script>
-{/if}
+{/if} -->
 
 
 

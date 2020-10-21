@@ -70,7 +70,7 @@
                                             <div class="card-heading">充值码/卡密/卡号 充值余额</div>
                                             <button class="btn btn-flat" id="code-update" ><span class="icon">favorite_border</span></button>
                                     </div>
-                                    <p><a type="button" class="btn fbtn-brand-accent btn-sm " href="https://www.juzifaka.com/details/9E84042F" target="_blank" >10￥充值码 购买 （商品名已做安全处理，拍下即为充值码） </a> * 购买多个充值码可叠加充值。为支付安全，商品名已做安全处理，请忽略商品名，拍下后获取充值码/卡号，在本页面充值即可。。</p>
+                                    <p><a type="button" class="btn fbtn-brand-accent btn-sm " href="https://www.mingypay.com/mall/?link=m5f8fc08b7d865" target="_blank" >10￥充值码 购买 （商品名已做安全处理，拍下即为充值码） </a></p><p> <a type="button" class="btn fbtn-brand-accent btn-sm " href="https://www.mingypay.com/mall/?link=m5f8fc0caddbdd" target="_blank" >100￥充值码 购买 （拍下即为充值码，多个充值码可叠加充值） </a> </p><p>* 购买多个充值码可叠加充值。为支付安全，商品名已做安全处理，请忽略商品名，拍下后获取充值码/卡号，在本页面输入即可充值余额。</p>
 
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="code">充值码填入这里 点右边心心符号 </label>

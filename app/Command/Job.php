@@ -28,7 +28,7 @@ use App\Utils\Telegram;
 use CloudXNS\Api;
 use App\Models\Disconnect;
 use App\Models\UnblockIp;
-use App\Models\Payback;  // 原来是缺少这个 song 
+use App\Models\Payback;  // 原来是缺少这个 song
 
 class Job
 {
@@ -41,7 +41,7 @@ class Job
                 if(!Tools::is_ip($server_list[0])){
                     if($node->changeNodeIp($server_list[0])){
                         $node->save();
-                    }                   
+                    }
                 }
             } else if($node->sort == 0 || $node->sort == 1 || $node->sort == 10){
                 if(!Tools::is_ip($node->server)){
@@ -50,9 +50,9 @@ class Job
                         if ($node->sort == 0 || $node->sort == 10) {
                             Tools::updateRelayRuleIp($node);
                         }
-                    }                   
-                }       
-            }           
+                    }
+                }
+            }
         }
     }
 
@@ -79,7 +79,7 @@ class Job
         system("cp ".BASE_PATH."/config/.config.php /tmp/ssmodbackup/configbak.php", $ret);
         echo $ret;
         system("zip -r /tmp/ssmodbackup.zip /tmp/ssmodbackup/* -P ".Config::get('auto_backup_passwd'), $ret);
-        $subject = Config::get('appName')."-备份成功";        
+        $subject = Config::get('appName')."-备份成功";
         $text = "您好，系统已经为您自动备份，请查看附件，用您设定的密码解压。" ;
         try {
             Mail::send($to, $subject, 'news/backup.tpl', [
@@ -128,7 +128,7 @@ class Job
     public static function DailyJob()
     {
 
-        /**  这个不需要了。后端 会自己处理这个事情的
+        /*  这个不需要了。后端 会自己处理这个事情的
         $nodes = Node::all();
         foreach ($nodes as $node) {
             if ($node->sort == 0 || $node->sort == 10 || $node->sort == 11) {
@@ -138,9 +138,9 @@ class Job
                 }
             }
         }
-        **/
+        */
 
-/**
+/*
         //auto reset
         $boughts=Bought::all();
         foreach ($boughts as $bought) {
@@ -167,7 +167,7 @@ class Job
                     $user->d = 0;
                     $user->last_day_t = 0;
                     $user->save();
-       
+
                       $subject = Config::get('appName')."-您的流量被重置了";
                       $to = $user->email;
                       $text = "您好，根据您所订购的订单 ID:".$bought->id."，流量已经被重置为".$shop->reset_value().'GB' ;
@@ -179,7 +179,7 @@ class Job
                       } catch (\Exception $e) {
                           echo $e->getMessage();
                       }
-                  
+
                     }
                 }
             }
@@ -198,14 +198,14 @@ class Job
                 $user->save();
             }
         }
-**/
+*/
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',9)->where('type','=',1)->get();  // 只获取4以上的在线节点 
+        $nodes_vnstat = Node::where('id','>',9)->where('type','=',1)->get();  // 只获取4以上的在线节点
         foreach ($nodes_vnstat as $node) {
             //echo $node->id.' nodeid ';
             # code...
             #$addn = explode('#', $node->node_ip);
-            /** 这是过期的计算方式，过时了
+            /* 这是过期的计算方式，过时了
             if (empty($addn['2'])) {
                 # code...
                 $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
@@ -217,14 +217,14 @@ class Job
                 $total = $sum_u + $sum_d;   //获取用户之和
             }
 
-            **/
+            */
             // 这里直接换算成 GB 保留两位小数
             $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
-            // 如果 today < 16G 就会要求在一个数值上 -1  
+            // 如果 today < 16G 就会要求在一个数值上 -1
             //这里取绝对值， 代表如果是负数的话，也不用担心。
             if (abs($traffic_today) < 16*1024*1024*1024) {
                 $node->node_sort -= 1;
-                $node->type = 0;  
+                $node->type = 0;
             }elseif (abs($traffic_today) > 32*1024*1024*1024) {
                 $node->node_sort += 1;
             }
@@ -233,14 +233,14 @@ class Job
             // 就是 流量重置日 倍率不变
             // 就是 如果流量限制为 0 ， 那么倍率就永久不变
             if ($node->node_bandwidth_limit > 1 && $today != $node->bandwidthlimit_resetday) {
-                // 一个周期 32天计算， 
+                // 一个周期 32天计算，
                 // 如果 5号到期   今天15号， 就是 32 + 15 - 5  = 43天，大于 32 ，减去 32 ，等于10天
-                // 如果 20号到期，今天5号，就是 32 + 5 - 20 = 17天 
+                // 如果 20号到期，今天5号，就是 32 + 5 - 20 = 17天
                 $today = date('d');
                 $days = 32 + $today - $node->bandwidthlimit_resetday;
                 $days > 32 && $days -= 32;
                 // 倍率 =  流量使用的百分比 / 时间使用的百分比
-                // rate = (node_bandwidth / node_bandwidth_limit) / ( $today / days) 
+                // rate = (node_bandwidth / node_bandwidth_limit) / ( $today / days)
                 $node->traffic_rate = round( ($node->node_bandwidth / $node->node_bandwidth_limit) / ( $days / 32)  ,2);
                 // 倍率 再 乘以 基准倍率  服务器价格 / 5美元
                 $node->traffic_rate = round( $node->traffic_rate * $node->node_cost / 5 , 1);
@@ -260,7 +260,7 @@ class Job
         }
 
         // 顺序是这样的：
-        // 禁用超过 32天没用的用户 ->  矫正所有到期的用户的列加流量 -> 所有enable用户 trasnfer_day变成今日  renew += 0.1  transferlimit + 3G -> 禁用余额为负 -> 禁用每日流量用超的用户 -> 禁用总流量用超的用户 
+        // 禁用超过 32天没用的用户 ->  矫正所有到期的用户的列加流量 -> 所有enable用户 trasnfer_day变成今日  renew += 0.1  transferlimit + 3G -> 禁用余额为负 -> 禁用每日流量用超的用户 -> 禁用总流量用超的用户
 
 
         //就这么简单，只需要自动禁用余额少于0 ，但是依然可用的账户。
@@ -278,7 +278,7 @@ class Job
         }
         //
 
-        // 余额少于 0 的用户 禁用掉 
+        // 余额少于 0 的用户 禁用掉
         $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
         foreach ($users_nomoney as $user) {
             $user->enable = 0;
@@ -289,7 +289,7 @@ class Job
         }
         // 这里也就意味着放弃了，余额小于 0 的用户，将没有那个流量重置周期。 永远没有的意思。 用超了就是用超了
 
-        //把所有的 renew 累加 周期到了的用户，重置流量限制  
+        //把所有的 renew 累加 周期到了的用户，重置流量限制
         $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('renew','>','class')->get();
         foreach ($users as $user) {
             // 先重置流量数据
@@ -302,7 +302,7 @@ class Job
         }
 
         // 这里把 每个用户的应该有的流量给叠加上。这个
-        // 这里只选取 等级大于0的用户  ，enable 为1的用户。 
+        // 这里只选取 等级大于0的用户  ，enable 为1的用户。
         $users = User::where('enable','>',0)->where('class','>',0)->get();
         foreach ($users as $user) {
             // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
@@ -318,7 +318,7 @@ class Job
                 $user->last_day_t = 0;
                 $user->transfer_enable = $user->auto_reset_bandwidth*1024*1024*1024;
                 $user->save();
-                
+
                 $subject = Config::get('appName')."-您的流量被重置了";
                 $to = $user->email;
                 $text = "您好，根据管理员的设置，流量已经被重置为".$user->auto_reset_bandwidth.'GB' ;
@@ -347,18 +347,18 @@ class Job
         $time_last24hours = time() - 24*3600;
         $users = User::where('enable','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
         foreach ($users as $user) {
-            $user->score += 1; // 积分加1 
+            $user->score += 1; // 积分加1
             $user->save();
         }
-       
+
         //将余额 小于 0 的用户，请空邀请人，收回邀请返利
         // 选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 16才行
-        $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',32)->get();  // 使用积分小于 32 且 money 小于 0 会被清理 
+        $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',32)->get();  // 使用积分小于 32 且 money 小于 0 会被清理
         foreach ($users as $user) {
             $ref_user = User::find($user->ref_by);
             //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
             $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
-            //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量 
+            //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量
             $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
             //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
             if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
@@ -371,7 +371,7 @@ class Job
                 #echo $user->id;
                 #echo ' ';
                 $Payback->total = -2;
-                $Payback->userid = $user->id;  //用户注册的ID 
+                $Payback->userid = $user->id;  //用户注册的ID
                 $Payback->ref_by = $user->ref_by;  //邀请人ID
                 $Payback->ref_get = - $ref_payback->ref_get;
                 $Payback->datetime = time();
@@ -432,7 +432,7 @@ class Job
         }
 
         Job::updatedownload();
-        
+
     }
 //   定时任务开启的情况下，每天自动检测有没有最新版的后端，github源来自Miku
      public static function updatedownload()
@@ -543,7 +543,7 @@ class Job
                 $subject = Config::get('appName')."-续费失败";
                     $to = $user->email;
                     $text = "您好，系统为您自动续费商品时，发现该商品已被下架，为能继续正常使用，建议您登录用户面板购买新的商品。" ;
-                    song 
+                    song
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -552,10 +552,10 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
-                    
+
                 continue;
             }
-            if ($user->money >= $shop->price) {    
+            if ($user->money >= $shop->price) {
                 $user->money=$user->money - $shop->price;
                 $user->save();
                 $shop->buy($user, 1);
@@ -574,7 +574,7 @@ class Job
                 $subject = Config::get('appName')."-续费成功";
                 $to = $user->email;
                 $text = "您好，系统已经为您自动续费，商品名：".$shop->name.",金额:".$shop->price." 元。" ;
-                
+
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -583,7 +583,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                
+
 
                 if (file_exists(BASE_PATH."/storage/".$bought->id.".renew")) {
                     unlink(BASE_PATH."/storage/".$bought->id.".renew");
@@ -601,7 +601,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
-                    
+
                     $myfile = fopen(BASE_PATH."/storage/".$bought->id.".renew", "w+") or die("Unable to open file!");
                     $txt = "1";
                     fwrite($myfile, $txt);
@@ -614,9 +614,9 @@ class Job
         UnblockIp::where("datetime", "<", time()-300)->delete();
         BlockIp::where("datetime", "<", time()-86400)->delete();
         TelegramSession::where("datetime", "<", time()-3600)->delete();
-/*  
+/*
         $adminUser = User::where("is_admin", "=", "1")->get();
-              
+
         //节点掉线检测
         if (Config::get("enable_detect_offline")=="true") {
             $nodes = Node::all();
@@ -628,7 +628,7 @@ class Job
                         $subject = Config::get('appName')."-系统警告";
                         $to = $user->email;
                         $text = "管理员您好，系统发现节点 ".$node->name." 掉线了，请您及时处理。" ;
-                        
+
                         try {
                             Mail::send($to, $subject, 'news/warn.tpl', [
                                 "user" => $user,"text" => $text
@@ -637,7 +637,7 @@ class Job
                         } catch (\Exception $e) {
                             echo $e->getMessage();
                         }
-                       
+
 
                         if (Config::get('enable_cloudxns')=='true' && ($node->sort==0 || $node->sort==10)) {
                             $api=new Api();
@@ -693,7 +693,7 @@ class Job
                     $subject = Config::get('appName')."-系统提示";
                     $to = $user->email;
                     $text = "管理员您好，系统发现节点 ".$node->name." 恢复上线了。" ;
-                    
+
                     try {
                         Mail::send($to, $subject, 'news/warn.tpl', [
                             "user" => $user,"text" => $text
@@ -702,7 +702,7 @@ class Job
                     } catch (\Exception $e) {
                         echo $e->getMessage();
                     }
-                    
+
 
                     if (Config::get('enable_cloudxns')=='true'&& ($node->sort==0 || $node->sort==10)) {
                         $api=new Api();
@@ -711,7 +711,7 @@ class Job
                         $api->setProtocol(true);
 
                         $domain_json=json_decode($api->domain->domainList());
-                        
+
                         foreach ($domain_json->data as $domain) {
                             if (strpos($domain->domain, Config::get('cloudxns_domain'))!==false) {
                                 $domain_id=$domain->id;
@@ -727,7 +727,7 @@ class Job
                                 $api->record->recordUpdate($domain_id, $record->host, $node->getNodeIp(), 'A', 55, 600, 1, '', $record_id);
                             }
                         }
-                        
+
                         $notice_text = "喵喵喵~ ".$node->name." 节点恢复了喵~域名解析被切换回来了喵~";
                         } else {
                             $notice_text = "喵喵喵~ ".$node->name." 节点恢复了喵~";
@@ -741,7 +741,7 @@ class Job
             }
         }
 */
-        
+
 /*
         //登录地检测
         if (Config::get("login_warn")=="true") {
@@ -784,8 +784,8 @@ class Job
         }
 
 */
-        
-        // 将即将到期的用户的等级重置为 0 
+
+        // 将即将到期的用户的等级重置为 0
         $timeNow = date("Y-m-d H:i:s", time() );
         $classOverUsers = User::where('class','>',0)->where('class_expire','<', $timeNow)->get();
         foreach ($classOverUsers as $user) {
@@ -810,7 +810,7 @@ class Job
                 $user->u = 0;
                 $user->d = 0;
                 $user->last_day_t = 0;
-                
+
                 $subject = Config::get('appName')."-您的用户账户已经过期了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经过期了。";
@@ -840,13 +840,13 @@ class Job
             if (Config::get('notify_limit_mode') !='false'){
                 $user_traffic_left = $user->transfer_enable - $user->u - $user->d;
                 $under_limit='false';
-                
+
                 if($user->transfer_enable != 0){
                     if (Config::get('notify_limit_mode') == 'per'&&
                     $user_traffic_left / $user->transfer_enable * 100 < Config::get('notify_limit_value')){
                     $under_limit='true';
                     $unit_text='%';
-                    } 
+                    }
                 }
                 else if(Config::get('notify_limit_mode')=='mb'&&
                 Tools::flowToMB($user_traffic_left) < Config::get('notify_limit_value')){
@@ -878,7 +878,7 @@ class Job
                 }
             }
 */
-            if ($user->class != 0 && 
+            if ($user->class != 0 &&
                 strtotime($user->class_expire)<time()
             ){
 
@@ -893,7 +893,7 @@ class Job
                     $text.='流量已经被重置为'.$reset_traffic.'GB';
                 }
                 $subject = Config::get('appName')."-您的账户等级已经过期了";
-                $to = $user->email;              
+                $to = $user->email;
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -913,12 +913,12 @@ class Job
                 strtotime($user->expire_in)+Config::get('account_expire_delete_days')*86400<time() && ( time() - strtotime($user->expire_in) ) > ($user->money * 30 * 24 * 3600)
             ) {
                 # 如果当前时间 - 过期时间 大于 用户余额的话， 1块钱=30天，所以：1元 = 2592000
-                # 如果过期 x 个月，且余额小于 1元=30 
+                # 如果过期 x 个月，且余额小于 1元=30
                 /*
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账户已经过期 ".Config::get('account_expire_delete_days')." 天了，帐号已经被删除。" ;
-                
+
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -928,19 +928,19 @@ class Job
                     echo $e->getMessage();
                 }
                 */
-                $iskilluser = true;  // 这里加个参数是否kill user 
+                $iskilluser = true;  // 这里加个参数是否kill user
                 //$user->kill_user();
                 //continue;
-            }elseif (Config::get('auto_clean_uncheck_days')>0 && 
-                max($user->last_check_in_time, strtotime($user->reg_date)) + (Config::get('auto_clean_uncheck_days')*86400) < time() && 
-                $user->class == 0 && 
+            }elseif (Config::get('auto_clean_uncheck_days')>0 &&
+                max($user->last_check_in_time, strtotime($user->reg_date)) + (Config::get('auto_clean_uncheck_days')*86400) < time() &&
+                $user->class == 0 &&
                 $user->money <= Config::get('auto_clean_min_money')
             ) {
                 /**
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_uncheck_days')." 天没签到了，帐号已经被删除。" ;
-                
+
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -953,16 +953,16 @@ class Job
                 $iskilluser = true;
                 //$user->kill_user();
                 //continue;
-            }elseif (Config::get('auto_clean_unused_days')>0 && 
-                max($user->t, strtotime($user->reg_date)) + (Config::get('auto_clean_unused_days')*86400) < time() && 
-                $user->class == 0 && 
+            }elseif (Config::get('auto_clean_unused_days')>0 &&
+                max($user->t, strtotime($user->reg_date)) + (Config::get('auto_clean_unused_days')*86400) < time() &&
+                $user->class == 0 &&
                 $user->money <= Config::get('auto_clean_min_money')
             ) {
                 /**
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_unused_days')." 天没使用了，帐号已经被删除。" ;
-                
+
                 try {
                     Mail::send($to, $subject, 'news/warn.tpl', [
                         "user" => $user,"text" => $text
@@ -977,19 +977,19 @@ class Job
                 //continue;
             }
 
-            //song 如果返利扣除在这里扣除的话，会不会好一些？我觉得会好一些，不错的主意。嘎嘎 有点意思，嘿嘿 可以有 
+            //song 如果返利扣除在这里扣除的话，会不会好一些？我觉得会好一些，不错的主意。嘎嘎 有点意思，嘿嘿 可以有
             if ( $iskilluser ) {
                 # code...
-                //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户 
+                //如果存在邀请，并且用户的使用流量 和 使用天数 合起来小于 128G就删除用户
                 //$used_time = floor( ( time() - strtotime($user->reg_date) ) / 86400 );
                 //$used_data = floor( ($user->u + $user->d) / 1073741824 );
                 echo ' deluser-'.$user->id;
-                if ($user->ref_by != 0 && $user->score < 32) {  //存在邀请，且用户 使用积分 < 32 
+                if ($user->ref_by != 0 && $user->score < 32) {  //存在邀请，且用户 使用积分 < 32
                     # code...
                     $ref_user = User::find($user->ref_by);
                     //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
                     $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
-                    //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量 
+                    //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量
                     $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
                     //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
                     if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
@@ -1002,7 +1002,7 @@ class Job
                         #echo $user->id;
                         #echo ' ';
                         $Payback->total = -2;
-                        $Payback->userid = $user->id;  //用户注册的ID 
+                        $Payback->userid = $user->id;  //用户注册的ID
                         $Payback->ref_by = $user->ref_by;  //邀请人ID
                         $Payback->ref_get = - $ref_payback->ref_get;
                         $Payback->datetime = time();
