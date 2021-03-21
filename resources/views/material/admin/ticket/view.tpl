@@ -8,12 +8,12 @@
 		</div>
 		<div class="container">
 			<div class="col-lg-12 col-sm-12">
-				
-					
+
+
 					{$ticketset->render()}
 					{foreach $ticketset as $ticket}
 					<div class="card">
-						<aside class="card-side pull-left"><img alt="alt text for John Smith avatar" src="{$ticket->User()->gravatar}"></span></br><a href="/admin/user/{$ticket->userid}/edit" target="_blank">{$ticket->User()->user_name}</a> </aside>
+						<aside class="card-side pull-left"><img alt="alt text for John Smith avatar" src="{$ticket->User()->gravatar}"></span></br><a href="/admin/user/{$ticket->userid}/edit">{$ticket->User()->user_name}</a> </aside>
 						<div class="card-main">
 							<div class="card-inner">
 								{if $ticket->rootid == 0}
@@ -27,12 +27,12 @@
 					</div>
 					{/foreach}
 					{$ticketset->render()}
-					
-					
+
+
 					{include file='dialog.tpl'}
 
 				<section class="content-inner margin-top-no">
-				
+
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
@@ -43,11 +43,11 @@
 										<textarea style="display:none;" id="content"></textarea>
 									</div>
 								</div>
-								
+
 							</div>
 						</div>
 					</div>
-					
+
 				<div aria-hidden="true" class="modal modal-va-middle fade" id="changetouser_modal" role="dialog" tabindex="-1">
 					<div class="modal-dialog modal-xs">
 						<div class="modal-content">
@@ -64,11 +64,11 @@
 						</div>
 					</div>
 				</div>
-					
+
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
-								
+
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-10 col-md-push-1">

@@ -666,7 +666,7 @@ ALTER TABLE `relay`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;
 CREATE TABLE `telegram_session` ( `id` BIGINT NOT NULL AUTO_INCREMENT , `user_id` BIGINT NOT NULL , `type` INT NOT NULL , `session_content` TEXT NOT NULL , `datetime` BIGINT NOT NULL , PRIMARY KEY (`id`)) ENGINE = InnoDB;
 
-ALTER TABLE `user` ADD `telegram_id` BIGINT NULL AFTER `is_multi_user`; 
+ALTER TABLE `user` ADD `telegram_id` BIGINT NULL AFTER `is_multi_user`;
 
 CREATE TABLE IF NOT EXISTS `paylist` (
   `id` bigint(20) NOT NULL,
@@ -702,7 +702,7 @@ ALTER TABLE `paylist`
 ALTER TABLE `ss_node` ADD `node_cost` INT NOT NULL DEFAULT '5' AFTER `mu_only`;
 #增加 在线人数选项
 ALTER TABLE `ss_node` ADD `node_online` INT NOT NULL DEFAULT '1' AFTER `node_cost`;
-#增加 性价比选项 
+#增加 性价比选项
 ALTER TABLE `ss_node` ADD `node_oncost` FLOAT NOT NULL DEFAULT '0' AFTER `node_online`;
 
 #增加用户 ban_times
@@ -750,7 +750,7 @@ ALTER TABLE `ticket` ADD `sort` INT(11) DEFAULT '0' COMMENT '用户等级排序'
 # 增加 node_bandwidth_lastday 昨天
 ALTER TABLE `ss_node` ADD `node_bandwidth_lastday` BIGINT(20) DEFAULT '0' COMMENT '节点昨日流量记录' AFTER `node_bandwidth`;
 
-# 增加两个项，一个是每天的流量限制项。超过就会被限制。 另一个是 累加项， 如果达到一定数值，就会被 累加。 
+# 增加两个项，一个是每天的流量限制项。超过就会被限制。 另一个是 累加项， 如果达到一定数值，就会被 累加。
 ALTER TABLE `user` ADD `renew` FLOAT(8) DEFAULT '0' COMMENT '流量周期累加' AFTER `class`;
 ALTER TABLE `user` ADD `transfer_limit` BIGINT(20) DEFAULT '1073741824' COMMENT '流量限制 默认为 1G' AFTER `transfer_enable`;
 
@@ -764,3 +764,7 @@ ALTER TABLE `user` ADD `score` INT(8) DEFAULT '0' COMMENT '用户打分' AFTER `
 
 #增加 CNCDN选项
 ALTER TABLE `ss_node` ADD `cncdn` TINYINT(4) AFTER `server`;
+
+#增加 rss订阅次数统计
+ALTER TABLE `user` ADD `rss_count` VARCHAR(64) DEFAULT '0' COMMENT 'Rss次数统计' AFTER `rss_ip`;
+ALTER TABLE `user` ADD `rss_count_lastday` VARCHAR(64) DEFAULT '0' COMMENT 'Rss昨日次数' AFTER `rss_count`;

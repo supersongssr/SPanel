@@ -11,7 +11,7 @@
 		</div>
 		<div class="container">
 			<section class="content-inner margin-top-no">
-             
+
 
 
 					<div class="col-xx-12 col-sm-6">
@@ -39,7 +39,7 @@
 									</div>
 								</div>
 							</div>
-						</div>  
+						</div>
 
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -49,7 +49,7 @@
 												<div class="card-heading">网络优化技术 <a href="/user/cfcdnlooking">教程</a></div>
 												<button class="btn btn-flat" id="cfcdn-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
-										
+
 										<div class="form-group form-group-label">
 											<label class="floating-label" for="cfcdn">网络优化： </label>
 											<input class="form-control maxwidth-edit" id="cfcdn" value="{$user->cfcdn}" type="text">
@@ -60,7 +60,7 @@
 							</div>
 						</div>
 
-						
+
 
 						<!--
 						<div class="card margin-bottom-no">
@@ -75,7 +75,7 @@
 										<div class="form-group form-group-label control-highlight-custom dropdown">
 											<label class="floating-label" for="group">请选择您的分组</label>
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
-												
+
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
 												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">A: 1 组</a></li>
@@ -86,8 +86,8 @@
 										</div>
 							        </div>
 						        </div>
-					        </div> 
-				        </div> 
+					        </div>
+				        </div>
 -->
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -112,7 +112,7 @@
 											<input class="form-control maxwidth-edit" id="repwd" type="password">
 										</div>
 									</div>
-									
+
 								</div>
 							</div>
 						</div>
@@ -125,7 +125,7 @@
 												<div class="card-heading">订阅获取节点数量设置</div>
 												<button class="btn btn-flat" id="sub_limit_update"><span class="icon">check</span>&nbsp;</button>
 										</div>
-										
+
 										<p>当前数量：<code id="ajax-user-passwd">{$user->sub_limit}</code>；等级越高，通过订阅获取的节点数越多，您可以在这里自定义订阅获取的节点数量。</p>
 										<div class="form-group form-group-label">
 											<label class="floating-label" for="sub_limit">等级越高，订阅越多</label>
@@ -144,8 +144,9 @@
 												<div class="card-heading">节点密码、V2ray密码修改</div>
 												<button class="btn btn-flat" id="ss-pwd-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
-										
-										<p>当前连接密码：<code id="ajax-user-passwd">{$user->passwd}</code><button class="kaobei copy-text btn btn-subscription" type="button" data-clipboard-text="{$user->passwd}">点击拷贝</button></p>
+
+										<p>当前SS密码：<code id="ajax-user-passwd">{$user->passwd}</code><button class="kaobei copy-text btn btn-subscription" type="button" data-clipboard-text="{$user->passwd}">点击拷贝</button></p>
+										<p>当前V2rayUUID：<code id="ajax-user-passwd">{$user->v2ray_uuid}</code><button class="kaobei copy-text btn btn-subscription" type="button" data-clipboard-text="{$user->v2ray_uuid}">点击拷贝</button></p>
 										<div class="form-group form-group-label">
 											<label class="floating-label" for="sspwd">新连接密码（修改后ss sr v2ray连接配置将会改变，请客户端更新节点）</label>
 											<input class="form-control maxwidth-edit" id="sspwd" type="text">
@@ -154,7 +155,7 @@
 								</div>
 							</div>
 						</div>
-                    
+
 <!-- song
 
 						<div class="card margin-bottom-no">
@@ -180,7 +181,7 @@
 									</div>
 								</div>
 							</div>
-						</div>  
+						</div>
 -->
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -234,7 +235,7 @@
 							</div>
 						</div>
 
-<!-- Song 
+<!-- Song
 
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -287,7 +288,7 @@
 
 								</div>
 							</div>
-						</div>  
+						</div>
 -->
 
 						<div class="card margin-bottom-no">
@@ -302,7 +303,7 @@
 										<div class="form-group form-group-label control-highlight-custom dropdown">
 											<label class="floating-label" for="theme">主题</label>
 											<button id="theme" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->theme}">
-												
+
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
 												{foreach $themes as $theme}
@@ -312,10 +313,10 @@
 										</div>
 							        </div>
 						        </div>
-					        </div> 
-                        </div> 
+					        </div>
+                        </div>
 
-						
+
 			        </div>
 
 
@@ -334,10 +335,10 @@
 									</div>
 								</div>
 							</div>
-						</div> 
+						</div>
 
-	
-<!-- Song 
+
+<!-- Song
 						<div class="card margin-bottom-no">
 							<div class="card-main">
 								<div class="card-inner">
@@ -351,7 +352,7 @@
 										<div class="form-group form-group-label control-highlight-custom dropdown">
 											<label class="floating-label" for="mail">发送设置</label>
 											<button type="button" id="mail" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->sendDailyMail}">
-												
+
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
 												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="mail">发送</a> </li>
@@ -395,7 +396,7 @@
 											<input class="form-control maxwidth-edit" id="port-specify" type="num">
 										</div>
 									</div>
-									
+
 									{/if}
 								</div>
 							</div>
@@ -448,9 +449,9 @@
 									</div>
 								</div>
 							</div>
-						</div>    
+						</div>
 
-						
+
 						{if $config['enable_telegram'] == 'true'}
 						<div class="card margin-bottom-no">
 							<div class="card-main">
@@ -476,7 +477,7 @@
 						    </div>
 					    </div>
 						{/if}
-					
+
 
 
 
@@ -522,7 +523,7 @@ $(".copy-text").click(function () {
                         $("#result").modal();
 						$("#ajax-user-port").html(data.msg);
 						$("#msg").html("设置成功，新端口是"+data.msg);
-						
+
                     } else {
                         $("#result").modal();
 						$("#msg").html(data.msg);
@@ -625,7 +626,7 @@ $(".copy-text").click(function () {
 <script>
 	var ga_qrcode = '{$user->getGAurl()}',
 	qrcode1 = new QRCode(document.getElementById("ga-qr"));
-	
+
     qrcode1.clear();
     qrcode1.makeCode(ga_qrcode);
 
@@ -1062,4 +1063,3 @@ $(".copy-text").click(function () {
         })
     })
 </script>
-

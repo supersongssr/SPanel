@@ -35,8 +35,8 @@ class Analytics
 
     public function getGroupLiveUser($group)
     {
-        #24小时内 各等级 分组在线人数
-        return User::where("enable","=",1)->where("node_group","=",$group)->where('t','>',(time()-1200))->count();
+        #6小时内 各等级 分组在线人数
+        return User::where("enable","=",1)->where("node_group","=",$group)->where('t','>',(time()-600))->count();
     }
 
     public function getGroupUser($group)
@@ -160,7 +160,7 @@ class Analytics
 
     public function getCostVIPGroupNode($vip,$group)
     {
-        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->sum('node_cost') * 5;
+        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->sum('node_cost') * 7;
     }
 
     public function getCostGroupNode($group)

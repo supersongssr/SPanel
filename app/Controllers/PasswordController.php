@@ -26,16 +26,34 @@ class PasswordController extends BaseController
         // check limit
 
         // send email
+        // 检查用户是否存在
         $user = User::where('email', $email)->first();
         if ($user == null) {
             $rs['ret'] = 0;
             $rs['msg'] = '此邮箱不存在.';
             return $response->getBody()->write(json_encode($rs));
         }
-        $rs['ret'] = 1;
-        $rs['msg'] = '重置邮件已经发送,请检查邮箱.';
+        //检查是否存在还有效的邮件
+        if ($user == null) {
+            $rs['ret'] = 0;
+            $rs['msg'] = '此邮箱不存在.';
+            return $response->getBody()->write(json_encode($rs));
+        }
+        // 检查是否存在未过期的发送的邮件
+        $exist_password_reset = PasswordReset::where('email', $email)->where('expire_time','>',time())->first();
+        if ($exist_password_reset->id) {
+          // code...如果存在未过期的
+          $rs['ret'] = 0;
+          $rs['msg'] = '已存在申请，请检查邮箱/垃圾箱，24小时内仅限一次申请.';
+          return $response->getBody()->write(json_encode($rs));
+        }
+        //发送邮件
         if (Password::sendResetEmail($email)) {
-            $res['msg'] = "邮件发送失败，请联系网站管理员。";
+          $rs['ret'] = 1;
+          $rs['msg'] = '重置邮件已经发送,请检查邮箱/垃圾箱.';
+        }else {
+          $rs['ret'] = 0;
+          $res['msg'] = "邮件发送失败，请联系网站管理员。";
         }
 
         return $response->getBody()->write(json_encode($rs));

@@ -200,29 +200,25 @@ class Job
         }
 */
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',9)->where('type','=',1)->get();  // 只获取4以上的在线节点
+        $nodes_vnstat = Node::where('id','>',9)->get();  // 只获取9以上的在线节点
         foreach ($nodes_vnstat as $node) {
-            //echo $node->id.' nodeid ';
-            # code...
-            #$addn = explode('#', $node->node_ip);
-            /* 这是过期的计算方式，过时了
-            if (empty($addn['2'])) {
-                # code...
-                $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
-                $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','>','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
-                $total = $sum_u + $sum_d;   //获取用户之和
-            }else{
-                $sum_u = TrafficLog::where('node_id','=', $node->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->sum('u');   //获取过去24小时内的总数据 再求和
-                $sum_d = TrafficLog::where('node_id','=', $node->id)->where('user_id','=','0')->where('log_time','>',(time()-86400))->sum('d');   //获取过去24小时内的总数据 再求和
-                $total = $sum_u + $sum_d;   //获取用户之和
-            }
 
-            */
+          // 判断这个节点是否今天没有走流量，是否是有问题的节点？
+          if ($node->node_bandwidth == $node->node_bandwidth_lastday) {
+            if ($node->type != 0) {
+              $node->type = 0;  //设置为 隐藏
+              $node->save();
+            }
+            // 跳出此次循环
+            continue;
+          }
+
             // 这里直接换算成 GB 保留两位小数
             $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
             // 如果 today < 16G 就会要求在一个数值上 -1
-            //这里取绝对值， 代表如果是负数的话，也不用担心。
-            if (abs($traffic_today) < 16*1024*1024*1024) {
+            //这里取绝对值， 代表如果是负数的话，也不用担心。 如果流量小于 16，并且节点在线
+            // 这里考虑到，如果小于16，但是节点是流量用超，所以限制了每天只能用4小时的那种情况的话，可以这么考虑。
+            if (abs($traffic_today) < 16*1024*1024*1024 && $node->type == 1 ) {
                 $node->node_sort -= 1;
                 $node->type = 0;
             }elseif (abs($traffic_today) > 32*1024*1024*1024) {
@@ -232,18 +228,23 @@ class Job
             // 只有流量限制不为 0 ，且非流量重置日的时候，才会按照这个标准矫正倍率，其他时间不用管
             // 就是 流量重置日 倍率不变
             // 就是 如果流量限制为 0 ， 那么倍率就永久不变
+            $today = date('d');
             if ($node->node_bandwidth_limit > 1 && $today != $node->bandwidthlimit_resetday) {
                 // 一个周期 32天计算，
                 // 如果 5号到期   今天15号， 就是 32 + 15 - 5  = 43天，大于 32 ，减去 32 ，等于10天
                 // 如果 20号到期，今天5号，就是 32 + 5 - 20 = 17天
-                $today = date('d');
                 $days = 32 + $today - $node->bandwidthlimit_resetday;
                 $days > 32 && $days -= 32;
                 // 倍率 =  流量使用的百分比 / 时间使用的百分比
                 // rate = (node_bandwidth / node_bandwidth_limit) / ( $today / days)
-                $node->traffic_rate = round( ($node->node_bandwidth / $node->node_bandwidth_limit) / ( $days / 32)  ,2);
-                // 倍率 再 乘以 基准倍率  服务器价格 / 5美元
-                $node->traffic_rate = round( $node->traffic_rate * $node->node_cost / 5 , 1);
+                $rate = round( ($node->node_bandwidth / $node->node_bandwidth_limit) / ( $days / 32)  ,2);
+                // 倍率  服务器价格 / 5美元
+                $node->traffic_rate = round( $rate * $node->node_cost / 5 , 1);
+            }
+
+            // 在时间为流量重置日那天的话，把所有正数的节点变为0
+            if ($today == $node->bandwidthlimit_resetday ) {
+              $node->node_sort > 0 && $node->node_sort = 0;
             }
 
             $node->info = floor($traffic_today/1024/1024/1024) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
@@ -268,7 +269,6 @@ class Job
         //自动禁用超过32天没有使用的用户 ,选取id>10的用户，防止那个 sr但端口的用户被禁用了导致节点无法用
         $date_check = date('Y-m-d H:i:s',strtotime('-1 month'));
         // 最近一个月内注册的不算
-        // 算一下 最近30天是啥
         $nouse_time = time() - 32*86400;
         // 选取 注册时间在1个月以上， 上次使用在一个月前， 等级 > 0的， enable = 1 的禁用。
         $users_nouse = User::where('id','>',10)->where('enable','=',1)->where('class','>',0)->where('t','<',$nouse_time)->where("reg_date",'<',$date_check)->get();
@@ -301,17 +301,19 @@ class Job
             $user->save();
         }
 
-        // 这里把 每个用户的应该有的流量给叠加上。这个
+        // 每天+流量 每天设置昨日流量，设置昨日订阅数
         // 这里只选取 等级大于0的用户  ，enable 为1的用户。
         $users = User::where('enable','>',0)->where('class','>',0)->get();
         foreach ($users as $user) {
             // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
             //$user->last_day_t=($user->u+$user->d);
             $user->renew += 0.1;
-            $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
+            // $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
+            $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
             $user->last_day_t = $user->d;     // 重置每日流量统计
+            $user->rss_count_lastday = $user->rss_count; // 记录昨日订阅数量统计
             $user->save();
-/** song
+/* song
             if (date("d") == $user->auto_reset_day) {
                 $user->u = 0;
                 $user->d = 0;
@@ -330,22 +332,22 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-**/
+*/
         }
 
-        // 总流量使用超限的，扣一分   同时发配到 1组去 那里没有流量限制
-        $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
+        // 2 3 组总流量使用超限的，扣一分   同时往下分配一组
+        $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
         foreach ($users as $user) {
             // 积分 - 1
             $user->score -= 1;
-            $user->node_group != 1 && $user->node_group = 1;  // 把流量超限的用户 发配到1组去。 1组提供很多流量很便宜的节点。
-            $user->class > 1 && $user->class -= 1; // 流量用超的用户，等级降低1 . 这个不错的想法。可以保障用户的等级在降低 节点会变少。
+            $user->node_group > 1 && $user->node_group -= 1;  // 把流量超限的用户减1组，也就是3组变2组，2组变1组
+            $user->transfer_limit = $user->class *10*1024*1024*1024;  //然后加上一些流量，相当于重置
             $user->save();
         }
 
-        # 用户每使用1天 增加1 积分 ; 所有流量用超的不加分
+        # 除了1组用户，其他组的用户每使用1天增加1积分
         $time_last24hours = time() - 24*3600;
-        $users = User::where('enable','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
+        $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
         foreach ($users as $user) {
             $user->score += 1; // 积分加1
             $user->save();
@@ -936,7 +938,7 @@ class Job
                 $user->class == 0 &&
                 $user->money <= Config::get('auto_clean_min_money')
             ) {
-                /**
+                /*
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_uncheck_days')." 天没签到了，帐号已经被删除。" ;
@@ -949,7 +951,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                **/
+                */
                 $iskilluser = true;
                 //$user->kill_user();
                 //continue;
@@ -958,7 +960,7 @@ class Job
                 $user->class == 0 &&
                 $user->money <= Config::get('auto_clean_min_money')
             ) {
-                /**
+                /*
                 $subject = Config::get('appName')."-您的用户账户已经被删除了";
                 $to = $user->email;
                 $text = "您好，系统发现您的账号已经 ".Config::get('auto_clean_unused_days')." 天没使用了，帐号已经被删除。" ;
@@ -971,7 +973,7 @@ class Job
                 } catch (\Exception $e) {
                     echo $e->getMessage();
                 }
-                **/
+                */
                 $iskilluser = true;
                 //$user->kill_user();
                 //continue;

@@ -29,7 +29,7 @@ $System_Config['db_password'] = 'password';						//用户名对应的密码
 
 
 //邮件设置--------------------------------------------------------------------------------------------
-$System_Config['mailDriver'] = 'smtp';	//发送邮件方式：none / mailgun / smtp / sendgrid 
+$System_Config['mailDriver'] = 'smtp';	//发送邮件方式：none / mailgun / smtp / sendgrid
 $System_Config['sendPageLimit']= 50;	//发信分页 解决大站发公告超时问题
 
 # mailgun
@@ -62,7 +62,7 @@ $System_Config['register_mode'] = 'invite';					//注册模式。close：关闭�
 $System_Config['defaultTraffic'] = '10';						//用户初始流量 单位GB
 $System_Config['user_expire_in_default']='32';			//用户账户过期时间，在注册时设置。（天）
 $System_Config['user_class_default']='3';					//用户注册等级，在注册时设置。
-//user reg money 
+//user reg money
 $System_Config['user_money_default']='0.66';
 $System_Config['user_class_expire_default']='24';			//用户等级过期时间，在注册时设置。（小时）
 $System_Config['user_conn']='1';							//用户注册客户端数量限制，0为不限制
@@ -85,7 +85,7 @@ $System_Config['mu_regex']='%5m%id.%suffix';				//单端口多用户混淆参数
 #邀请链接
 $System_Config['inviteNum'] = '32';			//注册后的邀请链接可用次数
 $System_Config['invite_get_money']='0.99';		//新用户通过私人邀请链接注册时，获得奖励金额（作为初始资金）
-// and gift money 
+// and gift money
 $System_Config['invite_gift_money']='6';				//邀请好友注册获得的奖励值 如果该用户被删除的话，奖励会收回
 $System_Config['invite_price']='0.1';		//用户购买邀请码所需要的价格，价格小于0时视为不开放购买
 $System_Config['custom_invite_price']='1';		//用户定制邀请码所需要的价格，价格小于0时视为不开放购买
@@ -169,10 +169,15 @@ $System_Config['enable_checkin_captcha'] = 'false';	//启用签到验证码
 
 
 //支付系统设置----------------------------------------------------------------------------------------
-#取值 none | codepay | trimepay | f2fpay | yftpay | chenAlipay | paymentwall | spay | paytaro
+#取值 none | codepay | trimepay | f2fpay | yftpay | chenAlipay | paymentwall | spay | paytaro | fakapay
 $System_Config['payment_system']='none';
 
-# paytaro 参数 
+# faka参数
+$System_Config['fakapay_url_10'] = 'vOc1odjdFs';
+$System_Config['fakapay_url_100'] = 'vOc1odjdFs';
+
+
+# paytaro 参数
 $System_Config['paytaro_app_id'] = 'vOc1odjdFs';
 $System_Config['paytaro_app_secret'] = 'aa57b6c5a67ecbc5133d3bc7b4f8cbac';
 

@@ -5,7 +5,7 @@ namespace App\Controllers;
 use App\Models\InviteCode;
 use App\Models\Node;
 use App\Models\User;
-use App\Models\NodeOnlineLog;  //写入用户在线人数嘎嘎 
+use App\Models\NodeOnlineLog;  //写入用户在线人数嘎嘎
 use App\Models\TrafficLog;  //用于写入节点流量日志
 use App\Services\Factory;
 use App\Services\Config;
@@ -43,7 +43,7 @@ class ApiController extends BaseController
     {
         // $data = $request->post('sdf');
         $email =  $request->getParam('email');
-        
+
         $email = strtolower($email);
         $passwd = $request->getParam('passwd');
 
@@ -88,14 +88,14 @@ class ApiController extends BaseController
                     ->orWhere("node_group", "=", 0);
             }
         )->orderBy("name")->get();
-        
+
         $mu_nodes = Node::where('sort', 9)->where('node_class', '<=', $user->class)->where("type", "1")->where(
             function ($query) use ($user) {
                 $query->where("node_group", "=", $user->node_group)
                     ->orWhere("node_group", "=", 0);
             }
         )->orderBy("name")->get();
-        
+
         $temparray=array();
         foreach ($nodes as $node) {
             if ($node->mu_only == 0) {
@@ -114,12 +114,12 @@ class ApiController extends BaseController
                                             "obfs_udp"=>false,
                                             "enable"=>true));
             }
-            
+
             if ($node->custom_rss == 1) {
                 foreach ($mu_nodes as $mu_node) {
                     $mu_user = User::where('port', '=', $mu_node->server)->first();
                     $mu_user->obfs_param = $user->getMuMd5();
-                    
+
                     array_push($temparray, array("remarks"=>$node->name."- ".$mu_node->server." 单端口",
                                         "server"=>$node->server,
                                         "server_port"=>$mu_user->port,
@@ -137,7 +137,7 @@ class ApiController extends BaseController
                 }
             }
         }
-        
+
         $res['ret'] = 1;
         $res['msg'] = "ok";
         $res['data'] = $temparray;
@@ -181,7 +181,7 @@ class ApiController extends BaseController
         $addn = explode('#', $node->node_ip);
         #如果第三个没有数据，说明是 正常添加的节点
         if ( empty($addn['2']) ) {
-            $node_online_log = NodeOnlineLog::where('node_id', $id)->orderBy('id', 'desc')->first(); 
+            $node_online_log = NodeOnlineLog::where('node_id', $id)->orderBy('id', 'desc')->first();
             if (!empty($node_online_log->online_user)) {
                 $online = $node_online_log->online_user;
             }
@@ -196,15 +196,15 @@ class ApiController extends BaseController
         $traffic_log = new TrafficLog();
         $traffic_now = $traffic - $traffic_mark;    //两次流量差值
         $traffic_now < 0 && $traffic_now = 1;   //如果流量差小于0 说明是流量重置了
-        $traffic_log->user_id = 0; //用于判断是否是节点上传的流量 用户是 0 
-        $traffic_log->u = 0;    //节点rx流量为0 
+        $traffic_log->user_id = 0; //用于判断是否是节点上传的流量 用户是 0
+        $traffic_log->u = 0;    //节点rx流量为0
         $traffic_log->d = $traffic_now; // 记录到节点流量
         $traffic_log->node_id = $id; //节点ID
         $traffic_log->rate = 0; //默认倍率为1
         $traffic_log->traffic = $traffic; //记录当前的流量值
         $traffic_log->log_time = time();
         $traffic_log->save();
-        //写入节点在线人数 
+        //写入节点在线人数
         $online_log = new NodeOnlineLog();
         $online_log->node_id = $id;
         $online_log->online_user = $online;
@@ -226,10 +226,13 @@ class ApiController extends BaseController
         !empty($request->getParam('node_class')) && $node->node_class = $request->getParam('node_class');
         !empty($request->getParam('node_group')) && $node->node_group = $request->getParam('node_group');
         !empty($request->getParam('node_cost')) && $node->node_cost = $request->getParam('node_cost');
-        !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
+        // !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
+        $node->sort = 11;
+        //如果设置了 cf中转，就是12 ，默认是11
+        $request->getParam('sort') && $node->sort = 12;
         !empty($request->getParam('node_bandwidth_limit')) && $node->node_bandwidth_limit = $request->getParam('node_bandwidth_limit')*1024*1024*1024;
         !empty($request->getParam('bandwidthlimit_resetday')) && $node->bandwidthlimit_resetday = $request->getParam('bandwidthlimit_resetday');
-        $node->node_sort=0;   // 故障排序设置为0 
+        $node->node_sort=0;   // 故障排序设置为0
         $node->save();
     }
 }

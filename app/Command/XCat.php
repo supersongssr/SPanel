@@ -47,6 +47,8 @@ class XCat
                 return $this->banUsernoPay();
             case("test"):
                 return $this->test();
+            case("transRecord"):
+                return $this->transRecord();
             case("createAdmin"):
                 return $this->createAdmin();
             case("resetTraffic"):
@@ -211,20 +213,119 @@ class XCat
     }
 
     public function test()
-    {   
-        /*$cdn_server = 'gagas347.tianyue888.com.cn';
-        $cdn_server = strstr($node_server, '.');
-        $cdn_server = substr($node_server, 1);
-        $user = User::wehre('id','=',1)->first();
-        $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();*/
+    {
 
-        $nodes = Node::all();
-        foreach ($nodes as $node) {
-            $node->node_sort = 0;
-            $node->save();
-        }
+
+      // 2021.3.12 批量替换域名
+      $nodelist = Node::all();
+      foreach ($nodelist as $node) {
+        // code...
+        $node->server=str_ireplace("snode.xyz","snodes.xyz",$node->server);
+        $node->node_ip=str_ireplace("snode.xyz","snodes.xyz",$node->node_ip);
+        $node->save();
+      }
+
+      // 测试 file_put_contents 能不能写入文件
+      // $date = date('Y-m-d H:i:s');
+      // $dateMonth = date('m');
+      // $dateDay = date('d');
+      // $dateHour = date('H');
+      //
+      // //获取上一次的数据 其中 那个 node_bandwidth_lastday=昨日记录！ node_bandwidth_limit=上一个小时的记录！
+      // $nodeRecord = Node::where('id',3)->first();
+      // $transNow = Node::where('id','>',9)->sum('node_bandwidth');
+      //
+      // //写入每小时的数据
+      // $transLasthour = $nodeRecord->node_bandwidth_limit;
+      // $transHourPath = "/www/wwwroot/ssp-uim/public/transhourly.html";
+      // $hourlyDate = '<br>' . date('m-d H') . ' |  ' . ($transNow - $transLasthour)/1000000000000 .'T';
+      // file_put_contents($transHourPath,$hourlyDate,FILE_APPEND);
+      // //写入昨日的记录到
+      // $nodeRecord->node_bandwidth_limit = $transNow;
+      //
+      // // 写入每天的数据
+      // if (date('H') == 19) {
+      //   $transLastday = $nodeRecord->node_bandwidth_lastday;
+      //   $transDayPath = "/www/wwwroot/ssp-uim/public/transdaily.html";
+      //   $dailyDate = '<br>' . date('y-m d') . ' |  ' . ($transNow - $transLastday)/1000000000000 .'T';
+      //   file_put_contents($transDayPath,$dailyDate,FILE_APPEND);
+      //   $nodeRecord->node_bandwidth_lastday = $transNow;
+      // }
+      //
+      // #保存这次数据，方便下次对比
+      // $nodeRecord->save();
+      //
+      // # end
+
+
+      //判断是否晚上3点，写入每天的数据
+
+
+      // // cncdns md5 给 数据库的 cncdn 一些空值加密
+      //   $cncdns = Cncdn::where('areaid','=','')->get();
+      //   foreach ($cncdns as $cncdn) {
+      //     $cncdn->areaid = md5($cncdn->area);
+      //     $cncdn->ipmd5 = md5($cncdn->cdnip);
+      //     $cncdn->save();
+      //   }
+
+      // // 把md5 后的数据，ip和 md5ip 对应输出
+      // $cncdns = Cncdn::where('server','=','osline.cn')->get();
+      // foreach ($cncdns as $cncdn) {
+      //     echo $cncdn->cdnip;
+      //     echo '\n';
+      // }
+      //
+      // foreach ($cncdns as $cncdn) {
+      //   echo $cncdn->ipmd5;
+      //   echo '\n';
+      // }
 
     }
+
+
+
+        public function transRecord()
+        {
+
+          //获取上一次的数据 其中 那个 node_bandwidth_lastday=昨日记录！ node_bandwidth_limit=上一个小时的记录！
+          $nodeRecord = Node::where('id',3)->first();
+          $transNow = Node::where('id','>',9)->sum('node_bandwidth');
+
+          //写入每小时的数据
+          $transLasthour = $nodeRecord->node_bandwidth_limit;
+          $transHourPath = "/www/wwwroot/ssp-uim/public/transhourly.html";
+          $hourlyDate = round(($transNow - $transLasthour)/1000000000) . date('mdH') . '<br>' ;
+          file_put_contents($transHourPath,$hourlyDate,FILE_APPEND);
+          //写入昨日的记录到
+          $nodeRecord->node_bandwidth_limit = $transNow;
+
+          // //写入online 在线人数每小时统计
+          // $nodeOnline = Node::where('type',1)->sum('node_online');
+          // $onlineHourPath = "/www/wwwroot/ssp-uim/public/onlinehourly.html";
+          // $onlineDate = $nodeOnline . date('mdH') . '<br>';
+          // file_put_contents($onlineHourPath,$onlineDate,FILE_APPEND);
+          // 写入 online 用户的每小时在线人数 就是这个小时在线人数的累计值。
+          $userOnline = User::where("enable","=",1)->where('t','>',(time()-3600))->count();
+          $onlineHourPath = "/www/wwwroot/ssp-uim/public/onlinehourly.html";
+          $onlineDate = $userOnline . date('mdH') . '<br>';
+          file_put_contents($onlineHourPath,$onlineDate,FILE_APPEND);
+
+          // 写入每天的数据
+          if (date('H') == 6) {
+            $transLastday = $nodeRecord->node_bandwidth_lastday;
+            $transDayPath = "/www/wwwroot/ssp-uim/public/transdaily.html";
+            $dailyDate = round(($transNow - $transLastday)/1000000000) . date('ymd') . '<br>' ;
+            file_put_contents($transDayPath,$dailyDate,FILE_APPEND);
+            $nodeRecord->node_bandwidth_lastday = $transNow;
+          }
+
+          #保存这次数据，方便下次对比
+          $nodeRecord->save();
+
+
+        }
+
 
     public function createAdmin()
     {

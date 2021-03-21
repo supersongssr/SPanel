@@ -849,22 +849,22 @@ class UserController extends BaseController
 
     public function cncdnlooking($request, $response, $args)
     {
-        /**
+        /*
         $pageNum = 1;
         if (isset($request->getQueryParams()["page"])) {
             $pageNum = $request->getQueryParams()["page"];
         }
         $cncdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->paginate(25, ['*'], 'page', $pageNum);
         $cncdns->setPath('/user/cncdnlooking');
-        **/
+        */
         $cncdns = Cncdn::where('status',1)->where('show',1)->get();
-        $usercdns = User::where('cncdn_count','>',7)->orderBy("cncdn_count", "desc")->limit('100')->get();
+        $usercdns = User::where('cncdn_count','>',32)->where('score','>',32)->orderBy("cncdn_count", "desc")->limit('100')->get();
 
         $iplocation = new QQWry();
 
         foreach ($usercdns as $usercdn) {
             $location = $iplocation->getlocation($usercdn->rss_ip);
-            $usercdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
+            $usercdn->location = iconv('gbk', 'utf-8//IGNORE', $location['area'] . ' | ' .$location['country']);
         }
 
         return $this->view()->assign("user", $this->user)->assign("cncdns", $cncdns)->assign("usercdns", $usercdns)->display('user/cncdnlooking.tpl');
@@ -872,22 +872,23 @@ class UserController extends BaseController
 
     public function cfcdnlooking($request, $response, $args)
     {
-        /**
+        /*
         $pageNum = 1;
         if (isset($request->getQueryParams()["page"])) {
             $pageNum = $request->getQueryParams()["page"];
         }
         $cfcdns = User::where('cfcdn_count','>',7)->orderBy("cfcdn_count", "desc")->paginate(25, ['*'], 'page', $pageNum);
         $cfcdns->setPath('/user/cfcdnlooking');
-**/
+*/
 
-        $cfcdns = User::where('cfcdn_count','>',7)->orderBy("cfcdn_count", "desc")->limit('100')->get();
+  // cfcdn count > 32,  用户使用得分 这个排序会好一些。
+        $cfcdns = User::where('cfcdn_count','>',32)->where('score','>',32)->orderBy("cfcdn_count", "desc")->limit('128')->get();
 
         $iplocation = new QQWry();
 
         foreach ($cfcdns as $cfcdn) {
             $location = $iplocation->getlocation($cfcdn->rss_ip);
-            $cfcdn->location = iconv('gbk', 'utf-8//IGNORE', $location['country'] . $location['area']);
+            $cfcdn->location = iconv('gbk', 'utf-8//IGNORE', $location['area'] . ' | ' .$location['country'] );
         }
 
         return $this->view()->assign("user", $this->user)->assign("cfcdns", $cfcdns)->display('user/cfcdnlooking.tpl');
@@ -1828,19 +1829,22 @@ class UserController extends BaseController
             return $response->getBody()->write(json_encode($res));
         }
 
+        // if (strlen($pwd) > 15) {
+        //   $res['ret'] = 0;
+        //   $res['msg'] = "长度不能超过15位";
+        //   return $response->getBody()->write(json_encode($res));
+        // }
+
         if (!Tools::is_validate($pwd)) {
             $res['ret'] = 0;
             $res['msg'] = "密码无效";
             return $response->getBody()->write(json_encode($res));
         }
-
+        //限制字符串长度,最高16位,限制15位
+        $pwd = substr($pwd,0,15);
         $user->updateSsPwd($pwd);
         $res['ret'] = 1;
-
-
         Radius::Add($user, $pwd);
-
-
         return $this->echoJson($response, $res);
     }
 

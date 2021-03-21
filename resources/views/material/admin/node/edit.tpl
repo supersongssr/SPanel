@@ -3,7 +3,7 @@
 {include file='admin/main.tpl'}
 
 	<main class="content">
-		<!-- 
+		<!--
 		<div class="content-header ui-content-header">
 			<div class="container">
 				<h1 class="content-heading">编辑节点 #{$node->id}</h1>
@@ -78,14 +78,14 @@
 												<label class="floating-label" for="sort">节点类型</label>
 												<select id="sort" class="form-control maxwidth-edit" name="sort">
 													<option value="11" {if $node->sort==11}selected{/if}>V2Ray</option>
-													<option value="12" {if $node->sort==12}selected{/if}>V2Ray CNCDN</option>
-													<option value="0" {if $node->sort==0}selected{/if}>Shadowsocks</option>
+													<option value="12" {if $node->sort==12}selected{/if}>CF + V2</option>
+													<!-- <option value="0" {if $node->sort==0}selected{/if}>Shadowsocks</option> -->
 													<!-- <option value="1" {if $node->sort==1}selected{/if}>VPN/Radius基础</option>
 													<option value="2" {if $node->sort==2}selected{/if}>SSH</option>
 													<option value="5" {if $node->sort==5}selected{/if}>Anyconnect</option>
 													<option value="9" {if $node->sort==9}selected{/if}>Shadowsocks 单端口多用户</option>
 													<option value="10" {if $node->sort==10}selected{/if}>Shadowsocks 中转</option> -->
-													
+
 												</select>
 											</div>
 									</div>
@@ -103,7 +103,7 @@
 										<input class="form-control maxwidth-edit" id="node_bandwidth_limit" name="node_bandwidth_limit" type="text" value="{$node->node_bandwidth_limit/1024/1024/1024}">
 										<p class="form-control-guide"><i class="material-icons">info</i>不设上限请填0</p>
 									</div>
-									
+
 									<div class="form-group form-group-label">
 										<div class="checkbox switch">
 											<label for="type">
@@ -271,4 +271,3 @@
 	});
 
 </script>
-

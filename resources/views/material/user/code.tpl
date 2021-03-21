@@ -22,13 +22,7 @@
                         <div class="card-main">
                             <div class="card-inner">
                                 <div class="card-inner">
-                                    <!-- <p class="card-heading">购买充值码：。</p>
 
-                                      <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
-                                      <p><a href="https://www.510ka.com/liebiao/DE81DC5F1B7B1552" target="_blank" >点此 捐赠/充值 510发卡 付款后会获得一个充值码/卡密 在本页面充值</a> * 请关闭代理访问发卡平台<br>
-                                        重要的事情说三遍<br>
-                                  </p>
-                                        <p>付款后在发卡平台获取一个充值码/卡密，卡密在本页面充值。</p> -->
                                     {if $config["enable_admin_contact"] == 'true'}
                                         <p class="card-heading">充值遇到问题？联系站长 或者 <a href="/user/ticket">提交工单</a> </p>
                                         {if $config["admin_contact1"]!=null}
@@ -48,19 +42,7 @@
                     </div>
                 </div>
 
-
-                {if $pmw!=''}
-                    <div class="col-lg-12 col-md-12">
-                        <div class="card margin-bottom-no">
-                            <div class="card-main">
-                                <div class="card-inner">
-                                    {$pmw}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                {/if}
-
+                {if $config["payment_system"] == 'fakapay'}
                 <div class="col-lg-12 col-md-12">
                     <div class="card margin-bottom-no">
                         <div class="card-main">
@@ -70,7 +52,7 @@
                                             <div class="card-heading">充值码/卡密/卡号 充值余额</div>
                                             <button class="btn btn-flat" id="code-update" ><span class="icon">favorite_border</span></button>
                                     </div>
-                                    <p><a type="button" class="btn fbtn-brand-accent btn-sm " href="https://www.mingypay.com/mall/?link=m5f8fc08b7d865" target="_blank" >10￥充值码 购买 （商品名已做安全处理，拍下即为充值码） </a></p><p> <a type="button" class="btn fbtn-brand-accent btn-sm " href="https://www.mingypay.com/mall/?link=m5f8fc0caddbdd" target="_blank" >100￥充值码 购买 （拍下即为充值码，多个充值码可叠加充值） </a> </p><p>* 购买多个充值码可叠加充值。为支付安全，商品名已做安全处理，请忽略商品名，拍下后获取充值码/卡号，在本页面输入即可充值余额。</p>
+                                    <p><a type="button" class="btn fbtn-brand-accent btn-sm " href="{{$config["fakapay_url_10"]}}" target="_blank" >10￥充值码 购买 （商品名已做安全处理，拍下即为充值码） </a></p><p> <a type="button" class="btn fbtn-brand-accent btn-sm " href="{{$config["fakapay_url_100"]}}" target="_blank" >100￥充值码 购买 （拍下即为充值码，多个充值码可叠加充值） </a> </p><p>* 购买多个充值码可叠加充值。为支付安全，商品名已做安全处理，请忽略商品名，拍下后获取充值码/卡号，在本页面输入即可充值余额。</p>
 
                                     <div class="form-group form-group-label">
                                         <label class="floating-label" for="code">充值码填入这里 点右边心心符号 </label>
@@ -81,6 +63,19 @@
                         </div>
                     </div>
                 </div>
+                {/if}
+
+                  {if $pmw!=''}
+                      <div class="col-lg-12 col-md-12">
+                          <div class="card margin-bottom-no">
+                              <div class="card-main">
+                                  <div class="card-inner">
+                                      {$pmw}
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  {/if}
 
 
 <!--

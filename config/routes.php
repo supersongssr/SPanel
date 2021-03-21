@@ -11,7 +11,7 @@ use App\Middleware\Mu;
 use App\Middleware\Mod_Mu;
 use Zeuxisoo\Whoops\Provider\Slim\WhoopsMiddleware;
 
-#song 
+#song
 use App\Utils\QQWry;
 /***
  * The slim documents: http://www.slimframework.com/docs/objects/router.html
@@ -138,7 +138,7 @@ $app->get('/yft/notify', 'App\Services\Gateway\YftPay:notify');//yft uses GET
 $app->get('/tos', 'App\Controllers\HomeController:tos');
 $app->get('/staff', 'App\Controllers\HomeController:staff');
 $app->post('/telegram_callback', 'App\Controllers\HomeController:telegram');
-//song 用户临时解封账号 
+//song 用户临时解封账号
 $app->post('/reactive', 'App\Controllers\AuthController:reactive');
 $app->post('/relevel', 'App\Controllers\UserController:relevel');
 $app->post('/uptopay', 'App\Controllers\UserController:uptopay');
@@ -186,7 +186,7 @@ $app->group('/user', function () {
     $this->get('/ticket/{id}/view', 'App\Controllers\UserController:ticket_view');
     $this->get('/ticket/{id}/openview', 'App\Controllers\UserController:ticket_openview');
     $this->put('/ticket/{id}', 'App\Controllers\UserController:ticket_update');
-    
+
     $this->post('/buy_invite', 'App\Controllers\UserController:buyInvite');
     $this->post('/custom_invite', 'App\Controllers\UserController:customInvite');
     $this->get('/edit', 'App\Controllers\UserController:edit');
@@ -247,7 +247,7 @@ $app->group('/payment', function () {
     $this->post('/status', 'App\Services\Payment:getStatus');
 });
 
-/**
+/*
 // Auth
 $app->group('/auth', function () {
     $this->get('/login', 'App\Controllers\AuthController:login');
@@ -261,7 +261,7 @@ $app->group('/auth', function () {
     $this->get('/telegram_oauth', 'App\Controllers\AuthController:telegram_oauth');
     $this->get('/login_getCaptcha', 'App\Controllers\AuthController:getCaptcha');
 })->add(new Guest());
-**/
+*/
 
 // Password
 $app->group('/password', function () {

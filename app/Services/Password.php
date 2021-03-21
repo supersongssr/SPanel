@@ -21,7 +21,7 @@ class Password
         $pwdRst = new PasswordReset();
         $pwdRst->email = $email;
         $pwdRst->init_time = time();
-        $pwdRst->expire_time = time() + 3600 * 24; // @todo
+        $pwdRst->expire_time = time() + 3600 * 24; // @todo //这里是24小时有效期
         $pwdRst->token = Tools::genRandomChar(64);
         if (!$pwdRst->save()) {
             return false;

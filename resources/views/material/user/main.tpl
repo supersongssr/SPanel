@@ -73,7 +73,7 @@
 									<i class="icon icon-lg">account_balance_wallet</i>&nbsp;用户面板
 								</a>
 							</li>
-							
+
 							<li>
 								<a href="/user/invite">
 									<i class="icon icon-lg">loyalty</i>&nbsp;邀请返利
@@ -100,7 +100,7 @@
 
 
 
-                          
+
 						</ul>
 
 
@@ -111,14 +111,14 @@
 									<i class="icon icon-lg">airplanemode_active</i>&nbsp;节点列表
 								</a>
 							</li>
-							<li>
+							<!-- <li>
 								<a href="/user/cncdnlooking">
 									<i class="icon icon-lg">visibility</i>&nbsp;中转加速技术
 								</a>
-							</li>
+							</li> -->
 							<li>
 								<a href="/user/cfcdnlooking">
-									<i class="icon icon-lg">visibility</i>&nbsp;直连优化技术
+									<i class="icon icon-lg">visibility</i>&nbsp;电信/移动网速优化
 								</a>
 							</li>
 							<li>
@@ -145,14 +145,14 @@
 									<i class="icon icon-lg">sync_problem</i>&nbsp;个人设定
 								</a>
 							</li>
-							
+
 							<!-- <li>
 								<a href="/user/relay">
 									<i class="icon icon-lg">compare_arrows</i>&nbsp;中转规则
 								</a>
 							</li> -->
 
-							
+
 							<li>
 								<a href="/user/lookingglass">
 									<i class="icon icon-lg">visibility</i>&nbsp;节点网速
@@ -171,12 +171,12 @@
 							</li>
 							{/if}
 
-							
+
 							<li><a href="/user/detect"><i class="icon icon-lg">account_balance</i>&nbsp;审计规则</a></li>
 							<li><a href="/user/detect/log"><i class="icon icon-lg">assignment_late</i>&nbsp;审计记录</a></li>
 						</ul>
 
-						
+
 
 						{if $config['enable_telegram']=='true' && $config['telegram_grouplink']!='' }
 						<li>

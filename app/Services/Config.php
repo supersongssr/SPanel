@@ -40,6 +40,8 @@ class Config
             "enable_donate" => self::get("enable_donate"),
             "enable_telegram" => self::get("enable_telegram"),
             "payment_system" => self::get("payment_system"),
+            "fakapay_url_10" => self::get("fakapay_url_10"),
+            "fakapay_url_100" => self::get("fakapay_url_100"),
           	"enable_mylivechat" => self::get("enable_mylivechat"),
           	"mylivechat_id" => self::get("mylivechat_id"),
           	"enable_ticket"=> self::get("enable_ticket"),

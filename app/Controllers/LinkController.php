@@ -10,7 +10,7 @@ use App\Models\Smartline;
 use App\Utils\ConfRender;
 use App\Utils\Tools;
 use App\Utils\URL;
-#song 
+#song
 use App\Utils\QQWry;
 
 /**
@@ -70,20 +70,33 @@ class LinkController extends BaseController
             return null;
         }
 
-        //上传用户订阅ip
-        $iplocation = new QQWry();
-        $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
-        //对字符的编码进行一次格式化，编码不同可能影响到判断
-        $location['area'] = iconv('gbk', 'utf-8//IGNORE', $location['area']);
-        $location['country'] = iconv('gbk', 'utf-8//IGNORE', $location['country']);
-        // 这里的 location['area'] 获取到的其实是 联通 电信 移动等网络
-        if (in_array($location['area'], ['移动','电信','联通'])) {
-            # code...
-            $user->rss_ip = $_SERVER["REMOTE_ADDR"];
-            $user->cncdn && $user->cncdn_count += 1;
-            $user->cfcdn && $user->cfcdn_count += 1;
-            $user->save();
-        }
+        //上传用户订阅IP，和用户订阅的数据
+        // 在用户设置了cfcdn 的情况下，才会记录这个IP
+        // if ($user->cfcdn) {
+        //   $iplocation = new QQWry();
+        //   $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
+        //   //对字符的编码进行一次格式化，编码不同可能影响到判断
+        //   $location['area'] = iconv('gbk', 'utf-8//IGNORE', $location['area']);
+        //   $location['country'] = iconv('gbk', 'utf-8//IGNORE', $location['country']);
+        //   // 这里的 location['area'] 获取到的其实是 联通 电信 移动等网络
+        //   if (in_array($location['area'], ['移动','电信','联通'])) {
+        //       # code...
+        //
+        //       $user->cncdn && $user->cncdn_count += 1;
+        //       $user->cfcdn && $user->cfcdn_count += 1;
+        //   }
+        // }
+        // 只所以不再记录这个IP的来源，是因为没有必要了 所有的用户都记录订阅的IP
+        // 如果设置了 cfcdn 就记录一下
+        $user->cncdn && $user->cncdn_count += 1;
+        $user->cfcdn && $user->cfcdn_count += 1;
+        //记录订阅IP
+        $user->rss_ip = $_SERVER["REMOTE_ADDR"];
+        // 然后统计一下这次的订阅次数
+        $user->rss_count += 1;
+        // 如果1天订阅次数超过100次， 就被减一个分组
+        $user->node_group > 1 && $user->rss_count - $user->rss_count_lastday > 128 && $user->node_group -= 1;
+        $user->save();
 
         $mu = 0;
         if (isset($request->getQueryParams()['mu'])) {
