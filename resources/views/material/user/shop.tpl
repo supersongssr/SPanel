@@ -79,9 +79,9 @@
 
 								</div>
 								<div class="shop-content">
-									<div class="shop-content-left">账号 +=</div><div class="shop-content-right">{$shop->bandwidth()}G & {$shop->expire()}<span>天</span></div>
-									<div class="shop-content-left">等级 +=</div><div class="shop-content-right">Lv.{$shop->user_class()} & {$shop->class_expire()}<span>天</span></div>
-									<div class="shop-content-left">节点 >=</div><div class="shop-content-right">Cloud{$shop->user_class() * 3} & HighS{$shop->user_class()}<span>个</span></div>
+									<div class="shop-content-left">账号 +</div><div class="shop-content-right">{$shop->bandwidth()}G & {$shop->expire()}<span>天</span></div>
+									<div class="shop-content-left">等级 +</div><div class="shop-content-right">Lv.{$shop->user_class()} & {$shop->class_expire()}<span>天</span></div>
+									<div class="shop-content-left">流量 =</div><div class="shop-content-right">{$shop->user_class() * 10 + $shop->user_class() * $shop->user_class() * 10} G/{$shop->user_class() * 10}天</span></div>
 								</div>
 								<div class="shop-content-extra">
 									{foreach $shop->content_extra() as $service}

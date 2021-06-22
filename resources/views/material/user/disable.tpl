@@ -29,8 +29,9 @@
 									<li> 您的余额小于 0 ，请尽快补充余额 > 0，以保障用户正常可用</li>
 									{/if}
 									{if $user->d > $user->transfer_limit}
-									<li> 您在 {$user->renew * 10}天内使用了 {ceil($user->d / 1024/1024)}M 下行流量，建议您在 {$user->renew * 10}天内使用下行流量不要超过 {floor($user->transfer_limit / 1024/1024)}M ；如果您有大流量需求，建议您使用低倍率节点！ 网站禁止滥用网站资源。 如果在正常使用下需求更多流量，请提交工单申请</li>
+									<li> 您在 {$user->renew * 10}天内使用了 {$user->d} Byte下行流量，如果您有大流量需求，建议您使用低倍率节点。 如果在正常使用下需求更多流量，请提交工单申请</li>
 									{/if}
+									<p style="color:red";>系统消息：<br> {$user->warming}</p>
 								</div>
 							</div>
 						</div>

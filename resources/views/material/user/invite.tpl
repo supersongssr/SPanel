@@ -141,10 +141,9 @@
 											  <!--       <td>#{$payback->id}</td> -->
 													<td>{$payback->id}</td>
 													<td>{if $payback->total == -1} 注册
-														{elseif $payback->total == -2} 注销
 														{else} {$payback->total}
 														{/if}</td>
-													<td>{$payback->userid}</td>
+													<td>{$payback->userid}{if $payback->callback == 1 }已注销{/if}</td>
 													<td>{$payback->ref_get} $</td>
 													<td>{$payback->datetime}</td>
 					

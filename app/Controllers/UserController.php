@@ -246,7 +246,7 @@ class UserController extends BaseController
         $codeq = Code::where("code", "=", $code)->where("isused", "=", 0)->first();
         if ($codeq == null) {
             $res['ret'] = 0;
-            $res['msg'] = "此充值码错误";
+            $res['msg'] = "此充值码错误或已被使用";
             return $response->getBody()->write(json_encode($res));
         }
 
@@ -967,7 +967,7 @@ class UserController extends BaseController
         if (isset($request->getQueryParams()["page"])) {
             $pageNum = $request->getQueryParams()["page"];
         }
-        $paybacks = Payback::where("ref_by", $this->user->id)->orderBy("id", "desc")->paginate(15, ['*'], 'page', $pageNum);
+        $paybacks = Payback::where('total','!=',-2)->where("ref_by", $this->user->id)->orderBy("id", "desc")->paginate(15, ['*'], 'page', $pageNum);
         if (!$paybacks_sum = Payback::where("ref_by", $this->user->id)->sum('ref_get')) {
             $paybacks_sum = 0;
         }
@@ -1308,9 +1308,9 @@ class UserController extends BaseController
         $bought->coupon = $code;
 
 
-        /** if (isset($onetime)) {
+        /* if (isset($onetime)) {
             $price = $shop->price;
-        } **/
+        } */
         $bought->price = $price;
         $bought->save();
 
@@ -1752,14 +1752,14 @@ class UserController extends BaseController
         $res['msg'] = "设置成功";
         return $this->echoJson($response, $res);
     }
-/**
+
     public function updateGroup($request, $response, $args)
     {
         $group = $request->getParam('group');
 
         $user = $this->user;
 
-        if ($group == "") {
+        if ($group == "" || $group > 3) {
             $res['ret'] = 0;
             $res['msg'] = "非法输入";
             return $response->getBody()->write(json_encode($res));
@@ -1773,7 +1773,7 @@ class UserController extends BaseController
         return $this->echoJson($response, $res);
     }
 
-**/
+
     public function updateMail($request, $response, $args)
     {
         $mail = $request->getParam('mail');

@@ -22,7 +22,7 @@ class NodeController extends AdminController
                             "status" => "?","traffic_rate" => "R",
                             "node_cost" => "C","node_online" => "O","node_oncost" => "负载", "node_group" => "G",
                             "node_class" => "L", "node_speedlimit" => "节点限速/Mbps",
-                            "node_bandwidth" => "已走流量/GB", "node_bandwidth_limit" => "流量限制/GB","info" => "节点信息",
+                            "node_bandwidth" => "GB", "node_bandwidth_limit" => "流量限制/GB","info" => "节点信息",
                             "bandwidthlimit_resetday" => "流量重置日", "node_heartbeat" => "上一次活跃时间",
                             "custom_method" => "自定义加密", "custom_rss" => "自定义协议以及混淆",
                             "mu_only" => "只启用单端口多用户");
@@ -110,7 +110,7 @@ class NodeController extends AdminController
         $group = $request->getParam('group');
         $class = $request->getParam('class');
 
-        $nodes = Node::where('type','=',1)->where('node_group','=',$group)->where('node_class','<=',$class)->orderBy("traffic_rate", "desc")->get();
+        $nodes = Node::where('node_group','=',$group)->where('node_class','<=',$class)->orderBy("type","desc")->orderBy("traffic_rate", "desc")->get();
         //$nodes = Node::orderBy("traffic_rate", "desc")->limit('30')->get();
 
         return $this->view()->assign("nodes", $nodes)->display('admin/node/nodectl.tpl');
@@ -201,7 +201,7 @@ class NodeController extends AdminController
                               "server" => "节点地址", "node_ip" => "节点IP", "traffic_rate" => "流量比率",
                               "node_cost" => "成本", "node_online" => "在线人数","node_oncost" => "负载","node_group" => "节点群组",
                               "node_class" => "节点等级", "node_speedlimit" => "节点限速/Mbps",
-                              "node_bandwidth" => "已走流量/GB", "node_bandwidth_limit" => "流量限制/GB","info" => "节点信息",
+                              "node_bandwidth" => "GB", "node_bandwidth_limit" => "流量限制/GB","info" => "节点信息",
                               "bandwidthlimit_resetday" => "流量重置日", "node_heartbeat" => "上一次活跃时间",
                               "custom_method" => "自定义加密", "custom_rss" => "自定义协议以及混淆",
                               "mu_only" => "只启用单端口多用户");

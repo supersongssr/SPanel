@@ -274,6 +274,7 @@ class Job
         $users_nouse = User::where('id','>',10)->where('enable','=',1)->where('class','>',0)->where('t','<',$nouse_time)->where("reg_date",'<',$date_check)->get();
         foreach ($users_nouse as $user) {
             $user->enable = 0;
+            $user->warming = date("Ymd H:i:s") . '账号超过1个月未使用，系统启用账号保护。您可以自助解除保护';
             $user->save();
         }
         //
@@ -282,6 +283,7 @@ class Job
         $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
         foreach ($users_nomoney as $user) {
             $user->enable = 0;
+            $user->warming = date("Ymd H:i:s").'账号余额异常，系统启用账号保护。请检查您的余额';
             $user->ban_times += $user->class;
             $user->ban_times > 16 && $user->pass = time();
             $user->score -= 1;   //用户积分 - 1
@@ -335,13 +337,16 @@ class Job
 */
         }
 
-        // 2 3 组总流量使用超限的，扣一分   同时往下分配一组
+        // 2 3 组总流量使用超限的，分配到下载组，然后加用户等级的流量！一次
         $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
         foreach ($users as $user) {
             // 积分 - 1
             $user->score -= 1;
-            $user->node_group > 1 && $user->node_group -= 1;  // 把流量超限的用户减1组，也就是3组变2组，2组变1组
-            $user->transfer_limit = $user->class *10*1024*1024*1024;  //然后加上一些流量，相当于重置
+            $user->ban_times += 1; //用户封禁次数+用户等级 每次+1次违规吧
+            $user->ban_times > 16 && $user->pass = time() && $user->enable = 0;
+            $user->warming = date("Ymd H:i:s") . '近期下行流量较多，系统已为您分配大带宽节点，下载请使用低倍率节点，切换分组请在个人设定页面';
+            $user->node_group > 1 && $user->node_group = 1;  // 分配到下载组
+            $user->transfer_limit += $user->class *1024*1024*1024;  //然后加上一些流量，相当于重置
             $user->save();
         }
 
@@ -354,8 +359,8 @@ class Job
         }
 
         //将余额 小于 0 的用户，请空邀请人，收回邀请返利
-        // 选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 16才行
-        $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',32)->get();  // 使用积分小于 32 且 money 小于 0 会被清理
+        // 选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 目前是设定的64
+        $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',64)->get();  // 使用积分小于 32 且 money 小于 0 会被清理
         foreach ($users as $user) {
             $ref_user = User::find($user->ref_by);
             //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
@@ -367,6 +372,8 @@ class Job
                 $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
                 //不再扣除流量 扣除邀请的流量！
                 //$ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                //邀请人的 ban_times += 1 惩罚一下
+                $ref_user->ban_times += 1 ;
                 $ref_user->save();
                 //写入返利日志
                 $Payback = new Payback();
@@ -378,12 +385,16 @@ class Job
                 $Payback->ref_get = - $ref_payback->ref_get;
                 $Payback->datetime = time();
                 $Payback->save();
+                // ref_payback 的 callback 写为1 就是这个返利被收回了。 实际这样的话，还是一个不错的方案的。也就是说，这个返利的话，只需要这里加一个参数就好了。无需之前的那种复杂的方案！ 这个可以有。
+                $ref_payback->callback = 1; // 设置这个返利已被收回！ 不错的做法和想法！ 
+                $ref_payback->save();
             }
             //这里把这个用户的 ref_by 也清空一下,这样避免下次重复计算
             $user->ref_by = 0;
             $user->enable = 0;
             $user->save();
         }
+
 
         // 把清空日志放到这里来
         NodeInfoLog::where("log_time", "<", time()-86400*3)->delete();
@@ -977,6 +988,10 @@ class Job
                 $iskilluser = true;
                 //$user->kill_user();
                 //continue;
+            }elseif ( $user->t == 0 && $user->u == 0 && $user->d == 0 && (strtotime($user->reg_date) + 86400) < time() && $user->class == 0 && $user->money <= 1 ) { 
+                // 增加一项，如果用户注册超过24小时，但是流量没使用，余额 < 1的话，就删除掉！ 防止注册机制导致网站出现问题。
+                // t=0 u=0 d=0说明没有使用，然后注册还 > 24小时，而且等级为0 ，余额<1 这类账号也是需要被删除的！ 
+                $iskilluser = true;
             }
 
             //song 如果返利扣除在这里扣除的话，会不会好一些？我觉得会好一些，不错的主意。嘎嘎 有点意思，嘿嘿 可以有
@@ -998,6 +1013,8 @@ class Job
                         $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
                         //扣除邀请的流量！ 不再扣除邀请流量
                         //$ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
+                        //邀请人的 ban_times += 1 惩罚一下
+                        $ref_user->ban_times += 1 ;
                         $ref_user->save();
                         //写入返利日志
                         $Payback = new Payback();
@@ -1009,6 +1026,9 @@ class Job
                         $Payback->ref_get = - $ref_payback->ref_get;
                         $Payback->datetime = time();
                         $Payback->save();
+                        // ref_payback 的 callback 写为1 就是这个返利被收回了。 实际这样的话，还是一个不错的方案的。也就是说，这个返利的话，只需要这里加一个参数就好了。无需之前的那种复杂的方案！ 这个可以有。
+                        $ref_payback->callback = 1; // 设置这个返利已被收回！ 不错的做法和想法！ 
+                        $ref_payback->save();
                     }
                 }
                 //然后再删除用户

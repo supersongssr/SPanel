@@ -387,6 +387,7 @@ class AuthController extends BaseController
 
         //dumplin：1、邀请人等级为0则邀请码不可用；2、邀请人invite_num为可邀请次数，填负数则为无限
         $c = InviteCode::where('code', $code)->first();
+        $date_lastday = date("Y-m-d H:i:s" , (time() - 86400) );
         if ($c == null) {
             if (Config::get('register_mode') == 'invite') {
                 $res['ret'] = 0;
@@ -407,10 +408,34 @@ class AuthController extends BaseController
                 $res['ret'] = 0;
                 $res['msg'] = "邀请人可用邀请次数为0";
                 return $response->getBody()->write(json_encode($res));
+            } else if ($gift_user->enable == 0) {
+                // 增加限制邀请人必须是 enable 才能用
+                $res['ret'] = 0;
+                $res['msg'] = "请联系邀请人先激活账号";
+                return $response->getBody()->write(json_encode($res));
+            } else if ($gift_user->money < 0) {
+                // 限制邀请人的余额必须为正，才能继续邀请
+                $res['ret'] = 0;
+                $res['msg'] = "请联系邀请人先充值余额";
+                return $response->getBody()->write(json_encode($res));
+            } else if ($gift_user->t == 0) {
+                // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
+                $res['ret'] = 0;
+                $res['msg'] = "请联系邀请人试用一下本站";
+                return $response->getBody()->write(json_encode($res));
+            } else if ($gift_user->score < 1) {
+                // 限制邀请人必须 score 有值才能邀请
+                $res['ret'] = 0;
+                $res['msg'] = "请联系邀请人体验一下本站节点再注册";
+                return $response->getBody()->write(json_encode($res));
+            } else if ($gift_user->reg_date > $date_lastday) {
+                // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
+                $res['ret'] = 0;
+                $res['msg'] = "请联系邀请人体验一下网站再注册";
+                return $response->getBody()->write(json_encode($res));
             }
+
         }
-
-
 
         // check email format
         if (!Check::isEmailLegal($email)) {
@@ -453,6 +478,26 @@ class AuthController extends BaseController
             $res['ret'] = 0;
             $res['msg'] = "请填上你的联络方式";
             return $response->getBody()->write(json_encode($res));
+        }
+
+        // IP 注册频率的限制
+        $user_reg_ip = substr($_SERVER["REMOTE_ADDR"],0,24);
+        // 10分钟内的数据，限制10分钟内同IP的注册数量不能超过2个。 
+        $date_last10min = date("Y-m-d H:i:s" , (time() - 600) );
+        $ip_reg_count = User::where('reg_ip',$user_reg_ip)->where('reg_date','>',$date_last10min)->count();
+        if ($ip_reg_count > 1) {
+            $res['ret'] = 0;
+            $res['msg'] = "注册的太快了，喝口茶再注册吧";
+            return $response->getBody()->write(json_encode($res));
+        }
+        // 限制 邀请码的注册频率
+        if ($c != null && $c->user_id != 0) {
+            $ref_reg_count = User::where('ref_by',$c->user_id)->where('reg_date','>',$date_last10min)->count();
+            if ($ref_reg_count > 1) {
+                $res['ret'] = 0;
+                $res['msg'] = "邀请的太快了，喝杯咖啡再注册吧";
+                return $response->getBody()->write(json_encode($res));
+            }
         }
 
         $user = User::where('im_value', $wechat)->where('im_type', $imtype)->first();
@@ -498,31 +543,46 @@ class AuthController extends BaseController
         
         //dumplin：填写邀请人，写入邀请奖励
         $user->ref_by = 0;
+        // 默认返利为false
+        $user_refback = false;
         //song 这里开始写入返利日志
-        if ($c != null) {
-            if ($c->user_id != 0) {
-                // song 这里只写入被邀请人的福利
-                $user->ref_by = $c->user_id;
-                $user->money = Config::get('invite_get_money');
-                // 这里保存一次，下面的 $user-id 才能获取到。可以有。嘎嘎 
-                $user->save();
-                $gift_user = User::where("id", "=", $c->user_id)->first();
-                $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1000 * 1000;
-                //song 增加gift user的 money 先赠送7元
-                $gift_user->money += Config::get('invite_gift_money');
-                $gift_user->invite_num -= 1;
-                $gift_user->save();
+        if ($c != null && $c->user_id != 0) {
+            // 如果存在邀请人，而且邀请人不为0 给返利
+            $user->ref_by = $c->user_id;
+            $user_refback =  true;
+        }
 
-                //song 写入新的返利日志 
-                //写入返利日志
-                $Payback = new Payback();
-                $Payback->total = -1;
-                $Payback->userid = $user->id;  //用户注册的ID 
-                $Payback->ref_by = $c->user_id;  //邀请人ID
-                $Payback->ref_get = Config::get('invite_gift_money');
-                $Payback->datetime = time();
-                $Payback->save();
-            }
+        // 如果24小时内存在相同IP注册过，那么就不给返利！
+        // 24小时内，同IP注册的账号，不再有返利
+        $user_regtime_payback = date("Y-m-d H:i:s" , (time() - 86400) );
+        $ip_payback_count = User::where('reg_ip',$user_reg_ip)->where('reg_date','>',$user_regtime_payback)->count();
+        if ($ip_payback_count > 0) {
+            // 如果存在24小时内的同IP注册账号，不给返利
+            $user_refback = false;
+        }
+
+        // 开始返利
+        if ($user_refback == true) {
+            // song 这里只写入被邀请人的福利
+            $user->money = Config::get('invite_get_money');
+            // 这里保存一次，下面的 $user-id 才能获取到。可以有。嘎嘎 
+            $user->save();
+            $gift_user = User::where("id", "=", $c->user_id)->first();
+            $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1000 * 1000;
+            //song 增加gift user的 money 先赠送5元
+            $gift_user->money += Config::get('invite_gift_money');
+            $gift_user->invite_num -= 1;
+            $gift_user->save();
+
+            //song 写入新的返利日志 
+            //写入返利日志
+            $Payback = new Payback();
+            $Payback->total = -1;
+            $Payback->userid = $user->id;  //用户注册的ID 
+            $Payback->ref_by = $c->user_id;  //邀请人ID
+            $Payback->ref_get = Config::get('invite_gift_money');
+            $Payback->datetime = time();
+            $Payback->save();
         }
         
         //Song
@@ -544,7 +604,8 @@ class AuthController extends BaseController
         $user->node_speedlimit = Config::get('user_speedlimit');
         $user->expire_in = date("Y-m-d H:i:s", time() + Config::get('user_expire_in_default') * 86400);
         $user->reg_date = date("Y-m-d H:i:s");
-        $user->reg_ip = $_SERVER["REMOTE_ADDR"];
+        // 这里设置一下，获取的IP，只获取 24位。再多的 就不获取的。
+        $user->reg_ip = $user_reg_ip; # 这里采用上面处理后的用户注册ip substr($_SERVER["REMOTE_ADDR"],24) ;
         $user->plan = 'A';
         $user->theme = Config::get('theme');
 
@@ -660,6 +721,8 @@ class AuthController extends BaseController
 
         if ($user->enable == 0) {
             $user->enable = 1;
+            // 重置用户的 ban_times 
+            $user->ban_times = 0;
             $user->save();
             $rs['ret'] = 1;
             $rs['msg'] = '账号已激活！';

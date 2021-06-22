@@ -768,3 +768,10 @@ ALTER TABLE `ss_node` ADD `cncdn` TINYINT(4) AFTER `server`;
 #增加 rss订阅次数统计
 ALTER TABLE `user` ADD `rss_count` VARCHAR(64) DEFAULT '0' COMMENT 'Rss次数统计' AFTER `rss_ip`;
 ALTER TABLE `user` ADD `rss_count_lastday` VARCHAR(64) DEFAULT '0' COMMENT 'Rss昨日次数' AFTER `rss_count`;
+
+#增加 用户 warming 消息
+ALTER TABLE `user` ADD `warming` TEXT COMMENT '警告消息' AFTER `cfcdn_count`;
+
+#payback 增加字段，显示此返利是否被收回 1是收回
+ALTER TABLE `payback`  ADD `callback` INT(8) COMMENT '返利是否被收回 1是收回了 3=邀请人已删除 0=返利还没被收回' AFTER `ref_get`;
+

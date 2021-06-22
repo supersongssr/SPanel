@@ -94,9 +94,23 @@ class LinkController extends BaseController
         $user->rss_ip = $_SERVER["REMOTE_ADDR"];
         // 然后统计一下这次的订阅次数
         $user->rss_count += 1;
-        // 如果1天订阅次数超过100次， 就被减一个分组
-        $user->node_group > 1 && $user->rss_count - $user->rss_count_lastday > 128 && $user->node_group -= 1;
+        // 订阅超32个，封禁。 订阅超 64个，降级！ 
+        $rss_today = $user->rss_count - $user->rss_count_lastday;
+        if ($rss_today > 32 && $rss_today % 2 > 0 ) {
+            $user->enable = 0; // 禁用用户 
+            $user->warming = date("Ymd H:i:s").'订阅异常，为防止订阅泄露，接下来12小时仅允许更新一次订阅！'; //增加提醒
+        }elseif ( $rss_today > 64 && $user->node_group > 1 ) {
+            $user->enable = 0 ;// 禁用用户 
+            $user->node_group = 1; //把用户放到1组去
+            $user->warming = date("Ymd H:i:s").'订阅严重异常，疑似泄露，封禁订阅24小时，今日不允许再更新订阅';
+        }
+        // 保存user
         $user->save();
+
+        // 如果发现用户被禁用，那么订阅设置为 null 
+        if ($user->enable == 0) {
+            return null;
+        }
 
         $mu = 0;
         if (isset($request->getQueryParams()['mu'])) {

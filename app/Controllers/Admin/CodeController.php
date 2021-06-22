@@ -52,7 +52,7 @@ class CodeController extends AdminController
         for ($i = 0; $i < $n; $i++) {
             $char = Tools::genRandomChar(8);
             $code = new Code();
-            $code->code = time() . $char;
+            $code->code = time() . $char . ($number * 100);
             $code->type = -1;
             $code->number = $number;
             $code->userid=0;

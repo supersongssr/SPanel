@@ -62,33 +62,31 @@
 
 
 
-						<!--
+						
 						<div class="card margin-bottom-no">
 							<div class="card-main">
 								<div class="card-inner">
 									<div class="card-inner">
 										<div class="cardbtn-edit">
-												<div class="card-heading">分组选择</div>
+												<div class="card-heading">分组 网络</div>
 												<button class="btn btn-flat" id="group-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
-										<p>当前分组：<code data-default="group">{$user->node_group} 组</code>，您可以使用当前分组的节点，分组间节点不互通。 您可以自由选择分组。</p>
+										<p>设置您的网络，系统会根据您的网络分配节点。设置后10分钟后生效，更新订阅。</p>
 										<div class="form-group form-group-label control-highlight-custom dropdown">
 											<label class="floating-label" for="group">请选择您的分组</label>
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
-
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">A: 1 组</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">B: 2 组</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">C: 3 组</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="group">D: 4 组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">大带宽</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">移动/电信组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">联通组</a></li>
 											</ul>
 										</div>
 							        </div>
 						        </div>
 					        </div>
 				        </div>
--->
+
 						<div class="card margin-bottom-no">
 							<div class="card-main">
 								<div class="card-inner">

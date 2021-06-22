@@ -242,6 +242,9 @@ class UserController extends AdminController
                 $Payback->ref_get = - $ref_payback->ref_get;
                 $Payback->datetime = time();
                 $Payback->save();
+                // ref_payback 的 callback 写为1 就是这个返利被收回了。 实际这样的话，还是一个不错的方案的。也就是说，这个返利的话，只需要这里加一个参数就好了。无需之前的那种复杂的方案！ 这个可以有。
+                $ref_payback->callback = 1; // 设置这个返利已被收回！ 不错的做法和想法！ 
+                $ref_payback->save();
             }
         }
 

@@ -99,14 +99,21 @@
 													<td>{$ticket->title}</td>
 													{if $ticket->status==1}
 													<td>服务中</td>
-													{elseif $ticket->status==3}
-													<td>公开工单</td>
-													{else}
-													<td>已完成</td>
-													{/if}
-													 <td>
+													<td>
 														<a class="btn btn-brand" href="/user/ticket/{$ticket->id}/view">查看</a>
 													</td>
+													{elseif $ticket->status==3}
+													<td>公开工单</td>
+													<td>
+														<a class="btn btn-brand" href="/user/ticket/{$ticket->id}/view">查看</a>
+													</td>
+													{else}
+													<td>已完成</td>
+													<td>
+														<a class="btn btn-brand" href="/user/ticket/{$ticket->id}/openview">查看</a>
+													</td>
+													{/if}
+													 
 												</tr>
 											{/foreach}
 										</table>

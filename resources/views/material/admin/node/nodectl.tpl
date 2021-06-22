@@ -33,7 +33,7 @@
 												</tr>
 												{foreach $nodes as $node}
 													<tr>
-														<td><a class="btn btn-brand" href="/admin/node/{$node->id}/edit">编辑</a> #{$node->id}</td>
+														<td>{if $node->type ==1 }<a class="btn btn-brand" href="/admin/node/{$node->id}/edit">编辑</a> #{$node->id}  在线{elseif $node->type == 0}<a class="btn btn-danger" href="/admin/node/{$node->id}/edit">编辑</a> #{$node->id} 离{/if}</td>
 														<td>{$node->name} - {$node->status}</td>
 														<td>{$node->node_class} 级 {$node->node_group} 组 {$node->traffic_rate} 倍 {$node->node_online} 人 {$node->node_oncost}</td>
 														<td>{$node->info}</td>

@@ -34,7 +34,7 @@
 							<div class="card-inner">
 								<div class="form-group form-group-label">
 									<div>
-										<p><code>我是否已阅读</code><a href="/user/announcement/7" target="_blank"> 网站公告</a>？<br><code>我可以上传图片，来表现更多信息</code>><a href="https://imgchr.com/" target="_blank">点击上传免费图片</a></p>
+										<p><code>我是否已阅读</code><a href="/user/announcement" target="_blank"> 帮助中心</a>？<br><code>我可以上传图片，来表现更多信息</code>><a href="https://imgchr.com/" target="_blank">点击上传免费图片</a></p>
 									</div>
 								</div>
 							</div>
@@ -47,7 +47,12 @@
 									<label class="floating-label" for="content">内容</label>
 									<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css" />
 									<div id="editormd">
-										<textarea style="display:none;" id="content"></textarea>
+										<textarea style="display:none;" id="content"># 4.4 反馈问题的格式
+反馈问题格式：
+1. 你的使用场景是什么？比如使用 Chrome 通过 v2rayN 代理观看 YouTube 视频。
+2. 你看到的不正常的现象是什么？（请描述具体现象，比如访问超时，TLS 证书错误等）
+3. 你期待看到的正确表现是怎样的？如能正常观看 YouTube视频。
+4. 请附上出错时软件输出的错误日志。（V2rayN在界面最下方，其他软件在设置 Logs 日志查看）</textarea>
 									</div>
 								</div>
 								
