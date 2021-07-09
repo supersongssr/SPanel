@@ -216,7 +216,7 @@ class ApiController extends BaseController
     public function ssn_v2($request, $response, $args)
     {
         $id = $args['id'];
-        $id < 9 && exit;  //ID 64以下是没有 V2节点的
+        $id < 10 && exit;  //ID 64以下是没有 V2节点的
         $node = Node::find($id);
         //写入节点数据 状态 流量
         !empty($request->getParam('name')) && $node->name = $request->getParam('name');
@@ -226,13 +226,10 @@ class ApiController extends BaseController
         !empty($request->getParam('node_class')) && $node->node_class = $request->getParam('node_class');
         !empty($request->getParam('node_group')) && $node->node_group = $request->getParam('node_group');
         !empty($request->getParam('node_cost')) && $node->node_cost = $request->getParam('node_cost');
-        // !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
-        $node->sort = 11;
-        //如果设置了 cf中转，就是12 ，默认是11
-        $request->getParam('sort') && $node->sort = 12;
+        !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
         !empty($request->getParam('node_bandwidth_limit')) && $node->node_bandwidth_limit = $request->getParam('node_bandwidth_limit')*1024*1024*1024;
         !empty($request->getParam('bandwidthlimit_resetday')) && $node->bandwidthlimit_resetday = $request->getParam('bandwidthlimit_resetday');
-        $node->node_sort=0;   // 故障排序设置为0
+        $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');
         $node->save();
     }
 }

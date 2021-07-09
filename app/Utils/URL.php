@@ -459,47 +459,67 @@ class URL
         if ($arrout == 0) {
             
             // 2021.4.4 增加ws节点 443+ tls 的节点，使用其他的80无端口的配置
-            if ($item['net'] == ws && $item['tls'] == 'tls') {
+            if ($node_explode[9]) {
                 $itemws = [
                     'v'=>'2',
                     'host'=>'',
                     'path'=>'',
                     'tls'=>''
                 ];
-                $itemws['ps'] = $item['ps'].'|80noTls';
+                $itemws['ps'] = $item['ps'].'|'.$node_explode[9];
                 $itemws['add'] = $item['add'];// addn ->server song
-                $itemws['port'] = 80;
+                $itemws['port'] = $node_explode[9];
                 $itemws['id'] = $item['id'];  //判断uuid是否为空，为空就设置为用户uuid
                 $itemws['aid'] = $item['aid'];
                 $itemws['net'] = $item['net'];
                 $itemws['type'] = $item['type'];
                 $itemws['host'] = $item['host'];
                 $itemws['path'] = $item['path'];
-                $itemws['tls'] = '';
-                return 'vmess://' . base64_encode(json_encode($itemws, JSON_UNESCAPED_UNICODE)) . "\n" . 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
+                $itemws['tls'] = $item['tls'];
+
+                if ($node_explode[10]) {
+                    $itemport3 = [
+                        'v'=>'2',
+                        'host'=>'',
+                        'path'=>'',
+                        'tls'=>''
+                    ];
+                    $itemport3['ps'] = $item['ps'].'|'.$node_explode[10];
+                    $itemport3['add'] = $item['add'];// addn ->server song
+                    $itemport3['port'] = $node_explode[10];
+                    $itemport3['id'] = $item['id'];  //判断uuid是否为空，为空就设置为用户uuid
+                    $itemport3['aid'] = $item['aid'];
+                    $itemport3['net'] = $item['net'];
+                    $itemport3['type'] = $item['type'];
+                    $itemport3['host'] = $item['host'];
+                    $itemport3['path'] = $item['path'];
+                    $itemport3['tls'] = $item['tls'];
+                }else{
+                    return 'vmess://' . base64_encode(json_encode($itemport3, JSON_UNESCAPED_UNICODE)) . "\n" . 'vmess://' . base64_encode(json_encode($itemws, JSON_UNESCAPED_UNICODE)) . "\n" . 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
+                }
             }else{
                 return 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
             }
         }else{
 
             // 2021.4.4 增加ws节点 443+ tls 的节点，使用其他的80无端口的配置
-            if ($item['net'] == ws && $item['tls'] == 'tls') {
+            if ($node_explode[9]) {
                 $itemws = [
                     'v'=>'2',
                     'host'=>'',
                     'path'=>'',
                     'tls'=>''
                 ];
-                $itemws['ps'] = $item['ps'].'|80noTls';
+                $itemws['ps'] = $item['ps'].'|'.$node_explode[9];
                 $itemws['add'] = $item['add'];// addn ->server song
-                $itemws['port'] = 80;
+                $itemws['port'] = $node_explode[9];
                 $itemws['id'] = $item['id'];  //判断uuid是否为空，为空就设置为用户uuid
                 $itemws['aid'] = $item['aid'];
                 $itemws['net'] = $item['net'];
                 $itemws['type'] = $item['type'];
                 $itemws['host'] = $item['host'];
                 $itemws['path'] = $item['path'];
-                $itemws['tls'] = '';
+                $itemws['tls'] = $item['tls'];
                 return $itemws. $item;
             }else{
                 return $item;
@@ -556,10 +576,10 @@ class URL
 
         $item = base64_encode($item).'?remarks='.urlencode($node->name.$cdn_area.'#'.$node->id.'|'.$node->traffic_rate.'|'.$user->class.'|'.$node->node_online.'%|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
 
-        // 增加80端口的节点
-        if ($node_explode[4] == 'ws' && $node_explode[8] == 'tls') {
-            $itemws = 'auto:'.(empty($node_explode[2]) ? $user->v2ray_uuid : $node_explode[2]).'@'.$node_server.':80';
-            $itemws = base64_encode($itemws).'?remarks='.urlencode($node->name.$cdn_area.'#'.$node->id.'|'.$node->traffic_rate.'|'.$user->class.'|'.$node->node_online.'%|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
+        // 增加多一个端口的节点
+        if ($node_explode[9]) {
+            $itemws = 'auto:'.(empty($node_explode[2]) ? $user->v2ray_uuid : $node_explode[2]).'@'.$node_server.':'.$node_explode[9];
+            $itemws = base64_encode($itemws).'?remarks='.urlencode($node->name.$cdn_area.'#'.$node->id.'|'.$node->traffic_rate.'|'.$user->class.'|'.$node->node_online.'%|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm).'&obfsParam='.$node_explode[6].'&path=/'.$node_explode[7].'&obfs='.($node_explode[4] == 'ws'? 'websocket': $node_explode[4]).'&tls='.(empty($node_explode[8]) ? '' : '1').'&peer='.$node_explode[6].'&allowInsecure=1&cert=';
             return "vmess://".$item ."\n" . "vmess://".$itemws;
         }else{
             return "vmess://".$item;
