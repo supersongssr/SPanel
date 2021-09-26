@@ -77,9 +77,9 @@
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">大带宽</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">移动/电信组</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">联通组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">大流量下载组</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">联通移动电信组</a></li>
+												<!-- <li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">联通组</a></li>-->
 											</ul>
 										</div>
 							        </div>
