@@ -175,7 +175,7 @@
 									<div class="checkbox switch">
 										<label for="disableothers">
 											<input checked class="access-hide" id="disableothers" type="checkbox">
-											<span class="switch-toggle"></span>关闭旧套餐自动续费
+											<span class="switch-toggle"></span>核对套餐信息
 										</label>
 									</div>
 									<br/>

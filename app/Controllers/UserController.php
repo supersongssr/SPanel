@@ -1273,6 +1273,10 @@ class UserController extends BaseController
         }
 
 
+        if ( strtotime($user->class_expire) < time() ) {
+            # 判断一下用户是否过期，如果过期，就设置为0，但是不保存 . 这样不影响到期的用户购买套餐。
+            $user->class = 0;
+        }
 
         //# 只允许购买 套餐等级 >= 用户等级的商品   这样就可以实现用户购买的套餐可以叠加了。只能向上叠加。
         ##这里需要先 json_decode一下 商品中的 content内容
