@@ -882,7 +882,7 @@ class UserController extends BaseController
 */
 
   // cfcdn count > 32,  用户使用得分 这个排序会好一些。
-        $cfcdns = User::where('cfcdn_count','>',32)->where('score','>',32)->orderBy("cfcdn_count", "desc")->limit('128')->get();
+        $cfcdns = User::where('score','>',32)->orderBy("cfcdn_count", "desc")->limit('128')->get();
 
         $iplocation = new QQWry();
 

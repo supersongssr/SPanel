@@ -226,7 +226,9 @@ class ApiController extends BaseController
         !empty($request->getParam('node_class')) && $node->node_class = $request->getParam('node_class');
         !empty($request->getParam('node_group')) && $node->node_group = $request->getParam('node_group');
         !empty($request->getParam('node_cost')) && $node->node_cost = $request->getParam('node_cost');
-        !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
+        // !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
+        $request->getParam('sort') == 'v2' && $node->sort = 11;
+        $request->getParam('sort') == 'cf' && $node->sort = 12;
         !empty($request->getParam('node_bandwidth_limit')) && $node->node_bandwidth_limit = $request->getParam('node_bandwidth_limit')*1024*1024*1024;
         !empty($request->getParam('bandwidthlimit_resetday')) && $node->bandwidthlimit_resetday = $request->getParam('bandwidthlimit_resetday');
         $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');

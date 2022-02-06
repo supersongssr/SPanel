@@ -87,9 +87,9 @@ class LinkController extends BaseController
         //   }
         // }
         // 只所以不再记录这个IP的来源，是因为没有必要了 所有的用户都记录订阅的IP
-        // 如果设置了 cfcdn 就记录一下
-        $user->cncdn && $user->cncdn_count += 1;
-        $user->cfcdn && $user->cfcdn_count += 1;
+        // 如果设置了 cfcdn 就记录一下, 这里特殊时期，只记录1分组的。其他分组的没有被墙的节点。
+        $user->cncdn && $user->node_group == 1 && $user->cncdn_count += 1;
+        $user->cfcdn && $user->node_group == 1 && $user->cfcdn_count += 1;
         //记录订阅IP
         $user->rss_ip = $_SERVER["REMOTE_ADDR"];
         // 然后统计一下这次的订阅次数

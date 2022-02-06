@@ -32,8 +32,8 @@
 											<label class="floating-label" for="cfcdn">网络优化（IP）： </label>
 											<input class="form-control maxwidth-edit" id="cfcdn" value="{$user->cfcdn}" type="text">
 										</div>
-										<p><a type="button" class="btn fbtn-brand-accent btn-sm " href="https://github.com/badafans/better-cloudflare-ip" target="_blank" >如何获取适合自己的优化IP</a></p>
-										<p><code>打开https://github.com/badafans/better-cloudflare-ip页面 -> 有相应的教程 -> 这个脚本的作用是可以快速的帮你选出适合你带宽的CFIP，您可以设定一个带宽值，比如20M，脚本会自动帮你选出一个适合的IP</code></p>
+										<p>Win教程：<code><a href="https://www.anycast.eu.org/batch.zip" target="_blank">点此下载文件 - 解压后查看使用说明</a></code></p>
+										<p>Liunx教程：<code>curl https://www.anycast.eu.org/cf.sh -o cf.sh && chmod +x cf.sh && ./cf.sh</code></p>
 									</div>
 								</div>
 							</div>
