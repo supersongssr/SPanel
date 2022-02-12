@@ -214,50 +214,96 @@ class XCat
 
     public function test()
     {
-        // 先获取 所有的 从 5.1日之后的所有的 payback  这个先从 5.1日 之后的所有账号的处理一遍！ 这个挺重要的！  然后处理所有的 5.12日前的
-        $paybacklistcount = Payback::where('total','=',-1)->where('callback','=',null)->where('datetime','>',1619755921)->where('datetime','<',1620792721)->count();
-        echo '-总数-' . $paybacklistcount;
-        $paybacklist = Payback::where('total','=',-1)->where('callback','=',null)->where('datetime','>',1619755921)->where('datetime','<',1620792721)->get();
-        foreach ( $paybacklist as $p ) {
-            // 两个事情，如果是 邀请人已经不存在了。那么就把这条数据 标注为 3 代表老帐号已删除？
-            // 如果 被邀请人已经不存在了，就把这个返利删除了。
-            $user = User::where('id','=',$p->userid)->first();
-            $ref_by = User::where('id','=',$p->ref_by)->first();
-            echo '||---go---';
-            echo '--userid=' . $p->userid;
-            echo  '--ref_by=' . $p->ref_by;
-            if ($ref_by == null ) {  // 如果 邀请人不存在的话，怎么办？
-                $p->callback = 3; // 3代表邀请人已删除。这条邀请已经无效了。
-                echo '-callback=3-';
-                // // 删除掉和这个用户所有有关的payback日志
-                // Payback::where('ref_by', '=' , $p->ref_by)->delete();
-                // echo '-删除所有此邀请人信息-';
-            } elseif ( $user == null ) { // 如果邀请人存在,被邀请人删除了那么就收回返利
-                // 需要检查一次，这个返利是否已经被收回了。
-                $refback = Payback::where('total','=',-2)->where('userid','=',$p->userid)->where('ref_by','=', $p->ref_by)->first();
-                if ($refback == null ) { // 如果不存在已收回的标注，就收回一次。
-                    echo '-refback=null-';
-                    echo '-money='. $ref_by->money;
-                    $ref_by->money -= $p->ref_get ;
-                    $ref_by->save();
-                    echo '-money='. $ref_by->money;
-                    $p->callback = 1; //1=返利已经被收回。
-                    // 这里写入一个新的记录
-                    $Payback = new Payback();
-                    $Payback->total = -2;
-                    $Payback->userid = $p->userid;  //用户注册的ID
-                    $Payback->ref_by = $p->ref_by;  //邀请人ID
-                    $Payback->ref_get = - $p->ref_get;
-                    $Payback->datetime = time();
-                    $Payback->save();
-                }elseif ($refback->id) { // 如果存在，并已经收回过一次了。就备注一下
-                    echo '-refback已经处理了-';
-                    $p->callback = 1;
-                }
-            } 
-            $p->save();
-            echo '---end---||';
-        }
+
+        echo '20220210';
+        // $snodes = Node::where('id','>',9)->get();
+        // foreach ($snodes as $key => $node) {
+        //     // parse_str($node->node_ip,$v2);
+        //     $info = $node->status;
+        //     $status = $node->info;
+
+        //     $node->status = $status;
+        //     $node->info = $info;
+        //     $node->save();
+        // }
+
+
+        // $snodes = Node::where('id','>',9)->get();
+        // foreach ($snodes as $key => $node) {
+        //     // parse_str($node->node_ip,$v2);
+        //     $node->sort == 11 && $v2 = 'v2=vmess';  // 获取开头参数
+        //     $node->sort == 12 && $v2 = 'v2=vmess';  // 这个 12 ，还要写成 加上CDN参数呢
+        //     //v2=vmess&add=&port=&aid=&scy=&net=&type=&host=&path=&tls=&sni=&alpn=&ecpt=&flow=&uuid=&cdn=
+        //     $cut = explode('#',$node->node_ip);
+        //     $v2 .= '&add=' . $node->server;
+        //     $v2 .= '&port=' . $cut['1'];
+        //     $v2 .= '&aid=0';
+        //     $v2 .= '&scy=' . $cut['5']; //就是加密
+        //     $v2 .= '&net=' . $cut['4'];
+        //     $v2 .= '&type='  ;//就是伪装
+        //     $v2 .= '&host=' .$cut['6'];
+        //     $v2 .= '&path=/' .$cut['7'];
+        //     $v2 .= '&tls=' .$cut['8'];
+        //     $v2 .= '&sni=';
+        //     $v2 .= '&alpn=';
+        //     $v2 .= '&ecpt=';
+        //     $v2 .= '&flow=';
+        //     $v2 .= '&uuid=' . $cut['2']; //独立节点
+        //     if ( $node->sort == 12 ) {
+        //         $v2 .= '&cdn=cf';  // 这个CDN只要有就行，什么参数无所谓。
+        //     } else{
+        //         $v2 .= '&cdn=';
+        //     }
+            
+        //     $node->server = $v2;
+        //     $node->node_ip = 'ip='.$cut['0'].'&ipv6=';
+        //     $node->sort == 12 && $node->sort = 11;  // 把之前的 cf节点给转换回来。
+        //     $node->save();
+        // }
+        // // 先获取 所有的 从 5.1日之后的所有的 payback  这个先从 5.1日 之后的所有账号的处理一遍！ 这个挺重要的！  然后处理所有的 5.12日前的
+        // $paybacklistcount = Payback::where('total','=',-1)->where('callback','=',null)->where('datetime','>',1619755921)->where('datetime','<',1620792721)->count();
+        // echo '-总数-' . $paybacklistcount;
+        // $paybacklist = Payback::where('total','=',-1)->where('callback','=',null)->where('datetime','>',1619755921)->where('datetime','<',1620792721)->get();
+        // foreach ( $paybacklist as $p ) {
+        //     // 两个事情，如果是 邀请人已经不存在了。那么就把这条数据 标注为 3 代表老帐号已删除？
+        //     // 如果 被邀请人已经不存在了，就把这个返利删除了。
+        //     $user = User::where('id','=',$p->userid)->first();
+        //     $ref_by = User::where('id','=',$p->ref_by)->first();
+        //     echo '||---go---';
+        //     echo '--userid=' . $p->userid;
+        //     echo  '--ref_by=' . $p->ref_by;
+        //     if ($ref_by == null ) {  // 如果 邀请人不存在的话，怎么办？
+        //         $p->callback = 3; // 3代表邀请人已删除。这条邀请已经无效了。
+        //         echo '-callback=3-';
+        //         // // 删除掉和这个用户所有有关的payback日志
+        //         // Payback::where('ref_by', '=' , $p->ref_by)->delete();
+        //         // echo '-删除所有此邀请人信息-';
+        //     } elseif ( $user == null ) { // 如果邀请人存在,被邀请人删除了那么就收回返利
+        //         // 需要检查一次，这个返利是否已经被收回了。
+        //         $refback = Payback::where('total','=',-2)->where('userid','=',$p->userid)->where('ref_by','=', $p->ref_by)->first();
+        //         if ($refback == null ) { // 如果不存在已收回的标注，就收回一次。
+        //             echo '-refback=null-';
+        //             echo '-money='. $ref_by->money;
+        //             $ref_by->money -= $p->ref_get ;
+        //             $ref_by->save();
+        //             echo '-money='. $ref_by->money;
+        //             $p->callback = 1; //1=返利已经被收回。
+        //             // 这里写入一个新的记录
+        //             $Payback = new Payback();
+        //             $Payback->total = -2;
+        //             $Payback->userid = $p->userid;  //用户注册的ID
+        //             $Payback->ref_by = $p->ref_by;  //邀请人ID
+        //             $Payback->ref_get = - $p->ref_get;
+        //             $Payback->datetime = time();
+        //             $Payback->save();
+        //         }elseif ($refback->id) { // 如果存在，并已经收回过一次了。就备注一下
+        //             echo '-refback已经处理了-';
+        //             $p->callback = 1;
+        //         }
+        //     } 
+        //     $p->save();
+        //     echo '---end---||';
+        // }
     //   // 2021.3.12 批量替换域名
     //   $nodelist = Node::all();
     //   foreach ($nodelist as $node) {

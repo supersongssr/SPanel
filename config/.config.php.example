@@ -43,7 +43,7 @@ $System_Config['smtp_username'] = 'postmaster@mail.abc.xyz';
 $System_Config['smtp_port'] = '465';
 $System_Config['smtp_name'] = 'postmaster@mail.abc.xyz';
 $System_Config['smtp_sender'] = 'postmaster@mail.abc.xyz';
-$System_Config['smtp_passsword'] = 'jfdoajfefhsdhfdsfdsfdsfdsf';
+$System_Config['smtp_passsword'] = 'xx';
 $System_Config['smtp_ssl'] = 'true';
 
 # sendgrid
@@ -124,15 +124,15 @@ $System_Config['mergeSub'] = 'false';						//合并订阅设置 可选项 false 
 
 //Telegram bot设置------------------------------------------------------------------------------------
 $System_Config['enable_telegram']='true';			//是否开启Telegram bot
-$System_Config['telegram_token']='481731051:AAGrLwOu2OZM4aQww9KyFQBjj2Sub5bwk18';				//Telegram bot,bot 的 token ，跟 father bot 申请
-$System_Config['telegram_chatid']='-1001140796228';				//Telegram bot,群组会话 ID,把机器人拉进群里之后跟他 /ping 一下即可得到。  1群 -1001259469248
+$System_Config['telegram_token']='x';				//Telegram bot,bot 的 token ，跟 father bot 申请
+$System_Config['telegram_chatid']='x';				//Telegram bot,群组会话 ID,把机器人拉进群里之后跟他 /ping 一下即可得到。  1群 -1001259469248
 $System_Config['enable_tuling']='true';			//是否开启图灵机器人
-$System_Config['tuling_apikey']='16b80eedb04f47af845dfbb2050cf8d9';					//图灵机器人API Key
+$System_Config['tuling_apikey']='x';					//图灵机器人API Key
 $System_Config['tuling_apisecert']='';				//图灵机器人密钥
 $System_Config['telegram_bot']='supersong_bot';				//Telegram 机器人账号
 $System_Config['telegram_group_quiet']='true';		//Telegram 机器人在群组中不回应
 $System_Config['telegram_qrcode']='online';	//二维码解码方式，online，phpzbar，zxing_online，zxing_local
-$System_Config['telegram_request_token']='376H43526e8JK';		//Telegram 机器人请求Key，随意设置，由大小写英文和数字组成，更新这个参数之后请 php xcat setTelegram
+$System_Config['telegram_request_token']='x';		//Telegram 机器人请求Key，随意设置，由大小写英文和数字组成，更新这个参数之后请 php xcat setTelegram
 $System_Config['enable_welcome_message']='false';	//机器人发送欢迎消息
 $System_Config['finance_public']='false';			//财务报告是否向Telegram群公开
 $System_Config['telegram_grouplink']='';           //telegram群邀请链接
@@ -148,9 +148,9 @@ $System_Config['enable_ticket']='true';		//是否开启工单系统
 
 #管理员联系方式设置
 $System_Config['enable_admin_contact']='true';			//是否开启管理员联系方式
-$System_Config['admin_contact1'] = 'QQ：1203997241';		//QQ、邮箱、微信仅用于举例
+$System_Config['admin_contact1'] = 'QQ：x';		//QQ、邮箱、微信仅用于举例
 $System_Config['admin_contact2'] = 'QQ群：等新群';	//也可以写电话、tg等其他联系方式
-$System_Config['admin_contact3'] = 'TG群：wwwokssxyz';		//没有格式要求，想怎么写就怎么写，可留空
+$System_Config['admin_contact3'] = 'TG群：x';		//没有格式要求，想怎么写就怎么写，可留空
 
 
 //验证码设置------------------------------------------------------------------------------------------
@@ -160,8 +160,8 @@ $System_Config['captcha_provider'] = 'geetest';		//取值 recaptcha | geetest(�
 $System_Config['recaptcha_sitekey'] = '';
 $System_Config['recaptcha_secret'] = '';
 
-$System_Config['geetest_id'] = '0cb2301a6474506db6cabd271ae3976d';
-$System_Config['geetest_key'] = '93b9928c31872aab21da629899d7369b';
+$System_Config['geetest_id'] = 'x';
+$System_Config['geetest_key'] = 'x';
 
 $System_Config['enable_reg_captcha'] = 'true';		//启用注册验证码
 $System_Config['enable_login_captcha'] = 'false';	//启用登录验证码
@@ -178,8 +178,8 @@ $System_Config['fakapay_url_100'] = 'vOc1odjdFs';
 
 
 # paytaro 参数
-$System_Config['paytaro_app_id'] = 'vOc1odjdFs';
-$System_Config['paytaro_app_secret'] = 'aa57b6c5a67ecbc5133d3bc7b4f8cbac';
+$System_Config['paytaro_app_id'] = 'x';
+$System_Config['paytaro_app_secret'] = 'x';
 
 #codepay码支付
 #wiki地址:https://goo.gl/dRwRDi  http://t.cn/RnsWjtB
@@ -300,7 +300,7 @@ $System_Config['cloudxns_domain']='zhaoj.in';		//你的域名
 #Cloudflare
 $System_Config['cloudflare_enable']='false';										//是否开启 Cloudflare 解析
 $System_Config['cloudflare_email']='user@example.com';								//Cloudflare 邮箱地址
-$System_Config['cloudflare_key']='c2547eb745079dac9320b638f5e225cf483cc5cfdda41';	//Cloudflare API Key
+$System_Config['cloudflare_key']='c2547eb745079dac9320bd638f5e225cf483cc5cfdda41';	//Cloudflare API Key
 $System_Config['cloudflare_name']='example.com';									//域名
 
 #不安全中转模式，这个开启之后使用除了 auth_aes128_md5 或者 auth_aes128_sha1 以外的协议地用户也可以设置和使用中转

@@ -1,7 +1,10 @@
-howtouse
+#how_To_Use
 
-##what's new
+##what's new 新功能
 ````
+20220210 优化订阅链接，现在简洁清晰。
+20220210 新增通知节点， 节点分组为0 的节点为 通知节点。
+20220210 新增支持 vmess vless trojan 订阅支持
 2020.4.23+ IOS订阅改为 mu=5
 1 取消加密协议的自定义
 2 独立节点订阅
@@ -49,7 +52,7 @@ web环境配置好后
 cd /www/wwwroot/你的网站 
 yum update
 yum install git -y
-git clone -b dev https://github.com/supersongssr/ssp-uim.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
+git clone -b dev https://github.com/supersongssr/spanel.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
 chown -R root:root *
 chmod -R 755 *
 chown -R www:www storage
@@ -114,10 +117,10 @@ php xcat initdownload         //下载ssr程式
 执行 crontab -e命令, 添加以下四条
 
 ```
-22 4 * * * php /www/wwwroot/ssp-uim/xcat sendDiaryMail
-58 3 * * * php -n /www/wwwroot/ssp-uim/xcat dailyjob
-17 */3 * * * php /www/wwwroot/ssp-uim/xcat checkjob
-###*/12 * * * * php /www/wwwroot/ssp-uim/xcat syncnode  #这个要不得，然后网站会出大问题的！主要是V2节点的IP会被重置！
+22 4 * * * php /www/wwwroot/spanel/xcat sendDiaryMail
+58 3 * * * php -n /www/wwwroot/spanel/xcat dailyjob
+17 */3 * * * php /www/wwwroot/spanel/xcat checkjob
+###*/12 * * * * php /www/wwwroot/spanel/xcat syncnode  #这个要不得，然后网站会出大问题的！主要是V2节点的IP会被重置！
 ```
 如果需要自动备份，可模仿以下两例，自行添加一条
 ```

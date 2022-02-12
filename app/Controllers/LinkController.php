@@ -6,10 +6,14 @@ namespace App\Controllers;
 
 use App\Models\Link;
 use App\Models\User;
+use App\Models\Node;
 use App\Models\Smartline;
 use App\Utils\ConfRender;
 use App\Utils\Tools;
+use App\Services\Config;
 use App\Utils\URL;
+use App\Models\Cncdn;   // 引入Cncdn自选
+
 #song
 use App\Utils\QQWry;
 
@@ -70,178 +74,138 @@ class LinkController extends BaseController
             return null;
         }
 
-        //上传用户订阅IP，和用户订阅的数据
-        // 在用户设置了cfcdn 的情况下，才会记录这个IP
-        // if ($user->cfcdn) {
-        //   $iplocation = new QQWry();
-        //   $location = $iplocation->getlocation($_SERVER["REMOTE_ADDR"]);
-        //   //对字符的编码进行一次格式化，编码不同可能影响到判断
-        //   $location['area'] = iconv('gbk', 'utf-8//IGNORE', $location['area']);
-        //   $location['country'] = iconv('gbk', 'utf-8//IGNORE', $location['country']);
-        //   // 这里的 location['area'] 获取到的其实是 联通 电信 移动等网络
-        //   if (in_array($location['area'], ['移动','电信','联通'])) {
-        //       # code...
-        //
-        //       $user->cncdn && $user->cncdn_count += 1;
-        //       $user->cfcdn && $user->cfcdn_count += 1;
-        //   }
-        // }
-        // 只所以不再记录这个IP的来源，是因为没有必要了 所有的用户都记录订阅的IP
-        // 如果设置了 cfcdn 就记录一下, 这里特殊时期，只记录1分组的。其他分组的没有被墙的节点。
-        $user->cncdn && $user->node_group == 1 && $user->cncdn_count += 1;
+        if ($user->enable == 0) {       // 如果发现用户被禁用，那么订阅设置为 null 
+            $url = 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+            $url .= '#'.urlencode($user->email.': 请登录并激活帐号:)');
+            return base64_encode($url);
+        }
+        
         $user->cfcdn && $user->node_group == 1 && $user->cfcdn_count += 1;
-        //记录订阅IP
-        $user->rss_ip = $_SERVER["REMOTE_ADDR"];
-        // 然后统计一下这次的订阅次数
-        $user->rss_count += 1;
-        // 订阅超32个，封禁。 订阅超 64个，降级！ 
-        $rss_today = $user->rss_count - $user->rss_count_lastday;
-        if ($rss_today > 32 && $rss_today % 2 > 0 ) {
-            $user->enable = 0; // 禁用用户 
-            $user->warming = date("Ymd H:i:s").'订阅异常，为防止订阅泄露，接下来12小时仅允许更新一次订阅！'; //增加提醒
-        }elseif ( $rss_today > 64 && $user->node_group > 1 ) {
+        $user->rss_ip != $_SERVER["REMOTE_ADDR"] && $user->rss_ips_count += 1;        //对比IP
+        $user->rss_ip = $_SERVER["REMOTE_ADDR"] && $user->rss_count += 1;            // 记录IP
+        $rss_today = $user->rss_count - $user->rss_count_lastday;       // 今日订阅次数
+        $rss_ips_today = $user->rss_ips_count - $user->rss_ips_lastday;       // 今日订阅 IP来源数
+        if ( $rss_ips_today > 32 && $rss_today % 3 == 0 ) {
             $user->enable = 0 ;// 禁用用户 
             $user->node_group = 1; //把用户放到1组去
-            $user->warming = date("Ymd H:i:s").'订阅严重异常，疑似泄露，封禁订阅24小时，今日不允许再更新订阅';
+            $user->warming = date("Ymd H:i:s").'订阅IP数异常，疑似泄露，今日剩余1次订阅机会，请单日IP来源<16个:)';
+            $url = 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+            $url .= '#'.urlencode('订阅IP异常，今日封禁订阅，请登录帐号检查');
+            $user->save();
+            return base64_encode($url);
+        } elseif ( $rss_today >= 32 && $rss_today % 8 == 0 ) {
+            $user->enable = 0; // 禁用用户 
+            $user->warming = date("Ymd H:i:s").'订阅次数异常，为防CC，今日剩余7次订阅机会，请单日订阅<25次'; //增加提醒
+            $url = 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+            $url .= '#'.urlencode('订阅频繁，请登录检查帐号');
+            $user->save();
+            return base64_encode($url);
+        } elseif ( $rss_today > 64 && $rss_today % 3 == 0 ) {
+            $user->enable = 0; // 禁用用户 
+            $user->node_group = 1; //把用户放到1组去
+            $user->warming = date("Ymd H:i:s").'订阅次数异常，为防CC，今日剩余1次订阅机会，请单日订阅<25次'; //增加提醒
+            $url = 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+            $url .= '#'.urlencode('订阅异常，请登录检查，请激活帐号');
+            $user->save();
+            return base64_encode($url);
         }
-        // 保存user
         $user->save();
-
-        // 如果发现用户被禁用，那么订阅设置为 null 
-        if ($user->enable == 0) {
-            return null;
-        }
-
-        $mu = 0;
+        
+        $mu = 2;
         if (isset($request->getQueryParams()['mu'])) {
-            $mu = (int)$request->getQueryParams()['mu'];
+            $mu = $request->getQueryParams()['mu'];
         }
-
-        $newResponse = $response->withHeader('Content-type', ' application/octet-stream; charset=utf-8')->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate')->withHeader('Content-Disposition', ' attachment; filename=' . $token . '.txt');
-        $newResponse->getBody()->write(self::GetSSRSub(User::where('id', '=', $Elink->userid)->first(), $mu));
-        return $newResponse;
+        // $newResponse = $response->withHeader('Content-type', ' application/octet-stream; charset=utf-8')->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate')->withHeader('Content-Disposition', ' attachment; filename=' . $token . '.txt');
+        // $newResponse->getBody()->write(self::GetSSRSub(User::where('id', '=', $Elink->userid)->first(), $mu));
+        // return $newResponse;
+        $url = '';
+        $url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
+        $url .= self::getAllUrl($user , $mu);        // 节点
+        return base64_encode($url);
     }
 
-    public const V2RYA_MU = 2;
-    public const SSD_MU = 3;
-    public const CLASH_MU = 4;
-    public const IOS_V2RAY = 5;
-
-    public static function GetSSRSub($user, $mu = 0)
-    {
-        if ($mu == 0 || $mu == 1) {
-            return Tools::base64_url_encode(URL::getAllUrl($user, $mu, 0));
-        }
-
-        if ($mu == self::V2RYA_MU) {
-            return Tools::base64_url_encode(URL::getAllVMessUrl($user));
-        }
-
-        if ($mu == self::SSD_MU) {
-            return URL::getAllSSDUrl($user);
-        }
-
-        if ($mu == self::CLASH_MU) {
-            // Clash
-            return self::GetClash($user);
-        }
-
-        if ($mu == self::IOS_V2RAY) {
-            // shadowrocket
-            return Tools::base64_url_encode(URL::getIOSVMessUrl($user));
-        }
+    public static function getNews($user, $mu = 2) {
+        $Nodes = Node::where("type", "=","1")->where("node_group", "=", 0)->orderBy("node_class","DESC")->get();
+        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+        $url .= '#'.urlencode('邮箱：'.$user->email.'|等级：'.$user->class.'|VIP有效期：'.$user->class_expire) ."\n";
+        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+        $url .= '#'.urlencode('剩余流量：'.$user->unusedTraffic()) ."\n";
+        foreach ($Nodes as $key => $node) {        // ss节点类的news
+            if ( $node->sort == 0 && ($mu == 'ss' || $mu == 2 || $mu == 5 ) ) {
+                $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';
+                $url .= '#'.urlencode($node->name) ."\n";
+            }elseif ($node->sort == 11 && ( $mu == 'vmess' || $mu == 2) ) {
+                $v2_json = [        
+                    "v"    => "2",
+                    "ps"   => $node->name,
+                    "add"  => '127.0.0.1' ,
+                    "port" => 80 ,
+                    "id"   => '6c6a0625-ac3f-4bd8-9cc8-0545e4e11409',
+                    "aid"  => 0 ,
+                    "scy"  => 'none' ,
+                    "net"  => 'tcp' ,
+                    "type" => '' ,
+                    "host" => '' ,
+                    "path" => '' ,
+                    "tls"  => '' ,
+                    "sni"  => '' ,
+                    "alpn" => ''  
+                ];
+                $url .= 'vmess://' . base64_encode(json_encode($v2_json, JSON_UNESCAPED_UNICODE)) . "\n" ;
+            }elseif ($node->sort == 13 && ( $mu == 'vless' || $mu == 2) ) {
+                $url .= 'vless://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@127.0.0.1:443?encryption=none';
+                $url .= '#'.urlencode($node->name) . "\n";
+            }elseif ($node->sort == 14 && ( $mu == 'trojan' || $mu == 2) ) {
+                $url .= 'trojan://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@127.0.0.1:443';
+                $url .= '#'.urlencode($node->name) . "\n";
+            }
+        }  
+        return $url;
     }
 
-    public static function GetClash($user)
-    {
-        $confs = [];
-        $proxy_confs = [];
-        // ss
-        $items = array_merge(URL::getAllItems($user, 0, 1), URL::getAllItems($user, 1, 1));
-        foreach ($items as $item) {
-            $sss = [
-                'name' => $item['remark'],
-                'type' => 'ss',
-                'server' => $item['address'],
-                'port' => $item['port'],
-                'cipher' => $item['method'],
-                'password' => $item['passwd'],
-            ];
-            if ($item['obfs'] != 'plain') {
-                switch ($item['obfs']) {
-                    case 'simple_obfs_http':
-                        $sss['plugin'] = 'obfs';
-                        $sss['plugin-opts']['mode'] = 'http';
-                        break;
-                    case 'simple_obfs_tls':
-                        $sss['plugin'] = 'obfs';
-                        $sss['plugin-opts']['mode'] = 'tls';
-                        break;
-                    case 'v2ray':
-                        $sss['plugin'] = 'v2ray-plugin';
-                        $sss['plugin-opts']['mode'] = 'websocket';
-                        if (strpos($item['obfs_param'], 'security=tls')) {
-                            $sss['plugin-opts']['tls'] = true;
-                        }
-                        $sss['plugin-opts']['host'] = $user->getMuMd5();
-                        $sss['plugin-opts']['path'] = $item['path'];
-                        break;
-                }
-                if ($item['obfs'] != 'v2ray') {
-                    if ($item['obfs_param'] != '') {
-                        $sss['plugin-opts']['host'] = $item['obfs_param'];
-                    } elseif ($user->obfs_param != '') {
-                        $sss['plugin-opts']['host'] = $user->obfs_param;
-                    } else {
-                        $sss['plugin-opts']['host'] = 'wns.windows.com';
-                    }
-                }
+    public static function getAllUrl($user, $mu = 2) {
+        $nodes = Node::where("type", "=","1")->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_online","ASC")->get();
+        $i = 0;
+        foreach ($nodes as $node) {
+            parse_str($node->server, $v2);  //获取参数
+            if ( $v2['cdn'] && $user->cfcdn ) {     //配置cfCDN参数
+                $v2['add'] = $user->cfcdn;
             }
-            $proxy_confs[] = $sss;
-            $confs[] = $sss;
+            if ($node->sort == 11 && ($mu == 'vmess' || $mu == 2 || $mu == 5) ) {
+                $v2_json = [
+                    "v"    => "2",
+                    "ps"   => $node->name.'*'.$node->traffic_rate.'@'.$node->id.'#'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G',
+                    "add"  => $v2['add'] ,
+                    "port" => $v2['port'] ,
+                    "id"   => ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) ,
+                    "aid"  => $v2['aid'] ,
+                    "scy"  => $v2['scy'] ,
+                    "net"  => $v2['net'] ,
+                    "type" => $v2['type'] ,
+                    "host" => $v2['host'] ,
+                    "path" => $v2['path'] ,
+                    "tls"  => $v2['tls'] ,
+                    "sni"  => $v2['sni'] ,
+                    "alpn" => $v2['alpn']  
+                ];
+                $url .= 'vmess://' . base64_encode(json_encode($v2_json, JSON_UNESCAPED_UNICODE)) . "\n" ;
+                $i++ ;
+            } elseif ( $node->sort == 13 && ($mu == 'vless' || $mu == 2 || $mu == 5 ) ) {
+                $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
+                $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&alpn='.urlencode($v2['alpn']);
+                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'@'.$node->id.'#'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
+                $i++ ;
+            } elseif ( $node->sort == 14 && ($mu == 'trojan' || $mu == 2 || $mu == 5 ) ) {
+                $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
+                $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&alpn='.urlencode($v2['alpn']);
+                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'@'.$node->id.'#'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
+                $i++ ;
+            }
+            if ( $i > $user->sub_limit ) {
+                break;
+            }
+            
         }
-        // v2
-        $items = URL::getAllVMessUrl($user, 1);
-        foreach ($items as $item) {
-            if (in_array($item['net'], array('kcp', 'http', 'quic'))) {
-                continue;
-            }
-            $v2rays = [
-                'name' => $item['ps'],
-                'type' => 'vmess',
-                'server' => $item['add'],
-                'port' => $item['port'],
-                'uuid' => $item['id'],
-                'alterId' => $item['aid'],
-                'cipher' => 'auto',
-            ];
-            if ($item['net'] == 'ws') {
-                $v2rays['network'] = 'ws';
-                $v2rays['ws-path'] = $item['path'];
-                if ($item['tls'] == 'tls') {
-                    $v2rays['tls'] = true;
-                }
-                if ($item['host'] != '') {
-                    $v2rays['ws-headers']['Host'] = $item['host'];
-                }
-            } elseif ($item['net'] == 'tls') {
-                $v2rays['tls'] = true;
-            }
-            $proxy_confs[] = $v2rays;
-            $confs[] = $v2rays;
-        }
-        $render = ConfRender::getTemplateRender();
-        $render->assign('user', $user)
-            ->assign('confs', $confs)
-            ->assign(
-                'proxies',
-                array_map(
-                    static function ($conf) {
-                        return $conf['name'];
-                    },
-                    $proxy_confs
-                )
-            );
-        return $render->fetch('clash.tpl');
+        return $url;
     }
 }

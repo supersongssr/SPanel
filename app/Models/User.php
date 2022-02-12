@@ -179,7 +179,7 @@ class User extends Model
 
     public function LastusedTraffic()
     {
-        $total = $this->attributes['last_day_t'] + $this->attributes['u'];
+        $total = $this->attributes['d'] + $this->attributes['u'];
         return Tools::flowAutoShow($total);
     }
 

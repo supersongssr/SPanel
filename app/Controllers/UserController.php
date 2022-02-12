@@ -477,7 +477,6 @@ class UserController extends BaseController
     public function node($request, $response, $args)
     {
         $user = Auth::getUser();
-        //$nodes = Node::where('type', 1)->orderBy('node_class')->orderBy('name')->get();
         $nodes = Node::where('node_group','=',$user->node_group)->orwhere('node_group','=',0)->where('id','>',3)->where('type', 1)->orderBy('node_class')->orderBy('traffic_rate')->get();
         $relay_rules = Relay::where('user_id', $this->user->id)->orwhere('user_id', 0)->orderBy('id', 'asc')->get();
         if (!Tools::is_protocol_relay($user)) {
@@ -521,7 +520,7 @@ class UserController extends BaseController
                 $array_node['flag'] = 'unknown.png';
             }
 
-/**
+/*
             $node_online=$node->isNodeOnline();
 
             if($node_online===null){
@@ -533,10 +532,10 @@ class UserController extends BaseController
             else if($node_online===false){
                 $array_node['online']=-1;
             }
-**/
+*/
             $array_node['online']=1;
 
-/**
+/*
             if ($node->sort == 0 ||$node->sort == 7 || $node->sort == 8 ||
                 $node->sort == 10 || $node->sort == 11){
                 $array_node['online_user']=$node->getOnlineUserCount();
@@ -544,11 +543,11 @@ class UserController extends BaseController
             else{
                 $array_node['online_user']=-1;
             }
-            **/
+            */
 
             $array_node['online_user']=$node->node_online;
 
-            /**
+            /*
             $nodeLoad = $node->getNodeLoad();
             if (isset($nodeLoad[0]['load'])) {
                 $array_node['latest_load'] = ((explode(" ", $nodeLoad[0]['load']))[0]) * 100;
@@ -556,11 +555,11 @@ class UserController extends BaseController
             else {
                 $array_node['latest_load'] = -1;
             }
-            **/
+            */
 
             $array_node['latest_load'] = $node->node_oncost;
 
-/**
+/*
             $array_node['traffic_used'] = (int)Tools::flowToGB($node->node_bandwidth);
             $array_node['traffic_limit'] = (int)Tools::flowToGB($node->node_bandwidth_limit);
             if($node->node_speedlimit==0.0){
@@ -572,7 +571,7 @@ class UserController extends BaseController
             else{
                 $array_node['bandwidth']=$node->node_speedlimit.'Mbps';
             }
-            **/
+            */
             $array_node['traffic_used'] = (int)Tools::flowToGB($node->node_bandwidth);
             $array_node['traffic_limit'] = (int)Tools::flowToGB($node->node_bandwidth_limit);
             $array_node['bandwidth']=$node->node_oncost;

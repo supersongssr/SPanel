@@ -104,13 +104,15 @@
 										<div class="form-group form-group-label">
 												<label class="floating-label" for="sort">节点类型</label>
 												<select id="sort" class="form-control maxwidth-edit" name="sort">
-													<option value="0">Shadowsocks</option>
+													<option value="0">SS</option>
 													<option value="1">VPN/Radius基础</option>
 													<option value="2">SSH</option>
 													<option value="5">Anyconnect</option>
 													<option value="9">Shadowsocks 单端口多用户</option>
 													<option value="10">Shadowsocks 中转</option>
-													<option value="11">V2Ray</option>
+													<option value="11">Vmess</option>
+													<option value="13">Vless</option>
+													<option value="14">Trojan</option>
 												</select>
 											</div>
 									</div>

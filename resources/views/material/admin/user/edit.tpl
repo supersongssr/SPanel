@@ -10,7 +10,7 @@
 		<div class="content-header ui-content-header">
 			<div class="container">
 				<h1 class="content-heading">用户编辑 #{$edit_user->id}</h1>
-				rss_count={$edit_user->rss_count} ; rss_count_lastday={$edit_user->rss_count_lastday} ; ban_times={$edit_user->ban_times}; warming={$edit_user->warming};
+				rss_count={$edit_user->rss_count} ; rss_count_lastday={$edit_user->rss_count_lastday} ; ban_times={$edit_user->ban_times}; warming={$edit_user->warming};score={$edit_user->score}
 			</div>
 		</div>
 		<div class="container">

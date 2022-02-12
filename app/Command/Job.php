@@ -200,19 +200,15 @@ class Job
         }
 */
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',9)->get();  // 只获取9以上的在线节点
+        $nodes_vnstat = Node::where('id','>',9)->where('node_group','>',0)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
         foreach ($nodes_vnstat as $node) {
-
-          // 判断这个节点是否今天没有走流量，是否是有问题的节点？
-          if ($node->node_bandwidth == $node->node_bandwidth_lastday) {
-            if ($node->type != 0) {
-              $node->type = 0;  //设置为 隐藏
-              $node->save();
+            if ($node->node_bandwidth == $node->node_bandwidth_lastday) {   // 判断这个节点是否今天没有走流量，是否是有问题的节点？
+                if ($node->type != 0) {
+                $node->type = 0;  //设置为 隐藏
+                $node->save();
+                }
+                continue;  // 跳出此次循环
             }
-            // 跳出此次循环
-            continue;
-          }
-
             // 这里直接换算成 GB 保留两位小数
             $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
             // 如果 today < 16G 就会要求在一个数值上 -1
@@ -224,7 +220,6 @@ class Job
             }elseif (abs($traffic_today) > 32*1024*1024*1024) {
                 $node->node_sort += 1;
             }
-
             // 只有流量限制不为 0 ，且非流量重置日的时候，才会按照这个标准矫正倍率，其他时间不用管
             // 就是 流量重置日 倍率不变
             // 就是 如果流量限制为 0 ， 那么倍率就永久不变
@@ -247,8 +242,8 @@ class Job
               $node->node_sort > 0 && $node->node_sort = 0;
             }
 
-            $node->info = floor($traffic_today/1024/1024/1024) . ' ' . $node->info ;    //将每天统计的节点的数据写入到节点的备注中去
-            $node->info = substr($node->info, 0,32);             //截取字符串长度为128位 防止超出
+            $node->status = floor($traffic_today/1024/1024/1024) . ' ' . $node->status ;    //将每天统计的节点的数据写入到节点的备注中去
+            $node->status = substr($node->status, 0,32);             //截取字符串长度为128位 防止超出
             $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据
             $node->save();
             //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
@@ -314,6 +309,7 @@ class Job
             $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
             $user->last_day_t = $user->d;     // 重置每日流量统计
             $user->rss_count_lastday = $user->rss_count; // 记录昨日订阅数量统计
+            $user->rss_ips_lastday = $user->rss_ips_count; // 记录昨日ips来源统计
             $user->save();
 /* song
             if (date("d") == $user->auto_reset_day) {

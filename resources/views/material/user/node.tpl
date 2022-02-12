@@ -22,9 +22,9 @@
 
 	<p>AlterId：<span class="card-tag tag-purple">{$server_explode[2]}</span></p>
 
-	<p>VMess链接：
-		<a class="copy-text" data-clipboard-text="{URL::getV2Url($user, $node['raw_node'])}">点击复制</a>
-	</p>
+	<!-- <p>VMess链接：
+		<a class="copy-text" data-clipboard-text="">点击复制</a>
+	</p> -->
 {/function}
 
 {function displayNodeLinkV2 node=null}

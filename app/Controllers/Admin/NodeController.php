@@ -18,7 +18,7 @@ class NodeController extends AdminController
     {
         $table_config['total_column'] = Array("op" => "操作", "id" => "ID", "name" => "名称",
                             "type" => "显", "node_sort" => "!","sort" => "类型",
-                            "server" => "节点地址", "node_ip" => "节点IP",
+                            "server" => "节点配置", "node_ip" => "节点IP",
                             "status" => "?","traffic_rate" => "R",
                             "node_cost" => "C","node_online" => "O","node_oncost" => "负载", "node_group" => "G",
                             "node_class" => "L", "node_speedlimit" => "节点限速/Mbps",
@@ -198,7 +198,7 @@ class NodeController extends AdminController
         $total_column = Array("op" => "操作", "id" => "ID", "name" => "名称",
                               "type" => "显示", "node_sort"=>"维护","sort" => "类型",
                               "status" => "状态",
-                              "server" => "节点地址", "node_ip" => "节点IP", "traffic_rate" => "流量比率",
+                              "server" => "节点配置", "node_ip" => "节点IP", "traffic_rate" => "流量比率",
                               "node_cost" => "成本", "node_online" => "在线人数","node_oncost" => "负载","node_group" => "节点群组",
                               "node_class" => "节点等级", "node_speedlimit" => "节点限速/Mbps",
                               "node_bandwidth" => "GB", "node_bandwidth_limit" => "流量限制/GB","info" => "节点信息",
@@ -215,7 +215,7 @@ class NodeController extends AdminController
         }
         $datatables->query('Select '.$key_str.' from ss_node');
         $datatables->edit('op', function ($data) {
-            return '<a class="btn btn-brand" '.($data['sort'] == 999 ? 'disabled' : 'href="/admin/node/'.$data['id'].'/edit"').'>编辑</a>
+            return '<a class="btn btn-brand" '.($data['sort'] == 999 ? 'disabled' : 'href="/admin/node/'.$data['id'].'/edit"').'>'.$data['id'].'</a>
                     <!-- <a class="btn btn-brand-accent" '.($data['sort'] == 999 ? 'disabled' : 'id="delete" value="'.$data['id'].'" href="javascript:void(0);" onClick="delete_modal_show(\''.$data['id'].'\')"').'>删除</a> -->';
         });
         $datatables->edit('node_bandwidth', function ($data) {
@@ -228,7 +228,7 @@ class NodeController extends AdminController
             $sort = '';
             switch($data['sort']) {
                 case 0:
-                  $sort = 'Sr';
+                  $sort = 'SS';
                   break;
                 case 1:
                   $sort = 'VPN/Radius基础';
@@ -249,10 +249,16 @@ class NodeController extends AdminController
                   $sort = 'V2';
                   break;
                 case 12:
-                  $sort = 'CF+';
+                  $sort = 'CDN';
                   break;
+                case 13:
+                    $sort = 'Vl';
+                    break;
+                case 14:
+                    $sort = 'Tr';
+                    break;
                 default:
-                  $sort = '系统保留';
+                  $sort = '?';
             }
             return $sort;
         });

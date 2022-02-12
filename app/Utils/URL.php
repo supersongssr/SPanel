@@ -5,11 +5,15 @@ use App\Models\Node;
 use App\Models\Relay;
 use App\Services\Config;
 use App\Controllers\LinkController;
-
-use App\Models\Cncdn;
+use App\Models\Cncdn;   // 引入Cncdn自选
 
 class URL
-{
+{   
+    // News nodes Url ，通知新闻节点 group=0的节点。
+    
+
+    // Vmess Url Get 
+    
     /*
     * 1 SSR can
     * 2 SS can
@@ -347,187 +351,8 @@ class URL
             return $ssurl;
         }
     }
-    public static function getV2Url($user, $node, $arrout = 0){
-        $node_explode = explode('#', $node->node_ip);//server ->node_ip song
-        $item = [
-            'v'=>'2',
-            'host'=>'',
-            'path'=>'',
-            'tls'=>''
-        ];
-        $node_warm = '';
-
-        //增加 cncdn 自选 和 cfcdn网络优化
-        $node_server = $node->server;
-        $cdn_area = '';  // CDN名字
-        // if ($node->sort == 12) {
-        //     if ($user->cncdn) {
-        //         $cdn_server = strstr($node_server, '.');
-        //         $cdn_server = substr($cdn_server, 1);
-        //         $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$user->cncdn)->orderBy('id','desc')->first();
-        //         if (!empty($cncdn->ipmd5)) {
-        //             $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
-        //             $cdn_area = '->'.$user->cncdn;
-        //         }
-        //         //$cdn_area = $user->cncdn;
-        //     }else{
-        //         $cdn_server = strstr($node_server, '.');
-        //         $cdn_server = substr($cdn_server, 1);
-        //         //$cdn_area_array = array("武汉联通","郑州联通","天津联通","重庆联通","济南联通","广州联通","石家庄联通","东莞电信","天津移动","广州移动","无锡移动","西安电信","青岛电信","株洲电信","苏州电信","宁波电信","南宁电信","天津电信","上海电信");
-        //         $cdn_area_array = array("武汉联通","郑州联通","天津联通","重庆联通","济南联通","广州联通","石家庄联通","天津移动","广州移动","无锡移动");
-        //         $cdn_area_choice = $cdn_area_array[array_rand($cdn_area_array,1)];
-        //         $cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->where('area','=',$cdn_area_choice)->orderBy('id','desc')->first();
-        //         //$cncdn = Cncdn::where('status','=','1')->where('server','=',$cdn_server)->orderBy('rand()')->select();
-        //         if (!empty($cncdn->ipmd5)) {
-        //             $node_server = $cncdn->ipmd5.'.'.$cncdn->host;
-        //             $cdn_area = '->'.$cdn_area_choice;
-        //         }
-        //     }
-        //
-        // }elseif ($user->cfcdn) {
-        //     $node_server = $user->cfcdn;
-        //     $cdn_area = $user->cfcdn;
-        // }
-        // 当用户设置了 cfcdn 且，cfcdn=12的时候，说明此节点支持CFCDN
-        if ($user->cfcdn && $node->sort == 12) {
-          $node_server = $user->cfcdn;
-          $cdn_area = $user->cfcdn;
-        }
-
-        $node_warm = Config::get("appName");
-        $user->class < 2 && $node_warm .= '|公益节点';
-        $item['ps'] = $node->name.$cdn_area.'#'.$node->id.'|'.$node->traffic_rate.'|'.$user->class.'|'.$node->node_online.'%|'.floor($node->node_bandwidth/1024/1024/1024).'G|'.$node_warm;
-        $item['add'] = $node_server;// addn ->server song
-        $item['port'] = $node_explode[1];
-        empty($node_explode[2]) ? $item['id'] = $user->v2ray_uuid : $item['id'] = $node_explode[2];  //判断uuid是否为空，为空就设置为用户uuid
-        $item['aid'] = $node_explode[3];
-        $item['net'] = $node_explode[4];
-        $item['type'] = $node_explode[5];
-        if (count($node_explode) > 8) {   //如果数量大于7的话，就是配置更多喽 由于结尾也有一个# 嘎嘎有点意思
-            $item['host'] = $node_explode[6];
-            $item['path'] = '/'.$node_explode[7];
-            empty($node_explode[8]) ? $item['tls'] = '' : $item['tls'] = 'tls';
-        }
-
-        #这里做个判断，如果 server 存在第二个值，那么就可以正常使用了！嘎嘎 嘿嘿不错的想法！
-        /**$server = explode(';', $node->server);
-        if ($server[1] != null ) {
-            # code...
-            $item['id'] = $user->getUuid();
-
-            $item['add'] = $server[0];
-            if ($server[1] == '0' || $server[1] == '') {
-                $item['port'] = 443;
-            } else {
-                $item['port'] = (int)$server[1];
-            }
-            $item['aid'] = (int)$server[2];
-            $item['net'] = 'tcp';
-            $item['type'] = 'none';
-            if (count($server) >= 4) {
-                $item['net'] = $server[3];
-                if ($item['net'] == 'ws') {
-                    $item['path'] = '/';
-                } elseif ($item['net'] == 'tls') {
-                    $item['tls'] = 'tls';
-                }
-            }
-            if (count($server) >= 5) {
-                if (in_array($item['net'], array('kcp', 'http'))) {
-                    $item['type'] = $server[4];
-                } elseif ($server[4] == 'ws') {
-                    $item['net'] = 'ws';
-                }
-            }
-            if (count($server) >= 6) {
-                $item = array_merge($item, URL::parse_args($server[5]));
-                if (array_key_exists('server', $item)) {
-                    $item['add'] = $item['server'];
-                    unset($item['server']);
-                }
-                if (array_key_exists('outside_port', $item)) {
-                    $item['port'] = (int)$item['outside_port'];
-                    unset($item['outside_port']);
-                }
-            }
-            #完成
-
-        }**/
-
-        
-
-        if ($arrout == 0) {
-            
-            // 2021.4.4 增加ws节点 443+ tls 的节点，使用其他的80无端口的配置
-            if ($node_explode[9]) {
-                $itemws = [
-                    'v'=>'2',
-                    'host'=>'',
-                    'path'=>'',
-                    'tls'=>''
-                ];
-                $itemws['ps'] = $item['ps'].'|'.$node_explode[9];
-                $itemws['add'] = $item['add'];// addn ->server song
-                $itemws['port'] = $node_explode[9];
-                $itemws['id'] = $item['id'];  //判断uuid是否为空，为空就设置为用户uuid
-                $itemws['aid'] = $item['aid'];
-                $itemws['net'] = $item['net'];
-                $itemws['type'] = $item['type'];
-                $itemws['host'] = $item['host'];
-                $itemws['path'] = $item['path'];
-                $itemws['tls'] = $item['tls'];
-
-                if ($node_explode[10]) {
-                    $itemport3 = [
-                        'v'=>'2',
-                        'host'=>'',
-                        'path'=>'',
-                        'tls'=>''
-                    ];
-                    $itemport3['ps'] = $item['ps'].'|'.$node_explode[10];
-                    $itemport3['add'] = $item['add'];// addn ->server song
-                    $itemport3['port'] = $node_explode[10];
-                    $itemport3['id'] = $item['id'];  //判断uuid是否为空，为空就设置为用户uuid
-                    $itemport3['aid'] = $item['aid'];
-                    $itemport3['net'] = $item['net'];
-                    $itemport3['type'] = $item['type'];
-                    $itemport3['host'] = $item['host'];
-                    $itemport3['path'] = $item['path'];
-                    $itemport3['tls'] = $item['tls'];
-                }else{
-                    return 'vmess://' . base64_encode(json_encode($itemport3, JSON_UNESCAPED_UNICODE)) . "\n" . 'vmess://' . base64_encode(json_encode($itemws, JSON_UNESCAPED_UNICODE)) . "\n" . 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
-                }
-            }else{
-                return 'vmess://' . base64_encode(json_encode($item, JSON_UNESCAPED_UNICODE));
-            }
-        }else{
-
-            // 2021.4.4 增加ws节点 443+ tls 的节点，使用其他的80无端口的配置
-            if ($node_explode[9]) {
-                $itemws = [
-                    'v'=>'2',
-                    'host'=>'',
-                    'path'=>'',
-                    'tls'=>''
-                ];
-                $itemws['ps'] = $item['ps'].'|'.$node_explode[9];
-                $itemws['add'] = $item['add'];// addn ->server song
-                $itemws['port'] = $node_explode[9];
-                $itemws['id'] = $item['id'];  //判断uuid是否为空，为空就设置为用户uuid
-                $itemws['aid'] = $item['aid'];
-                $itemws['net'] = $item['net'];
-                $itemws['type'] = $item['type'];
-                $itemws['host'] = $item['host'];
-                $itemws['path'] = $item['path'];
-                $itemws['tls'] = $item['tls'];
-                return $itemws. $item;
-            }else{
-                return $item;
-            }
-            
-        }
-
-    }
+ 
+    
 
     public static function getIOSV2Url($user, $node){
         $node_explode = explode('#', $node->node_ip);//server ->node_ip song
@@ -585,42 +410,6 @@ class URL
             return "vmess://".$item;
         }
         return "vmess://".$item;
-    }
-
-    public static function getAllVMessUrl($user, $arrout = 0) {
-        if ($user->is_admin) {
-            $nodes = Node::where(
-                function ($query) {
-                    $query->where('sort', 11)
-                        ->orwhere('sort', 12);
-                }
-            )->where("type", "1")->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->get();
-        }else{
-            $nodes = Node::where(
-                function ($query) {
-                    $query->where('sort', 11)
-                        ->orwhere('sort', 12);
-                }
-            )->where(
-                function ($query) use ($user){
-                    $query->where("node_group", "=", $user->node_group)
-                        ->orWhere("node_group", "=", 0);
-                }
-            )->where("type", "1")->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("node_oncost","ASC")->limit($user->sub_limit)->get();
-        }
-
-        if ($arrout == 0) {
-            $result = '';
-            foreach ($nodes as $node) {
-                $result .= (URL::getV2Url($user, $node, $arrout) . "\n");
-            }
-        } else {
-            $result = [];
-            foreach ($nodes as $node) {
-                $result[] = URL::getV2Url($user, $node, $arrout);
-            }
-        }
-        return $result;
     }
 
     public static function getIOSVMessUrl($user) {

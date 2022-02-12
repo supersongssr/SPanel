@@ -277,7 +277,7 @@ class AuthController extends BaseController
             //$allow_email = explode(';', Config::get('allow_email_list'));
             $check_email = explode('@', $email);
             //song 判断是否在白名单中
-            /**
+            /*
             //if (!in_array($check_email['1'], $allow_email)) {
             if (!stripos(Config::get('allow_email_list') , $check_email['1'])) {
                 # code...
@@ -285,7 +285,7 @@ class AuthController extends BaseController
                 $res['msg'] = "咦,邮箱地址不常见呢,联系管理员加入白名单！";
                 return $response->getBody()->write(json_encode($res));
             }
-            **/
+            */
 
             $user = User::where('email', '=', $email)->first();
             if ($user != null) {
@@ -423,17 +423,18 @@ class AuthController extends BaseController
                 $res['ret'] = 0;
                 $res['msg'] = "请联系邀请人试用一下本站";
                 return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->score < 1) {
-                // 限制邀请人必须 score 有值才能邀请
-                $res['ret'] = 0;
-                $res['msg'] = "请联系邀请人体验一下本站节点再注册";
-                return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->reg_date > $date_lastday) {
-                // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
-                $res['ret'] = 0;
-                $res['msg'] = "请联系邀请人体验一下网站再注册";
-                return $response->getBody()->write(json_encode($res));
-            }
+            } 
+            // else if ($gift_user->score < 1) {
+            //     // 限制邀请人必须 score 有值才能邀请
+            //     $res['ret'] = 0;
+            //     $res['msg'] = "请联系邀请人体验一下本站节点再注册";
+            //     return $response->getBody()->write(json_encode($res));
+            // } else if ($gift_user->reg_date > $date_lastday) {
+            //     // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
+            //     $res['ret'] = 0;
+            //     $res['msg'] = "请联系邀请人体验一下网站再注册";
+            //     return $response->getBody()->write(json_encode($res));
+            // }
 
         }
 

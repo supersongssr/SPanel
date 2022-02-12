@@ -164,12 +164,12 @@ CREATE TABLE IF NOT EXISTS `ss_invite_code` (
 CREATE TABLE IF NOT EXISTS `ss_node` (
   `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `type` int(3) NOT NULL,
-  `server` varchar(128) NOT NULL,
+  `type` int(3) NOT NULL COMMENT '节点是否启用1 启用 0 不启用 ，有毛病的参数', 
+  `server` varchar(500) NOT NULL,
   `method` varchar(64) NOT NULL,
   `info` varchar(128) NOT NULL,
   `status` varchar(128) NOT NULL,
-  `sort` int(3) NOT NULL,
+  `sort` int(3) NOT NULL COMMENT '节点类型，真的是有毛病的参数',
   `custom_method` tinyint(1) NOT NULL DEFAULT '0',
   `traffic_rate` float NOT NULL DEFAULT '1',
   `node_class` int(11) NOT NULL DEFAULT '0',
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `ss_node` (
   `node_bandwidth_limit` bigint(20) NOT NULL DEFAULT '0',
   `bandwidthlimit_resetday` int(11) NOT NULL DEFAULT '0',
   `node_heartbeat` bigint(20) NOT NULL DEFAULT '0',
-  `node_ip` text
+  `node_ip` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
@@ -293,7 +293,7 @@ CREATE TABLE IF NOT EXISTS `user` (
 
 CREATE TABLE IF NOT EXISTS `user_token` (
   `id` int(11) NOT NULL,
-  `token` varchar(256) NOT NULL,
+  `token` varchar(255) NOT NULL,
   `user_id` int(11) NOT NULL,
   `create_time` int(11) NOT NULL,
   `expire_time` int(11) NOT NULL
@@ -552,7 +552,7 @@ SET time_zone = "+00:00";
 CREATE TABLE IF NOT EXISTS `ss_node` (
   `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL,
-  `type` int(3) NOT NULL,
+  `type` int(3) NOT NULL COMMENT '1显示 0不显示 是否显示节点',
   `server` varchar(128) NOT NULL,
   `method` varchar(64) NOT NULL,
   `info` varchar(128) NOT NULL,
@@ -756,7 +756,7 @@ ALTER TABLE `user` ADD `transfer_limit` BIGINT(20) DEFAULT '1073741824' COMMENT 
 
 # node 增加 到期时间 和 节点的 排序选项，按照错误的次数排序 这个还是可以的。因为倍率可能变得不再重要了。 因为倍率变稳定了。
 ALTER TABLE `ss_node` ADD `node_sort` INT(11) DEFAULT '0' COMMENT '节点故障排序' AFTER `node_oncost`;
-ALTER TABLE `ss_node` ADD `node_date` INT(11) DEFAULT '0' COMMENT '节点到期时间 ' AFTER `node_sort`;
+-- ALTER TABLE `ss_node` ADD `node_date` INT(11) DEFAULT '0' COMMENT '节点到期时间 ' AFTER `node_sort`;
 
 
 # user 增加用户打分表 score ，用来判断用户是否会被清理掉
@@ -766,8 +766,8 @@ ALTER TABLE `user` ADD `score` INT(8) DEFAULT '0' COMMENT '用户打分' AFTER `
 ALTER TABLE `ss_node` ADD `cncdn` TINYINT(4) AFTER `server`;
 
 #增加 rss订阅次数统计
-ALTER TABLE `user` ADD `rss_count` VARCHAR(64) DEFAULT '0' COMMENT 'Rss次数统计' AFTER `rss_ip`;
-ALTER TABLE `user` ADD `rss_count_lastday` VARCHAR(64) DEFAULT '0' COMMENT 'Rss昨日次数' AFTER `rss_count`;
+ALTER TABLE `user` ADD `rss_count` INT(11) DEFAULT '0' COMMENT 'Rss次数统计' AFTER `rss_ip`;
+ALTER TABLE `user` ADD `rss_count_lastday` INT(11) DEFAULT '0' COMMENT 'Rss昨日次数' AFTER `rss_count`;
 
 #增加 用户 warming 消息
 ALTER TABLE `user` ADD `warming` TEXT COMMENT '警告消息' AFTER `cfcdn_count`;
@@ -775,3 +775,6 @@ ALTER TABLE `user` ADD `warming` TEXT COMMENT '警告消息' AFTER `cfcdn_count`
 #payback 增加字段，显示此返利是否被收回 1是收回
 ALTER TABLE `payback`  ADD `callback` INT(8) COMMENT '返利是否被收回 1是收回了 3=邀请人已删除 0=返利还没被收回' AFTER `ref_get`;
 
+#增加 rss订阅次数统计
+ALTER TABLE `user` ADD `rss_ips_count` INT(11) DEFAULT '0' COMMENT 'RssIp来源统计' AFTER `rss_count_lastday`;
+ALTER TABLE `user` ADD `rss_ips_lastday` INT(11) DEFAULT '0' COMMENT 'Rss昨日Ip来源次数' AFTER `rss_ips_count`;

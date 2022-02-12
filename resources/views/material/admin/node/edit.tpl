@@ -53,11 +53,6 @@
 										<input class="form-control maxwidth-edit" id="group" name="group" type="text" value="{$node->node_group}">
 									</div>
 
-									<div class="form-group form-group-label">
-										<label class="floating-label" for="cost">节点成本</label>
-										<input class="form-control maxwidth-edit" id="cost" name="cost" type="text" value="{$node->node_cost}">
-									</div>
-
 									<div class="form-group form-group-label" hidden="hidden">
 										<div class="checkbox switch">
 											<label for="custom_method">
@@ -74,21 +69,10 @@
 										</div>
 									</div>
 									<div class="form-group form-group-label">
-										<div class="form-group form-group-label">
-												<label class="floating-label" for="sort">节点类型</label>
-												<select id="sort" class="form-control maxwidth-edit" name="sort">
-													<option value="11" {if $node->sort==11}selected{/if}>V2Ray</option>
-													<option value="12" {if $node->sort==12}selected{/if}>CF + V2</option>
-													<!-- <option value="0" {if $node->sort==0}selected{/if}>Shadowsocks</option> -->
-													<!-- <option value="1" {if $node->sort==1}selected{/if}>VPN/Radius基础</option>
-													<option value="2" {if $node->sort==2}selected{/if}>SSH</option>
-													<option value="5" {if $node->sort==5}selected{/if}>Anyconnect</option>
-													<option value="9" {if $node->sort==9}selected{/if}>Shadowsocks 单端口多用户</option>
-													<option value="10" {if $node->sort==10}selected{/if}>Shadowsocks 中转</option> -->
-
-												</select>
-											</div>
+										<label class="floating-label" for="node_sort">故障排序</label>
+										<input class="form-control maxwidth-edit" id="node_sort" name="node_sort" type="text" value="{$node->node_sort}">
 									</div>
+									
 
 								</div>
 							</div>
@@ -98,11 +82,7 @@
 							<div class="card-main">
 								<div class="card-inner">
 
-									<div class="form-group form-group-label">
-										<label class="floating-label" for="node_bandwidth_limit">节点流量上限（GB）</label>
-										<input class="form-control maxwidth-edit" id="node_bandwidth_limit" name="node_bandwidth_limit" type="text" value="{$node->node_bandwidth_limit/1024/1024/1024}">
-										<p class="form-control-guide"><i class="material-icons">info</i>不设上限请填0</p>
-									</div>
+									
 
 									<div class="form-group form-group-label">
 										<div class="checkbox switch">
@@ -110,6 +90,11 @@
 												<input {if $node->type==1}checked{/if} class="access-hide" id="type" name="type" type="checkbox"><span class="switch-toggle"></span>是否显示
 											</label>
 										</div>
+									</div>
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="node_bandwidth_limit">节点流量上限（GB）</label>
+										<input class="form-control maxwidth-edit" id="node_bandwidth_limit" name="node_bandwidth_limit" type="text" value="{$node->node_bandwidth_limit/1024/1024/1024}">
+										<p class="form-control-guide"><i class="material-icons">info</i>不设上限请填0</p>
 									</div>
 
 									<div class="form-group form-group-label">
@@ -121,10 +106,28 @@
 										<label class="floating-label" for="rate">流量比例</label>
 										<input class="form-control maxwidth-edit" id="rate" name="rate" type="text" value="{$node->traffic_rate}">
 									</div>
-
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="node_sort">故障排序</label>
-										<input class="form-control maxwidth-edit" id="node_sort" name="node_sort" type="text" value="{$node->node_sort}">
+										<div class="form-group form-group-label">
+												<label class="floating-label" for="sort">节点类型</label>
+												<select id="sort" class="form-control maxwidth-edit" name="sort">
+													<option value="" {if $node->sort==''}selected{/if}>?</option>
+													<option value="0" {if $node->sort==0}selected{/if}>SS</option>
+													<option value="11" {if $node->sort==11}selected{/if}>Vmess</option>
+													<option value="13" {if $node->sort==13}selected{/if}>Vless</option>
+													<option value="14" {if $node->sort==14}selected{/if}>Trojan</option>
+													<!-- <option value="1" {if $node->sort==1}selected{/if}>VPN/Radius基础</option>
+													<option value="2" {if $node->sort==2}selected{/if}>SSH</option>
+													<option value="5" {if $node->sort==5}selected{/if}>Anyconnect</option>
+													<option value="9" {if $node->sort==9}selected{/if}>Shadowsocks 单端口多用户</option>
+													<option value="10" {if $node->sort==10}selected{/if}>Shadowsocks 中转</option> -->
+												</select>
+											</div>
+									</div>
+
+									
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="cost">节点成本</label>
+										<input class="form-control maxwidth-edit" id="cost" name="cost" type="text" value="{$node->node_cost}">
 									</div>
 
 									<div class="form-group form-group-label">

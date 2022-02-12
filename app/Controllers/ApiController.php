@@ -166,11 +166,12 @@ class ApiController extends BaseController
 
     public function ssn_sub($request, $response, $args)
     {
+        $request->getParam('token') != Config::get('muKey') && exit;    // 判断 token是否正确
         $id = $args['id'];
         $status = $request->getParam('status');
         $traffic = $request->getParam('traffic');
         $online = $request->getParam('online');
-        $id < 9 && exit;
+        $id < 10 && exit;
         //写入节点数据 状态 流量
         $node = Node::find($id);
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
@@ -178,20 +179,20 @@ class ApiController extends BaseController
         $node->node_bandwidth = $traffic;
         //
         //如果是正常节点 那么下面的就没必要了记录了
-        $addn = explode('#', $node->node_ip);
+        // $addn = explode('#', $node->node_ip);
         #如果第三个没有数据，说明是 正常添加的节点
-        if ( empty($addn['2']) ) {
-            $node_online_log = NodeOnlineLog::where('node_id', $id)->orderBy('id', 'desc')->first();
-            if (!empty($node_online_log->online_user)) {
-                $online = $node_online_log->online_user;
-            }
-        }
+        // if ( empty($addn['2']) ) {
+        //     $node_online_log = NodeOnlineLog::where('node_id', $id)->orderBy('id', 'desc')->first();
+        //     if (!empty($node_online_log->online_user)) {
+        //         $online = $node_online_log->online_user;
+        //     }
+        // }
         //
         $node->node_online = $online;
         $node->node_oncost = round( ($online / $node->node_cost), 2);
         $node->save();
         //
-        empty($addn['2']) && exit;
+        // empty($addn['2']) && exit;
         //写入流量使用记录
         $traffic_log = new TrafficLog();
         $traffic_now = $traffic - $traffic_mark;    //两次流量差值
@@ -214,24 +215,55 @@ class ApiController extends BaseController
     }
 
     public function ssn_v2($request, $response, $args)
-    {
+    {   
+        $request->getParam('token') != Config::get('muKey') && exit;    // 判断 token是否正确
         $id = $args['id'];
-        $id < 10 && exit;  //ID 64以下是没有 V2节点的
+        $id < 10 && exit;  //1-9为保留ID。 通知节点为 group0 
         $node = Node::find($id);
-        //写入节点数据 状态 流量
-        !empty($request->getParam('name')) && $node->name = $request->getParam('name');
-        !empty($request->getParam('server')) && $node->server = $request->getParam('server');
-        !empty($request->getParam('node_ip')) && $node->node_ip = $request->getParam('node_ip');
-        !empty($request->getParam('node_status')) && $node->status = $request->getParam('node_status');
-        !empty($request->getParam('node_class')) && $node->node_class = $request->getParam('node_class');
-        !empty($request->getParam('node_group')) && $node->node_group = $request->getParam('node_group');
-        !empty($request->getParam('node_cost')) && $node->node_cost = $request->getParam('node_cost');
-        // !empty($request->getParam('sort')) && $node->sort = $request->getParam('sort');
-        $request->getParam('sort') == 'v2' && $node->sort = 11;
-        $request->getParam('sort') == 'cf' && $node->sort = 12;
-        !empty($request->getParam('node_bandwidth_limit')) && $node->node_bandwidth_limit = $request->getParam('node_bandwidth_limit')*1024*1024*1024;
-        !empty($request->getParam('bandwidthlimit_resetday')) && $node->bandwidthlimit_resetday = $request->getParam('bandwidthlimit_resetday');
-        $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');
+        // node_info 有数据才更改
+        $request->getParam('name') && $node->name = $request->getParam('node_name');
+        $request->getParam('node_desc') && $node->info = $request->getParam('node_desc');
+        $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
+        $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
+        $request->getParam('node_cost') && $node->node_cost = $request->getParam('node_cost');
+        $request->getParam('node_traffic_limit') && $node->node_bandwidth_limit = $request->getParam('node_traffic_limit')*1024*1024*1024;
+        $request->getParam('node_traffic_resetday') && $node->bandwidthlimit_resetday = $request->getParam('node_traffic_resetday');
+        $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');  //排序
+        // $request->getParam('sort') == 'v2' && $node->sort = 11;
+        // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
+        // node->node_ip  和v2ray无关，但是和服务器相关的信息
+        if ( $request->getParam('node_ip') ) {
+            $node->node_ip = 'ip=' . $request->getParam('node_ip');
+            $node->node_ip .= '&ipv6=' . $request->getParam('node_ipv6');
+        }
+        // protocol v2ray config 要更改，全部更改。 node->server段
+        if ( $request->getParam('v2') ) {
+            $request->getParam('v2') == 'ss' && $node->sort = 0;  // 这里0代表SS
+            $request->getParam('v2') == 'vmess' && $node->type = 11; 
+            $request->getParam('v2') == 'vless' && $node->type = 13;
+            $request->getParam('v2') == 'trojan' && $node->type = 14;
+            $node->server = 'v2='.$request->getParam('v2');
+            $node->server .= '&add='.$request->getParam('v2_add');
+            $node->server .= '&port='.$request->getParam('v2_port');
+            $node->server .= '&aid='.$request->getParam('v2_aid');
+            $node->server .= '&scy='.$request->getParam('v2_scy');
+            $node->server .= '&net='.$request->getParam('v2_net');
+            $node->server .= '&type='.$request->getParam('v2_type');
+            $node->server .= '&host='.$request->getParam('v2_host');
+            $node->server .= '&path='.$request->getParam('v2_path');
+            $node->server .= '&tls='.$request->getParam('v2_tls');
+            $node->server .= '&sni='.$request->getParam('v2_sni');
+            $node->server .= '&alpn='.$request->getParam('v2_alpn');
+            $node->server .= '&ecpt='.$request->getParam('v2_ecpt');  //vless独有
+            $node->server .= '&flow='.$request->getParam('v2_flow');  // xtls流控
+            $node->server .= '&uuid='.$request->getParam('v2_uuid');  //独立节点标志
+            $node->server .= '&cdn='.$request->getParam('v2_cdn');  //是否支持CDN？ 这个 最好是用 CDN标志
+            //这里的许多参数，都值得商榷。目前来看，很明显这些参数，不适合用在
+            //最好是保持参数的一致性，以及参数的可阅读性。 1 那个 v2的参数 为标准，其他的为新加的。
+            // 一个小原则： 一律用简写。 因为作为参数 方便 或则不用简写，就用正常的标注方案？ 可是我觉得，正常的标注方案， 用的也是简写？ 
+            // 一个基本原则：  节点配置用 v2_开头， node信息相关，用 node_开头。 方便区分。
+            // 信息的话，最好是很容易区分的，最好如此。  节点名字name 信息info 状态 status ip ipv6 等级level 分组group 倍率rate 排序sort 
+        }
         $node->save();
     }
 }
