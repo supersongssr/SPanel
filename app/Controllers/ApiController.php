@@ -168,31 +168,22 @@ class ApiController extends BaseController
     {
         $request->getParam('token') != Config::get('muKey') && exit;    // 判断 token是否正确
         $id = $args['id'];
+        $id < 10 && exit;
+
         $status = $request->getParam('status');
+        $hidden = $request->getParam('hidden');
         $traffic = $request->getParam('traffic');
         $online = $request->getParam('online');
-        $id < 10 && exit;
+        
         //写入节点数据 状态 流量
         $node = Node::find($id);
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
         $node->type = $status;
         $node->node_bandwidth = $traffic;
-        //
-        //如果是正常节点 那么下面的就没必要了记录了
-        // $addn = explode('#', $node->node_ip);
-        #如果第三个没有数据，说明是 正常添加的节点
-        // if ( empty($addn['2']) ) {
-        //     $node_online_log = NodeOnlineLog::where('node_id', $id)->orderBy('id', 'desc')->first();
-        //     if (!empty($node_online_log->online_user)) {
-        //         $online = $node_online_log->online_user;
-        //     }
-        // }
-        //
+        $node->custom_rss = $hidden;
         $node->node_online = $online;
-        $node->node_oncost = round( ($online / $node->node_cost), 2);
         $node->save();
-        //
-        // empty($addn['2']) && exit;
+
         //写入流量使用记录
         $traffic_log = new TrafficLog();
         $traffic_now = $traffic - $traffic_mark;    //两次流量差值
@@ -205,13 +196,13 @@ class ApiController extends BaseController
         $traffic_log->traffic = $traffic; //记录当前的流量值
         $traffic_log->log_time = time();
         $traffic_log->save();
+
         //写入节点在线人数
         $online_log = new NodeOnlineLog();
         $online_log->node_id = $id;
         $online_log->online_user = $online;
         $online_log->log_time = time();
         $online_log->save();
-        // 这样这个API就写好了，非常棒，Very Good!
     }
 
     public function ssn_v2($request, $response, $args)

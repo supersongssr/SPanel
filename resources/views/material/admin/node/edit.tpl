@@ -42,16 +42,12 @@
 										<label class="floating-label" for="status">节点状态</label>
 										<input class="form-control maxwidth-edit" id="status" name="status" type="text" value="{$node->status}">
 									</div>
-
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="class">节点等级</label>
-										<input class="form-control maxwidth-edit" id="class" name="class" type="text" value="{$node->node_class}">
+										<label class="floating-label" for="info">节点描述</label>
+										<input class="form-control maxwidth-edit" id="info" name="info" type="text" value="{$node->info}">
 									</div>
 
-									<div class="form-group form-group-label">
-										<label class="floating-label" for="group">节点群组</label>
-										<input class="form-control maxwidth-edit" id="group" name="group" type="text" value="{$node->node_group}">
-									</div>
+									
 
 									<div class="form-group form-group-label" hidden="hidden">
 										<div class="checkbox switch">
@@ -60,14 +56,7 @@
 											</label>
 										</div>
 									</div>
-
-									<div class="form-group form-group-label" hidden="hidden">
-										<div class="checkbox switch">
-											<label for="custom_rss">
-												<input {if $node->custom_rss==1}checked{/if} class="access-hide" id="custom_rss" type="checkbox" name="custom_rss"><span class="switch-toggle"></span>自定义协议&混淆
-											</label>
-										</div>
-									</div>
+									
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="node_sort">故障排序</label>
 										<input class="form-control maxwidth-edit" id="node_sort" name="node_sort" type="text" value="{$node->node_sort}">
@@ -87,7 +76,7 @@
 									<div class="form-group form-group-label">
 										<div class="checkbox switch">
 											<label for="type">
-												<input {if $node->type==1}checked{/if} class="access-hide" id="type" name="type" type="checkbox"><span class="switch-toggle"></span>是否显示
+												<input {if $node->type==1}checked{/if} class="access-hide" id="type" name="type" type="checkbox"><span class="switch-toggle"></span>状态
 											</label>
 										</div>
 									</div>
@@ -98,8 +87,22 @@
 									</div>
 
 									<div class="form-group form-group-label">
-										<label class="floating-label" for="info">节点描述</label>
-										<input class="form-control maxwidth-edit" id="info" name="info" type="text" value="{$node->info}">
+										<label class="floating-label" for="class">节点等级</label>
+										<input class="form-control maxwidth-edit" id="class" name="class" type="text" value="{$node->node_class}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="group">节点群组</label>
+										<input class="form-control maxwidth-edit" id="group" name="group" type="text" value="{$node->node_group}">
+									</div>
+
+									
+									<div class="form-group form-group-label" >
+										<div class="checkbox switch">
+											<label for="custom_rss">
+												<input {if $node->custom_rss==1}checked{/if} class="access-hide" id="custom_rss" type="checkbox" name="custom_rss"><span class="switch-toggle"></span>订阅
+											</label>
+										</div>
 									</div>
 
 									<div class="form-group form-group-label">
