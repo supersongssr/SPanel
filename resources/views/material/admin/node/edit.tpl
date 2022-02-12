@@ -49,18 +49,21 @@
 
 									
 
-									<div class="form-group form-group-label" hidden="hidden">
-										<div class="checkbox switch">
-											<label for="custom_method">
-												<input {if $node->custom_method==1}checked{/if} class="access-hide" id="custom_method" name="custom_method" type="checkbox"><span class="switch-toggle"></span>自定义加密
-											</label>
-										</div>
-									</div>
+									
 									
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="node_sort">故障排序</label>
 										<input class="form-control maxwidth-edit" id="node_sort" name="node_sort" type="text" value="{$node->node_sort}">
 									</div>
+									<div class="form-group form-group-label" >
+										<div class="checkbox switch">
+											<label for="custom_rss">
+												<input {if $node->custom_rss==1}checked{/if} class="access-hide" id="custom_rss" type="checkbox" name="custom_rss"><span class="switch-toggle"></span>订阅
+											</label>
+										</div>
+									</div>
+
+									
 									
 
 								</div>
@@ -96,14 +99,14 @@
 										<input class="form-control maxwidth-edit" id="group" name="group" type="text" value="{$node->node_group}">
 									</div>
 
-									
-									<div class="form-group form-group-label" >
+									<div class="form-group form-group-label" hidden="hidden">
 										<div class="checkbox switch">
-											<label for="custom_rss">
-												<input {if $node->custom_rss==1}checked{/if} class="access-hide" id="custom_rss" type="checkbox" name="custom_rss"><span class="switch-toggle"></span>订阅
+											<label for="custom_method">
+												<input {if $node->custom_method==1}checked{/if} class="access-hide" id="custom_method" name="custom_method" type="checkbox"><span class="switch-toggle"></span>节点存在心跳
 											</label>
 										</div>
 									</div>
+									
 
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="rate">流量比例</label>

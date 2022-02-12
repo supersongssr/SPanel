@@ -171,7 +171,7 @@ class ApiController extends BaseController
         $id < 10 && exit;
 
         $status = $request->getParam('status');
-        $hidden = $request->getParam('hidden');
+        $health = $request->getParam('health');
         $traffic = $request->getParam('traffic');
         $online = $request->getParam('online');
         
@@ -180,8 +180,10 @@ class ApiController extends BaseController
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
         $node->type = $status;
         $node->node_bandwidth = $traffic;
-        $node->custom_rss = $hidden;
+        // $node->custom_rss = $health;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
+        $node->custom_rss = 1;          
         $node->node_online = $online;
+        $node->node_heartbeat = time();     //节点心跳包
         $node->save();
 
         //写入流量使用记录
@@ -230,9 +232,9 @@ class ApiController extends BaseController
         // protocol v2ray config 要更改，全部更改。 node->server段
         if ( $request->getParam('v2') ) {
             $request->getParam('v2') == 'ss' && $node->sort = 0;  // 这里0代表SS
-            $request->getParam('v2') == 'vmess' && $node->type = 11; 
-            $request->getParam('v2') == 'vless' && $node->type = 13;
-            $request->getParam('v2') == 'trojan' && $node->type = 14;
+            $request->getParam('v2') == 'vmess' && $node->sort = 11; 
+            $request->getParam('v2') == 'vless' && $node->sort = 13;
+            $request->getParam('v2') == 'trojan' && $node->sort = 14;
             $node->server = 'v2='.$request->getParam('v2');
             $node->server .= '&add='.$request->getParam('v2_add');
             $node->server .= '&port='.$request->getParam('v2_port');

@@ -164,7 +164,7 @@ class LinkController extends BaseController
     }
 
     public static function getAllUrl($user, $mu = 2) {
-        $nodes = Node::where("type", "=","1")->where('custom_rss','=','1')->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_online","ASC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
+        $nodes = Node::where("type", "=","1")->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_online","ASC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
         $i = 0;
         foreach ($nodes as $node) {
             parse_str($node->server, $v2);  //获取参数
