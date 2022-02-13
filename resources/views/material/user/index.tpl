@@ -444,7 +444,7 @@
 														</ul>
 													</nav>
 													<div class="tab-pane fade active in" id="all_v2ray_windows">
-														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="/download/v2rayN.zip" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载</a><a href="https://github.com/2dust/v2rayN/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a>→解压→运行<code>V2rayN.exe</code>；</p>
+														<p><span class="icon icon-lg text-white">filter_1</span>获取软件：<a href="/download/v2rayN-Core.zip" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载v4.29</a><a href="https://github.com/2dust/v2rayN/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a>→解压→运行<code>V2rayN.exe</code>；</p>
 														<p><span class="icon icon-lg text-white">filter_2</span>订阅节点：双击任务栏右下角<code>V2rayN</code>图标→订阅→订阅设置→添加→备注：<code>{$config["appName"]}</code>→地址：<code>{$subUrl}{$ssr_sub_token}?mu=2</code>→确定；订阅→ 更新订阅→等待获取节点；</p>
 														<p><span class="icon icon-lg text-white">filter_3</span>使用节点：右键点击任意节点→设为活动服务器；V2rayN-设置-路由设置-启用路由高级功能-绕过大陆模式；打开浏览器上网；(Tls报错问题解决方案：V2rayN-设置-参数设置-底层传输安全选TLS时，默认跳过证书验证)</p>
 														<p><span class="icon icon-lg text-white">filter_4</span>图文教程：<small>*无法使用？请提交工单*</small><a href="/user/announcement/3">点击查看图文教程</a></p>

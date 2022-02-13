@@ -171,6 +171,7 @@ class ApiController extends BaseController
         $id < 10 && exit;
 
         $status = $request->getParam('status');
+        $daily = $request->getParam('daily');
         $health = $request->getParam('health');
         $traffic = $request->getParam('traffic');
         $online = $request->getParam('online');
@@ -178,10 +179,12 @@ class ApiController extends BaseController
         //写入节点数据 状态 流量
         $node = Node::find($id);
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
-        $node->type = $status;
+        $status == 0 && $node->type = 0;
+        $status == 1 && $node->type = 1;
+        $node->node_oncost = $daily;
+        // $health == 0 && $node->custom_rss = 0;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
+        $health == 1 && $node->custom_rss = 1;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
         $node->node_bandwidth = $traffic;
-        // $node->custom_rss = $health;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
-        $node->custom_rss = 1;          
         $node->node_online = $online;
         $node->node_heartbeat = time();     //节点心跳包
         $node->save();

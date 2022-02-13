@@ -164,7 +164,7 @@ class LinkController extends BaseController
     }
 
     public static function getAllUrl($user, $mu = 2) {
-        $nodes = Node::where("type", "=","1")->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_online","ASC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
+        $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_oncost","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
         $i = 0;
         foreach ($nodes as $node) {
             parse_str($node->server, $v2);  //获取参数
@@ -174,7 +174,7 @@ class LinkController extends BaseController
             if ($node->sort == 11 && ($mu == 'vmess' || $mu == 2 || $mu == 5) ) {
                 $v2_json = [
                     "v"    => "2",
-                    "ps"   => $node->name.'*'.$node->traffic_rate.'@'.$node->id.'#'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G',
+                    "ps"   => $node->name.'*'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G',
                     "add"  => $v2['add'] ,
                     "port" => $v2['port'] ,
                     "id"   => ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) ,
@@ -193,12 +193,12 @@ class LinkController extends BaseController
             } elseif ( $node->sort == 13 && ($mu == 'vless' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'@'.$node->id.'#'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
+                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
                 $i++ ;
             } elseif ( $node->sort == 14 && ($mu == 'trojan' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'@'.$node->id.'#'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
+                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
                 $i++ ;
             }
             if ( $i > $user->sub_limit ) {
