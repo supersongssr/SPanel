@@ -182,7 +182,7 @@ class ApiController extends BaseController
         $status == 0 && $node->type = 0;
         $status == 1 && $node->type = 1;
         $node->node_oncost = $daily;
-        // $health == 0 && $node->custom_rss = 0;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
+        $health == 0 && $node->custom_rss = 0;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
         $health == 1 && $node->custom_rss = 1;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
         $node->node_bandwidth = $traffic;
         $node->node_online = $online;
@@ -217,7 +217,7 @@ class ApiController extends BaseController
         $id < 10 && exit;  //1-9为保留ID。 通知节点为 group0 
         $node = Node::find($id);
         // node_info 有数据才更改
-        $request->getParam('name') && $node->name = $request->getParam('node_name');
+        $request->getParam('node_name') && $node->name = $request->getParam('node_name');
         $request->getParam('node_desc') && $node->info = $request->getParam('node_desc');
         $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
         $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
@@ -260,6 +260,7 @@ class ApiController extends BaseController
             // 一个基本原则：  节点配置用 v2_开头， node信息相关，用 node_开头。 方便区分。
             // 信息的话，最好是很容易区分的，最好如此。  节点名字name 信息info 状态 status ip ipv6 等级level 分组group 倍率rate 排序sort 
         }
+        $node->node_heartbeat = time();     //节点心跳包
         $node->save();
     }
 }
