@@ -126,20 +126,20 @@ class LinkController extends BaseController
 
     public static function getNews($user, $mu = 2) {
         $Nodes = Node::where("type", "=","1")->where("node_group", "=", 0)->orderBy("node_class","DESC")->get();
-        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
-        $url .= '#'.urlencode('邮箱：'.$user->email.'|等级：'.$user->class.'|VIP有效期：'.$user->class_expire) ."\n";
-        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
+        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';      //添加用户到期信息
+        $url .= '#'.urlencode('邮箱：'.$user->email.'_等级：'.$user->class.'_VIP有效期：'.$user->class_expire) ."\n";
+        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';      //添加用户到期信息
         $url .= '#'.urlencode('剩余流量：'.$user->unusedTraffic()) ."\n";
         foreach ($Nodes as $key => $node) {        // ss节点类的news
             if ( $node->sort == 0 && ($mu == 'ss' || $mu == 2 || $mu == 5 ) ) {
-                $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';
+                $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';
                 $url .= '#'.urlencode($node->name) ."\n";
             }elseif ($node->sort == 11 && ( $mu == 'vmess' || $mu == 2) ) {
                 $v2_json = [        
                     "v"    => "2",
                     "ps"   => $node->name,
-                    "add"  => '127.0.0.1' ,
-                    "port" => 80 ,
+                    "add"  => 'wordpress.org' ,
+                    "port" => 443 ,
                     "id"   => '6c6a0625-ac3f-4bd8-9cc8-0545e4e11409',
                     "aid"  => 0 ,
                     "scy"  => 'none' ,
@@ -153,10 +153,10 @@ class LinkController extends BaseController
                 ];
                 $url .= 'vmess://' . base64_encode(json_encode($v2_json, JSON_UNESCAPED_UNICODE)) . "\n" ;
             }elseif ($node->sort == 13 && ( $mu == 'vless' || $mu == 2) ) {
-                $url .= 'vless://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@127.0.0.1:443?encryption=none';
+                $url .= 'vless://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@wordpress.org:443?encryption=none';
                 $url .= '#'.urlencode($node->name) . "\n";
             }elseif ($node->sort == 14 && ( $mu == 'trojan' || $mu == 2) ) {
-                $url .= 'trojan://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@127.0.0.1:443';
+                $url .= 'trojan://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@wordpress.org:443';
                 $url .= '#'.urlencode($node->name) . "\n";
             }
         }  
@@ -174,7 +174,7 @@ class LinkController extends BaseController
             if ($node->sort == 11 && ($mu == 'vmess' || $mu == 2 || $mu == 5) ) {
                 $v2_json = [
                     "v"    => "2",
-                    "ps"   => $node->name.'*'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G',
+                    "ps"   => $node->name.'_'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G',
                     "add"  => $v2['add'] ,
                     "port" => $v2['port'] ,
                     "id"   => ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) ,
@@ -193,12 +193,12 @@ class LinkController extends BaseController
             } elseif ( $node->sort == 13 && ($mu == 'vless' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
+                $url .= '#'.urlencode($node->name.'_'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
                 $i++ ;
             } elseif ( $node->sort == 14 && ($mu == 'trojan' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.'*'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
+                $url .= '#'.urlencode($node->name.'_'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G') . "\n";
                 $i++ ;
             }
             if ( $i > $user->sub_limit ) {
