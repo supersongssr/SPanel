@@ -1,37 +1,8 @@
-﻿{include file='user/main.tpl'}
+{include file='user/main.tpl'}
 
 <script src="//cdn.jsdelivr.net/gh/SuicidalCat/canvasjs.js@v2.3.1/canvasjs.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery@3.3.1"></script>
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
-<!-- song 
--->
-{function displayV2rayNode node=null}
-	{assign var=server_explode value="#"|explode:$node['server']}
-	{if empty($server_explode[5])}
-		{$server_explode[5] = $user->getUuid()}
-	{/if}
-	<p>地址：<span class="card-tag tag-blue">{$server_explode[0]}</span></p>
-
-	<p>端口：<span class="card-tag tag-volcano">{$server_explode[1]}</span></p>
-
-	<p>协议参数：<span class="card-tag tag-green">{$server_explode[3]}:{$server_explode[4]}</span></p>
-
-	<p>用户 UUID：<span class="card-tag tag-geekblue">{$server_explode[5]}</span></p>
-
-	<p>流量比例：<span class="card-tag tag-red">{$node['traffic_rate']}</span></p>
-
-	<p>AlterId：<span class="card-tag tag-purple">{$server_explode[2]}</span></p>
-
-	<!-- <p>VMess链接：
-		<a class="copy-text" data-clipboard-text="">点击复制</a>
-	</p> -->
-{/function}
-
-{function displayNodeLinkV2 node=null}
-	<div class="tiptitle">
-		<a href="javascript:void(0);">{$node['name']}</a>
-	</div>
-{/function}
 
 <main class="content">
 	<div class="content-header ui-content-header">
@@ -60,12 +31,12 @@
                     <div class="node-cardgroup">
                         {$class=-1}
 						{foreach $nodes as $node}
-						{if $node['class']!=$class}
-							{$class=$node['class']}
+						{if $node['node_class']!=$class}
+							{$class=$node['node_class']}
 							{if !$node@first}</div>{/if}
 							<div class="nodetitle">
 								<a class="waves-effect waves-button" data-toggle="collapse" href="#cardgroup{$class}" aria-expanded="true" aria-controls="cardgroup{$class}">
-								    <span>{if $class == 0}普通{else}VIP {$node['class']} {/if}用户节点</span><i class="material-icons">expand_more</i>
+								    <span>{if $class == 0}公告消息{else}VIP {$node['node_class']} 节点{/if}</span><i class="material-icons">expand_more</i>
 								</a>
 							</div>
 							<div class="card-row collapse in" id="cardgroup{$class}">
@@ -73,95 +44,86 @@
 						<div class="node-card node-flex" cardindex="{$node@index}">
                             <div class="nodemain">
                                 <div class="nodehead node-flex">
-                                    {if $config['enable_flag']=='true'}<div class="flag"><img src="/images/prefix/{$node['flag']}" alt=""></div>{/if}
+                                    {if $config['enable_flag']=='true'}<div class="flag"><img src="/images/prefix/v2ray.png" alt=""></div>{/if}
                                     <div class="nodename">{$node['name']}</div>
                                 </div>
                                 <div class="nodemiddle node-flex">
-                                    <div class="onlinemember node-flex"><i class="material-icons node-icon">flight_takeoff</i><span>{if $node['online_user'] == -1} N/A{else} {$node['online_user']}{/if}</span></div>
+                                    <div class="onlinemember node-flex"><i class="material-icons node-icon">flight_takeoff</i><span>{$node->node_online}</span></div>
                                     <div class="nodetype">{$node['status']}</div>
                                 </div>
                                 <div class="nodeinfo node-flex">
-                                    <div class="nodetraffic node-flex"><i class="material-icons node-icon">equalizer</i><span>{if $node['traffic_limit']>0}{$node['traffic_used']}/{$node['traffic_limit']}GB{else}{$node['traffic_used']}GB{/if}</span></div>
+                                    <div class="nodetraffic node-flex"><i class="material-icons node-icon">equalizer</i><span>{floor($node['node_bandwidth']/1000000000)}/{floor($node['node_bandwidth_limit']/1000000000)}GB</span></div>
                                     <div class="nodecheck node-flex">
                                         <i class="material-icons node-icon">network_check</i><span>x{$node['traffic_rate']}</span>
                                     </div>
-                                    <div class="nodeband node-flex"><i class="material-icons node-icon">flash_on</i><span>{if {$node['bandwidth']}==0}N/A{else}{$node['bandwidth']*100}%{/if}</span></div>
+                                    <div class="nodeband node-flex"><i class="material-icons node-icon">flash_on</i><span>{$node->node_oncost}</span></div>
                                 </div>
                             </div>
                             <div class="nodestatus">
-                                <div class="{if $node['online']=="1"}nodeonline{elseif $node['online']=='0'}nodeunset{else}nodeoffline{/if}">
-                                    <i class="material-icons">{if $node['online']=="1"}cloud_queue{elseif $node['online']=='0'}wifi_off{else}flash_off{/if}</i>
+                                <div class="{if $node->node_group == 0 }nodeoffline{elseif $node->node_group == $user->node_group || $user->class < 1}nodeonline{else}nodeunset{/if}">
+                                    <i class="material-icons">{if $node->node_group == $user->node_group || $user->class < 1}cloud_queue{elseif $node->node_group == 0}wifi_off{else}flash_off{/if}</i>
                                 </div>
 							</div>
 
 						</div>
 						<div class="node-tip cust-model" tipindex="{$node@index}">
-								{if $node['class'] > $user->class}
+								
+								{if $node['node_class'] > $user->class}
 									<p class="card-heading" align="center"><b> <i class="icon icon-lg">visibility_off</i>
 										您当前等级不足以使用该节点，如需升级请<a href="/user/shop">点击这里</a>升级套餐</b></p>
 								{else}
-
-									{$relay_rule = null}
-
-                                    {if $node['sort'] == 10 && $node['sort'] != 11}
-										{$relay_rule = $tools->pick_out_relay_rule($node['id'], $user->port, $relay_rules)}
-									{/if}
-
-									{if $node['mu_only'] != 1 && $node['sort'] != 11}
-									    <div class="tiptitle">
-											<a href="javascript:void(0);" onClick="urlChange('{$node['id']}',0,{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">
-												{$node['name']}{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if}
-											</a>
-												<div class="nodeload">
-													<div class="label label-brand-accent"> ↑点击节点查看配置信息</div>
-												<div>
-													<span class="node-icon"><i class="icon icon-lg">cloud</i></span>
-													<span class="node-load">负载：<code>{if $node['latest_load'] == -1}N/A{else}{$node['latest_load']}%{/if}</code></span>
-												</div>
-											</div>
-										</div>
-									{elseif $node['sort'] == 11}
-										{displayNodeLinkV2 node=$node}
-										{$point_node=$node}
-									{/if}
-
-									{if $node['sort'] == 0 || $node['sort'] == 10}
-										{$point_node=$node}
-									{/if}
-
-									{if ($node['sort'] == 0 || $node['sort'] == 10) && $node['mu_only'] != -1}
-										{foreach $nodes_muport as $single_muport}
-
-										{if !($single_muport['server']->node_class <= $user->class && ($single_muport['server']->node_group == 0 || $single_muport['server']->node_group == $user->node_group))}
-											{continue}
-										{/if}
-
-										{if !($single_muport['user']->class >= $node['class'] && ($node['group'] == 0 || $single_muport['user']->node_group == $node['group']))}
-											{continue}
-										{/if}
-
-										{$relay_rule = null}
-
-										{if $node['sort'] == 10 && $single_muport['user']['is_multi_user'] != 2}
-											{$relay_rule = $tools->pick_out_relay_rule($node['id'], $single_muport['server']->server, $relay_rules)}
-										{/if}
-											<div class="tiptitle">
-												<a href="javascript:void(0);" onClick="urlChange('{$node['id']}',{$single_muport['server']->server},{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">{$node['name']}
-													{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if} - 单端口 Shadowsocks - {$single_muport['server']->server} 端口
-												</a>
-											</div>
-										{/foreach}
-									{/if}
-
 									<div class="tipmiddle">
-										<div><span class="node-icon"><i class="icon icon-lg">chat</i> </span>{$node['info']}</div>
+										{* <div><span class="node-icon"><i class="icon icon-lg">chat</i> </span>{$node['info']}</div> *}
+										<div class="nodename">手动添加节点信息</div>
 									</div>
-
-									{if $node['sort'] == 11}
-										{displayV2rayNode node=$node}
+									{$v2 = $node->getV2($node['server'])}
+									{if $node['sort'] == 11 }
+										<p>类型 Protocol：<span class="card-tag tag-red">Vmess节点</span></p>
+										<p>名字 Name：<span class="card-tag geekblue">{$node->name}</span></p>
+										<p>地址 Address ：<span class="card-tag tag-blue">{$v2['add']}</span></p>
+										<p>用户Id ID ：<span class="card-tag tag-geekblue">{if $v2['uuid']}{$v2['uuid']}{else}{$user->v2ray_uuid}{/if}</span></p>
+										<p>额外ID AlterId ：<span class="card-tag tag-purple">{$v2['aid']}</span></p>
+										<p>端口 Port ：<span class="card-tag tag-volcano">{$v2['port']}</span></p>
+										<p>加密方式 Security ：<span class="card-tag tag-green">{$v2['scy']}</span></p>
+										<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
+										<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
+										<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
+										<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
+										<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
+										<p>ALPN ：<span class="card-tag tag-green">{$v2['alpn']}</span></p>
+									{elseif $node['sort'] == 13 }
+										<p>类型 Protocol：<span class="card-tag tag-red">VLESS 节点</span></p>
+										<p>名字 Name：<span class="card-tag tag-geekblue">{$node->name}</span></p>
+										<p>地址 Address ：<span class="card-tag tag-blue">{$v2['add']}</span></p>
+										<p>用户Id ID ：<span class="card-tag tag-geekblue">{if $v2['uuid']}{$v2['uuid']}{else}{$user->v2ray_uuid}{/if}</span></p>
+										<p>流控 Flow ：<span class="card-tag tag-purple">{$v2['flow']}</span></p>
+										<p>端口 Port ：<span class="card-tag tag-volcano">{$v2['port']}</span></p>
+										<p>加密 Encryption ：<span class="card-tag tag-green">{$v2['ecp']}</span></p>
+										<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
+										<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
+										<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
+										<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
+										<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
+										<p>ALPN ：<span class="card-tag tag-green">{$v2['alpn']}</span></p>
+									{elseif $node->sort == 14 }
+										<p>类型 Protocol：<span class="card-tag tag-red">Trojan 节点</span></p>
+										<p>名字 Name：<span class="card-tag tag-geekblue">{$node->name}</span></p>
+										<p>地址 Address ：<span class="card-tag tag-blue">{$v2['add']}</span></p>
+										<p>用户Id ID ：<span class="card-tag tag-geekblue">{if $v2['uuid']}{$v2['uuid']}{else}{$user->v2ray_uuid}{/if}</span></p>
+										<p>流控 Flow ：<span class="card-tag tag-purple">{$v2['flow']}</span></p>
+										<p>端口 Port ：<span class="card-tag tag-volcano">{$v2['port']}</span></p>
+										<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
+										<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
+										<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
+										<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
+										<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
+										<p>ALPN ：<span class="card-tag tag-red">{$v2['alpn']}</span></p>
+									{else}
+										<p><span class="card-tag tag-red">当前节点暂不支持查看配置信息</span></p>
 									{/if}
-
-
 								{/if}
 							</div>
 						{$point_node=null}
@@ -175,41 +137,36 @@
 									<div class="tile-wrap">        
 										{$class=-1}
 										{foreach $nodes as $node}
-                                        
-										{if $node['class']!=$class}
-											{$class=$node['class']}
+										{if $node['node_class']!=$class}
+											{$class=$node['node_class']}
 											
-											<p class="card-heading">{if $class == 0}普通{else}VIP {$node['class']} {/if}用户节点</p>	
+											<p class="card-heading">{if $class == 0}公告消息{else}VIP {$node['node_class']}节点 {/if}</p>	
 										{/if}
 
 										<div class="tile tile-collapse">
 											<div data-toggle="tile" data-target="#heading{$node['id']}">
 												<div class="tile-side pull-left" data-ignore="tile">
-													<div class="avatar avatar-sm {if $node['online']=="1"}nodeonline{elseif $node['online']=='0'}nodeunset{else}nodeoffline{/if}">
-														<span class="material-icons">{if $node['online']=="1"}cloud_queue{elseif $node['online']=='0'}wifi_off{else}flash_off{/if}</span>
+													<div class="avatar avatar-sm {if $node->node_group == 0 }nodeoffline{elseif $node->node_group == $user->node_group || $user->class < 1}nodeonline{else}nodeunset{/if}">
+														<span class="material-icons">{if $node->node_group == $user->node_group || $user->class < 1}cloud_queue{elseif $node->node_group == 0 }wifi_off{else}flash_off{/if}</span>
 													</div>
 												</div>
 												<div class="tile-inner">
 													<div class="text-overflow node-textcolor">
 														<span class="enable-flag">
 															{if $config['enable_flag']=='true'}
-															   <img src="/images/prefix/{$node['flag']}" height="22" width="40" />
+															   <img src="/images/prefix/v2ray.png" height="22" width="40" />
 															{/if}
 															   {$node['name']}
 														</span>
 														|
 														<span class="node-icon"><i class="icon icon-lg">flight_takeoff</i></span>
-														  <strong><b><span class="node-alive">{if $node['online_user'] == -1}N/A{else}{$node['online_user']}{/if}</span></b></strong> 
+														  <strong><b><span class="node-alive">{$node->node_online}</span></b></strong> 
 											            | <span class="node-icon"><i class="icon icon-lg">cloud</i></span>
-														<span class="node-load">负载：{if $node['latest_load'] == -1}N/A{else}{$node['latest_load']*100}%{/if}</span> 
+														<span class="node-load">负载：{$node->node_oncost}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">import_export</i></span>
 														<span class="node-mothed">{$node['bandwidth']}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">equalizer</i></span>
-														{if $node['traffic_limit']>0}
-															<span class="node-band">{$node['traffic_used']}/{$node['traffic_limit']}</span>
-														{else}
-															{$node['traffic_used']}GB
-														{/if}
+															<span class="node-band">{floor($node['node_bandwidth']/1000000000)}/{floor($node['node_bandwidth_limit']/1000000000)}</span>
 														| <span class="node-icon"><i class="icon icon-lg">network_check</i></span>
 														<span class="node-tr">{$node['traffic_rate']} 倍率</span> 
 														| <span class="node-icon"><i class="icon icon-lg">notifications_none</i></span>
@@ -231,64 +188,61 @@
 														</div>
 													</div>
 													{else}
-
-													{$relay_rule = null}
-													<!-- 用户等级不小于节点等级 -->
-
-                                                    {if $node['sort'] == 10 && $node['sort'] != 11}
-														{$relay_rule = $tools->pick_out_relay_rule($node['id'], $user->port, $relay_rules)}
-													{/if}
+                                                    
                                                  <div class="card nodetip-table">
 														<div class="card-main">
 																<div class="card-inner">
-													{if $node['mu_only'] != 1 && $node['sort'] != 11}
-													
-																<p class="card-heading">
-																	<a href="javascript:void(0);" onClick="urlChange('{$node['id']}',0,{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">{$node['name']}
-																		{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if}</a>
-																	<span class="label label-brand-accent">←点击节点查看配置信息</span>
-																</p>
-
-													{elseif $node['sort'] == 11}
-														{displayNodeLinkV2 node=$node}
-														{$point_node=$node}
-												    {/if}
-
-                                                    {if $node['sort'] == 0 || $node['sort'] == 10}
-														{$point_node=$node}
+														{* <div><i class="icon icon-lg node-icon">chat</i> {$node['info']}</div> *}
+														<div class="nodename">手动添加节点信息</div>
+													{$v2 = $node->getV2($node['server'])}
+													{if $node['sort'] == 11 }
+														<p>类型 Protocol：<span class="card-tag tag-red">Vmess节点</span></p>
+														<p>名字 Name：<span class="card-tag geekblue">{$node->name}</span></p>
+														<p>地址 Address ：<span class="card-tag tag-blue">{$v2['add']}</span></p>
+														<p>用户Id ID ：<span class="card-tag tag-geekblue">{if $v2['uuid']}{$v2['uuid']}{else}{$user->v2ray_uuid}{/if}</span></p>
+														<p>额外ID AlterId ：<span class="card-tag tag-purple">{$v2['aid']}</span></p>
+														<p>端口 Port ：<span class="card-tag tag-volcano">{$v2['port']}</span></p>
+														<p>加密方式 Security ：<span class="card-tag tag-green">{$v2['scy']}</span></p>
+														<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
+														<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
+														<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
+														<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+														<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
+														<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
+														<p>ALPN ：<span class="card-tag tag-green">{$v2['alpn']}</span></p>
+													{elseif $node['sort'] == 13 }
+														<p>类型 Protocol：<span class="card-tag tag-red">VLESS 节点</span></p>
+														<p>名字 Name：<span class="card-tag tag-geekblue">{$node->name}</span></p>
+														<p>地址 Address ：<span class="card-tag tag-blue">{$v2['add']}</span></p>
+														<p>用户Id ID ：<span class="card-tag tag-geekblue">{if $v2['uuid']}{$v2['uuid']}{else}{$user->v2ray_uuid}{/if}</span></p>
+														<p>流控 Flow ：<span class="card-tag tag-purple">{$v2['flow']}</span></p>
+														<p>端口 Port ：<span class="card-tag tag-volcano">{$v2['port']}</span></p>
+														<p>加密 Encryption ：<span class="card-tag tag-green">{$v2['ecp']}</span></p>
+														<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
+														<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
+														<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
+														<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+														<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
+														<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
+														<p>ALPN ：<span class="card-tag tag-green">{$v2['alpn']}</span></p>
+													{elseif $node->sort == 14 }
+														<p>类型 Protocol：<span class="card-tag tag-red">Trojan 节点</span></p>
+														<p>名字 Name：<span class="card-tag tag-geekblue">{$node->name}</span></p>
+														<p>地址 Address ：<span class="card-tag tag-blue">{$v2['add']}</span></p>
+														<p>用户Id ID ：<span class="card-tag tag-geekblue">{if $v2['uuid']}{$v2['uuid']}{else}{$user->v2ray_uuid}{/if}</span></p>
+														<p>流控 Flow ：<span class="card-tag tag-purple">{$v2['flow']}</span></p>
+														<p>端口 Port ：<span class="card-tag tag-volcano">{$v2['port']}</span></p>
+														<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
+														<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
+														<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
+														<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+														<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
+														<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
+														<p>ALPN ：<span class="card-tag tag-red">{$v2['alpn']}</span></p>
+													{else}
+														<p><span class="card-tag tag-red">当前节点暂不支持查看配置信息</span></p>
 													{/if}
 
-													{if ($node['sort'] == 0 || $node['sort'] == 10) && $node['mu_only'] != -1}
-													{foreach $nodes_muport as $single_muport}
-
-														{if !($single_muport['server']->node_class <= $user->class && ($single_muport['server']->node_group == 0 || $single_muport['server']->node_group == $user->node_group))}
-															{continue}
-														{/if}
-
-														{if !($single_muport['user']->class >= $node['class'] && ($node['group'] == 0 || $single_muport['user']->node_group == $node['group']))}
-															{continue}
-														{/if}
-
-														{$relay_rule = null}
-
-														{if $node['sort'] == 10 && $single_muport['user']['is_multi_user'] != 2}
-															{$relay_rule = $tools->pick_out_relay_rule($node['id'], $single_muport['server']->server, $relay_rules)}
-														{/if}
-
-															<p class="card-heading">
-																<a href="javascript:void(0);" onClick="urlChange('{$node['id']}',{$single_muport['server']->server},{if $relay_rule != null}{$relay_rule->id}{else}0{/if})">{$node['name']}
-																	{if $relay_rule != null} - {$relay_rule->dist_node()->name}{/if} - 单端口 Shadowsocks -
-																	{$single_muport['server']->server} 端口</a><span class="label label-brand-accent">←点击节点查看配置信息</span>
-															</p>
-
-													{/foreach}
-													{/if}
-													
-													<div><i class="icon icon-lg node-icon">chat</i> {$node['info']}</div>
-
-													{if $node['sort'] == 11}
-														{displayV2rayNode node=$node}
-													{/if}
 												</div>
 											  </div>
 

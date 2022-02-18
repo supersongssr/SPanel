@@ -20,6 +20,12 @@ class Node extends Model
         'sort' => 'int',
     ];
 
+    public function getV2($server)
+    {
+        parse_str( $this->attributes['server'], $v2);  //获取参数
+        return $v2;
+    }
+
     public function getLastNodeInfoLog()
     {
         $id = $this->attributes['id'];

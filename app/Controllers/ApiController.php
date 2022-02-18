@@ -175,9 +175,17 @@ class ApiController extends BaseController
         $health = $request->getParam('health');
         $traffic = $request->getParam('traffic');
         $online = $request->getParam('online');
+        $ip = $_SERVER["REMOTE_ADDR"];   //记录请求ip
         
         //写入节点数据 状态 流量
         $node = Node::find($id);
+        $node->node_heartbeat = time();     //节点心跳包
+        if ( strpos($node->node_ip , $ip) === false ) {        // 对ip进行检测。这个有点意思。 或许可以考虑直接从 请求ip中获取到 这个ip也是不错的方法。
+            $node->info .= '_' .$ip;
+            $node->node_sort -= 100;
+            // $node->save();
+            // exit;
+        }
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
         $status == 0 && $node->type = 0;
         $status == 1 && $node->type = 1;
@@ -186,7 +194,7 @@ class ApiController extends BaseController
         $health == 1 && $node->custom_rss = 1;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
         $node->node_bandwidth = $traffic;
         $node->node_online = $online;
-        $node->node_heartbeat = time();     //节点心跳包
+        
         $node->save();
 
         //写入流量使用记录
@@ -221,14 +229,14 @@ class ApiController extends BaseController
         $request->getParam('node_desc') && $node->info = $request->getParam('node_desc');
         $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
         $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
-        $request->getParam('node_cost') && $node->node_cost = $request->getParam('node_cost');
+        $request->getParam('node_cost') != '' && $node->node_cost = $request->getParam('node_cost');
         $request->getParam('node_traffic_limit') && $node->node_bandwidth_limit = $request->getParam('node_traffic_limit')*1024*1024*1024;
         $request->getParam('node_traffic_resetday') && $node->bandwidthlimit_resetday = $request->getParam('node_traffic_resetday');
         $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');  //排序
         // $request->getParam('sort') == 'v2' && $node->sort = 11;
         // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
         // node->node_ip  和v2ray无关，但是和服务器相关的信息
-        if ( $request->getParam('node_ip') ) {
+        if ( $request->getParam('node_ip') || $request->getParam('node_ipv6') ) {
             $node->node_ip = 'ip=' . $request->getParam('node_ip');
             $node->node_ip .= '&ipv6=' . $request->getParam('node_ipv6');
         }
