@@ -152,91 +152,52 @@
 
 									<table class="table">
 										<tr>
-											<th>数据</th>
-											<th>10</th>
-											<th>9</th>
-											<th>8</th>
-											<th>7</th>
-											<th>6</th>
-											<th>5</th>
-											<th>4</th>
-											<th>3</th>
-											<th>2</th>
-											<th>1</th>
-											<th>0</th>
+											<td>备注</td>
+											<td>参数</td>
+											<td>值</td>
 										</tr>
 										<tr>
-											<tr>
-											<td>1组</td>
-											<td>{$sts->getVIPGroupNode(10,1) - $sts->getOncostVIPGroupNode(10,1)}</td>
-											<td>{$sts->getVIPGroupNode(9,1) - $sts->getOncostVIPGroupNode(9,1)}</td>
-											<td>{$sts->getVIPGroupNode(8,1) - $sts->getOncostVIPGroupNode(8,1)}</td>
-											<td>{$sts->getVIPGroupNode(7,1) - $sts->getOncostVIPGroupNode(7,1)}</td>
-											<td>{$sts->getVIPGroupNode(6,1) - $sts->getOncostVIPGroupNode(6,1)}</td>
-											<td>{$sts->getVIPGroupNode(5,1) - $sts->getOncostVIPGroupNode(5,1)}</td>
-											<td>{$sts->getVIPGroupNode(4,1) - $sts->getOncostVIPGroupNode(4,1)}</td>
-											<td>{$sts->getVIPGroupNode(3,1) - $sts->getOncostVIPGroupNode(3,1)}</td>
-											<td>{$sts->getVIPGroupNode(2,1) - $sts->getOncostVIPGroupNode(2,1)}</td>
-											<td>{$sts->getVIPGroupNode(1,1) - $sts->getOncostVIPGroupNode(1,1)}</td>
-											<td>{$sts->getVIPGroupNode(0,1)}|{$sts->getOncostVIPGroupNode(0,1)}</td>
+											<td>全日消耗</td>
+											<td>all_traffic_daily_mark</td>
+											<td>{$sts->getRecord('all_traffic_daily_mark')}</td>
 										</tr>
 										<tr>
-											<td>2组</td>
-											<td>{$sts->getVIPGroupNode(10,2) - $sts->getOncostVIPGroupNode(10,2)}</td>
-											<td>{$sts->getVIPGroupNode(9,2) - $sts->getOncostVIPGroupNode(9,2)}</td>
-											<td>{$sts->getVIPGroupNode(8,2) - $sts->getOncostVIPGroupNode(8,2)}</td>
-											<td>{$sts->getVIPGroupNode(7,2) - $sts->getOncostVIPGroupNode(7,2)}</td>
-											<td>{$sts->getVIPGroupNode(6,2) - $sts->getOncostVIPGroupNode(6,2)}</td>
-											<td>{$sts->getVIPGroupNode(5,2) - $sts->getOncostVIPGroupNode(5,2)}</td>
-											<td>{$sts->getVIPGroupNode(4,2) - $sts->getOncostVIPGroupNode(4,2)}</td>
-											<td>{$sts->getVIPGroupNode(3,2) - $sts->getOncostVIPGroupNode(3,2)}</td>
-											<td>{$sts->getVIPGroupNode(2,2) - $sts->getOncostVIPGroupNode(2,2)}</td>
-											<td>{$sts->getVIPGroupNode(1,2) - $sts->getOncostVIPGroupNode(1,2)}</td>
-											<td>{$sts->getVIPGroupNode(0,2)}|{$sts->getOncostVIPGroupNode(0,2)}</td>
+											<td>全日供给</td>
+											<td>all_traffic_daily_supply</td>
+											<td>{$sts->getRecord('all_traffic_daily_supply')}</td>
 										</tr>
 										<tr>
-											<td>3组</td>
-											<td>{$sts->getVIPGroupNode(10,3) - $sts->getOncostVIPGroupNode(10,3)}</td>
-											<td>{$sts->getVIPGroupNode(9,3) - $sts->getOncostVIPGroupNode(9,3)}</td>
-											<td>{$sts->getVIPGroupNode(8,3) - $sts->getOncostVIPGroupNode(8,3)}</td>
-											<td>{$sts->getVIPGroupNode(7,3) - $sts->getOncostVIPGroupNode(7,3)}</td>
-											<td>{$sts->getVIPGroupNode(6,3) - $sts->getOncostVIPGroupNode(6,3)}</td>
-											<td>{$sts->getVIPGroupNode(5,3) - $sts->getOncostVIPGroupNode(5,3)}</td>
-											<td>{$sts->getVIPGroupNode(4,3) - $sts->getOncostVIPGroupNode(4,3)}</td>
-											<td>{$sts->getVIPGroupNode(3,3) - $sts->getOncostVIPGroupNode(3,3)}</td>
-											<td>{$sts->getVIPGroupNode(2,3) - $sts->getOncostVIPGroupNode(2,3)}</td>
-											<td>{$sts->getVIPGroupNode(1,3) - $sts->getOncostVIPGroupNode(1,3)}</td>
-											<td>{$sts->getVIPGroupNode(0,3)}|{$sts->getOncostVIPGroupNode(0,3)}</td>
+											<td>组1日消耗</td>
+											<td>group1_traffic_daily_mark</td>
+											<td>{$sts->getRecord('group1_traffic_daily_mark')}</td>
 										</tr>
 										<tr>
-											<td>4组</td>
-											<td>{$sts->getVIPGroupNode(10,4) - $sts->getOncostVIPGroupNode(10,4)}</td>
-											<td>{$sts->getVIPGroupNode(9,4) - $sts->getOncostVIPGroupNode(9,4)}</td>
-											<td>{$sts->getVIPGroupNode(8,4) - $sts->getOncostVIPGroupNode(8,4)}</td>
-											<td>{$sts->getVIPGroupNode(7,4) - $sts->getOncostVIPGroupNode(7,4)}</td>
-											<td>{$sts->getVIPGroupNode(6,4) - $sts->getOncostVIPGroupNode(6,4)}</td>
-											<td>{$sts->getVIPGroupNode(5,4) - $sts->getOncostVIPGroupNode(5,4)}</td>
-											<td>{$sts->getVIPGroupNode(4,4) - $sts->getOncostVIPGroupNode(4,4)}</td>
-											<td>{$sts->getVIPGroupNode(3,4) - $sts->getOncostVIPGroupNode(3,4)}</td>
-											<td>{$sts->getVIPGroupNode(2,4) - $sts->getOncostVIPGroupNode(2,4)}</td>
-											<td>{$sts->getVIPGroupNode(1,4) - $sts->getOncostVIPGroupNode(1,4)}</td>
-											<td>{$sts->getVIPGroupNode(0,4)}|{$sts->getOncostVIPGroupNode(0,4)}</td>
+											<td>组1日供给</td>
+											<td>group1_traffic_daily_supply</td>
+											<td>{$sts->getRecord('group1_traffic_daily_supply')}</td>
 										</tr>
 										<tr>
-											<td>5组</td>
-											<td>{$sts->getVIPGroupNode(10,5) - $sts->getOncostVIPGroupNode(10,5)}</td>
-											<td>{$sts->getVIPGroupNode(9,5) - $sts->getOncostVIPGroupNode(9,5)}</td>
-											<td>{$sts->getVIPGroupNode(8,5) - $sts->getOncostVIPGroupNode(8,5)}</td>
-											<td>{$sts->getVIPGroupNode(7,5) - $sts->getOncostVIPGroupNode(7,5)}</td>
-											<td>{$sts->getVIPGroupNode(6,5) - $sts->getOncostVIPGroupNode(6,5)}</td>
-											<td>{$sts->getVIPGroupNode(5,5) - $sts->getOncostVIPGroupNode(5,5)}</td>
-											<td>{$sts->getVIPGroupNode(4,5) - $sts->getOncostVIPGroupNode(4,5)}</td>
-											<td>{$sts->getVIPGroupNode(3,5) - $sts->getOncostVIPGroupNode(3,5)}</td>
-											<td>{$sts->getVIPGroupNode(2,5) - $sts->getOncostVIPGroupNode(2,5)}</td>
-											<td>{$sts->getVIPGroupNode(1,5) - $sts->getOncostVIPGroupNode(1,5)}</td>
-											<td>{$sts->getVIPGroupNode(0,5)}|{$sts->getOncostVIPGroupNode(0,5)}</td>
+											<td>组2日消耗</td>
+											<td>group2_traffic_daily_mark</td>
+											<td>{$sts->getRecord('group2_traffic_daily_mark')}</td>
+										</tr>
+										<tr>
+											<td>组2日供给</td>
+											<td>group2_traffic_daily_supply</td>
+											<td>{$sts->getRecord('group2_traffic_daily_supply')}</td>
+										</tr>
+										<tr>
+											<td>组4日消耗</td>
+											<td>group4_traffic_daily_mark</td>
+											<td>{$sts->getRecord('group4_traffic_daily_mark')}</td>
+										</tr>
+										<tr>
+											<td>组4日供给</td>
+											<td>group4_traffic_daily_supply</td>
+											<td>{$sts->getRecord('group4_traffic_daily_supply')}</td>
 										</tr>
 									</table>
+
 
 								</div>
 							</div>

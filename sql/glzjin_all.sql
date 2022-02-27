@@ -698,23 +698,23 @@ ALTER TABLE `paylist`
   MODIFY `id` bigint(20) NOT NULL AUTO_INCREMENT;ALTER TABLE `user_traffic_log` CHANGE `u` `u` BIGINT(20) NOT NULL, CHANGE `d` `d` BIGINT(20) NOT NULL;
 
 
-# 增加节点的服务器成本 参数
+-- 增加节点的服务器成本 参数
 ALTER TABLE `ss_node` ADD `node_cost` INT NOT NULL DEFAULT '5' AFTER `mu_only`;
-#增加 在线人数选项
+-- 增加 在线人数选项
 ALTER TABLE `ss_node` ADD `node_online` INT NOT NULL DEFAULT '1' AFTER `node_cost`;
-#增加 性价比选项
+-- 增加 性价比选项
 ALTER TABLE `ss_node` ADD `node_oncost` FLOAT NOT NULL DEFAULT '0' AFTER `node_online`;
 
-#增加用户 ban_times
+-- #增加用户 ban_times
 ALTER TABLE `user` ADD `ban_times` INT NOT NULL DEFAULT '0' AFTER `telegram_id`;
 
-#增加用户自定义获取节点数量功能
+-- #增加用户自定义获取节点数量功能
 ALTER TABLE `user` ADD `sub_limit` INT NOT NULL DEFAULT '16' AFTER `ban_times`;
 
-#主动增加UUID
+-- #主动增加UUID
 ALTER TABLE `user` ADD `v2ray_uuid` VARCHAR(64) DEFAULT NULL AFTER `passwd`;
 
-# 增加一个 CNCDN的表，用来放置那个  百度云加速的 ip段
+-- # 增加一个 CNCDN的表，用来放置那个  百度云加速的 ip段
 
 --
 -- 表的结构 `cncdn`
@@ -733,48 +733,73 @@ CREATE TABLE IF NOT EXISTS `cncdn` (
   primary key (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-#在用户信息那里，增加一个 cncdn 的项 和 cfcdn 的项目 以及一个 subip 的选项，用来收集用户的订阅来源ip，这个很重要。
-# 最好是再收集一下用户的ip，这个可以有。
+-- #在用户信息那里，增加一个 cncdn 的项 和 cfcdn 的项目 以及一个 subip 的选项，用来收集用户的订阅来源ip，这个很重要。
+-- # 最好是再收集一下用户的ip，这个可以有。
 ALTER TABLE `user` ADD `rss_ip` VARCHAR(64) DEFAULT NULL COMMENT '订阅ip' AFTER `sub_limit`;
 ALTER TABLE `user` ADD `cncdn` VARCHAR(64) DEFAULT '0' COMMENT 'CN自选入口' AFTER `rss_ip`;
 ALTER TABLE `user` ADD `cncdn_count` VARCHAR(64) DEFAULT '0' COMMENT 'CN次数统计' AFTER `cncdn`;
 ALTER TABLE `user` ADD `cfcdn` VARCHAR(64) DEFAULT '0' COMMENT 'CF自选ip' AFTER `cncdn_count`;
 ALTER TABLE `user` ADD `cfcdn_count` VARCHAR(64) DEFAULT '0' COMMENT 'CF次数统计' AFTER `cfcdn`;
 
-# 增加是否edu用户的选项
+-- # 增加是否edu用户的选项
 ALTER TABLE `user` ADD `is_edu` VARCHAR(64) DEFAULT '0' COMMENT 'EDU用户' AFTER `last_day_t`;
 
-#工单页面增加了一个排序选项
+-- #工单页面增加了一个排序选项
 ALTER TABLE `ticket` ADD `sort` INT(11) DEFAULT '0' COMMENT '用户等级排序' AFTER `userid`;
 
-# 增加 node_bandwidth_lastday 昨天
+-- # 增加 node_bandwidth_lastday 昨天
 ALTER TABLE `ss_node` ADD `node_bandwidth_lastday` BIGINT(20) DEFAULT '0' COMMENT '节点昨日流量记录' AFTER `node_bandwidth`;
 
-# 增加两个项，一个是每天的流量限制项。超过就会被限制。 另一个是 累加项， 如果达到一定数值，就会被 累加。
+-- # 增加两个项，一个是每天的流量限制项。超过就会被限制。 另一个是 累加项， 如果达到一定数值，就会被 累加。
 ALTER TABLE `user` ADD `renew` FLOAT(8) DEFAULT '0' COMMENT '流量周期累加' AFTER `class`;
 ALTER TABLE `user` ADD `transfer_limit` BIGINT(20) DEFAULT '1073741824' COMMENT '流量限制 默认为 1G' AFTER `transfer_enable`;
 
-# node 增加 到期时间 和 节点的 排序选项，按照错误的次数排序 这个还是可以的。因为倍率可能变得不再重要了。 因为倍率变稳定了。
+-- # node 增加 到期时间 和 节点的 排序选项，按照错误的次数排序 这个还是可以的。因为倍率可能变得不再重要了。 因为倍率变稳定了。
 ALTER TABLE `ss_node` ADD `node_sort` INT(11) DEFAULT '0' COMMENT '节点故障排序' AFTER `node_oncost`;
 -- ALTER TABLE `ss_node` ADD `node_date` INT(11) DEFAULT '0' COMMENT '节点到期时间 ' AFTER `node_sort`;
 
 
-# user 增加用户打分表 score ，用来判断用户是否会被清理掉
+-- # user 增加用户打分表 score ，用来判断用户是否会被清理掉
 ALTER TABLE `user` ADD `score` INT(8) DEFAULT '0' COMMENT '用户打分' AFTER `ref_by`;
 
-#增加 CNCDN选项
+-- #增加 CNCDN选项
 ALTER TABLE `ss_node` ADD `cncdn` TINYINT(4) AFTER `server`;
 
-#增加 rss订阅次数统计
+-- #增加 rss订阅次数统计
 ALTER TABLE `user` ADD `rss_count` INT(11) DEFAULT '0' COMMENT 'Rss次数统计' AFTER `rss_ip`;
 ALTER TABLE `user` ADD `rss_count_lastday` INT(11) DEFAULT '0' COMMENT 'Rss昨日次数' AFTER `rss_count`;
 
-#增加 用户 warming 消息
+-- #增加 用户 warming 消息
 ALTER TABLE `user` ADD `warming` TEXT COMMENT '警告消息' AFTER `cfcdn_count`;
 
-#payback 增加字段，显示此返利是否被收回 1是收回
+-- #payback 增加字段，显示此返利是否被收回 1是收回
 ALTER TABLE `payback`  ADD `callback` INT(8) COMMENT '返利是否被收回 1是收回了 3=邀请人已删除 0=返利还没被收回' AFTER `ref_get`;
 
-#增加 rss订阅次数统计
+-- #增加 rss订阅次数统计
 ALTER TABLE `user` ADD `rss_ips_count` INT(11) DEFAULT '0' COMMENT 'RssIp来源统计' AFTER `rss_count_lastday`;
 ALTER TABLE `user` ADD `rss_ips_lastday` INT(11) DEFAULT '0' COMMENT 'Rss昨日Ip来源次数' AFTER `rss_ips_count`;
+
+--
+-- 增加 record表
+--
+
+CREATE TABLE IF NOT EXISTS `record` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(128) NOT NULL COMMENT '配置name',
+  `value` text COMMENT '值',
+  `comment` varchar(128) COMMENT '描述',
+  primary key (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+-- 增加值
+INSERT INTO `record` VALUES ('', 'all_traffic_daily_mark', '','全站每日用流量记录');
+INSERT INTO `record` VALUES ('', 'all_traffic_daily_supply', '','全站每日供给流量记录');
+INSERT INTO `record` VALUES ('', 'group1_traffic_daily_mark', '','组1每日用流量记录');
+INSERT INTO `record` VALUES ('', 'group1_traffic_daily_supply', '','组1每日供给流量记录');
+INSERT INTO `record` VALUES ('', 'group2_traffic_daily_mark', '','组2每日用流量记录');
+INSERT INTO `record` VALUES ('', 'group2_traffic_daily_supply', '','组2每日供给记录');
+
+INSERT INTO `record` VALUES ('', 'group3_traffic_daily_mark', '','组3每日用流量记录');
+INSERT INTO `record` VALUES ('', 'group3_traffic_daily_supply', '','组3每日供给记录');
+INSERT INTO `record` VALUES ('', 'group4_traffic_daily_mark', '','组4每日用流量记录');
+INSERT INTO `record` VALUES ('', 'group4_traffic_daily_supply', '','组4每日供给记录');

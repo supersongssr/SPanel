@@ -5,9 +5,17 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\Node;
 use App\Utils\Tools;
+use App\Models\Record;  // record表
+
 
 class Analytics
 {
+    public function getRecord($name)
+    {
+        $record = Record::where('name',$name)->first();
+        return $record->value;
+    }
+
     public function getTotalUser()
     {
         return User::count();
