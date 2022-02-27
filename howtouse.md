@@ -75,7 +75,7 @@ php composer.phar install
 ```
 location / {
   try_files $uri $uri/ /index.php$is_args$args;
-  }
+}
 ```
 ### 修改网站目录
 
