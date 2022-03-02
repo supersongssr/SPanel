@@ -1297,10 +1297,17 @@ class UserController extends BaseController
         }
         $tickets = Ticket::where("userid", $this->user->id)->where("rootid", 0)->orderBy("datetime", "desc")->paginate(5, ['*'], 'page', $pageNum);
         $tickets->setPath('/user/ticket');
-
-        $opentickets = Ticket::where("status", 3)->where("rootid", 0)->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
-        $opentickets->setPath('/user/ticket');
-
+        //
+        // search 
+        if (isset($request->getQueryParams()["search"])) {
+            $keyword = trim($request->getQueryParams()["search"]);
+            $opentickets = Ticket::where("status", 3)->where("rootid", 0)->where('title','like','%'.$keyword.'%')->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
+            $opentickets->setPath('/user/ticket?search='.$keyword);
+        }else{
+            $opentickets = Ticket::where("status", 3)->where("rootid", 0)->orderBy("datetime", "desc")->paginate(15, ['*'], 'page', $pageNum);
+            $opentickets->setPath('/user/ticket');
+        }
+        
         return $this->view()->assign('tickets', $tickets)->assign('opentickets', $opentickets)->display('user/ticket.tpl');
     }
 

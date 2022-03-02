@@ -22,7 +22,17 @@
 					<div class="card">
 						<div class="card-main">
 							<div class="card-inner">
-								<p><code>*这里列举了常见的工单内容，方便您快速参考别人的问题的解决方案。</code></p>
+								
+								<div class="cardbtn-edit">
+										<div class="card-heading">工单 搜索</div>
+										<button class="btn btn-flat" id="ticket-search"><span class="icon">check</span>&nbsp;</button>
+								</div>
+									<p><code>*这里列举了公开的工单内容，方便您快速参考别人的问题的解决方案。
+									<br>*您也可以通过搜索快速寻找适合自己的工单内容。</code></p>
+								<div class="form-group form-group-label">
+									<label class="floating-label" for="key-word">请输入 关键词 点右侧心心符号</label>
+									<input class="form-control maxwidth-edit" id="key-word" value="" type="text">
+								</div>
 							</div>
 						</div>
 					</div>
@@ -51,7 +61,7 @@
 													</td>
 													<td>{$ticket->title}</td>
 													{if $ticket->status==3}
-													<td>常见问题</td>
+													<td>公开工单</td>
 													{else}
 													<td>出错了</td>
 													{/if}
@@ -142,6 +152,16 @@
 	</main>
 
 
+
+
+<script>
+$(document).ready(function () {
+	$("#ticket-search").click(function () {
+		var key = $("#key-word").val();
+		window.location.href = '/user/ticket' + '?search=' + key;
+	})
+})
+</script>
 
 
 
