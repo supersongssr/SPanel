@@ -84,7 +84,7 @@ class TelegramProcess
                     }
                     $aff_payback = Payback::where('total','<',0)->where('ref_by','=',$user->id)->sum('ref_get'); // 注册奖励
                     $ref_payback = Payback::where('total','>',0)->where('ref_by','=',$user->id)->sum('ref_get'); // 消费返利
-                    $reply['message'] = '您累计充值 '.$user_charge.'￥，邀请奖励'. $aff_payback.'￥，消费返利'. $ref_payback .' ￥，购买了等级为Lv '.$user->class .' 的套餐，您在 '. ($user->renew *10) . ' 天内使用了 '. floor($user->d / 1024/1024/1024) .' G下行流量';
+                    $reply['message'] = '您累计充值 '.$user_charge.'￥，邀请奖励'. $aff_payback.'￥，消费返利'. $ref_payback .' ￥，购买了等级为Lv '.$user->class .' 的套餐';
                     break;
 
                 case 'rss':

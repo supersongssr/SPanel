@@ -803,3 +803,6 @@ INSERT INTO `record` VALUES ('', 'group3_traffic_daily_mark', '','组3每日用�
 INSERT INTO `record` VALUES ('', 'group3_traffic_daily_supply', '','组3每日供给记录');
 INSERT INTO `record` VALUES ('', 'group4_traffic_daily_mark', '','组4每日用流量记录');
 INSERT INTO `record` VALUES ('', 'group4_traffic_daily_supply', '','组4每日供给记录');
+
+-- 2022-02-28
+ALTER TABLE `user` ADD `renew_time` INT(11) DEFAULT '0' COMMENT '下次流量周期重置时间';

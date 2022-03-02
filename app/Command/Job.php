@@ -35,26 +35,26 @@ class Job
 {
     public static function syncnode()
     {
-        $nodes = Node::all();
-        foreach ($nodes as $node) {
-            if ($node->sort == 11) {
-                $server_list = explode(";", $node->server);
-                if(!Tools::is_ip($server_list[0])){
-                    if($node->changeNodeIp($server_list[0])){
-                        $node->save();
-                    }
-                }
-            } else if($node->sort == 0 || $node->sort == 1 || $node->sort == 10){
-                if(!Tools::is_ip($node->server)){
-                    if($node->changeNodeIp($node->server)){
-                        $node->save();
-                        if ($node->sort == 0 || $node->sort == 10) {
-                            Tools::updateRelayRuleIp($node);
-                        }
-                    }
-                }
-            }
-        }
+        // $nodes = Node::all();
+        // foreach ($nodes as $node) {
+        //     if ($node->sort == 11) {
+        //         $server_list = explode(";", $node->server);
+        //         if(!Tools::is_ip($server_list[0])){
+        //             if($node->changeNodeIp($server_list[0])){
+        //                 $node->save();
+        //             }
+        //         }
+        //     } else if($node->sort == 0 || $node->sort == 1 || $node->sort == 10){
+        //         if(!Tools::is_ip($node->server)){
+        //             if($node->changeNodeIp($node->server)){
+        //                 $node->save();
+        //                 if ($node->sort == 0 || $node->sort == 10) {
+        //                     Tools::updateRelayRuleIp($node);
+        //                 }
+        //             }
+        //         }
+        //     }
+        // }
     }
 
     public static function backup($full=false)
@@ -113,22 +113,21 @@ class Job
 
     public static function syncnasnode()
     {
-        $nodes = Node::all();
-        foreach ($nodes as $node) {
-            $rule = preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/",$node->server);
-            if (!$rule && (!$node->sort || $node->sort == 10)) {
-                $ip=gethostbyname($node->server);
-                $node->node_ip=$ip;
-                $node->save();
+        // $nodes = Node::all();
+        // foreach ($nodes as $node) {
+        //     $rule = preg_match("/^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$/",$node->server);
+        //     if (!$rule && (!$node->sort || $node->sort == 10)) {
+        //         $ip=gethostbyname($node->server);
+        //         $node->node_ip=$ip;
+        //         $node->save();
 
-                Radius::AddNas($node->node_ip, $node->server);
-            }
-        }
+        //         Radius::AddNas($node->node_ip, $node->server);
+        //     }
+        // }
     }
 
     public static function DailyJob()
     {
-
         /*  这个不需要了。后端 会自己处理这个事情的
         $nodes = Node::all();
         foreach ($nodes as $node) {
@@ -140,8 +139,7 @@ class Job
             }
         }
         */
-
-/*
+        /*
         //auto reset
         $boughts=Bought::all();
         foreach ($boughts as $bought) {
@@ -184,9 +182,8 @@ class Job
                     }
                 }
             }
-
-    // song 按照用户等级，计算重置周期，1级时 1个月 100G   3级 3个月 300G  9级时 9个月 900G 以此类推
-//          // 用户等级小于1 的， 余额小于0 的， 账户被暂停的 都不重置这个数据
+            // song 按照用户等级，计算重置周期，1级时 1个月 100G   3级 3个月 300G  9级时 9个月 900G 以此类推
+            // 用户等级小于1 的， 余额小于0 的， 账户被暂停的 都不重置这个数据
             if ($user->class < 1 || $user->enable < 1 || $user->money < 0) {
                 continue;
             }
@@ -199,7 +196,7 @@ class Job
                 $user->save();
             }
         }
-*/
+        */
         // 获取节点每日流量值
         //
         function getRecord($name){
@@ -251,21 +248,24 @@ class Job
         $group4_traffic_daily_supply = $group4_traffic_daily_supply . 'G_'.getRecord('group4_traffic_daily_supply');
         $group4_traffic_daily_supply = substr($group4_traffic_daily_supply,0,1000);
         setRecord('group4_traffic_daily_supply',$group4_traffic_daily_supply);
-
-
+        //
         //自动审计每天节点流量数据 song
         $nodes_vnstat = Node::where('id','>',9)->where('node_group','>',0)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
         foreach ($nodes_vnstat as $node) {
-            
             if ($node->node_bandwidth == $node->node_bandwidth_lastday) {   // 判断这个节点是否今天没有走流量，是否是有问题的节点？
-                $node->type != 0 && $node->type = 0 && $node->save();
+                if ($node->type != 0) {
+                    $node->type = 0;
+                    $node->save();
+                }
                 continue;   
             }
             // 这两个 if别反了。 需要把 流量记录下，方便统计每日消耗的真实流量
             if ( $node->node_heartbeat < (time() - 7200) ) {        // 判断节点在过去两小时内 是否存在心跳
-                $node->type = 0;
-                $node->node_bandwidth_lastday = $node->node_bandwidth; 
-                $node->save();
+                if ($node->type != 0 || $node->node_bandwidth_lastday != $node->node_bandwidth) {
+                    $node->type = 0;
+                    $node->node_bandwidth_lastday = $node->node_bandwidth; 
+                    $node->save();
+                }
                 continue;
             }
             //
@@ -283,7 +283,7 @@ class Job
                 // rate
                 $days = 32 + $today - $node->bandwidthlimit_resetday;
                 $days > 31 && $days -= 31;
-                $node->traffic_rate = round( ($node->node_bandwidth * 40 / $node->node_bandwidth_limit / $days)  ,1);
+                $node->traffic_rate = round( ($node->node_bandwidth * 50 / $node->node_bandwidth_limit / $days)  ,1);
             }
             if ($today == $node->bandwidthlimit_resetday ) {        // 在时间为流量重置日那天的话，把所有正数的节点变为0
                 $node->node_sort > 0 && $node->node_sort = 0;
@@ -329,58 +329,43 @@ class Job
             $user->save();
         }
         // 这里也就意味着放弃了，余额小于 0 的用户，将没有那个流量重置周期。 永远没有的意思。 用超了就是用超了
-
+        // renew废弃，转为 renew_time 参数
         //把所有的 renew 累加 周期到了的用户，重置流量限制
-        $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('renew','>','class')->get();
+        // $users = User::where('enable','>',0)->where('class','>',0)->whereColumn('renew','>','class')->get();
+        // foreach ($users as $user) {
+        //     // 先重置流量数据
+        //     $user->u = $user->u + $user->d;
+        //     $user->d = 0;
+        //     // 再重置每日流量数据
+        //     $user->transfer_limit = $user->class *10*1024*1024*1024;
+        //     $user->renew = 0;
+        //     $user->save();
+        // }
+        // 用户流量周期，限制为 在 x天内， 使用的流量重置。
+        $users = User::where('enable','>',0)->where('class','>',0)->where('renew_time','<',time())->get();
         foreach ($users as $user) {
             // 先重置流量数据
             $user->u = $user->u + $user->d;
             $user->d = 0;
             // 再重置每日流量数据
-            $user->transfer_limit = $user->class *10*1024*1024*1024;
-            $user->renew = 0;
+            $user->transfer_limit = $user->class *10*1024*1024*1024;   //  
+            $user->renew_time = time() + $user->class *10*24*3600;   //  
             $user->save();
         }
-
-        // 每天+流量 每天设置昨日流量，设置昨日订阅数
-        // 这里只选取 等级大于0的用户  ，enable 为1的用户。
+        // 每日统计数据 重置 ： 流量， 订阅 
         $users = User::where('enable','>',0)->where('class','>',0)->get();
         foreach ($users as $user) {
-            // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
-            //$user->last_day_t=($user->u+$user->d);
-            $user->renew += 0.1;
+            // $user->renew += 0.1;
             // $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
-            $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
-            $user->last_day_t = $user->d;     // 重置每日流量统计
+            // $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
+            $user->last_day_t = $user->d;     // // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
             $user->rss_count_lastday = $user->rss_count; // 记录昨日订阅数量统计
             $user->rss_ips_lastday = $user->rss_ips_count; // 记录昨日ips来源统计
             $user->save();
-/* song
-            if (date("d") == $user->auto_reset_day) {
-                $user->u = 0;
-                $user->d = 0;
-                $user->last_day_t = 0;
-                $user->transfer_enable = $user->auto_reset_bandwidth*1024*1024*1024;
-                $user->save();
-
-                $subject = Config::get('appName')."-您的流量被重置了";
-                $to = $user->email;
-                $text = "您好，根据管理员的设置，流量已经被重置为".$user->auto_reset_bandwidth.'GB' ;
-                try {
-                    Mail::send($to, $subject, 'news/warn.tpl', [
-                        "user" => $user,"text" => $text
-                    ], [
-                    ]);
-                } catch (\Exception $e) {
-                    echo $e->getMessage();
-                }
-*/
         }
-
         // 2 3 组总流量使用超限的，分配到下载组，然后加用户等级的流量！一次
         $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
         foreach ($users as $user) {
-            // 积分 - 1
             $user->score -= 1;
             $user->ban_times += 1; //用户封禁次数+用户等级 每次+1次违规吧
             $user->ban_times > 16 && $user->pass = time() && $user->enable = 0;
@@ -389,17 +374,14 @@ class Job
             $user->transfer_limit += $user->class *1024*1024*1024;  //然后加上一些流量，相当于重置
             $user->save();
         }
-
-        # 除了1组用户，其他组的用户每使用1天增加1积分
+        # 除了1组用户，其他组的用户每使用1天增加1积分 余额须 > 0
         $time_last24hours = time() - 24*3600;
-        $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
+        $users = User::where('node_group','>',1)->where('enable','>',0)->where('money','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
         foreach ($users as $user) {
             $user->score += 1; // 积分加1
             $user->save();
         }
-
-        //将余额 小于 0 的用户，请空邀请人，收回邀请返利
-        // 选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 目前是设定的64
+        //将余额 小于 0 的用户，请空邀请人，收回邀请返利  选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 目前是设定的64
         $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',64)->get();  // 使用积分小于 32 且 money 小于 0 会被清理
         foreach ($users as $user) {
             $ref_user = User::find($user->ref_by);
@@ -434,8 +416,6 @@ class Job
             $user->enable = 0;
             $user->save();
         }
-
-
         // 把清空日志放到这里来
         NodeInfoLog::where("log_time", "<", time()-86400*3)->delete();
         NodeOnlineLog::where("log_time", "<", time()-86400*3)->delete();
@@ -445,52 +425,46 @@ class Job
         EmailVerify::where("expire_in", "<", time()-86400*3)->delete();
          system("rm ".BASE_PATH."/storage/*.png", $ret);
         Telegram::Send("姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~");
-
+        // 更新ip地址库
         #https://github.com/shuax/QQWryUpdate/blob/master/update.php
-
-        $copywrite = file_get_contents("http://update.cz88.net/ip/copywrite.rar");
-
-        $adminUser = User::where("is_admin", "=", "1")->get();
-
-        $newmd5 = md5($copywrite);
-        $oldmd5 = file_get_contents(BASE_PATH."/storage/qqwry.md5");
-
-        if ($newmd5 != $oldmd5) {
-            file_put_contents(BASE_PATH."/storage/qqwry.md5", $newmd5);
-            $qqwry = file_get_contents("http://update.cz88.net/ip/qqwry.rar");
-            if ($qqwry != "") {
-                $key = unpack("V6", $copywrite)[6];
-                for ($i=0; $i<0x200; $i++) {
-                    $key *= 0x805;
-                    $key ++;
-                    $key = $key & 0xFF;
-                    $qqwry[$i] = chr(ord($qqwry[$i]) ^ $key);
-                }
-                $qqwry = gzuncompress($qqwry);
-                rename(BASE_PATH."/storage/qqwry.dat", BASE_PATH."/storage/qqwry.dat.bak");
-                $fp = fopen(BASE_PATH."/storage/qqwry.dat", "wb");
-                if ($fp) {
-                    fwrite($fp, $qqwry);
-                    fclose($fp);
-                }
-            }
-        }
-
-        $iplocation = new QQWry();
-        $location=$iplocation->getlocation("8.8.8.8");
-        $Userlocation = $location['country'];
-        if (iconv('gbk', 'utf-8//IGNORE', $Userlocation)!="美国") {
-            unlink(BASE_PATH."/storage/qqwry.dat");
-            rename(BASE_PATH."/storage/qqwry.dat.bak", BASE_PATH."/storage/qqwry.dat");
-        }
-
-        Job::updatedownload();
+        // $copywrite = file_get_contents("http://update.cz88.net/ip/copywrite.rar");
+        // $adminUser = User::where("is_admin", "=", "1")->get();
+        // $newmd5 = md5($copywrite);
+        // $oldmd5 = file_get_contents(BASE_PATH."/storage/qqwry.md5");
+        // if ($newmd5 != $oldmd5) {
+        //     file_put_contents(BASE_PATH."/storage/qqwry.md5", $newmd5);
+        //     $qqwry = file_get_contents("http://update.cz88.net/ip/qqwry.rar");
+        //     if ($qqwry != "") {
+        //         $key = unpack("V6", $copywrite)[6];
+        //         for ($i=0; $i<0x200; $i++) {
+        //             $key *= 0x805;
+        //             $key ++;
+        //             $key = $key & 0xFF;
+        //             $qqwry[$i] = chr(ord($qqwry[$i]) ^ $key);
+        //         }
+        //         $qqwry = gzuncompress($qqwry);
+        //         rename(BASE_PATH."/storage/qqwry.dat", BASE_PATH."/storage/qqwry.dat.bak");
+        //         $fp = fopen(BASE_PATH."/storage/qqwry.dat", "wb");
+        //         if ($fp) {
+        //             fwrite($fp, $qqwry);
+        //             fclose($fp);
+        //         }
+        //     }
+        // }
+        // $iplocation = new QQWry();
+        // $location=$iplocation->getlocation("8.8.8.8");
+        // $Userlocation = $location['country'];
+        // if (iconv('gbk', 'utf-8//IGNORE', $Userlocation)!="美国") {
+        //     unlink(BASE_PATH."/storage/qqwry.dat");
+        //     rename(BASE_PATH."/storage/qqwry.dat.bak", BASE_PATH."/storage/qqwry.dat");
+        // }
+        // Job::updatedownload();
 
     }
 //   定时任务开启的情况下，每天自动检测有没有最新版的后端，github源来自Miku
      public static function updatedownload()
       {
-        system('cd '.BASE_PATH."/public/ssr-download/ && git pull https://github.com/xcxnig/ssr-download.git");
+        // system('cd '.BASE_PATH."/public/ssr-download/ && git pull https://github.com/xcxnig/ssr-download.git");
      }
 
 
