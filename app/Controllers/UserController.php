@@ -1421,7 +1421,7 @@ class UserController extends BaseController
             $newResponse = $response->withStatus(302)->withHeader('Location', '/user/ticket');
             return $newResponse;
         }
-/**
+/*
         if ($status == 1 && $ticket_main->status != $status) {
             $adminUser = User::where("is_admin", "=", "1")->get();
             foreach ($adminUser as $user) {
@@ -1471,7 +1471,7 @@ class UserController extends BaseController
                 }
             }
         }
-**/
+*/
         $antiXss = new AntiXSS();
 
         $ticket = new Ticket();
@@ -1533,7 +1533,7 @@ class UserController extends BaseController
         }
 
 
-        $ticketset = Ticket::where("id", $id)->orWhere("rootid", "=", $id)->orderBy("datetime", "asc")->paginate(15, ['*'], 'page', $pageNum);
+        $ticketset = Ticket::where("id", $id)->where('status',3)->orWhere("rootid", "=", $id)->orderBy("datetime", "asc")->paginate(15, ['*'], 'page', $pageNum);
         $ticketset->setPath('/user/ticket/' . $id . "/openview");
 
 
