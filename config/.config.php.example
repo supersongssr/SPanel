@@ -19,6 +19,8 @@ $System_Config['debug'] =  'false';								//正式环境请确保为 false
 $System_Config['appName'] = 'www.abc.xyz';							//站点名称
 $System_Config['baseUrl'] = 'https://abc.xyz';					//站点地址
 $System_Config['subUrl'] = 'https://rss.abc.xyz/link/';	//订阅地址，如需和站点名称相同，请不要修改
+$System_Config['subconUrl'] = 'https://rss.abc.xyz/link/';	//订阅转换地址
+
 $System_Config['payUrl'] = 'https://pay.abc.xyz/link/';	//pay支付用的
 $System_Config['muKey'] = 'glzjin';								//用于校验ss-go mu的请求，可以随意修改，但请保持前后端一致
 $System_Config['db_driver'] = 'mysql';							//数据库程序
@@ -113,6 +115,8 @@ $System_Config['enable_bought_reset']='false';	//购买时是否重置流量
 $System_Config['port_price']='0.1';				//用户随机重置端口所需要的价格，价格小于0时视为不开放购买
 $System_Config['port_price_specify']='1';		//用户指明钦定端口所需要的价格，价格小于0时视为不开放购买
 
+# ticket Price 
+$System_Config['ticket_price']='0.33';		//提交工单的价格
 #高级
 $System_Config['class_expire_reset_traffic']='-1';		//等级到期时重置为的流量值，单位GB，小于0时不重置
 $System_Config['account_expire_delete_days']='7';		//账户到期几天之后会删除账户，小于0时不删除

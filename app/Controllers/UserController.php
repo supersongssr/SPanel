@@ -1341,9 +1341,9 @@ class UserController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        if ($user->money < 1) {
+        if ($user->money < 0) {
             $res['ret'] = 0;
-            $res['msg'] = "余额 < 1 无法提交工单";
+            $res['msg'] = "余额 < 0 无法提交工单";
             return $this->echoJson($response, $res);
         }
 
@@ -1359,8 +1359,8 @@ class UserController extends BaseController
         $ticket->sort += $this->user->class;
         $ticket->save();
 
-        // 每个新工单扣除0.7元余额
-        $user->money -= 0.7;
+        // 每个新工单扣除余额
+        $user->money -= Config::get('ticket_price');
         $user->save();
         //新工单不再邮件提醒
 /**
@@ -1410,9 +1410,9 @@ class UserController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        if ($user->money < 0.1) {
+        if ($user->money < 0) {
             $res['ret'] = 0;
-            $res['msg'] = "余额 < 0.1 无法提交工单";
+            $res['msg'] = "余额 < 0 无法提交工单";
             return $this->echoJson($response, $res);
         }
 
@@ -1490,8 +1490,8 @@ class UserController extends BaseController
         $ticket_main->save();
         $ticket->save();
 
-        // 如果工单状态 != 0 就会扣除 0.2 余额
-        $status != 0 && $user->money -= 0.2;
+        // 如果工单状态 != 0 就会扣除  余额
+        $status != 0 && $user->money -= Config::get('ticket_price');
         $user->save();
 
 

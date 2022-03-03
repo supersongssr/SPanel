@@ -127,10 +127,12 @@ class LinkController extends BaseController
 
     public static function getNews($user, $mu = 2) {
         $Nodes = Node::where("type", "=","1")->where("node_group", "=", 0)->orderBy("node_class","DESC")->get();
-        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';      //添加用户到期信息
-        $url .= '#'.urlencode('邮箱：'.$user->email.'_等级：'.$user->class.'_VIP有效期：'.$user->class_expire) ."\n";
-        $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';      //添加用户到期信息
-        $url .= '#'.urlencode('剩余流量：'.$user->unusedTraffic()) ."\n";
+        if ( $mu == 'ss' || $mu == 2 || $mu == 5 ) {  //一些设备不支持 ss节点
+            $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';      //添加用户到期信息
+            $url .= '#'.urlencode('邮箱：'.$user->email.'_等级：'.$user->class.'_VIP有效期：'.$user->class_expire) ."\n";
+            $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';      //添加用户到期信息
+            $url .= '#'.urlencode('剩余流量：'.$user->unusedTraffic()) ."\n";
+        }
         foreach ($Nodes as $key => $node) {        // ss节点类的news
             if ( $node->sort == 0 && ($mu == 'ss' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@wordpress.org:443';

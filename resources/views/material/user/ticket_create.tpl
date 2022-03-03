@@ -47,7 +47,7 @@
 									<label class="floating-label" for="content">内容</label>
 									<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css" />
 									<div id="editormd">
-										<textarea style="display:none;" id="content"># 4.4 反馈问题的格式
+										<textarea style="display:none;" id="content">
 反馈问题格式：
 1. 你的使用场景是什么？比如使用 Chrome 通过 v2rayN 代理观看 YouTube 视频。
 2. 你看到的不正常的现象是什么？（请描述具体现象，比如访问超时，TLS 证书错误等）
@@ -72,7 +72,7 @@
 								<div class="form-group">
 									<div class="row">
 										<div class="col-md-10 col-md-push-1">
-											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 -0.5￥挂号费</button>
+											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 - {$config["ticket_price"]}￥</button>
 										</div>
 									</div>
 								</div>
