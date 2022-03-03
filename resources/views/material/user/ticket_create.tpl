@@ -48,11 +48,17 @@
 									<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css" />
 									<div id="editormd">
 										<textarea style="display:none;" id="content">
-反馈问题格式：
-1. 你的使用场景是什么？比如使用 Chrome 通过 v2rayN 代理观看 YouTube 视频。
-2. 你看到的不正常的现象是什么？（请描述具体现象，比如访问超时，TLS 证书错误等）
-3. 你期待看到的正确表现是怎样的？如能正常观看 YouTube视频。
-4. 请附上出错时软件输出的错误日志。（V2rayN在界面最下方，其他软件在设置 Logs 日志查看）</textarea>
+1. 你的使用场景是什么？:软件版本、设备型号、
+: 
+
+2. 你看到的不正常的现象是什么？ :节点、浏览器、帐号、报错
+: 
+
+3. 你期待看到的正确表现是怎样的？
+: 
+
+4. *请附上出错时软件输出的错误日志。*（V2rayN在界面最下方，其他软件在Logs/日志查看）
+: </textarea>
 									</div>
 								</div>
 								
@@ -73,6 +79,7 @@
 									<div class="row">
 										<div class="col-md-10 col-md-push-1">
 											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 - {$config["ticket_price"]}￥</button>
+											<p>感谢您的耐心提问，有价值的工单将会被公开回复，并帮助到其他用户，并 + {$config["ticket_price"]}￥。</p>
 										</div>
 									</div>
 								</div>

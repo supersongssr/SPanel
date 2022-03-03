@@ -118,12 +118,12 @@
 							</li> -->
 							<li>
 								<a href="/user/cfcdnlooking">
-									<i class="icon icon-lg">visibility</i>&nbsp;电信/移动网速优化
+									<i class="icon icon-lg">visibility</i>&nbsp;网速优化
 								</a>
 							</li>
 							<li>
 								<a href="/user/announcement">
-									<i class="icon icon-lg">announcement</i>&nbsp;帮助中心
+									<i class="icon icon-lg">announcement</i>&nbsp;公告中心
 								</a>
 							</li>
 							<li>

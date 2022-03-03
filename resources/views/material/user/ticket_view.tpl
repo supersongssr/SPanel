@@ -48,6 +48,7 @@
 											<button id="submit" type="submit" class="btn btn-block btn-brand">添加 并 - {$config["ticket_price"]}￥</button>
 											<button id="close" type="submit" class="btn btn-block btn-brand-accent">添加并关闭</button>
                       <button id="close_directly" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">直接关闭</button>
+                      <p>感谢您的耐心提问，有价值的工单将会被公开回复，并帮助到其他用户，并 + {$config["ticket_price"]}￥。</p>
 
 										</div>
 									</div>
