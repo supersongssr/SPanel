@@ -32,8 +32,8 @@
 											<label class="floating-label" for="cfcdn">网络优化（IP）： </label>
 											<input class="form-control maxwidth-edit" id="cfcdn" value="{$user->cfcdn}" type="text">
 										</div>
-										<p>Win教程：<code><a href="https://www.anycast.eu.org/batch.zip" target="_blank">点此下载文件 - 解压后查看使用说明</a></code></p>
-										<p>Liunx教程：<code>curl https://www.anycast.eu.org/cf.sh -o cf.sh && chmod +x cf.sh && ./cf.sh</code></p>
+										<p>Win教程：<code><a href="https://www.baipiao.eu.org/batch.zip" target="_blank">点此下载文件 - 解压后查看使用说明</a></code></p>
+										<p>Liunx教程：<code>curl https://www.baipiao.eu.org/cf.sh -o cf.sh && chmod +x cf.sh && ./cf.sh</code></p>
 									</div>
 								</div>
 							</div>

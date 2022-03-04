@@ -772,17 +772,8 @@ class UserController extends BaseController
 
     public function cfcdnlooking($request, $response, $args)
     {
-        /*
-        $pageNum = 1;
-        if (isset($request->getQueryParams()["page"])) {
-            $pageNum = $request->getQueryParams()["page"];
-        }
-        $cfcdns = User::where('cfcdn_count','>',7)->orderBy("cfcdn_count", "desc")->paginate(25, ['*'], 'page', $pageNum);
-        $cfcdns->setPath('/user/cfcdnlooking');
-*/
-
-  // cfcdn count > 32,  用户使用得分 这个排序会好一些。
-        $cfcdns = User::where('score','>',32)->orderBy("cfcdn_count", "desc")->limit('128')->get();
+        // 选择 分组为1, 并且在过去 24小时有使用的用户。
+        $cfcdns = User::where('node_group',1)->where('t','>',(time()-86400) )->orderBy("cfcdn_count", "desc")->limit('128')->get();
 
         $iplocation = new QQWry();
 
