@@ -280,6 +280,10 @@ class Job
                     $traffic_today > 32*1024*1024*1024 && $node->node_sort += 2;
                     $traffic_today > 64*1024*1024*1024 && $node->node_sort += 4;
                 } 
+                // 自动降低流量少的节点的等级， 节点正常，health正常，但是流量少 流量 >1 <10G的情况下，会自动降低一个等级，让更多的用户可以查看到。
+                if ( $node->type == 1 && $node->custom_rss == 1 && $node->node_sort < 0 && $node->traffic_rate < 1 && $node->node_class > 1 && $traffic_today > 1*1024*1024*1024 && $traffic_today < 10*1024*1024*1024) {
+                    $node->node_class -= 1;    //这些节点，需要管理员手动处理，所以，降低等级也没啥。
+                }
                 // rate
                 $days = 32 + $today - $node->bandwidthlimit_resetday;
                 $days > 31 && $days -= 31;

@@ -261,7 +261,7 @@
 																<a class="" data-toggle="tab" href="#all_v2rayu"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayU ★★★★</a>
 															</li>
 															<li >
-																<a class="" data-toggle="tab" href="#all_v2raya"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA ★★★★★</a>
+																<a class="" data-toggle="tab" href="#all_v2raya"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA ★★★</a>
 																
 															</li>
 														</ul>
@@ -269,7 +269,7 @@
 													<div class="tab-pane fade" id="all_v2raya">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
-														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 推荐搭配 搭配 Homebrew 安装，请先安装 <a href="https://brew.sh/" >Homebrew</a>  
+														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 推荐搭配 搭配 Homebrew 安装，请先安装 <a href="https://brew.sh/" >Homebrew</a>  
 															<br> 下载V2rayA: <a href="">本站下载</a> 或 <a href="https://github.com/v2rayA/v2rayA/releases">官网下载</a>， 下载 -> 解压 -> 将 v2rayA文件重命名为 v2raya 并将其保存到 /usr/local/bin/
 															<br> 在 /usr/local/bin/ 目录下 新建一个 sh脚本 v2raya.sh 输入如下内容：
 															<code><br>#! /bin/zsh<br>
@@ -281,12 +281,12 @@
 															<br> 如果遇到 macOS 的安全限制，那么需要运行以下命令: <code>xattr -d -r com.apple.quarantine  /usr/local/bin/*</code>
 															<br> 运行 <code>/usr/local/bin/v2raya.sh</code>
 															<br> 打开浏览器输入 127.0.0.1:2017 即为V2rayA的主界面
-														</p>
+														</p> -->
+														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="https://v2raya.org/docs/prologue/installation/macos/" class="btn-dl">查看官方教程</a> </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>V2rayA网页 -> <code>导入</code> 填写订阅地址 -> 确定 </p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>V2rayA网页 -> 节点 -> 选择 -> 网页左上角 -> 运行 </p>
 													</div>
 													<div class="tab-pane fade active in" id="all_v2rayu">
-														<p>提醒：V2rayU可能已停止更新，上次更新时间为 2021-01-22</p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/V2rayU.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载</a><a href="https://github.com/yanue/V2rayU/releases/download/3.0.0.preview/V2rayU.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a>→在<code>安装界面</code>将<code>v2rayU</code>拖到<code>Applications</code>文件夹→打开启动台，找到v2rayU→点击启动；<small>*首次打开会有安全提示，点击 好*</small></p>
