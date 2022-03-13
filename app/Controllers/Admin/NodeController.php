@@ -20,7 +20,7 @@ class NodeController extends AdminController
                             "type" => "显", "node_sort" => "!","sort" => "类型",
                             "server" => "节点配置", "node_ip" => "节点IP",
                             "status" => "?","traffic_rate" => "R",
-                            "node_cost" => "C","node_online" => "O","node_oncost" => "负载", "node_group" => "G",
+                            "node_cost" => "C","node_online" => "O","node_oncost" => "日均", "node_group" => "G",
                             "node_class" => "L", "node_speedlimit" => "节点限速/Mbps",
                             "node_bandwidth" => "GB", "node_bandwidth_limit" => "流量限制/GB","info" => "节点信息",
                             "bandwidthlimit_resetday" => "流量重置日", "node_heartbeat" => "上一次活跃时间",

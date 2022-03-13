@@ -240,20 +240,26 @@ class XCat
         // $group4_traffic_daily_supply = Node::where('id','>',9)->where('type',1)->where('node_cost','>',1)->where('node_group','=',4)->sum('node_oncost');
         // echo 'G2 supply ' .$group4_traffic_daily_supply   .'G_';
 
-        $total = 0;
-        echo "Group4: \n";
-        $nodes = Node::where('id','>',9)->where('node_group',4)->where('type',1)->where('node_cost','>',1)->orderBy('node_oncost','DESC')->get();
-        foreach ($nodes as $key => $node) {
-            echo 'Id= ' . $node->id ."\t";
-            echo '今= ' . floor($node->node_bandwidth / 1073741824 )."G \t";
-            echo '昨= ' . floor($node->node_bandwidth_lastday / 1073741824 )."G \t";
-            echo '差= ' . floor(($node->node_bandwidth - $node->node_bandwidth_lastday)/ 1073741824 )."G \t";
-            echo '供= ' . $node->node_oncost. 'G  ';
-            echo "\n";
-            $total += ($node->node_bandwidth - $node->node_bandwidth_lastday)/ 1073741824;
-        }
-        echo '---';
-        echo floor($total) .'G';
+        // $total = 0;
+        // echo "Group4: \n";
+        // $nodes = Node::where('id','>',9)->where('node_group',4)->where('type',1)->where('node_cost','>',1)->orderBy('node_oncost','DESC')->get();
+        // foreach ($nodes as $key => $node) {
+        //     echo 'Id= ' . $node->id ."\t";
+        //     echo '今= ' . floor($node->node_bandwidth / 1073741824 )."G \t";
+        //     echo '昨= ' . floor($node->node_bandwidth_lastday / 1073741824 )."G \t";
+        //     echo '差= ' . floor(($node->node_bandwidth - $node->node_bandwidth_lastday)/ 1073741824 )."G \t";
+        //     echo '供= ' . $node->node_oncost. 'G  ';
+        //     echo "\n";
+        //     $total += ($node->node_bandwidth - $node->node_bandwidth_lastday)/ 1073741824;
+        // }
+        // echo '---';
+        // echo floor($total) .'G';
+
+        // $nodes = Node::where('id','>',9)->where('type',1)->get();
+        // foreach ($nodes as $key => $node) {
+        //     $node->custom_rss = 1;
+        //     $node->save();
+        // }
         
         // $snodes = Node::where('id','>',9)->get();
         // foreach ($snodes as $key => $node) {
