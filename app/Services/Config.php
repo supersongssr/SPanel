@@ -56,7 +56,8 @@ class Config
             "captcha_provider" => self::get("captcha_provider"),
             "enable_email_verify" => self::get("enable_email_verify"),
             "telegram_grouplink" => self::get("telegram_grouplink"),
-            "ticket_price" => self::get("ticket_price")
+            "ticket_price" => self::get("ticket_price"),
+            "clonepay_homeurl" => self::get("clonepay_homeurl")
          ];
     }
 

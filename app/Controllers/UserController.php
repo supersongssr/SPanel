@@ -2143,6 +2143,60 @@ class UserController extends BaseController
         return $response->getBody()->write(json_encode($rs));
     }
 
+    //sdo 2022-03-21 自动同步 clonepay
+    public function syncclonepay($request, $response, $args)
+    {
+        // 检测是否开启 功能
+        if (Config::get('payment_system') != 'clonepay') {
+            $rs['ret'] = 0;
+            $rs['msg'] = '此功能尚未开启，请刷新页面';
+            return $response->getBody()->write(json_encode($rs));
+        }
+        // 开始同步信息
+        $user = Auth::getUser();
+        if (Config::get('clonepay_syncurl')) {   //是否设置了 同步 url地址
+            $sync_url = Config::get('clonepay_syncurl') .'&email=' . $user->email ;
+            // 开始 curl get 
+            // 初始化
+            $curl = curl_init();
+            // 设置url路径
+            curl_setopt($curl, CURLOPT_URL, $sync_url);
+            // 将 curl_exec()获取的信息以文件流的形式返回，而不是直接输出。
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true) ;
+            // 在启用 CURLOPT_RETURNTRANSFER 时候将获取数据返回
+            // 添加头信息
+            // CURLINFO_HEADER_OUT选项可以拿到请求头信息
+            curl_setopt($curl, CURLINFO_HEADER_OUT, true);
+            // 不验证SSL
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+            // 执行
+            $syncpays = curl_exec($curl);
+            // 关闭连接
+            curl_close($curl);
+            // 返回数据
+        }
+        if ($syncpays) {
+            parse_str($syncpays, $msg);
+        }else{
+            $rs['ret'] = 0;
+            $rs['msg'] = '网络超时，没有获取到数据';
+            return $response->getBody()->write(json_encode($rs));
+        }
+        // 判断 是否存在 error 
+        if ($msg['error']) {
+            $rs['ret'] = 0;
+            $rs['msg'] = $msg['error'];
+        }elseif($msg['success']){
+            $rs['ret'] = 1;
+            $rs['msg'] = '已同步'.$user->email.'用户在'.$msg['days'] . '天内的 <code>'. $msg['total'].'</code> 个订单,请刷新页面查看余额。';
+        }else{
+            $rs['ret'] = 0;
+            $rs['msg'] = '返回数据无法识别，请联系管理员';
+        }
+        return $response->getBody()->write(json_encode($rs));
+    }
+
     //song reset user relevel
     public function uptocncdn($request, $response, $args)
     {

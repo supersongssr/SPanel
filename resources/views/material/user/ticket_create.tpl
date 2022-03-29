@@ -48,10 +48,10 @@
 									<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/css/editormd.min.css" />
 									<div id="editormd">
 										<textarea style="display:none;" id="content">
-1. 你的使用场景是什么？:软件版本、设备型号、
+1. 你的使用场景是什么？ eg:软件、版本、设备、型号
 : 
 
-2. 你看到的不正常的现象是什么？ :节点、浏览器、帐号、报错
+2. 你看到的不正常的现象是什么？ eg:节点、浏览器、帐号、报错
 : 
 
 3. 你期待看到的正确表现是怎样的？

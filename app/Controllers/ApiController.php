@@ -12,6 +12,7 @@ use App\Services\Config;
 use App\Utils\Tools;
 use App\Utils\Hash;
 use App\Utils\Helper;
+use App\Models\Code; // 20220320
 
 /**
  *  ApiController
@@ -270,5 +271,49 @@ class ApiController extends BaseController
         }
         $node->node_heartbeat = time();     //节点心跳包
         $node->save();
+    }
+
+    public function clonepay_modown($request, $response, $args){  // sdo 2022-03-18 clonepay 同步
+        // 验证key 
+        if (!$request->getParam('token') || $request->getParam('token') != Config::get('apitoken') ) {
+            exit;
+        }
+        // 验证 ip  
+        $ip = $_SERVER["REMOTE_ADDR"]; // 获取请求ip
+        if ($ip != Config::get('safeip') && $ip != Config::get('safeipv6')) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
+            exit;
+        }
+        //获取 email，验证用户
+        $email = $request->getParam('email');
+        $ice_num = $request->getParam('ice_num');
+        if (!$email) {
+            exit;
+        }
+        $user = User::where('email', '=', $email)->first();
+        if (!$user->id) {
+            exit;
+        }
+        // 和 充值卡充值一样的原理，进行充值和返利。
+        // 验证是否已经存在订单号了！ 如果已经存在了，就不再加money了。
+        $code_id = $ice_num . '-cpm';  //加一个标识符号 可以有。但是其实也没啥必要 cpm clonepaymodown cpr clonepayripro
+        $exsitcode = Code::where('code',$code_id)->first();
+        if ($exsitcode->id) {
+            echo '&error=订单已存在';
+            exit;
+        }
+        // 记录着个订单号到 数据库，加上clone这个
+        $codeq = New Code();
+        $codeq->code = $code_id;
+        $codeq->type = -1;
+        $codeq->number = $request->getParam('ice_money');
+        $codeq->isused = 1;
+        $codeq->userid = $user->id;
+        $codeq->usedatetime=$request->getParam('ice_time');
+        $codeq->save();
+        // 给用户加上余额。
+        $user->money += $request->getParam('ice_money');
+        $user->save();
+        // 判断用户的返利情况，给返利用户添加余额，记录返利信息。
+        // stodo
     }
 }
