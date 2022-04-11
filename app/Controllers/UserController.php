@@ -1755,7 +1755,7 @@ class UserController extends BaseController
         $user = Auth::getUser();
         $sub_limit = $request->getParam('sub_limit');
 
-        if ($sub_limit > ($user->class * 8 + 8)) {
+        if ($sub_limit > ($user->class * 16 + 32)) {
             $res['ret'] = 0;
             $res['msg'] = "等级不够";
             return $response->getBody()->write(json_encode($res));

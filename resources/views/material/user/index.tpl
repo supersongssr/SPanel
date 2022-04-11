@@ -299,7 +299,10 @@
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
-																<a class="" data-toggle="tab" href="#all_v2raya_linux"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA ★★★★★</a>
+																<a class="" data-toggle="tab" href="#all_v2raya_debian"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA - Debian/Ubuntu ★★★★★</a>
+															</li>
+															<li >
+																<a class="" data-toggle="tab" href="#all_v2raya_centos"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA - Centos/RedHat ★★★</a>
 															</li>
 															<li>
 																<a class="" data-toggle="tab" href="#all_qv2ray"><i class="icon icon-lg">flight_takeoff</i>&nbsp;Qv2ray ★★</a>
@@ -307,7 +310,7 @@
 														</ul>
 													</nav>
 													
-													<div class="tab-pane fade active in" id="all_v2raya_linux">
+													<div class="tab-pane fade active in" id="all_v2raya_debian">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
@@ -316,6 +319,22 @@
 															<br> 添加 V2rayA软件源： <code>echo "deb https://apt.v2raya.mzz.pub/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list</code>
 															<br> 更新	<code>sudo apt update</code>
 															<br> 安装 V2rayA: <code>sudo apt install v2raya</code>
+															<br> 启动 V2rayA: <code>sudo systemctl start v2raya.service</code>
+															<br> 设置开机自动运行： <code>sudo systemctl enable v2raya.service</code>
+															<br> 打开V2rayA: 打开浏览器 输入 <code>127.0.0.1:2017</code> 请注意，V2rayA的界面是网页控制，无图形主界面。
+														</p>
+														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>v2rayNG -> 左上角 -> <code>订阅设置</code> -> 右上角<code>+</code>添加订阅；v2rayNG -> 右上角 <code>+</code> ->更新订阅；</p>
+														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>选择节点 -> 右下角 <code>图标</code> -> 弹出窗口：允许VPN(仅第一次开启出现)</p>
+													</div>
+													<div class="tab-pane fade active in" id="all_v2raya_centos">
+														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
+															<br> 安装后可以关掉V2ray服务，V2rayA不依赖V2ray服务，只需要V2raycore <code>sudo systemctl disable v2ray --now</code>
+															<br> 下载RPM包 <code>cd;wget -LOk https://github.com/v2rayA/v2rayA/releases/download/v1.5.6.2/installer_redhat_x64_1.5.6.2.rpm</code>
+															<br> 注意，RPM包以x64为例，如果是其他系统，请自行下载相应的rpm包：下载地址： https://github.com/v2rayA/v2rayA/releases
+															<br> 安装RPM包 <code>sudo rpm -i ~/installer_redhat_x64_1.5.6.2.rpm </code>
+															<br> 注意：如果您下载的包在其他路径，如/root/download/xxx，请替换路径。 如： sudo rpm -i /root/download/xxx你下载的包名字.rpm  
 															<br> 启动 V2rayA: <code>sudo systemctl start v2raya.service</code>
 															<br> 设置开机自动运行： <code>sudo systemctl enable v2raya.service</code>
 															<br> 打开V2rayA: 打开浏览器 输入 <code>127.0.0.1:2017</code> 请注意，V2rayA的界面是网页控制，无图形主界面。

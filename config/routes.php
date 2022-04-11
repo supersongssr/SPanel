@@ -65,7 +65,7 @@ if ($debug == false) {
 }
 
 ## 是否开启禁止大陆IP访问
-$isforbidden_china = true;
+$isforbidden_china = false;
 #禁止中国大陆的IP 访问本站！
 if ($isforbidden_china) {
     # code...

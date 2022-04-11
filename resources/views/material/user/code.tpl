@@ -77,7 +77,7 @@
                                             <div class="card-heading">充值余额  (安全充值)</div>
                                     </div>
                                     <div>
-                                        <p>@充值余额：<a type="button" class="btn fbtn-brand" href="{{$config["clonepay_homeurl"]}}" target="_blank" >充值网站 (商品已安全处理)</a></p>
+                                        <p>@充值余额：<a type="button" class="btn fbtn-brand" href="{{$config["clonepay_homeurl"]}}&regname={{$user->user_name}}&regemail={{$user->email}}" target="_blank" >充值网站 (商品已安全处理)</a></p>  
                                         <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (本站相同邮箱)</p>
                                         <p>2. 在 <code>充值网站</code> 在线充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
                                         <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">刷新余额</a></p>
