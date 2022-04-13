@@ -274,13 +274,14 @@ class ApiController extends BaseController
     }
 
     public function clonepay_modown($request, $response, $args){  // sdo 2022-03-18 clonepay 同步
-        // 验证key 
-        if (!$request->getParam('token') || $request->getParam('token') != Config::get('apitoken') ) {
-            exit;
-        }
         // 验证 ip  
         $ip = $_SERVER["REMOTE_ADDR"]; // 获取请求ip
-        if ($ip != Config::get('safeip') && $ip != Config::get('safeipv6')) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
+        if ($ip != Config::get('clonepay_safeip') && $ip != Config::get('clonepay_safeipv6')) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
+            exit;
+        }
+        // 验证签名
+        $signStr = $request->getParam('order').'&'.$request->getParam('money').'&'.Config::get('clonepay_apitoken');
+        if (md5($signStr) != $request->getParam('sign')) {
             exit;
         }
         //获取 email，验证用户

@@ -225,6 +225,12 @@
     </div>
 </main>
 <script>
+    // sdo2022-04-12 自动去除 卡密中的 空格
+    // 自动去除公钥和私钥中的空格和换行
+    $("#code").on('input', function () {
+        $(this).val($(this).val().replace(/(\s+)/g, ''));
+    });
+    //
 	$(document).ready(function () {
 		$("#code-update").click(function () {
 			$.ajax({

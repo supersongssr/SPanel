@@ -179,9 +179,9 @@ $System_Config['payment_system']='none';
 # clonepay 参数 sdo2022-03-21
 $System_Config['clonepay_homeurl'] = 'http://modown.cc';
 $System_Config['clonepay_syncurl'] = ['http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown'];
-$System_Config['apitoken'] = 'clonepaysimida'; // 安全密钥 
-$System_Config['safeip'] = '127.0.0.1';  //安全通信唯一ip地址
-$System_Config['safeipv6'] = '';  //安全通信 唯一 ipv6地址
+$System_Config['clonepay_apitoken'] = 'clonepaysimida'; // 安全密钥 
+$System_Config['clonepay_safeip'] = '127.0.0.1';  //安全通信唯一ip地址
+$System_Config['clonepay_safeipv6'] = '';  //安全通信 唯一 ipv6地址
 
 # faka参数
 $System_Config['fakapay_url_10'] = 'vOc1odjdFs';
