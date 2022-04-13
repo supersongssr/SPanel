@@ -396,7 +396,7 @@ $app->group('/api', function () {
     $this->get('/sublink','App\Controllers\Client\ClientApiController:GetSubLink');
     $this->post('/ssn_sub/{id}','App\Controllers\ApiController:ssn_sub'); // song 后端节点用于上报节点状态 流量的API
     $this->post('/ssn_v2/{id}','App\Controllers\ApiController:ssn_v2'); // song 后端节点用于上报节点状态 流量的API
-    $this->post('/clonepay_modown','App\Controllers\ApiController:clonepay_modown'); // sdo 2022-03-18 clonepay_modown 支付同步方案
+    $this->post('/clonepay','App\Controllers\ApiController:clonepay'); // sdo 2022-03-18 clonepay 支付同步方案
 
 });
 

@@ -273,7 +273,11 @@ class ApiController extends BaseController
         $node->save();
     }
 
-    public function clonepay_modown($request, $response, $args){  // sdo 2022-03-18 clonepay 同步
+    public function clonepay($request, $response, $args){  // sdo 2022-03-18 clonepay 同步 sdo2022-04-13改名
+        //验证是否开启 clonepay
+        if (Config::get('payment_system') != 'clonepay') {
+            exit;
+        }
         // 验证 ip  
         $ip = $_SERVER["REMOTE_ADDR"]; // 获取请求ip
         if ($ip != Config::get('clonepay_safeip') && $ip != Config::get('clonepay_safeipv6')) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
