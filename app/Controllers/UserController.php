@@ -116,7 +116,9 @@ class UserController extends BaseController
         }
         $codes = Code::where('type', '<>', '-2')->where('userid', '=', $this->user->id)->orderBy('id', 'desc')->paginate(15, ['*'], 'page', $pageNum);
         $codes->setPath('/user/code');
-        return $this->view()->assign('codes', $codes)->assign('pmw', Payment::purchaseHTML())->display('user/code.tpl');
+        $sign = $this->user->email . '&' .date('Ymd') .'&' . Config::get('clonepay_apitoken');
+        $clonepay_url = Config::get('clonepay_homeurl') .'&regname=' . $this->user->user_name . '&regemail='. $this->user->email . '&regkey=' .md5($sign);
+        return $this->view()->assign('clonepay_url',$clonepay_url)->assign('codes', $codes)->assign('pmw', Payment::purchaseHTML())->display('user/code.tpl');
     }
 
     public function orderDelete($request, $response, $args)

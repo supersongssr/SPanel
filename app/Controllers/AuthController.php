@@ -444,6 +444,12 @@ class AuthController extends BaseController
             $res['msg'] = "邮箱无效";
             return $response->getBody()->write(json_encode($res));
         }
+        //sdo2022-04-25 禁止某些邮箱登录
+        if ( stripos($email, 'ssmail.win') ) {
+            $res['ret'] = 0;
+            $res['msg'] = "该邮箱系统被禁止注册";
+            return $response->getBody()->write(json_encode($res));
+        }
         // check email
         $user = User::where('email', $email)->first();
         if ($user != null) {
