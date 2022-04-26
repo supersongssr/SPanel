@@ -239,13 +239,14 @@ CREATE TABLE IF NOT EXISTS `unblockip` (
 -- --------------------------------------------------------
 
 --
--- 表的结构 `user`
+-- 表的结构 `user` 
+-- sdo2022-04-26 email变更为 64为限制，原来为32位，可能会出问题
 --
 
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int(11) NOT NULL,
   `user_name` varchar(128) CHARACTER SET utf8mb4 NOT NULL,
-  `email` varchar(32) NOT NULL,
+  `email` varchar(64) NOT NULL,
   `pass` varchar(64) NOT NULL,
   `passwd` varchar(16) NOT NULL,
   `t` int(11) NOT NULL DEFAULT '0',
