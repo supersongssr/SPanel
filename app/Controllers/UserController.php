@@ -1158,13 +1158,11 @@ class UserController extends BaseController
             $price = $price / 2 ;
         }
 
-
         if (bccomp($user->money , $price,2)==-1) {
             $res['ret'] = 0;
             $res['msg'] = '喵喵喵~ 当前余额不足，总价为' . $price . '元。</br><a href="/user/code">点击进入充值界面</a>';
             return $response->getBody()->write(json_encode($res));
         }
-
 
         if ( strtotime($user->class_expire) < time() ) {
             # 判断一下用户是否过期，如果过期，就设置为0，但是不保存 . 这样不影响到期的用户购买套餐。
@@ -1212,6 +1210,19 @@ class UserController extends BaseController
         $bought->save();
 
         $shop->buy($user);
+
+        //sdo2022-04-27 修改一些用户默认参数
+        // 这里，购买新套餐，会把相应的等级的流量，加入 transfer_limit 这个参数里。防止出现流量用超无法使用的情况
+        // 加上 每个等级 * 10 倍的流量 
+        $money_pay = Code::where('userid',$user->id)->orderBy('id',"desc")->first();  //取最后一个即可
+        if ($money_pay->id) { // 付款过的用户，分组为4
+            $user->node_group = Config::get('node_group');
+            $user->transfer_limit += $user->class * 10*1024*1024*1024;
+        }elseif( $user->t == 0 ){  //如果是新注册未使用用户，限制1G/天
+            $user->transfer_limit += $user->class * 1024*1024*1024;
+            $user->renew_time = time() + $user->class * 24 * 3600;
+        }
+        $user->save();
 
         $res['ret'] = 1;
         $res['msg'] = "购买成功";

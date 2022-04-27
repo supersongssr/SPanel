@@ -367,7 +367,7 @@ class Job
             $user->rss_ips_lastday = $user->rss_ips_count; // 记录昨日ips来源统计
             $user->save();
         }
-        // 2 3 组总流量使用超限的，分配到下载组，然后加用户等级的流量！一次
+        // 2 3 组总流量使用超限的，分配到1组，然后加用户等级的流量！一次
         $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
         foreach ($users as $user) {
             $user->score -= 1;

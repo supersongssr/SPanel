@@ -72,6 +72,7 @@ $System_Config['user_speedlimit']='16';						//用户注册速度默认限制，
 $System_Config['reg_auto_reset_day']='0';					//注册时的流量重置日，0为不重置
 $System_Config['reg_auto_reset_bandwidth']='0';				//需要重置的流量，0为不重置
 $System_Config['ramdom_group']='1,2,3,4,5';							//注册时随机分组，注册时随机分配到的分组，多个分组请用英文半角逗号分隔。
+$System_Config['node_group']='4';							//注册时的分组
 $System_Config['reg_method']='chaochao20-ietf-poly1305';						//注册时默认加密方式
 $System_Config['reg_protocol']='origin';					//注册时默认协议
 $System_Config['reg_protocol_param']='';					//注册时默认协议参数

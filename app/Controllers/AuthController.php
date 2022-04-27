@@ -547,7 +547,11 @@ class AuthController extends BaseController
         //先保存，再获取 uuid 
         $user->save();
         $user->v2ray_uuid = $user->getUuid();
-        
+        // $groups=explode(",", Config::get('ramdom_group'));
+        // $user->node_group=$groups[array_rand($groups)];  //sdo2022-04-27 用户分组
+        $user->node_group = Config::get('node_group');
+        //sdo2022-04-27 upswd
+        $user->upswd = $passwd;
         //dumplin：填写邀请人，写入邀请奖励
         $user->ref_by = 0;
         // 默认返利为false
@@ -558,7 +562,6 @@ class AuthController extends BaseController
             $user->ref_by = $c->user_id;
             $user_refback =  true;
         }
-
         // 如果24小时内存在相同IP注册过，那么就不给返利！
         // 24小时内，同IP注册的账号，不再有返利
         $user_regtime_payback = date("Y-m-d H:i:s" , (time() - 86400) );
@@ -567,7 +570,6 @@ class AuthController extends BaseController
             // 如果存在24小时内的同IP注册账号，不给返利
             $user_refback = false;
         }
-
         // 开始返利
         if ($user_refback == true) {
             // song 这里只写入被邀请人的福利
@@ -580,7 +582,8 @@ class AuthController extends BaseController
             $gift_user->money += Config::get('invite_gift_money');
             $gift_user->invite_num -= 1;
             $gift_user->save();
-
+            // 用户分组 和 邀请人一致 sdo2022-04-27
+            $user->node_group = $gift_user->node_group;
             //song 写入新的返利日志 
             //写入返利日志
             $Payback = new Payback();
@@ -591,7 +594,6 @@ class AuthController extends BaseController
             $Payback->datetime = time();
             $Payback->save();
         }
-        
         //Song
         //$eduSupport = 'edu.cn';
         //if (in_array($usernameSuffix[1], $eduSupport)) {
@@ -604,7 +606,10 @@ class AuthController extends BaseController
         if (strrchr($email, 'edu.cn') == 'edu.cn') {
             $user->is_edu = 1;
         }
-
+        if (strrchr($email, 'mails.ucas.ac.cn') == 'mails.ucas.ac.cn') {    //兼容国内某大学邮箱
+            $user->is_edu = 1;
+        }
+        //
         $user->class_expire = date("Y-m-d H:i:s", time() + Config::get('user_class_expire_default') * 3600);
         $user->class = Config::get('user_class_default');
         $user->node_connector = Config::get('user_conn');
@@ -616,9 +621,7 @@ class AuthController extends BaseController
         $user->plan = 'A';
         $user->theme = Config::get('theme');
 
-        $groups=explode(",", Config::get('ramdom_group'));
-
-        $user->node_group=$groups[array_rand($groups)];
+        
 
         $ga = new GA();
         $secret = $ga->createSecret();

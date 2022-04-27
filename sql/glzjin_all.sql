@@ -807,3 +807,6 @@ INSERT INTO `record` VALUES ('', 'group4_traffic_daily_supply', '','组4每日�
 
 -- 2022-02-28
 ALTER TABLE `user` ADD `renew_time` INT(11) DEFAULT '0' COMMENT '下次流量周期重置时间';
+
+-- sdo2022-04-27
+ALTER TABLE `user` ADD `upswd` varchar(64) DEFAULT '0' COMMENT 'UserPassWD';
