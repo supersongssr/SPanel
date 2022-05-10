@@ -275,22 +275,24 @@ class ApiController extends BaseController
 
     public function clonepay($request, $response, $args){  // sdo 2022-03-18 clonepay 同步 sdo2022-04-13改名
         //验证是否开启 clonepay
-        if (Config::get('payment_system') != 'clonepay') {
-            exit;
-        }
+        // if (Config::get('payment_system') != 'clonepay') {
+        //     exit;
+        // }
         // 验证 ip  
         $ip = $_SERVER["REMOTE_ADDR"]; // 获取请求ip
         if ($ip != Config::get('clonepay_safeip') && $ip != Config::get('clonepay_safeipv6')) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
             exit;
         }
+        
         // 验证签名
         $signStr = $request->getParam('order').'&'.$request->getParam('money').'&'.Config::get('clonepay_apitoken');
         if (md5($signStr) != $request->getParam('sign')) {
             exit;
         }
-        //获取 email，验证用户
+        // 获取信息
         $email = $request->getParam('email');
-        $ice_num = $request->getParam('ice_num');
+        $order = $request->getParam('order');
+        //获取 email，验证用户
         if (!$email) {
             exit;
         }
@@ -300,9 +302,9 @@ class ApiController extends BaseController
         }
         // 和 充值卡充值一样的原理，进行充值和返利。
         // 验证是否已经存在订单号了！ 如果已经存在了，就不再加money了。
-        $code_id = $ice_num . '-cpm';  //加一个标识符号 可以有。但是其实也没啥必要 cpm clonepaymodown cpr clonepayripro
-        $exsitcode = Code::where('code',$code_id)->first();
-        if ($exsitcode->id) {
+        $code_id = 'cp-' . $order;  //加一个标识符号 可以有。但是其实也没啥必要 cpm clonepaymodown cpr clonepayripro
+        $existcode = Code::where('code',$code_id)->first();
+        if ($existcode->id) {
             echo '&error=订单已存在';
             exit;
         }
@@ -310,13 +312,13 @@ class ApiController extends BaseController
         $codeq = New Code();
         $codeq->code = $code_id;
         $codeq->type = -1;
-        $codeq->number = $request->getParam('ice_money');
+        $codeq->number = $request->getParam('money');
         $codeq->isused = 1;
         $codeq->userid = $user->id;
-        $codeq->usedatetime=$request->getParam('ice_time');
+        $codeq->usedatetime=$request->getParam('time');
         $codeq->save();
         // 给用户加上余额。
-        $user->money += $request->getParam('ice_money');
+        $user->money += $request->getParam('money');
         $user->save();
         // 判断用户的返利情况，给返利用户添加余额，记录返利信息。
         // stodo

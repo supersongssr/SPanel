@@ -74,17 +74,16 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <div class="cardbtn-edit">
-                                            <div class="card-heading">充值余额  (安全充值)</div>
+                                            <div class="card-heading">充值余额  (代付充值)</div>
                                     </div>
                                     <div>
-                                        <p>@充值余额：<a type="button" class="btn fbtn-brand" href="{{$clonepay_url}}" target="_blank" >充值网站 (商品已安全处理)</a></p>  
-                                        <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (本站相同邮箱)</p>
-                                        <p>2. 在 <code>充值网站</code> 在线充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
-                                        <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">刷新余额</a></p>
+                                        <p>@充值余额:-> <a type="button" class="btn fbtn-brand" href="{{$clonepay_url}}" target="_blank" >充值网站 (商品已安全处理)</a></p>  
+                                        <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (相同邮箱 充值同步)</p>
+                                        <p>2. 在 <code>充值网站</code> 支付充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
+                                        <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">刷新余额 {$user->money}￥</a></p>
                                         <p><font color="#399AF2" size="5">购买售后联系邮箱：cpay@ssmail.win （暂无大陆微信/QQ联系方式）</font></p>
                                     <hr>
-                                        <p>@常见问题：
-                                        <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">同步充值记录</button></p>
+                                        <p>@常见问题:-> <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">同步充值记录</button></p>
                                         <p><code>*邮箱不同，充值记录同步么？ - 不同步(必须邮箱相同)</code></p>
                                         <p><code>*邮箱相同，用户名密码不同，充值记录同步么？ - 同步(邮箱相同即可)</code></p>
                                     </div>
