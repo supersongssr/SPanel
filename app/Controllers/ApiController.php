@@ -13,6 +13,7 @@ use App\Utils\Tools;
 use App\Utils\Hash;
 use App\Utils\Helper;
 use App\Models\Code; // 20220320
+use App\Models\Payback; //sdo2022-05-12
 
 /**
  *  ApiController
@@ -322,5 +323,39 @@ class ApiController extends BaseController
         $user->save();
         // 判断用户的返利情况，给返利用户添加余额，记录返利信息。
         // stodo
+        if ($user->ref_by != "" && $user->ref_by != 0 && $user->ref_by != null) {
+            $gift_user = User::where("id", "=", $user->ref_by)->first();
+            if(!$gift_user->id){
+                exit;
+            }
+            //写入返利日志
+            $Payback = new Payback();
+            $Payback->total = $codeq->number;
+            $Payback->userid = $user->id;
+            $Payback->ref_by = $user->ref_by;
+            $Payback->ref_get = $codeq->number * (Config::get('code_payback') / 100);
+            $Payback->datetime = time();
+            $Payback->save();
+            $gift_user->money += ($codeq->number * (Config::get('code_payback') / 100));
+            $gift_user->save();
+
+            // 二级返利
+            if ($gift_user->ref_by != 0 && $gift_user->ref_by != null) {
+                $gift_user2 = User::where("id", "=", $gift_user->ref_by)->first();
+                if(!$gift_user2->id){
+                    exit;
+                }
+                //写入返利日志
+                $Payback = new Payback();
+                $Payback->total = $codeq->number;
+                $Payback->userid = $gift_user->id;
+                $Payback->ref_by = $gift_user->ref_by;
+                $Payback->ref_get = $codeq->number * (Config::get('code_payback2') / 100);
+                $Payback->datetime = time();
+                $Payback->save();
+                $gift_user2->money += ($codeq->number * (Config::get('code_payback2') / 100));
+                $gift_user2->save();
+            }
+        }
     }
 }
