@@ -228,7 +228,7 @@
 </script>
 
 {if $config['enable_telegram'] == 'true'}
-    <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+    <script src="/jscdn/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
     <script>
         var telegram_qrcode = 'mod://login/{$login_token}';
         var qrcode = new QRCode(document.getElementById("telegram-qr"));

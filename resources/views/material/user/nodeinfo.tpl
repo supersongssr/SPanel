@@ -245,7 +245,7 @@
 {include file='user/footer.tpl'}
 
 
-<script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
+<script src="/jscdn/gh/davidshimjs/qrcodejs@gh-pages/qrcode.min.js"></script>
 <script>
 	{if URL::SSCanConnect($user, $mu)}
     var text_qrcode = '{URL::getItemUrl($ss_item, 1)}',

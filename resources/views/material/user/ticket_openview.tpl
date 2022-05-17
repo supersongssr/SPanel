@@ -58,7 +58,7 @@
 
 
 
-<script src="https://cdn.jsdelivr.net/npm/editor.md@1.5.0/editormd.min.js"></script>
+<script src="/jscdn/npm/editor.md@1.5.0/editormd.min.js"></script>
 <script>
     $(document).ready(function () {
         function submit() {
@@ -135,7 +135,7 @@
 	
     $(function() {
         editor = editormd("editormd", {
-             path : "https://cdn.jsdelivr.net/npm/editor.md@1.5.0/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
+             path : "/jscdn/npm/editor.md@1.5.0/lib/", // Autoload modules mode, codemirror, marked... dependents libs path
 			height: 450,
 			saveHTMLToTextarea : true,
 			emoji : true

@@ -14,16 +14,16 @@
         ga('set', 'dimension1', hostDomain);
         ga('send', 'pageview');
     </script>
-    <script async src="https://www.google-analytics.com/analytics.js"></script>
+    {* <script async src="https://www.google-analytics.com/analytics.js"></script> *}
     <!-- End Google Analytics -->
     {/if}
-	<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0"></script>
+	<script src="/jscdn/npm/jquery-validation@1.17.0.js"></script>
     {if isset($geetest_html)}
 	<script src="//static.geetest.com/static/tools/gt.js"></script>
     {/if}
 	<script src="/theme/material/js/base.min.js"></script>
 	<script src="/theme/material/js/project.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/clipboard@1.5.16/dist/clipboard.min.js"></script>
+	<script src="/jscdn/npm/clipboard@1.5.16/dist/clipboard.min.js"></script>
 	<!-- song <script type="text/javascript" color="0,217,255" opacity="0.5" count="49" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1.0.1"></script> -->
 
 

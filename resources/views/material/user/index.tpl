@@ -657,7 +657,7 @@ alert("请设置您的 中转加速入口 加速您的网络 ");
 
 {include file='user/footer.tpl'}
 
-<script src="https://cdn.jsdelivr.net/npm/shake.js@1.2.2/shake.min.js"></script>
+<script src="/jscdn/npm/shake.js@1.2.2/shake.min.js"></script>
 
 <script>
 ;(function(){

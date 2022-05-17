@@ -1,5 +1,4 @@
-@import url(https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css);
-
+@import url(/jscdn/npm/font-awesome@4.7.0/css/font-awesome.min.css);
 .pure-g {
     align-content: unset;
     -webkit-align-content: unset;
@@ -290,7 +289,7 @@ input.checkbox,
 
 .auth-submit:hover,
 .auth-submit:focus,
-    {
+{
     background-color: #d6d6d6;
     border-color: #d6d6d6;
 }
@@ -791,88 +790,68 @@ button[name=reset] {
     .user {
         padding: 0;
     }
-
     .auth-tg {
         margin-top: 0;
     }
-
     .auth-sm a {
         min-width: 120px;
     }
-
     .footer {
         margin-top: 3rem;
     }
-
     .title-left a {
         margin-bottom: 0;
     }
-
     .logo-sm,
     .auth-sm {
         padding: 1rem 3rem;
         margin-top: .8rem;
     }
-
     .title h1 {
         font-size: 4rem;
     }
-
     .staff {
         text-align: left;
     }
-
     .time {
         text-align: right;
     }
-
     .auth-submit {
         width: 32%;
     }
-
     .auth-links {
         padding: 0;
     }
-
     .auth-links a {
         flex-basis: 100%;
     }
-
     .title-back {
         font-size: 8.5rem;
     }
-
     .auth>div:first-of-type {
         padding: 0 0 0 5%;
     }
-
     .usrcenter {
         padding: 0 10%;
     }
-
     .enableCrisp {
         padding-right: 3rem;
     }
-
     .ann,
     .user-shop {
         max-height: 385px;
         overflow: auto;
     }
-
     .link-reset .uim-tooltip-top {
         width: 230px;
     }
-
     .invite-link {
         width: 450px;
     }
-
     .user-invite-title .tips {
         margin-bottom: .5rem;
         margin-left: .75rem;
     }
-
     .margin-nobottom-sm {
         margin-bottom: 0 !important;
     }
@@ -882,57 +861,46 @@ button[name=reset] {
     .title h1 {
         font-size: 5rem;
     }
-
     .twin {
         justify-content: space-around;
         align-items: flex-end;
         padding: 0 2.5%;
     }
-
     .twin>* {
         flex-basis: 39%;
     }
-
     .input-control {
         width: 41%;
     }
-
     .reg .input-control {
         flex-basis: 48%;
     }
 }
 
 @media screen and (min-width:64em) {
-
     .title {
         width: 75%;
         padding-left: 5%;
     }
-
     .auth {
         width: 90%;
     }
-
     .title-back {
         font-size: 12rem;
     }
-
 }
 
 @media screen and (min-width:80em) {
     .title h1 {
         padding-right: 4rem;
     }
-
     .title-left {
         text-align: left;
     }
-
     .logo-bg .logo {
         display: unset;
         margin-left: 10rem;
     }
-
 }
 
 @media screen and (max-width:35.5em) {
@@ -943,7 +911,10 @@ button[name=reset] {
 
 
 /* 组件 */
+
+
 /* messager */
+
 .uim-messager {
     position: fixed;
     top: 6rem;
@@ -971,7 +942,9 @@ button[name=reset] {
     color: #D1335B;
 }
 
+
 /* checkbox */
+
 input[type=checkbox].uim-checkbox {
     width: 16px;
     height: 16px;
@@ -1006,6 +979,7 @@ input[type=checkbox].uim-checkbox {
     background: #D1335B;
     box-shadow: 0 0 5px 1px gray;
 }
+
 
 /* dropdown */
 
@@ -1071,6 +1045,7 @@ input[type=checkbox].uim-checkbox {
     min-width: unset;
     width: 100%;
 }
+
 
 /* modal */
 
@@ -1161,6 +1136,7 @@ button.uim-modal-confirm {
     cursor: pointer;
 }
 
+
 /* switch */
 
 .uim-switch-body {
@@ -1210,6 +1186,7 @@ button.uim-modal-confirm {
     font-size: 14px;
 }
 
+
 /* tooltip */
 
 .uim-tooltip {
@@ -1237,6 +1214,7 @@ button.uim-modal-confirm {
     transform: rotateZ(45deg);
     z-index: -1;
 }
+
 
 /* anchor */
 
@@ -1279,6 +1257,7 @@ button.uim-modal-confirm {
 .uim-anchor li:last-of-type {
     border-radius: 0 0 12px 12px;
 }
+
 
 /* progressbar */
 
@@ -1384,19 +1363,19 @@ button.uim-modal-confirm {
         opacity: .3;
         width: 0
     }
-
     to {
         opacity: 0;
         width: 100%
     }
 }
 
+
 /* loading 动画 */
+
 .spinner {
     width: 60px;
     height: 60px;
     background-color: #fff;
-
     margin: 100px auto;
     -webkit-animation: rotateplane 1.2s infinite ease-in-out;
     animation: rotateplane 1.2s infinite ease-in-out;
@@ -1406,11 +1385,9 @@ button.uim-modal-confirm {
     0% {
         -webkit-transform: perspective(120px)
     }
-
     50% {
         -webkit-transform: perspective(120px) rotateY(180deg)
     }
-
     100% {
         -webkit-transform: perspective(120px) rotateY(180deg) rotateX(180deg)
     }
@@ -1421,12 +1398,10 @@ button.uim-modal-confirm {
         transform: perspective(120px) rotateX(0deg) rotateY(0deg);
         -webkit-transform: perspective(120px) rotateX(0deg) rotateY(0deg)
     }
-
     50% {
         transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg);
         -webkit-transform: perspective(120px) rotateX(-180.1deg) rotateY(0deg)
     }
-
     100% {
         transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
         -webkit-transform: perspective(120px) rotateX(-180deg) rotateY(-179.9deg);
@@ -1449,7 +1424,6 @@ button.uim-modal-confirm {
     position: absolute;
     top: 0;
     left: 0;
-
     -webkit-animation: cubemove 1.8s infinite ease-in-out;
     animation: cubemove 1.8s infinite ease-in-out;
 }
@@ -1463,15 +1437,12 @@ button.uim-modal-confirm {
     25% {
         -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5)
     }
-
     50% {
         -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg)
     }
-
     75% {
         -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5)
     }
-
     100% {
         -webkit-transform: rotate(-360deg)
     }
@@ -1482,22 +1453,18 @@ button.uim-modal-confirm {
         transform: translateX(42px) rotate(-90deg) scale(0.5);
         -webkit-transform: translateX(42px) rotate(-90deg) scale(0.5);
     }
-
     50% {
         transform: translateX(42px) translateY(42px) rotate(-179deg);
         -webkit-transform: translateX(42px) translateY(42px) rotate(-179deg);
     }
-
     50.1% {
         transform: translateX(42px) translateY(42px) rotate(-180deg);
         -webkit-transform: translateX(42px) translateY(42px) rotate(-180deg);
     }
-
     75% {
         transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
         -webkit-transform: translateX(0px) translateY(42px) rotate(-270deg) scale(0.5);
     }
-
     100% {
         transform: rotate(-360deg);
         -webkit-transform: rotate(-360deg);
