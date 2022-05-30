@@ -19,7 +19,7 @@
     {/if}
 	<script src="/jscdn/npm/jquery-validation@1.17.0.js"></script>
 	<script src="/jscdn/npm/datatables.net@1.10.19.js"></script>
-	<script src="//cdn.jsdelivr.net/gh/DataTables/DataTables@1.10.19/media/js/dataTables.material.min.js"></script>
+	<script src="/jscdn/gh/DataTables/DataTables@1.10.19/media/js/dataTables.material.min.js"></script>
 	<script src="/theme/material/js/base.min.js"></script>
 	<script src="/theme/material/js/project.min.js"></script>
 	<!-- song <script type="text/javascript" color="0,217,255" opacity="0.5" count="49" src="https://cdn.jsdelivr.net/npm/canvas-nest.js@1.0.1"></script> -->

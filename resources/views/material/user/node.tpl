@@ -1,6 +1,6 @@
 {include file='user/main.tpl'}
 
-<script src="//cdn.jsdelivr.net/gh/SuicidalCat/canvasjs.js@v2.3.1/canvasjs.min.js"></script>
+<script src="/jscdn/gh/SuicidalCat/canvasjs.js@v2.3.1/canvasjs.min.js"></script>
 <script src="/jscdn/npm/jquery@3.3.1.js"></script>
 <script type="application/x-javascript"> addEventListener("load", function() { setTimeout(hideURLbar, 0); }, false); function hideURLbar(){ window.scrollTo(0,1); } </script>
 
