@@ -14,7 +14,6 @@
 							<div class="card">
 								<div class="card-main">
 									<div class="card-inner margin-bottom-no">
-										<p class="card-heading"><a href="/user/announcement" class="btn btn-brand">返回所有文章</a>&nbsp;&nbsp;&nbsp;<a href="/user/announcement/1" class="btn btn-brand">常见问题解答</a></p>
 										<div class="card-table">
 											<div class="table-responsive">
 												<table class="table">
@@ -27,7 +26,7 @@
 													<tr>
 														<!--<td>#{$ann->id}</td> 
 														<td>{$ann->date}</td> song-->
-														<td>{$ann->date}&nbsp;&nbsp;<a href="/user/announcement/{$ann->id}" class="btn btn-brand">{$ann->markdown}</a><br>{$ann->content}</td>
+														<td>{$ann->date}&nbsp;&nbsp;<a href="/user/announcement/{$ann->id}" class="btn">{$ann->markdown}</a><br>{$ann->content}</td>
 													</tr>
 													{/foreach}
 												</table>

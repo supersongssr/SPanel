@@ -12,7 +12,9 @@
 				<h1 class="content-heading">用户编辑 #{$edit_user->id}</h1>
 				rss_count={$edit_user->rss_count} ; rss_count_lastday={$edit_user->rss_count_lastday} ; ban_times={$edit_user->ban_times}; warming={$edit_user->warming};score={$edit_user->score}; rss_ips_count={$edit_user->rss_ips_count} ; rss_ips_lastday={$edit_user->rss_ips_lastday} ;rss_ip={$edit_user->rss_ip}
 				<br>
-				t={$edit_user->t} ; u={$edit_user->u} ;d={$edit_user->d} 
+				t={$edit_user->t} ; u={$edit_user->u} ;d={$edit_user->d} ; last_day_t昨日流量记录={$edit_user->last_day_t}
+				<br>
+				top_up充值累计={$edit_user->top_up};  UUID={$edit_user->v2ray_uuid} ;
 			</div>
 		</div>
 		<div class="container">
@@ -37,13 +39,13 @@
 									<input class="form-control maxwidth-edit" id="pass" type="password"  autocomplete="new-password">
 								</div>
 
-								<div class="form-group form-group-label">
+								<!-- <div class="form-group form-group-label">
 									<div class="checkbox switch">
 										<label for="is_admin">
 											<input {if $edit_user->is_admin==1}checked{/if} class="access-hide" id="is_admin" type="checkbox"><span class="switch-toggle"></span>是否管理员
 										</label>
 									</div>
-								</div>
+								</div> -->
 
 								<div class="form-group form-group-label">
 									<div class="checkbox switch">
@@ -283,11 +285,11 @@
 
     window.addEventListener('load', () => {
     function submit() {
-        if (document.getElementById('is_admin').checked) {
-            var is_admin = 1;
-        } else {
-            var is_admin = 0;
-        }
+        // if (document.getElementById('is_admin').checked) {
+        //     var is_admin = 1;
+        // } else {
+        //     var is_admin = 0;
+        // }
 
         if (document.getElementById('enable').checked) {
             var enable = 1;
@@ -322,7 +324,7 @@
                 remark: $$getValue('remark'),
                 money: $$getValue('money'),
                 enable,
-                is_admin,
+                // is_admin,
                 ga_enable,
                 ref_by: $$getValue('ref_by'),
                 forbidden_ip: $$getValue('forbidden_ip'),

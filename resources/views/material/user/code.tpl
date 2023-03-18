@@ -24,7 +24,7 @@
                                 <div class="card-inner">
 
                                     {if $config["enable_admin_contact"] == 'true'}
-                                        <p class="card-heading">充值遇到问题？联系站长 或者 <a href="/user/ticket">提交工单</a> </p>
+                                        <p class="card-heading">充值遇到问题？发送邮件至 spay@ssmail.win 联系管理员</p>
                                         {if $config["admin_contact1"]!=null}
                                             <li>{$config["admin_contact1"]}</li>
                                         {/if}
@@ -35,6 +35,7 @@
                                             <li>{$config["admin_contact3"]}</li>
                                         {/if}
                                     {/if}
+                                    <p><font color="#FA8072" size="3">任何未提前邮件沟通就发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
                                     <p><i class="icon icon-lg">attach_money</i>当前余额：<font color="#399AF2" size="5">{$user->money}</font> </p>
                                 </div>
                             </div>
@@ -81,9 +82,10 @@
                                         <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (相同邮箱 充值同步)</p>
                                         <p>2. 在 <code>充值网站</code> 支付充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
                                         <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">刷新余额 {$user->money}￥</a></p>
-                                        <p><font color="#399AF2" size="5">购买售后联系邮箱：cpay@ssmail.win （暂无大陆微信/QQ联系方式）</font></p>
+                                        <p><font color="#399AF2" size="4">充值问题专用邮箱：cpay@ssmail.win （22:00前当日回复,22:00后次日回复）</font></p>
+                                        <p><font color="#FA8072" size="3">任何未提前邮件沟通而发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
                                     <hr>
-                                        <p>@常见问题:-> <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">同步充值记录</button></p>
+                                        <p>@常见问题:-> <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">充值未同步? 点此同步充值记录</button></p>
                                         <p><code>*邮箱不同，充值记录同步么？ - 不同步(必须邮箱相同)</code></p>
                                         <p><code>*邮箱相同，用户名密码不同，充值记录同步么？ - 同步(邮箱相同即可)</code></p>
                                     </div>
@@ -134,7 +136,7 @@
                             <div class="card-inner">
                                 <div class="card-inner">
                                     <p class="card-heading">VIP10</p>
-                                    <p>此页面累计充值满233，您可以申请 VIP10 。 <br>我们提供免费的VIP10专属的 Azure 600M节点供充值用户使用。<br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满223而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
+                                    <p>此页面累计充值满233，您可以申请 VIP10 。 <br>*请注意：此为临时策略，不保证长期提供，当我们取消此功能的时候，您的账号等级也将会恢复。<br>*请注意：我们将采用严格的检测机制，如果您累计充值不满223而点击此按钮，系统会将您的账号禁用（您可以自助解封）。</p>
                                 </div>
                                 <div class="card-inner">
                                     <button id="uptopay" type="submit" class="btn btn-block btn-brand ">申请VIP10 Azure 600M节点</button>

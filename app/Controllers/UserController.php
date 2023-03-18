@@ -81,7 +81,7 @@ class UserController extends BaseController
             }
         }
 
-        $Ann = Ann::orderBy('id', 'desc')->first();   //song
+        $Ann = Ann::orderBy('id', 'asc')->first();   //song
 
 
         return $this->view()
@@ -1055,7 +1055,7 @@ class UserController extends BaseController
         }
 
         // 这里 按照排序，选择最后一个 有效的 优惠码。这个方便做更改优惠码的方式
-        $coupon = Coupon::where("code", $coupon)->orderBy("id",DESC)->first();
+        $coupon = Coupon::where("code", $coupon)->orderBy("id",'DESC')->first();
 
         if ($coupon == null) {
             $res['ret'] = 0;
@@ -1337,11 +1337,11 @@ class UserController extends BaseController
             return $this->echoJson($response, $res);
         }
 
-        if (strpos($content, "admin") != false || strpos($content, "user") != false) {
-            $res['ret'] = 0;
-            $res['msg'] = "请求中有不当词语";
-            return $this->echoJson($response, $res);
-        }
+        // if (strpos($content, "admin") != false || strpos($content, "user") != false) {
+        //     $res['ret'] = 0;
+        //     $res['msg'] = "请求中有不当词语";
+        //     return $this->echoJson($response, $res);
+        // }
 
         if ($user->class < 1) {
             $res['ret'] = 0;
@@ -1678,7 +1678,7 @@ class UserController extends BaseController
 
         $user = $this->user;
 
-        if ($group == "" || $group > 3) {
+        if ($group == "" || $group > 4) {
             $res['ret'] = 0;
             $res['msg'] = "非法输入";
             return $response->getBody()->write(json_encode($res));

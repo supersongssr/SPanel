@@ -88,7 +88,9 @@
 										<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
 										<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
 										<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
-										<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Path ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Servername(gRPC) ：<span class="card-tag tag-green">{$v2['serviceName']}</span></p>
+										<p>模式 mode(gRPC) ：<span class="card-tag tag-green">{$v2['mode']}</span></p>
 										<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
 										<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
 										<p>ALPN ：<span class="card-tag tag-green">{$v2['alpn']}</span></p>
@@ -103,7 +105,9 @@
 										<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
 										<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
 										<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
-										<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>伪装路径Path ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Servername(gRPC) ：<span class="card-tag tag-green">{$v2['serviceName']}</span></p>
+										<p>模式 mode(gRPC) ：<span class="card-tag tag-green">{$v2['mode']}</span></p>
 										<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
 										<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
 										<p>ALPN ：<span class="card-tag tag-green">{$v2['alpn']}</span></p>
@@ -117,7 +121,9 @@
 										<p>传输协议 Network ：<span class="card-tag tag-green">{$v2['net']}</span></p>
 										<p>伪装类型 Type ：<span class="card-tag tag-green">{$v2['type']}</span></p>
 										<p>伪装 Host Quic加密方式 ：<span class="card-tag tag-green">{$v2['host']}</span></p>
-										<p>Path QUIC密钥 gRPC ：<span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>伪装路径 Path <span class="card-tag tag-green">{$v2['path']}</span></p>
+										<p>Servername(gRPC) ：<span class="card-tag tag-green">{$v2['serviceName']}</span></p>
+										<p>模式 mode(gRPC) ：<span class="card-tag tag-green">{$v2['mode']}</span></p>
 										<p>Tls传输 ：<span class="card-tag tag-green">{$v2['tls']}</span></p>
 										<p>SNI ：<span class="card-tag tag-green">{$v2['sni']}</span></p>
 										<p>ALPN ：<span class="card-tag tag-red">{$v2['alpn']}</span></p>

@@ -140,6 +140,22 @@ class UserController extends AdminController
         $user = User::find($id);
         if ($user == null) {
         }
+
+        /*
+        $codes=Code::where('userid',$user->id)->get();
+            $tempdata['top_up']=0;
+            foreach($codes as $code){
+				$tempdata['top_up']+=$code->number;
+            }
+            */
+
+        // 2022-08-21-song-编辑用户显示总充值金额
+        $codes=Code::where('userid',$user->id)->get();
+        $user->top_up = 0;
+        foreach($codes as $code){
+            $user->top_up+=$code->number;
+        }
+
         return $this->view()->assign('edit_user', $user)->display('admin/user/edit.tpl');
     }
 
@@ -188,7 +204,7 @@ class UserController extends AdminController
         $user->node_speedlimit = $request->getParam('node_speedlimit');
         $user->node_connector = $request->getParam('node_connector');
         $user->enable = $request->getParam('enable');
-        $user->is_admin = $request->getParam('is_admin');
+        // $user->is_admin = $request->getParam('is_admin');
         $user->ga_enable = $request->getParam('ga_enable');
         $user->node_group = $request->getParam('group');
         $user->ref_by = $request->getParam('ref_by');

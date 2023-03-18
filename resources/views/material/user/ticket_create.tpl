@@ -48,7 +48,7 @@
 									<link rel="stylesheet" href="/jscdn/npm/editor.md@1.5.0/css/editormd.min.css" />
 									<div id="editormd">
 										<textarea style="display:none;" id="content">
-1. 你的使用场景是什么？ eg:软件、版本、设备、型号
+1. 你的使用场景是什么？ eg:软件名字&版本、设备名字&型号
 : 
 
 2. 你看到的不正常的现象是什么？ eg:节点、浏览器、帐号、报错
@@ -57,7 +57,7 @@
 3. 你期待看到的正确表现是怎样的？
 : 
 
-4. *请附上出错时软件输出的错误日志。*（V2rayN在界面最下方，其他软件在Logs/日志查看）
+4. *请附上出错时软件输出的错误日志。eg:节点名字#ID,该节点报错日志
 : </textarea>
 									</div>
 								</div>

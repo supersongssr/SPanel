@@ -214,6 +214,102 @@ class XCat
 
     public function test()
     {
+        // echo 'a1105_add_2022-09-23_2022-11-07  to group 1';
+        // $nodes = Node::where('node_group',2)->where('info','a1105_add_2022-09-23_2022-11-07')->get();
+        // foreach($nodes as $node){
+        //     $node->node_group = 1;
+        //     echo $node->id . '---';
+        //     $node->save();
+        // }
+        // echo '把3组节点换成4组';
+        // $nodes = Node::where('node_group',3)->get();
+        // foreach($nodes as $node){
+        //     $node->node_group = 4;
+        //     echo $node->id . '+++';
+        //     $node->save();
+        // }
+
+       
+
+        // echo '统计1组的 2-7级用户人 放到3组去';
+        // $users = User::where('enable',1)->where("node_group",1)->where('class','<',10)->where('class','>',6)->get();
+
+        // foreach ($users as $user) {
+        //     # code...
+        //     $user->node_group = 3;
+        //     echo $user->id . '---';
+        //     $user->save();
+        // }
+
+
+        echo '当前无数据';
+        //自动审计每天节点流量数据 song
+        // $nodes_vnstat = Node::where('id','>',9)->where('node_group','>',0)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
+        // foreach ($nodes_vnstat as $node) {
+        //     if ($node->node_bandwidth == $node->node_bandwidth_lastday) {   // 判断这个节点是否今天没有走流量，是否是有问题的节点？
+        //         continue;   
+        //     }
+        //     // 这两个 if别反了。 需要把 流量记录下，方便统计每日消耗的真实流量
+        //     if ( $node->node_heartbeat < (time() - 7200) ) {        // 判断节点在过去两小时内 是否存在心跳
+        //         continue;
+        //     }
+        //     //
+        //     $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
+        //     $today = date('d');
+        //     if ($node->node_bandwidth_limit > 1 && $today != $node->bandwidthlimit_resetday) {  
+        //         // node_sort
+        //         // rate 节点倍率计算方案
+        //         $traffic_used_days = 32 + $today - $node->bandwidthlimit_resetday;
+        //         $traffic_used_days > 32 && $traffic_used_days -= 32;
+        //         $traffic_used_days < 1 && $traffic_used_days = 1; # 防止已用时间为0
+        //         // $node->traffic_rate = round( ($node->node_bandwidth * 50 / $node->node_bandwidth_limit / $days)  ,1);  # 旧的计算方式,已抛弃
+        //         $traffic_used_ever_day = round( ( $node->node_bandwidth / 1024 / 1024 / 1024 / $traffic_used_days ), 2) ;   # 计算已用日均流量 G
+        //         $node->node_oncost > 0 && $node->traffic_rate = round(( $traffic_used_ever_day / $node->node_oncost ), 1);  # 倍率= 已用日均流量/剩余日均流量 G
+        //         echo $node->traffic_rate;
+        //         echo '--';
+        //         # 下面 计算 流量的 限额 和 金钱的 方案,考虑到有 fake节点,目前做不到这样. 
+        //         if ( $node->node_cost > 0 && $node->node_bandwidth_limit > 0 ) {
+        //             // 注意: node_bandwidth_limit 是 *1024*1024*1024 得出来的.
+        //             $node->traffic_rate = round(($node->traffic_rate * 500 * $node->node_cost * 1024 * 1024 *1024 / $node->node_bandwidth_limit ),1); # 倍率再算上 流量价格  流量/刀  目前能买到500G/刀 ,就是 1800G/4.5刀
+        //             echo $node->traffic_rate;
+        //             echo '-----';
+        //         }
+        //     }
+        // }
+        # is_clone 设置和记录
+        // $nodes = Node::where('id','>',40)->get();
+        // foreach($nodes as $node){
+        //     parse_str($node->server, $v2);  //获取参数
+        //     $getid = $v2['host'];
+        //     $getid = str_replace('.node.xyz','',$getid);
+        //     $getid = str_replace('.s2022.xyz','',$getid);
+        //     $getid = str_replace('.s2022.buzz','',$getid);
+        //     $getid = str_replace('ipv6s','',$getid);
+        //     $getid = str_replace('s','',$getid);
+        //     // echo $getid;
+        //     echo '------------';
+        //     if ($getid != $node->id) {
+        //         $node->is_clone=$getid;
+        //         echo $getid . ' != ' . $node->id;
+        //         echo '----------------';
+        //         $node->save();
+        //     }
+            
+        // }
+
+        # 把指定节点信息的节点,更改节点分组. 
+        #
+        # Config
+        // $info = 'a1107_2022-10-07';  # 需要查找的节点 info
+        // $now_group = 1; #该节点现在的分组
+        // $new_group = 2; #该节点需要移动到的分组
+        // #
+        
+        // $nodes = Node::where('id','>',9)->get();
+        // foreach($nodes as $node){
+        //     $node->traffic_rate = 1;
+        //     $node->save();
+        // }
 
         // echo '20220210';
         // $all_traffic_today = Node::where('id','>',9)->where('node_group','>',0)->where('node_cost','>',1)->sum('node_bandwidth') - Node::where('id','>',9)->where('node_group','>',0)->where('node_cost','>',1)->sum('node_bandwidth_lastday');

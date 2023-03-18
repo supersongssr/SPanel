@@ -242,6 +242,7 @@ class ApiController extends BaseController
             $node->node_ip = 'ip=' . $request->getParam('node_ip');
             $node->node_ip .= '&ipv6=' . $request->getParam('node_ipv6');
         }
+        
         // protocol v2ray config 要更改，全部更改。 node->server段
         if ( $request->getParam('v2') ) {
             $request->getParam('v2') == 'ss' && $node->sort = 0;  // 这里0代表SS
@@ -259,6 +260,8 @@ class ApiController extends BaseController
             $node->server .= '&path='.$request->getParam('v2_path');
             $node->server .= '&tls='.$request->getParam('v2_tls');
             $node->server .= '&sni='.$request->getParam('v2_sni');
+            $node->server .= '&serviceName='.$request->getParam('v2_servicename');
+            $node->server .= '&mode='.$request->getParam('v2_mode'); // grpc 分流
             $node->server .= '&alpn='.$request->getParam('v2_alpn');
             $node->server .= '&ecpt='.$request->getParam('v2_ecpt');  //vless独有
             $node->server .= '&flow='.$request->getParam('v2_flow');  // xtls流控
@@ -269,6 +272,14 @@ class ApiController extends BaseController
             // 一个小原则： 一律用简写。 因为作为参数 方便 或则不用简写，就用正常的标注方案？ 可是我觉得，正常的标注方案， 用的也是简写？ 
             // 一个基本原则：  节点配置用 v2_开头， node信息相关，用 node_开头。 方便区分。
             // 信息的话，最好是很容易区分的，最好如此。  节点名字name 信息info 状态 status ip ipv6 等级level 分组group 倍率rate 排序sort 
+            // 判断是否克隆节点, 如果v2_id 和节点id不一致,就可以判断为 是 isclone节点.
+            if ( $request->getParam('v2_id') ) {
+                if ($request->getParam('v2_id') != $id) {
+                    $node->is_clone = $request->getParam('v2_id');
+                } else {
+                    $node->is_clone = 0;
+                }
+            }
         }
         $node->node_heartbeat = time();     //节点心跳包
         $node->save();

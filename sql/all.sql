@@ -810,3 +810,5 @@ ALTER TABLE `user` ADD `renew_time` INT(11) DEFAULT '0' COMMENT '下次流量周
 
 -- sdo2022-04-27
 ALTER TABLE `user` ADD `upswd` varchar(64) DEFAULT '0' COMMENT 'UserPassWD';
+-- 2022-09-05 add is_clone to ssnode
+ALTER TABLE `ss_node` ADD `is_clone` INT(11) DEFAULT '0' COMMENT '克隆节点_0或id';

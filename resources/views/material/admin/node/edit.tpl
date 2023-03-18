@@ -16,7 +16,11 @@
 					<form id="main_form">
 						<div class="card">
 							<div class="card-main">
+								
 								<div class="card-inner">
+									<div> <p> 
+									is_clone={$node->is_clone} 
+									</p> </div>
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="name">节点名称  #{$node->id}</label>
 										<input class="form-control maxwidth-edit" id="name" name="name" type="text" value="{$node->name}">

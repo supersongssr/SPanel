@@ -110,7 +110,7 @@ class NodeController extends AdminController
         $group = $request->getParam('group');
         $class = $request->getParam('class');
 
-        $nodes = Node::where('node_group','=',$group)->where('node_class','<=',$class)->orderBy("type","desc")->orderBy("traffic_rate", "desc")->get();
+        $nodes = Node::where('node_group','=',$group)->where('node_class','<=',$class)->orderBy("type","desc")->orderBy("custom_rss","asc")->orderBy("traffic_rate", "desc")->get();
         //$nodes = Node::orderBy("traffic_rate", "desc")->limit('30')->get();
 
         return $this->view()->assign("nodes", $nodes)->display('admin/node/nodectl.tpl');
@@ -170,6 +170,22 @@ class NodeController extends AdminController
         $node->bandwidthlimit_resetday=$request->getParam('bandwidthlimit_resetday');
         $node->save();
         Telegram::Send("新节点~~".$request->getParam('name').'VIP等级 '.$node->node_class.' #'.$id);
+        // 同时修改 is_clone 节点.
+        
+        // if ($node->is_clone != 0) {
+        //     $clone_nodes = Node::where('is_clone',$node->is_clone)->get();
+        //     $host_node = Node::find($node->is_clone);
+        //     $host_node->node_group = $node->node_group;
+        //     $host_node->save();
+        // }else{
+        //     $clone_nodes = Node::where('is_clone',$node->id)->get();
+        // }
+        // foreach ($clone_node as $clone_nodes) {
+        //     $clone_node->node_group = $node->node_group;
+        //     $clone_node->save();
+        // }
+        
+
         $rs['ret'] = 1;
         $rs['msg'] = "修改成功";
         return $response->getBody()->write(json_encode($rs));

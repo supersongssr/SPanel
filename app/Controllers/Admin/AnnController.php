@@ -16,7 +16,7 @@ class AnnController extends AdminController
     public function index($request, $response, $args)
     {
         $table_config['total_column'] = array("op" => "操作", "id" => "ID",
-                              "date" => "日期", "content" => "内容");
+                              "date" => "日期", "markdown" => "内容");
         $table_config['default_show_column'] = array("op", "id",
                                                     "date", "content");
         $table_config['ajax_url'] = 'announcement/ajax';
@@ -131,7 +131,7 @@ class AnnController extends AdminController
     public function ajax($request, $response, $args)
     {
         $datatables = new Datatables(new DatatablesHelper());
-        $datatables->query('Select id as op,id,date,content from announcement');
+        $datatables->query('Select id as op,id,date,markdown from announcement');
 
         $datatables->edit('op', function ($data) {
             return '<a class="btn btn-brand" href="/admin/announcement/'.$data['id'].'/edit">编辑</a>
@@ -140,6 +140,11 @@ class AnnController extends AdminController
 
         $datatables->edit('DT_RowId', function ($data) {
             return 'row_1_'.$data['id'];
+        });
+
+        $datatables->edit('markdown', function ($data) {
+            $cut = explode('#',$data['markdown']);
+            return $data['markdown'] = $cut[1];
         });
 
         $body = $response->getBody();

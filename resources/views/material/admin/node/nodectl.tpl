@@ -29,14 +29,18 @@
 													<th>编辑</th>
 													<th>名字</th>
 													<th>节点</th>
+													<th>表现</th>
 													<th>流量</th>
+													<th>备注</th>
 												</tr>
 												{foreach $nodes as $node}
 													<tr>
-														<td>{if $node->type ==1 }<a class="btn btn-brand" href="/admin/node/{$node->id}/edit">{$node->id}</a>{elseif $node->type == 0}<a class="btn btn-danger" href="/admin/node/{$node->id}/edit">{$node->id}</a>{/if}</td>
-														<td>{$node->name} - {$node->status}</td>
-														<td>{$node->node_class} 级 {$node->node_group} 组 {$node->traffic_rate} 倍率 {$node->node_online} 人</td>
+														<td>{if $node->type == 0 }<a class="btn btn-flat" href="/admin/node/{$node->id}/edit">{$node->id}</a>{elseif $node->type == 1 && $node->custom_rss == 1}<a class="btn btn-brand" href="/admin/node/{$node->id}/edit">{$node->id}</a>{else}<a class="btn btn-danger" href="/admin/node/{$node->id}/edit">{$node->id}</a>{/if}</td>
+														<td>{$node->name}</td>
+														<td>{$node->node_class} 级 {$node->traffic_rate} 倍率 {$node->node_online} 人</td>
 														<td>{$node->status}</td>
+														<td>{floor($node->node_bandwidth / 1024 / 1024 / 1024)}G</td>
+														<td>{$node->info}</td>
 													</tr>
 												{/foreach}
 											</table>

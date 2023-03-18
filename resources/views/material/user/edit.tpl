@@ -77,8 +77,10 @@
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">World 全球组 (大带宽)</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">Asia  亚洲组 (低延迟)</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">全球: G口_大带宽</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">全球: 美_欧_亚</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">亚太: 日_韩_新_印_港_美</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="group">中国: 港_日_新</a></li>
 												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">延迟受物理法则限制，距离越近延迟越低；欧美地区往往提供较大带宽。</a></li>
 												<!-- <li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">联通组</a></li>-->
 											</ul>

@@ -123,12 +123,12 @@
 							</li>
 							<li>
 								<a href="/user/announcement">
-									<i class="icon icon-lg">announcement</i>&nbsp;公告中心
+									<i class="icon icon-lg">announcement</i>&nbsp;帮助文档
 								</a>
 							</li>
 							<li>
 								<a href="/user/ticket">
-									<i class="icon icon-lg">question_answer</i>&nbsp;工单客服
+									<i class="icon icon-lg">question_answer</i>&nbsp;技术支持
 								</a>
 							</li>
 						</ul>
