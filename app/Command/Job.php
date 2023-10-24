@@ -126,6 +126,21 @@ class Job
         // }
     }
 
+
+    public static function DbClean()
+    {
+        // 把清空日志放到这里来
+        NodeInfoLog::where("log_time", "<", time()-86400*3)->delete();
+        NodeOnlineLog::where("log_time", "<", time()-86400*3)->delete();
+        TrafficLog::where("log_time", "<", time()-86400*3)->delete();
+        DetectLog::where("datetime", "<", time()-86400*3)->delete();
+        Speedtest::where("datetime", "<", time()-86400*3)->delete();
+        EmailVerify::where("expire_in", "<", time()-86400*3)->delete();
+         system("rm ".BASE_PATH."/storage/*.png", $ret);
+         echo 'db clean done :)';
+        Telegram::Send("姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~");
+    }
+
     public static function DailyJob()
     {
         /*  这个不需要了。后端 会自己处理这个事情的
@@ -319,6 +334,8 @@ class Job
             $node_info->save();
         }
 
+        Telegram::Send("节点梳理完毕");
+
         // 顺序是这样的：
         // 禁用超过 32天没用的用户 ->  矫正所有到期的用户的列加流量 -> 所有enable用户 trasnfer_day变成今日  renew += 0.1  transferlimit + 3G -> 禁用余额为负 -> 禁用每日流量用超的用户 -> 禁用总流量用超的用户
         //自动禁用超过32天没有使用的用户 ,选取id>10的用户，防止那个 sr但端口的用户被禁用了导致节点无法用
@@ -333,6 +350,7 @@ class Job
             $user->save();
         }
         //
+        Telegram::Send("未使用用户梳理完毕");
 
         // 余额少于 0 的用户 禁用掉
         $users_nomoney = User::where('money','<',0)->where('enable','=',1)->get();
@@ -344,6 +362,8 @@ class Job
             $user->score -= 1;   //用户积分 - 1
             $user->save();
         }
+
+        Telegram::Send("余额梳理完毕");
         // 这里也就意味着放弃了，余额小于 0 的用户，将没有那个流量重置周期。 永远没有的意思。 用超了就是用超了
         // renew废弃，转为 renew_time 参数
         //把所有的 renew 累加 周期到了的用户，重置流量限制
@@ -368,17 +388,11 @@ class Job
             $user->renew_time = time() + $user->class *10*24*3600;   //  
             $user->save();
         }
-        // 每日统计数据 重置 ： 流量， 订阅 
-        $users = User::where('enable','>',0)->where('class','>',0)->get();
-        foreach ($users as $user) {
-            // $user->renew += 0.1;
-            // $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
-            // $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
-            $user->last_day_t = $user->d;     // // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
-            $user->rss_count_lastday = $user->rss_count; // 记录昨日订阅数量统计
-            $user->rss_ips_lastday = $user->rss_ips_count; // 记录昨日ips来源统计
-            $user->save();
-        }
+
+        Telegram::Send("流量周期完毕");
+
+
+        
         // 2 3 组总流量使用超限的，分配到1组，然后加用户等级的流量！一次
         $users = User::where('node_group','>',1)->where('enable','>',0)->where('class','>',0)->whereColumn('d','>','transfer_limit')->get();
         foreach ($users as $user) {
@@ -390,6 +404,7 @@ class Job
             $user->transfer_limit += $user->class *1024*1024*1024;  //然后加上一些流量，相当于重置
             $user->save();
         }
+        Telegram::Send("总流量完毕");
         # 除了1组用户，其他组的用户每使用1天增加1积分 余额须 > 0
         $time_last24hours = time() - 24*3600;
         $users = User::where('node_group','>',1)->where('enable','>',0)->where('money','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
@@ -397,6 +412,7 @@ class Job
             $user->score += 1; // 积分加1
             $user->save();
         }
+        Telegram::Send("积分完毕");
         //将余额 小于 0 的用户，请空邀请人，收回邀请返利  选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 目前是设定的64
         $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',64)->get();  // 使用积分小于 32 且 money 小于 0 会被清理
         foreach ($users as $user) {
@@ -432,15 +448,8 @@ class Job
             $user->enable = 0;
             $user->save();
         }
-        // 把清空日志放到这里来
-        NodeInfoLog::where("log_time", "<", time()-86400*3)->delete();
-        NodeOnlineLog::where("log_time", "<", time()-86400*3)->delete();
-        TrafficLog::where("log_time", "<", time()-86400*3)->delete();
-        DetectLog::where("datetime", "<", time()-86400*3)->delete();
-        Speedtest::where("datetime", "<", time()-86400*3)->delete();
-        EmailVerify::where("expire_in", "<", time()-86400*3)->delete();
-         system("rm ".BASE_PATH."/storage/*.png", $ret);
-        Telegram::Send("姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~");
+        Telegram::Send("邀请返利完毕");
+        
         // 更新ip地址库
         #https://github.com/shuax/QQWryUpdate/blob/master/update.php
         // $copywrite = file_get_contents("http://update.cz88.net/ip/copywrite.rar");
@@ -475,6 +484,22 @@ class Job
         //     rename(BASE_PATH."/storage/qqwry.dat.bak", BASE_PATH."/storage/qqwry.dat");
         // }
         // Job::updatedownload();
+
+        // 每日统计数据 重置 ： 流量， 订阅  只记录过去48小时使用的用户?
+        $check_time = time() - 48 * 3600 ;
+        $users = User::where('enable','>',0)->where('class','>',0)->where('t', '>',  $check_time)->limit('20000')->get();
+        foreach ($users as $user) {
+            // $user->renew += 0.1;
+            // $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
+            // $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
+            $user->last_day_t = $user->d;     // // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
+            $user->rss_count_lastday = $user->rss_count; // 记录昨日订阅数量统计
+            $user->rss_ips_lastday = $user->rss_ips_count; // 记录昨日ips来源统计
+            $user->save();
+        }
+        Telegram::Send("订阅统计完毕");
+
+        Telegram::Send("姐姐姐姐，今日任务完成了呢,很开心");
 
     }
 //   定时任务开启的情况下，每天自动检测有没有最新版的后端，github源来自Miku

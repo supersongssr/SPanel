@@ -164,7 +164,7 @@
 													<a class="" data-toggle="tab" href="#all_linux"><i class="icon icon-lg">dvr</i>&nbsp;Linux</a>
 												</li>
 												<li>
-													<a class="" data-toggle="tab" href="#all_router"><i class="icon icon-lg">router</i>&nbsp;路由</a>
+													<a class="" data-toggle="tab" href="#all_router"><i class="icon icon-lg">router</i>&nbsp;软路由</a>
 												</li>
 												<li>
 													<a class="" data-toggle="tab" href="#all_game"><i class="icon icon-lg">videogame_asset</i>&nbsp;游戏</a>
@@ -183,7 +183,7 @@
 																<a class="" data-toggle="tab" href="#all_v2rayn"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayN ★★★★★</a>
 															</li>
 															<li>
-																<a class="" data-toggle="tab" href="#all_clash"><i class="icon icon-lg">flight_takeoff</i>&nbsp;Clash</a>
+																<a class="" data-toggle="tab" href="#all_clash"><i class="icon icon-lg">flight_takeoff</i>&nbsp;Clash 停用</a>
 															</li>
 														</ul>
 													</nav>
@@ -265,11 +265,11 @@
 																<a class="" data-toggle="tab" href="#all_v2raya"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA ★★★★</a>
 															</li>
 															<li >
-																<a class="" data-toggle="tab" href="#all_v2rayu"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayU ★</a>
+																<a class="" data-toggle="tab" href="#all_v2rayu"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayU 停用</a>
 															</li>
 														</ul>
 													</nav>
-													<div class="tab-pane fade" id="all_v2raya">
+													<div class="tab-pane fade active in" id="all_v2raya">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 推荐搭配 搭配 Homebrew 安装，请先安装 <a href="https://brew.sh/" >Homebrew</a>  
@@ -285,11 +285,11 @@
 															<br> 运行 <code>/usr/local/bin/v2raya.sh</code>
 															<br> 打开浏览器输入 127.0.0.1:2017 即为V2rayA的主界面
 														</p> -->
-														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="https://v2raya.org/docs/prologue/installation/macos/" class="btn-dl">查看官方教程</a> </p>
+														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="/user/announcement/21" class="btn-dl">查看教程</a> </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>V2rayA网页 -> <code>导入</code> 填写订阅地址 -> 确定 </p>
-														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>V2rayA网页 -> 节点 -> 选择 -> 网页左上角 -> 运行 </p>
+														<p><span class="icon icon-lg text-white">filter_3</span><b>使用软件：</b><a href="/user/announcement/28" class="btn-dl">查看教程</a> </p>
 													</div>
-													<div class="tab-pane fade active in" id="all_v2rayu">
+													<div class="tab-pane fade" id="all_v2rayu">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/V2rayU-64.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载 v3.3.0 Intel芯片版</a> <a href="/download/V2rayU-arm64.dmg" class="btn-dl"><i class="material-icons">save_alt</i> v3.3.0 M1/M2芯片版</a> <a href="https://github.com/yanue/V2rayU/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载v3.3.0</a>→在<code>安装界面</code>将<code>v2rayU</code>拖到<code>Applications</code>文件夹→打开启动台，找到v2rayU→点击启动；<small>*首次打开会有安全提示，点击 好*</small></p>
@@ -308,7 +308,7 @@
 																<a class="" data-toggle="tab" href="#all_v2raya_centos"><i class="icon icon-lg">flight_land</i>&nbsp;V2rayA - Centos/RedHat ★★★</a>
 															</li>
 															<li>
-																<a class="" data-toggle="tab" href="#all_qv2ray"><i class="icon icon-lg">flight_takeoff</i>&nbsp;Qv2ray ★★</a>
+																<a class="" data-toggle="tab" href="#all_qv2ray"><i class="icon icon-lg">flight_takeoff</i>&nbsp;Qv2ray 停用</a>
 															</li>
 														</ul>
 													</nav>
@@ -316,7 +316,7 @@
 													<div class="tab-pane fade active in" id="all_v2raya_debian">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
-														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
+														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
 															<br> 安装后可以关掉V2ray服务，V2rayA不依赖V2ray服务，只需要V2raycore <code>sudo systemctl disable v2ray --now</code>
 															<br> 安装 V2rayA : 添加公钥 <code>wget -qO - https://apt.v2raya.mzz.pub/key/public-key.asc | sudo apt-key add -</code>
 															<br> 添加 V2rayA软件源： <code>echo "deb https://apt.v2raya.mzz.pub/ v2raya main" | sudo tee /etc/apt/sources.list.d/v2raya.list</code>
@@ -325,14 +325,16 @@
 															<br> 启动 V2rayA: <code>sudo systemctl start v2raya.service</code>
 															<br> 设置开机自动运行： <code>sudo systemctl enable v2raya.service</code>
 															<br> 打开V2rayA: 打开浏览器 输入 <code>127.0.0.1:2017</code> 请注意，V2rayA的界面是网页控制，无图形主界面。
-														</p>
-														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>v2rayNG -> 左上角 -> <code>订阅设置</code> -> 右上角<code>+</code>添加订阅；v2rayNG -> 右上角 <code>+</code> ->更新订阅；</p>
-														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>选择节点 -> 右下角 <code>图标</code> -> 弹出窗口：允许VPN(仅第一次开启出现)</p>
+														</p> -->
+														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="/user/announcement/24" class="btn-dl">查看安装教程</a> </p>
+														<p><span class="icon icon-lg text-white">filter_2</span><b>使用软件：</b><a href="/user/announcement/28" class="btn-dl">查看使用教程</a> </p>
+														<p><span class="icon icon-lg text-white">filter_3</span><b>订阅节点：</b>v2rayA  -> 导入</p>
+														
 													</div>
-													<div class="tab-pane fade active in" id="all_v2raya_centos">
+													<div class="tab-pane fade  " id="all_v2raya_centos">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
-														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
+														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
 															<br> 安装后可以关掉V2ray服务，V2rayA不依赖V2ray服务，只需要V2raycore <code>sudo systemctl disable v2ray --now</code>
 															<br> 下载RPM包 <code>cd;wget -LOk https://github.com/v2rayA/v2rayA/releases/download/v1.5.6.2/installer_redhat_x64_1.5.6.2.rpm</code>
 															<br> 注意，RPM包以x64为例，如果是其他系统，请自行下载相应的rpm包：下载地址： https://github.com/v2rayA/v2rayA/releases
@@ -341,9 +343,10 @@
 															<br> 启动 V2rayA: <code>sudo systemctl start v2raya.service</code>
 															<br> 设置开机自动运行： <code>sudo systemctl enable v2raya.service</code>
 															<br> 打开V2rayA: 打开浏览器 输入 <code>127.0.0.1:2017</code> 请注意，V2rayA的界面是网页控制，无图形主界面。
-														</p>
-														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>v2rayNG -> 左上角 -> <code>订阅设置</code> -> 右上角<code>+</code>添加订阅；v2rayNG -> 右上角 <code>+</code> ->更新订阅；</p>
-														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>选择节点 -> 右下角 <code>图标</code> -> 弹出窗口：允许VPN(仅第一次开启出现)</p>
+														</p> -->
+														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="https://v2raya.org/docs/prologue/installation/redhat/" class="btn-dl">查看教程</a> </p>
+														<p><span class="icon icon-lg text-white">filter_2</span><b>使用软件：</b><a href="/user/announcement/28" class="btn-dl">查看使用教程</a> </p>
+														<p><span class="icon icon-lg text-white">filter_3</span><b>订阅节点：</b>v2rayA  -> 导入</p>
 													</div>
 													<div class="tab-pane fade  " id="all_qv2ray">
 														<p>友情提示：Qv2ray团队已停止开发该软件。最后更新时间为2021-08-17 </p>
@@ -357,12 +360,14 @@
 													<nav class="tab-nav margin-top-no">
 														<ul class="nav nav-list">
 															<li class="active">
-																<a class="" data-toggle="tab" href="#all_ssrplus"><i class="icon icon-lg">flight_land</i>&nbsp;SSRPlus ★★★★★</a>
+																<a class="" data-toggle="tab" href="#all_ssrplus"><i class="icon icon-lg">flight_land</i>&nbsp;v2rayA ★★★★★</a>
 															</li>
 														</ul>
 													</nav>
 													
-													<div class="tab-pane fade active in" id="all_v2rayng">
+													<div class="tab-pane fade active in" id="all_ssrplus">
+														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="/user/announcement/26" class="btn-dl">查看教程</a> </p>
+														<p><span class="icon icon-lg text-white">filter_2</span><b>使用软件：</b><a href="/user/announcement/28" class="btn-dl">查看教程</a> </p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b>  </p>

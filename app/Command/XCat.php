@@ -15,6 +15,15 @@ use App\Utils\Tools;
 use App\Services\Config;
 //song
 use App\Models\NodeInfoLog;
+use App\Models\NodeOnlineLog;
+use App\Models\Record;  // record表
+use App\Models\DetectLog;
+use App\Models\Speedtest;
+use App\Models\EmailVerify;
+use App\Utils\Telegram;
+
+
+
 use App\Models\TrafficLog;
 use App\Models\Cncdn;
 //song
@@ -89,6 +98,8 @@ class XCat
                 return Job::DailyJob();
             case("checkjob"):
                 return Job::CheckJob();
+            case("dbclean"):
+                return Job::DbClean();
             case("userga"):
                 return Job::UserGa();
             case("backup"):
@@ -214,6 +225,13 @@ class XCat
 
     public function test()
     {
+
+        // echo 'try clean node online log ';
+        // NodeOnlineLog::where("log_time", "<", time()-86400*3)->delete();
+        // echo 'try to clean user traffic log ';
+        // TrafficLog::where("log_time", "<", time()-86400*3)->delete();
+
+       
         // echo 'a1105_add_2022-09-23_2022-11-07  to group 1';
         // $nodes = Node::where('node_group',2)->where('info','a1105_add_2022-09-23_2022-11-07')->get();
         // foreach($nodes as $node){
@@ -229,6 +247,23 @@ class XCat
         //     $node->save();
         // }
 
+        // echo "初始: ".memory_get_usage()."B\n";
+        // $users = User::where('enable','>',0)->where('class','>',0)->get();
+        // echo 'start';
+        // echo "使用: ".memory_get_usage()."B\n";
+        // foreach ($users as $user) {
+        //     // $user->renew += 0.1;
+        //     // $user->transfer_limit += $user->class*1024*1024*1024; // 每天给用户赠送 5G流量 这个可以有
+        //     // $user->transfer_limit += 1*1024*1024*1024; // 现在是2G每天 这样可以限制用户的流量使用情况！
+        //     $user->last_day_t = $user->d;     // // 这里改变一下，只记录用户 d 的数据，不记录 u 数据。
+        //     $user->rss_count_lastday = $user->rss_count; // 记录昨日订阅数量统计
+        //     $user->rss_ips_lastday = $user->rss_ips_count; // 记录昨日ips来源统计
+        //     $user->save();
+        //     echo $user->id;
+        //     echo '-----';
+        // }
+        // echo "释放: ".memory_get_usage()."B\n";
+        // echo "峰值: ".memory_get_peak_usage()."B\n";
        
 
         // echo '统计1组的 2-7级用户人 放到3组去';
