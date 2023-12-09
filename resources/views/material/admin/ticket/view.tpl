@@ -74,8 +74,8 @@
 										<div class="col-md-10 col-md-push-1">
 											<button id="submit" type="submit" class="btn btn-block btn-brand waves-attach waves-light">添加</button>
 											<button id="show" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">添加并展示 + {$config["ticket_price"]}</button>
-                                            <button id="close" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">添加并关闭</button>
-                                            <button id="close_directly" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">直接关闭</button> 	<a class="btn btn-block btn-brand waves-attach waves-light" id="changetouser" href="javascript:void(0);" onClick="changetouser_modal_show()">切换为该用户</a>
+                                            <button id="skip" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">跳过skip</button>
+                                            <button id="close" type="submit" class="btn btn-block btn-brand-accent waves-attach waves-light">直接关闭</button> 	<a class="btn btn-block btn-brand waves-attach waves-light" id="changetouser" href="javascript:void(0);" onClick="changetouser_modal_show()">切换为该用户</a>
 										</div>
 									</div>
 								</div>
@@ -130,6 +130,11 @@
             submit();
         });
 
+        $$.getElementById('skip').addEventListener('click', () => {
+            status = 2;
+            submit();
+        });
+
         $$.getElementById('show').addEventListener('click', () => {
             status = 3;
             submit();
@@ -138,36 +143,6 @@
         $$.getElementById('close').addEventListener('click', () => {
             status = 0;
             submit();
-        });
-
-        $$.getElementById('close_directly').addEventListener('click', () => {
-            status = 0;
-            $("#result").modal();
-            $$.getElementById('msg').innerHTML = `正在提交。`;
-            $.ajax({
-                type: "PUT",
-                url: "/admin/ticket/{$id}",
-                dataType: "json",
-                data: {
-                    content: '这条工单已被关闭',
-                    status
-                },
-                success: data => {
-                    if (data.ret) {
-                        $("#result").modal();
-                        $$.getElementById('msg').innerHTML = data.msg;
-                        //window.setTimeout("location.href=top.document.referrer", {$config['jump_delay']});
-                        window.location.href = "/admin/ticket/{$nextid}/view";
-                    } else {
-                        $("#result").modal();
-                        $$.getElementById('msg').innerHTML = data.msg;
-                    }
-                },
-                error: jqXHR => {
-                    $("#result").modal();
-					$$.getElementById('msg').innerHTML = `发生错误：${ldelim}jqXHR.status{rdelim}`;
-                }
-            });
         });
 
 	function changetouser_id(){

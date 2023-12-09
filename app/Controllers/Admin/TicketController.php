@@ -35,45 +35,56 @@ class TicketController extends AdminController
         $content = $request->getParam('content');
         $status = $request->getParam('status');
 
+        // status: 0 close , 1 skip , 2 submit , 3 show 
+        // ticket->status: 0 close 1 at server  3 show 
 
-        if ($content==""||$status=="") {
+
+        if ($status=="") {
             $res['ret'] = 0;
             $res['msg'] = "请填全";
             return $this->echoJson($response, $res);
         }
 
-        // if (strpos($content, "admin")!=false||strpos($content, "user")!=false) {
-        //     $res['ret'] = 0;
-        //     $res['msg'] = "请求中有不正当的词语。";
-        //     return $this->echoJson($response, $res);
-        // }
         $ticket_main=Ticket::where("id", "=", $id)->where("rootid", "=", 0)->first();
-        //if($status==1&&$ticket_main->status!=$status)
         $user = User::where("id", "=", $ticket_main->userid)->first();
-        $subject = Config::get('appName')."-工单被回复";
-        $to = $user->email;
-        $text = "您好，有人回复了<a href=\"".Config::get('baseUrl')."/user/ticket/".$ticket_main->id."/view\">工单</a>，请您查看。" ;
-        try {
-            Mail::send($to, $subject, 'news/warn.tpl', [
-                "user" => $user,"text" => $text
-            ], [
-            ]);
-        } catch (\Exception $e) {
-            echo $e->getMessage();
-        }
-        $antiXss = new AntiXSS();
-        $ticket=new Ticket();
-        $ticket->title=$antiXss->xss_clean($ticket_main->title);
-        $ticket->content=$antiXss->xss_clean($content);
-        $ticket->rootid=$ticket_main->id;
-        $ticket->userid=Auth::getUser()->id;
-        $ticket->sort = 0;
-        $ticket->datetime=time();
 
-        $ticket_main->status=$status;
-        $ticket_main->sort= 0;
+        if ($status == 1 || $status == 3) { // 1: submit 3: show 
+            $antiXss = new AntiXSS();
+            $ticket=new Ticket();
+            $ticket->title=$antiXss->xss_clean($ticket_main->title);
+            $ticket->content=$antiXss->xss_clean($content);
+            $ticket->rootid=$ticket_main->id;
+            $ticket->userid=Auth::getUser()->id;
+            $ticket->sort = 0;
+            $ticket->datetime=time();
+            $ticket->save();
+        }
+        
+        if ($status == 3){  // 3: submit and show 
+            $subject = Config::get('appName')."-工单被回复";
+            $to = $user->email;
+            $text = "您好，有人回复了<a href=\"".Config::get('baseUrl')."/user/ticket/".$ticket_main->id."/view\">工单</a>，请您查看。" ;
+            try {
+                Mail::send($to, $subject, 'news/warn.tpl', [
+                    "user" => $user,"text" => $text
+                ], [
+                ]);
+            } catch (\Exception $e) {
+                echo $e->getMessage();
+            }
+        }
+
+        if ($status == 2){ // 2 : skip 1: submit 3: show 0 :close 
+            $ticket_main->status = 1;
+            $ticket_main->sort = 1;
+        }elseif($status == 0){
+            $ticket_main->status = 1;
+            $ticket_main->sort = 0;
+        }else{ //
+            $ticket_main->status = $status;
+            $ticket_main->sort = 0;
+        }
         $ticket_main->save();
-        $ticket->save();
 
         if ( $status == 3 ) {
             $user->money += Config::get('ticket_price');
