@@ -32,7 +32,7 @@
 										</tr>
 										<tr>
 											<td>24H</td>
-											<td>{$sts->getLiveUserAll()}:${$sts->getCostAll()}</td>
+											<td>{round($sts->getLiveUserAll()/$sts->getCostAll())}</td>
 											<td>{$sts->getLiveUserByVip(10)}</td>
 											<td>{$sts->getLiveUserByVip(9)}</td>
 											<td>{$sts->getLiveUserByVip(8)}</td>

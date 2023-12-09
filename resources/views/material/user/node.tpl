@@ -36,7 +36,7 @@
 							{if !$node@first}</div>{/if}
 							<div class="nodetitle">
 								<a class="waves-effect waves-button" data-toggle="collapse" href="#cardgroup{$class}" aria-expanded="true" aria-controls="cardgroup{$class}">
-								    <span>{if $class == 0}公告消息{else}VIP {$node['node_class']} 节点{/if}</span><i class="material-icons">expand_more</i>
+								<span>{if $class == 0}公告消息{else}VIP {$node['node_class']} 节点{/if}</span><i class="material-icons">expand_more</i>
 								</a>
 							</div>
 							<div class="card-row collapse in" id="cardgroup{$class}">
@@ -44,24 +44,27 @@
 						<div class="node-card node-flex" cardindex="{$node@index}">
                             <div class="nodemain">
                                 <div class="nodehead node-flex">
-                                    {if $config['enable_flag']=='true'}<div class="flag"><img src="/images/prefix/v2ray.png" alt=""></div>{/if}
-                                    <div class="nodename">{$node['name']}</div>
+                                    <!-- {if $config['enable_flag']=='true'}<div class="flag"><img src="/images/prefix/v2ray.png" alt=""></div>{/if} -->
+                                    <i class="material-icons node-icon">public </i>
+									<div class="nodename"> {$node['name']}_#{$node['id']}</div>
                                 </div>
                                 <div class="nodemiddle node-flex">
-                                    <div class="onlinemember node-flex"><i class="material-icons node-icon">flight_takeoff</i><span>{$node->node_online}</span></div>
-                                    <div class="nodetype">{$node['status']}</div>
+                                    
+                                    <div class="nodetype node-flex"><i class="material-icons node-icon">notifications_none</i>{$node['info']}</div>
                                 </div>
                                 <div class="nodeinfo node-flex">
+									
                                     <div class="nodetraffic node-flex"><i class="material-icons node-icon">equalizer</i><span>{floor($node['node_bandwidth']/1000000000)}/{floor($node['node_bandwidth_limit']/1000000000)}GB</span></div>
-                                    <div class="nodecheck node-flex">
+                                    <div class="onlinemember node-flex"><i class="material-icons node-icon">person_add</i><span>{$node->node_online}</span></div>
+									<div class="nodecheck node-flex">
                                         <i class="material-icons node-icon">network_check</i><span>x{$node['traffic_rate']}</span>
                                     </div>
-                                    <div class="nodeband node-flex"><i class="material-icons node-icon">flash_on</i><span>{$node->node_oncost}</span></div>
+                                    <!-- <div class="nodeband node-flex"><i class="material-icons node-icon">flight</i><span>{date('Y-m-d H:i:s', $node['node_heartbeat'])}</span></div> -->
                                 </div>
                             </div>
                             <div class="nodestatus">
-                                <div class="{if $node->node_group == 0 }nodeoffline{elseif $node->node_group == $user->node_group || $user->class < 1}nodeonline{else}nodeunset{/if}">
-                                    <i class="material-icons">{if $node->node_group == $user->node_group || $user->class < 1}cloud_queue{elseif $node->node_group == 0}wifi_off{else}flash_off{/if}</i>
+                                <div class="nodeonline">
+                                    <i class="material-icons">tune</i>
                                 </div>
 							</div>
 
@@ -168,15 +171,15 @@
 														<span class="node-icon"><i class="icon icon-lg">flight_takeoff</i></span>
 														  <strong><b><span class="node-alive">{$node->node_online}</span></b></strong> 
 											            | <span class="node-icon"><i class="icon icon-lg">cloud</i></span>
-														<span class="node-load">负载：{$node->node_oncost}</span> 
+														<span class="node-load">{$node->node_oncost}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">import_export</i></span>
 														<span class="node-mothed">{$node['bandwidth']}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">equalizer</i></span>
 															<span class="node-band">{floor($node['node_bandwidth']/1000000000)}/{floor($node['node_bandwidth_limit']/1000000000)}</span>
 														| <span class="node-icon"><i class="icon icon-lg">network_check</i></span>
-														<span class="node-tr">{$node['traffic_rate']} 倍率</span> 
+														<span class="node-tr">{$node['traffic_rate']}</span> 
 														| <span class="node-icon"><i class="icon icon-lg">notifications_none</i></span>
-														<span class="node-status">{$node['status']}</span>
+														<span class="node-status">{$node['info']}</span>
 													</div>
 												</div>
 											</div>

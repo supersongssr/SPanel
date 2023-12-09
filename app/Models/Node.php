@@ -124,11 +124,11 @@ class Node extends Model
         $sort = $this->attributes['sort'];
         $node_heartbeat = $this->attributes['node_heartbeat'];
         $log = NodeOnlineLog::where('node_id', $id)->where("log_time",">",time()-3600)->orderBy('id', 'desc')->first(); //获取在线人数时间改为1小时内
-        /** if(!($sort == 0 || $sort == 7 || $sort == 8 || $sort==10 || $sort==11) || $node_heartbeat == 0){
+        /* if(!($sort == 0 || $sort == 7 || $sort == 8 || $sort==10 || $sort==11) || $node_heartbeat == 0){
             $result = null;
         }else if ($log != null && $log->log_time + 3600 > time()) { //原来这里也要改一下啊
             $result = true;
-        }**/
+        } */
         if ($log) {
             $result = true;
         }elseif ($log->online_user == 0) {

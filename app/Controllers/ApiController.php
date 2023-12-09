@@ -166,6 +166,7 @@ class ApiController extends BaseController
         return $this->echoJson($response, $res);
     }
 
+    // ss node backend upload new traffic and ip message 
     public function ssn_sub($request, $response, $args)
     {
         $request->getParam('token') != Config::get('muKey') && exit;    // 判断 token是否正确
@@ -183,7 +184,7 @@ class ApiController extends BaseController
         $node = Node::find($id);
         $node->node_heartbeat = time();     //节点心跳包
         if ( strpos($node->node_ip , $ip) === false ) {        // 对ip进行检测。这个有点意思。 或许可以考虑直接从 请求ip中获取到 这个ip也是不错的方法。
-            $node->info .= '_' .$ip;
+            $node->ip .= '_' .$ip;
             $node->node_sort -= 100;
             // $node->save();
             // exit;
@@ -220,6 +221,7 @@ class ApiController extends BaseController
         $online_log->save();
     }
 
+    // ss node backend , update node config  v2ray / xray 
     public function ssn_v2($request, $response, $args)
     {   
         $request->getParam('token') != Config::get('muKey') && exit;    // 判断 token是否正确
