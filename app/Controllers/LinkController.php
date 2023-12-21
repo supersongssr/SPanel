@@ -172,7 +172,7 @@ class LinkController extends BaseController
         //sdo2022-04-27 节点后缀添加网站名字
         $info = '';
         if ($user->class < 5) {
-            $info .= '__'. Config::get('appName');
+            $info .= '_'. Config::get('appName');
         }
         foreach ($nodes as $node) {
             parse_str($node->server, $v2);  //获取参数
@@ -182,7 +182,7 @@ class LinkController extends BaseController
             if ($node->sort == 11 && ($mu == 'vmess' || $mu == 2 || $mu == 5) ) {
                 $v2_json = [
                     "v"    => "2",
-                    "ps"   => $node->name.'_'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G'.$info,
+                    "ps"   => $node->name.'_'.$node->traffic_rate.'#'.$node->id.$info,
                     "add"  => $v2['add'] ,
                     "port" => $v2['port'] ,
                     "id"   => ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) ,
@@ -203,12 +203,12 @@ class LinkController extends BaseController
             } elseif ( $node->sort == 13 && ($mu == 'vless' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.'_'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G'.$info) . "\n";
+                $url .= '#'.urlencode($node->name.'_'.$node->traffic_rate.'#'.$node->id .$info) . "\n";
                 $i++ ;
             } elseif ( $node->sort == 14 && ($mu == 'trojan' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.'_'.$node->traffic_rate.'#'.$node->id.'@'.floor( ( $node->node_bandwidth_limit - $node->node_bandwidth) /1024/1024/1024 ).'G'.$info) . "\n";
+                $url .= '#'.urlencode($node->name.'_'.$node->traffic_rate.'#'.$node->id .$info) . "\n";
                 $i++ ;
             }
             if ( $i > $user->sub_limit ) {

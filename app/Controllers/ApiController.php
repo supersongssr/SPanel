@@ -230,7 +230,7 @@ class ApiController extends BaseController
         $node = Node::find($id);
         // node_info 有数据才更改
         $request->getParam('node_name') && $node->name = $request->getParam('node_name');
-        $request->getParam('node_desc') && $node->info = $request->getParam('node_desc');
+        $request->getParam('node_info') && $node->info = $request->getParam('node_info');
         $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
         $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
         $request->getParam('node_cost') != '' && $node->node_cost = $request->getParam('node_cost');
@@ -243,6 +243,8 @@ class ApiController extends BaseController
         if ( $request->getParam('node_ip') || $request->getParam('node_ipv6') ) {
             $node->node_ip = 'ip=' . $request->getParam('node_ip');
             $node->node_ip .= '&ipv6=' . $request->getParam('node_ipv6');
+            $node->node_ip .= '&expire=' . $request->getParam('node_expire');
+            $node->node_ip .= '&from=' . $request->getParam('node_from');
         }
         
         // protocol v2ray config 要更改，全部更改。 node->server段
