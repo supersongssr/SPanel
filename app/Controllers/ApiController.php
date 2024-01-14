@@ -174,30 +174,28 @@ class ApiController extends BaseController
         $id < 10 && exit;
 
         $status = $request->getParam('status');
-        $daily = $request->getParam('daily');
         $health = $request->getParam('health');
-        $traffic = $request->getParam('traffic');
-        $online = $request->getParam('online');
         $ip = $_SERVER["REMOTE_ADDR"];   //记录请求ip
         
         //写入节点数据 状态 流量
         $node = Node::find($id);
         $node->node_heartbeat = time();     //节点心跳包
         if ( strpos($node->node_ip , $ip) === false ) {        // 对ip进行检测。这个有点意思。 或许可以考虑直接从 请求ip中获取到 这个ip也是不错的方法。
-            $node->ip .= '_' .$ip;
+            $node->ip .= '|' .$ip;
             $node->node_sort -= 100;
-            // $node->save();
-            // exit;
         }
         $traffic_mark = $node->node_bandwidth; //获取节点当前流量
+
         $status == 0 && $node->type = 0;
         $status == 1 && $node->type = 1;
-        $node->node_oncost = $daily;
         $health == 0 && $node->custom_rss = 0;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
         $health == 1 && $node->custom_rss = 1;            // 流量健康程度。如果流量不健康，就取消用户订阅，但是已订阅用户还能用。
-        $node->node_bandwidth = $traffic;
-        $node->node_online = $online;
-        
+        $node->node_bandwidth = $request->getParam('traffic');  //节点记录的流量,重启后归零
+        $node->traffic_used = $request->getParam('traffic_used');
+        $node->traffic_left = $request->getParam('traffic_left');
+        $node->traffic_used_daily = $request->getParam('traffic_used_daily');
+        $node->traffic_left_daily = $request->getParam('traffic_left_daily');  // 剩余日均流量 这个值是 gb值
+        $node->node_online = $request->getParam('online');
         $node->save();
 
         //写入流量使用记录
@@ -219,6 +217,8 @@ class ApiController extends BaseController
         $online_log->online_user = $online;
         $online_log->log_time = time();
         $online_log->save();
+
+        // 写入 node info 
     }
 
     // ss node backend , update node config  v2ray / xray 

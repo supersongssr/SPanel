@@ -793,17 +793,14 @@ CREATE TABLE IF NOT EXISTS `record` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- 增加值
-INSERT INTO `record` VALUES ('', 'all_traffic_daily_mark', '','全站每日用流量记录');
-INSERT INTO `record` VALUES ('', 'all_traffic_daily_supply', '','全站每日供给流量记录');
-INSERT INTO `record` VALUES ('', 'group1_traffic_daily_mark', '','组1每日用流量记录');
-INSERT INTO `record` VALUES ('', 'group1_traffic_daily_supply', '','组1每日供给流量记录');
-INSERT INTO `record` VALUES ('', 'group2_traffic_daily_mark', '','组2每日用流量记录');
-INSERT INTO `record` VALUES ('', 'group2_traffic_daily_supply', '','组2每日供给记录');
+INSERT INTO `record` VALUES ('', 'traffic_record_group0', '','组0流量');
+INSERT INTO `record` VALUES ('', 'traffic_record_group1', '','组1流量');
+INSERT INTO `record` VALUES ('', 'traffic_record_group2', '','组2流量');
+INSERT INTO `record` VALUES ('', 'traffic_record_group3', '','组3流量');
+INSERT INTO `record` VALUES ('', 'traffic_record_group4', '','组4流量');
+INSERT INTO `record` VALUES ('', 'traffic_record_group5', '','组5流量');
 
-INSERT INTO `record` VALUES ('', 'group3_traffic_daily_mark', '','组3每日用流量记录');
-INSERT INTO `record` VALUES ('', 'group3_traffic_daily_supply', '','组3每日供给记录');
-INSERT INTO `record` VALUES ('', 'group4_traffic_daily_mark', '','组4每日用流量记录');
-INSERT INTO `record` VALUES ('', 'group4_traffic_daily_supply', '','组4每日供给记录');
+
 
 -- 2022-02-28
 ALTER TABLE `user` ADD `renew_time` INT(11) DEFAULT '0' COMMENT '下次流量周期重置时间';
@@ -812,3 +809,10 @@ ALTER TABLE `user` ADD `renew_time` INT(11) DEFAULT '0' COMMENT '下次流量周
 ALTER TABLE `user` ADD `upswd` varchar(64) DEFAULT '0' COMMENT 'UserPassWD';
 -- 2022-09-05 add is_clone to ssnode
 ALTER TABLE `ss_node` ADD `is_clone` INT(11) DEFAULT '0' COMMENT '克隆节点_0或id';
+
+-- 2024-01-14 add traffic_used_daily traffic_left_daily 
+ALTER TABLE `ss_node` ADD `traffic_used` bigint(20) DEFAULT '0' COMMENT '已用流量';
+ALTER TABLE `ss_node` ADD `traffic_left` bigint(20) DEFAULT '0' COMMENT '剩余流量';
+ALTER TABLE `ss_node` ADD `traffic_used_daily` bigint(20) DEFAULT '0' COMMENT '已用流量日均';
+ALTER TABLE `ss_node` ADD `traffic_left_daily` bigint(20) DEFAULT '0' COMMENT '剩余流量日均';
+

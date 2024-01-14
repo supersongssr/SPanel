@@ -143,220 +143,81 @@ class Job
 
     public static function DailyJob()
     {
-        /*  这个不需要了。后端 会自己处理这个事情的
-        $nodes = Node::all();
-        foreach ($nodes as $node) {
-            if ($node->sort == 0 || $node->sort == 10 || $node->sort == 11) {
-                if (date("d")==$node->bandwidthlimit_resetday) {
-                    $node->node_bandwidth=0;
-                    $node->save();
-                }
-            }
-        }
-        */
-        /*
-        //auto reset
-        $boughts=Bought::all();
-        foreach ($boughts as $bought) {
-            $user=User::where("id", $bought->userid)->first();
-
-            if ($user == null) {
-                $bought->delete();
-                continue;
-            }
-
-            $shop=Shop::where("id", $bought->shopid)->first();
-
-            if ($shop == null) {
-                $bought->delete();
-                continue;
-            }
-
-            if($shop->reset() != 0 && $shop->reset_value() != 0 && $shop->reset_exp() != 0) {
-                if(time() - $shop->reset_exp() * 86400 < $bought->datetime) {
-                    if(intval((time() - $bought->datetime) / 86400) % $shop->reset() == 0 && intval((time() - $bought->datetime) / 86400) != 0) {
-                    echo("流量重置-".$user->id."\n");
-                    $user->transfer_enable = Tools::toGB($shop->reset_value());
-                    $user->u = 0;
-                    $user->d = 0;
-                    $user->last_day_t = 0;
-                    $user->save();
-
-                      $subject = Config::get('appName')."-您的流量被重置了";
-                      $to = $user->email;
-                      $text = "您好，根据您所订购的订单 ID:".$bought->id."，流量已经被重置为".$shop->reset_value().'GB' ;
-                      try {
-                          Mail::send($to, $subject, 'news/warn.tpl', [
-                              "user" => $user,"text" => $text
-                          ], [
-                          ]);
-                      } catch (\Exception $e) {
-                          echo $e->getMessage();
-                      }
-
-                    }
-                }
-            }
-            // song 按照用户等级，计算重置周期，1级时 1个月 100G   3级 3个月 300G  9级时 9个月 900G 以此类推
-            // 用户等级小于1 的， 余额小于0 的， 账户被暂停的 都不重置这个数据
-            if ($user->class < 1 || $user->enable < 1 || $user->money < 0) {
-                continue;
-            }
-
-            if(intval((time() - $bought->datetime) / 86400) % ($user->class * 30) == 0) {
-                //把 用户的所有流量 放到 u ， d的流量不变
-                // 然后每天检测一次 这个数据的变化，来判断一次是否封号
-                $user->u = $user->u + $user->d;
-                $user->d = 0;
-                $user->save();
-            }
-        }
-        */
-        // 获取节点每日流量值
-        //
-        function getRecord($name){
-            $vo = Record::where('name',$name)->first();
-            return $vo->value;
-        }
-        function setRecord($name,$value){
-            // // only 500 bytes allow 
-            // $value 
-            $vo = Record::where('name',$name)->update(['value'=>$value]);
-            return $vo;
-        }
-
-        // function getAllTraffic(){
-        //     // all traffic count today 
-        //     $all_traffic_today = Node::where('id','>',40)->where('node_group','>',0)->where('is_clone','=',0)->sum('node_bandwidth') ;
-        //     // all trafficc count last day 
-        //     $all_traffic_lastday = Node::where('id','>',40)->where('node_group','>',0)->where('is_clone','=',0)->sum('node_bandwidth_lastday');
-        //     //used traffic = today - lastday 
-        //     $used_traffic = $all_traffic_today - $all_traffic_lastday;
-        //     // traffic left >= 100G 
-        //     $supply_traffic_more100_count = Node::where('id','>',40)->where('type',1)->where('is_clone','=',0)->where('node_group','>',0)->where('node_oncost','>=',1073741824)->count();
-        //     $supply_traffic_more100 = $supply_traffic_more100_count * 100;
-        //     // traffic  left < 100G 
-        //     $supply_traffic_less100 = Node::where('id','>',40)->where('type',1)->where('is_clone','=',0)->where('node_group','>',0)->where('node_oncost','<',1073741824)->sum('node_oncost');
-        //     // supply traffic = more than 100 + less than 100
-        //     $supply_traffic = $supply_traffic_more100 + $supply_traffic_less100;
-        // }
-
-        // // get each group traffic 
-        // function getGroupTraffic(){
-
-        // }
-        // 下面代码写的好丑
-        // 总日耗流量
-        $all_traffic_today = Node::where('id','>',9)->where('node_group','>',0)->where('is_clone','=',0)->sum('node_bandwidth') - Node::where('id','>',9)->where('node_group','>',0)->where('is_clone','=',0)->sum('node_bandwidth_lastday');
-        $all_traffic_daily_mark = round($all_traffic_today / 1073741824 ) .'G_'. getRecord('all_traffic_daily_mark');
-        $all_traffic_daily_mark = substr($all_traffic_daily_mark,0,1000);
-        setRecord('all_traffic_daily_mark',$all_traffic_daily_mark);
-        // 总日供给流量
-        $all_traffic_daily_supply = Node::where('id','>',9)->where('type',1)->where('is_clone','=',0)->where('node_group','>',0)->sum('node_oncost');
-        $all_traffic_daily_supply = $all_traffic_daily_supply . 'G_'.getRecord('all_traffic_daily_supply');
-        $all_traffic_daily_supply = substr($all_traffic_daily_supply,0,1000);
-        setRecord('all_traffic_daily_supply',$all_traffic_daily_supply);
-        // 组1 日耗流量
-        $group1_traffic_today = Node::where('id','>',9)->where('node_group','=',1)->where('is_clone','=',0)->sum('node_bandwidth') - Node::where('id','>',9)->where('node_group','=',1)->where('is_clone','=',0)->sum('node_bandwidth_lastday');
-        $group1_traffic_daily_mark = round($group1_traffic_today / 1073741824 ) .'G_'. getRecord('group1_traffic_daily_mark');
-        $group1_traffic_daily_mark = substr($group1_traffic_daily_mark,0,1000);
-        setRecord('group1_traffic_daily_mark',$group1_traffic_daily_mark);
-        // 组1 日供给流量
-        $group1_traffic_daily_supply = Node::where('id','>',9)->where('type',1)->where('is_clone','=',0)->where('node_group','=',1)->sum('node_oncost');
-        $group1_traffic_daily_supply = $group1_traffic_daily_supply .'G_'.getRecord('group1_traffic_daily_supply');
-        $group1_traffic_daily_supply = substr($group1_traffic_daily_supply,0,1000);
-        setRecord('group1_traffic_daily_supply',$group1_traffic_daily_supply);
-        // 组2 日耗流量
-        $group2_traffic_today = Node::where('id','>',9)->where('node_group','=',2)->where('is_clone','=',0)->sum('node_bandwidth') - Node::where('id','>',9)->where('node_group','=',2)->where('is_clone','=',0)->sum('node_bandwidth_lastday');
-        $group2_traffic_daily_mark = round($group2_traffic_today / 1073741824 ) .'G_'. getRecord('group2_traffic_daily_mark');
-        $group2_traffic_daily_mark = substr($group2_traffic_daily_mark,0,1000);
-        setRecord('group2_traffic_daily_mark',$group2_traffic_daily_mark);
-        // 组2 日供给流量
-        $group2_traffic_daily_supply = Node::where('id','>',9)->where('type',1)->where('is_clone','=',0)->where('node_group','=',2)->sum('node_oncost');
-        $group2_traffic_daily_supply = $group2_traffic_daily_supply . 'G_'.getRecord('group2_traffic_daily_supply');
-        $group2_traffic_daily_supply = substr($group2_traffic_daily_supply,0,1000);
-        setRecord('group2_traffic_daily_supply',$group2_traffic_daily_supply);
-        // 组4 日耗流量
-        $group4_traffic_today = Node::where('id','>',9)->where('node_group','=',4)->where('is_clone','=',0)->sum('node_bandwidth') - Node::where('id','>',9)->where('node_group','=',4)->where('is_clone','=',0)->sum('node_bandwidth_lastday');
-        $group4_traffic_daily_mark = round($group4_traffic_today / 1073741824 ) .'G_'. getRecord('group4_traffic_daily_mark');
-        $group4_traffic_daily_mark = substr($group4_traffic_daily_mark,0,1000);
-        setRecord('group4_traffic_daily_mark',$group4_traffic_daily_mark);
-        // 组4 日供给流量
-        $group4_traffic_daily_supply = Node::where('id','>',9)->where('type',1)->where('is_clone','=',0)->where('node_group','=',4)->sum('node_oncost');
-        $group4_traffic_daily_supply = $group4_traffic_daily_supply . 'G_'.getRecord('group4_traffic_daily_supply');
-        $group4_traffic_daily_supply = substr($group4_traffic_daily_supply,0,1000);
-        setRecord('group4_traffic_daily_supply',$group4_traffic_daily_supply);
-        //
         //自动审计每天节点流量数据 song
-        $nodes_vnstat = Node::where('id','>',9)->where('node_group','>',0)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
-        foreach ($nodes_vnstat as $node) {
-            // if ($node->node_bandwidth == $node->node_bandwidth_lastday) {   // 判断这个节点是否今天没有走流量，是否是有问题的节点？
-            //     if ($node->type != 0) {
-            //         $node->type = 0;
-            //         $node->save();
-            //     }
-            //     continue;   
-            // }
-            // 这两个 if别反了。 需要把 流量记录下，方便统计每日消耗的真实流量
-            if ( $node->node_heartbeat < (time() - 7200) ) {        // 判断节点在过去两小时内 是否存在心跳
-                if ($node->type != 0 || $node->node_bandwidth_lastday != $node->node_bandwidth) {
-                    $node->type = 0;
-                    $node->node_bandwidth_lastday = $node->node_bandwidth; 
-                    $node->save();
+        $nodes = Node::where('id','>',60)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
+
+        // 分组流量统计
+        $_group=0;
+        while($_group < 6){  // 1 2 3 4 5 组
+            $_name = 'traffic_record_group'.$_group;
+            $_record = Record::where('name',$_name)->get();
+            $_used_count = 0;
+            $_left_count = 0;
+            foreach($nodes as $node){
+                if ($node->node_group != $_group){
+                    continue;
                 }
-                continue;
+                $_traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
+                $_traffic_today > 100*1024*1024*1024 && $_traffic_today = 100*1024*1024*1024; //上限100G
+                $_traffic_today < 1 && $_traffic_today = 0; //下限0G
+                $_used_count += $_traffic_today ;
+
+                $_traffic_left_daily = $node->traffic_left_daily ;
+                $_traffic_left_daily > 100*1024*1024*1024 && $_traffic_left_daily = 100*1024*1024*1024;  //剩余流量的统计上限100G
+                $_traffic_left_daily < 1 && $_traffic_left_daily = 0;  //下限0G
+                $_left_count += $_traffic_left_daily;
+            }
+                // 表现为: 使用流量+某个值 (等于提供的值) 如果出现了负数,说明 提供的流量不够了. 每个节点只统计 0-100G范围内.
+            $_new_value = round($_used_count/1024/1024/1024).'+'.round(($_left_count - $_used_count)/1024/1024/1024).'G,'.$_record->value; 
+            $_new_value = substr($_new_value, 0, 32);  // 限制字符串的长度 太长了不好显示
+            $_record->value = $_new_value.'|'.date("Y-m-d"); //添加一个日期,方便判断
+            $_record->save();
+            $_group++;
+        }
+
+        // 单独处理每个节点
+        foreach ($nodes as $node) {
+            if ( $node->node_heartbeat < (time() - 7200) && $node->type != 0 ) {        // 判断节点在过去两小时内 是否存在心跳
+                $node->type = 0;
             }
             //
             $traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
-            $today = date('d');
+
+            // status 
+            $node->status = round($traffic_today/1024/1024/1024) . ',' . $node->status ;    //将每天统计的节点的数据写入到节点的备注中去
+            $node->status = substr($node->status, 0,32);             //截取字符串长度为128位 防止超出
+            $node->status .= '|'.date("Y-m-d");
+
             // node_sort
-            if ( $node->custom_rss == 1 ) {  //添加正常订阅的节点才处理 
+            if ( $node->custom_rss == 1 ) {  //添加正常订阅的节点才处理   //思考一下这个怎么计算? 
                 $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 10;     // 节点维修值 如果节点为0 就需要大修了。
                 $traffic_today < 8*1024*1024*1024 && $node->node_sort -= 2;
                 $traffic_today < 16*1024*1024*1024 && $node->node_sort -= 1;
                 $traffic_today > 32*1024*1024*1024 && $node->node_sort += 2;
                 $traffic_today > 64*1024*1024*1024 && $node->node_sort += 4;
-            } 
-            // 自动降低流量少的节点的等级， 节点正常，health正常，但是流量少 流量 >1 <10G的情况下，会自动降低一个等级，让更多的用户可以查看到。
-            if ( $node->type == 1 && $node->custom_rss == 1 && $node->node_sort < 0 && $node->traffic_rate < 1 && $node->node_class > 1 && $traffic_today > 1*1024*1024*1024 && $traffic_today < 10*1024*1024*1024) {
-                $node->node_class -= 1;    //这些节点，需要管理员手动处理，所以，降低等级也没啥。
             }
-            // traffic rate     : 
-            // rate 节点倍率计算方案
-            if ( $node->bandwidthlimit_resetday > 0 ) {
-                $traffic_used_days = $today - $node->bandwidthlimit_resetday;
-                $traffic_used_days < 1 && $traffic_used_days += 30;
-                $traffic_used_ever_day = round( ( $node->node_bandwidth / 1024 / 1024 / 1024 / $traffic_used_days ), 2) ;   # 计算已用日均流量 G / D
-                $node->node_oncost > 0 && $node->traffic_rate = round(( $traffic_used_ever_day / $node->node_oncost ), 1);  # 倍率= 已用日均流量/剩余日均流量 G
-            }else{   #没有流量重置周期的情况下, 这个流量倍率=1
-                $node->traffic_rate = 1;
-            }
-            //  reset day , reset traffic rate to 1 
-            if ($today == $node->bandwidthlimit_resetday ) {        // 在时间为流量重置日那天的话，把所有正数的节点变为0
-                $node->node_sort > 0 && $node->node_sort = 0;
-                $node->traffic_rate = 1;
-            }
-            # 下面 计算 流量的 限额 和 金钱的 方案
-            if ( $node->node_cost > 0 && $node->node_bandwidth_limit > 0 ) {
-                $node->traffic_rate = round(($node->traffic_rate * 500 * $node->node_cost * 1024 * 1024 * 1024 / $node->node_bandwidth_limit ),1); # 倍率再算上 流量价格  流量/刀  目前能买到500G/刀 ,就是 1800G/4.5刀
-                echo $node->traffic_rate;
-            }
-            // traffic limit
-            $node->traffic_rate < 0.1 && $node->traffic_rate = 0.1; //下限
-            $node->traffic_rate > 9.9 && $node->traffic_rate = 9.9; //上限
             
-            $node->status = floor($traffic_today/1024/1024/1024) . ' ' . $node->status ;    //将每天统计的节点的数据写入到节点的备注中去
-            $node->status = substr($node->status, 0,32);             //截取字符串长度为128位 防止超出
+            // traffic_rate :
+            if ($node->traffic_left_daily > 0){  //剩余日均流量 > 0才行,因为要做被除数
+                $_rate = $node->traffic_used_daily / $node->traffic_left_daily;
+            } else{
+                $_rate = 1;
+            }
+            $_rate = round($_rate * $node->node_cost / 2); // 最低价格是2 美金,超过2美金的话,倍率会计算的高一些. 
+            $_rate < 1 && $_rate = 1;
+            $_rate > 5 && $_rate = 5;
+            $node->traffic_rate = $_rate;
+
             $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据
             $node->save();
             
-            //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
-            $node_info = new NodeInfoLog();
-            $node_info->node_id = $node->id;
-            $node_info->uptime = $traffic_today ;
-            $node_info->load = 0;
-            $node_info->log_time = time();
-            $node_info->save();
+            // //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
+            // $node_info = new NodeInfoLog();
+            // $node_info->node_id = $node->id;
+            // $node_info->uptime = $traffic_today ;
+            // $node_info->load = 0;
+            // $node_info->log_time = time();
+            // $node_info->save();
         }
 
         Telegram::Send("节点梳理完毕");

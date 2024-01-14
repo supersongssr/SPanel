@@ -197,7 +197,7 @@ class Analytics
 
     public function getCostByVipAndGroup($vip,$group)
     {
-        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->where('is_clone','=',0)->sum('node_cost') * 7;
+        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->where('is_clone','=',0)->sum('node_cost');
     }
 
 

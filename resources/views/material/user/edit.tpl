@@ -77,12 +77,8 @@
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">欧美更多 带宽大</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">欧美多 带宽大</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">亚太多 延迟低</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="group">亚太更多 延迟低</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">距离越远延迟越高;欧美地区带宽大</a></li>
-												<!-- <li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">联通组</a></li>-->
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">欧美多 带宽大</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">亚太多 延迟低</a></li>
 											</ul>
 										</div>
 							        </div>

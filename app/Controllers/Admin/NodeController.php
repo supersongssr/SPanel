@@ -110,7 +110,7 @@ class NodeController extends AdminController
         $group = $request->getParam('group');
         $class = $request->getParam('class');
 
-        $nodes = Node::where('node_group','=',$group)->where('node_class','<=',$class)->orderBy("type","desc")->orderBy("custom_rss","asc")->orderBy("traffic_rate", "desc")->get();
+        $nodes = Node::where('node_group','=',$group)->where("is_clone",0)->where('node_class','<=',$class)->orderBy("type","desc")->orderBy("custom_rss","asc")->orderBy("traffic_rate", "desc")->get();
         //$nodes = Node::orderBy("traffic_rate", "desc")->limit('30')->get();
 
         return $this->view()->assign("nodes", $nodes)->display('admin/node/nodectl.tpl');

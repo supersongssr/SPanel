@@ -175,50 +175,31 @@
 
 									<table class="table">
 										<tr>
-											<td>备注</td>
+											<td>名</td>
 											<!-- <td>参数</td> -->
 											<td>值</td>
 										</tr>
 										<tr>
-											<td>全日消耗</td>
-											<!-- <td>all_traffic_daily_mark</td> -->
-											<td>{$sts->getRecord('all_traffic_daily_mark')}</td>
+											<td>组1供给</td>
+											<td>{$sts->getRecord('traffic_record_group1')}</td>
 										</tr>
 										<tr>
-											<td>全日供给</td>
-											<!-- <td>all_traffic_daily_supply</td> -->
-											<td>{$sts->getRecord('all_traffic_daily_supply')}</td>
+											<td>组2供给</td>
+											<td>{$sts->getRecord('traffic_record_group2')}</td>
 										</tr>
 										<tr>
-											<td>组1日消耗</td>
-											<!-- <td>group1_traffic_daily_mark</td> -->
-											<td>{$sts->getRecord('group1_traffic_daily_mark')}</td>
+											<td>组3供给</td>
+											<td>{$sts->getRecord('traffic_record_group3')}</td>
 										</tr>
 										<tr>
-											<td>组1日供给</td>
-											<!-- <td>group1_traffic_daily_supply</td> -->
-											<td>{$sts->getRecord('group1_traffic_daily_supply')}</td>
+											<td>组4供给</td>
+											<td>{$sts->getRecord('traffic_record_group4')}</td>
 										</tr>
 										<tr>
-											<td>组2日消耗</td>
-											<!-- <td>group2_traffic_daily_mark</td> -->
-											<td>{$sts->getRecord('group2_traffic_daily_mark')}</td>
+											<td>组5供给</td>
+											<td>{$sts->getRecord('traffic_record_group5')}</td>
 										</tr>
-										<tr>
-											<td>组2日供给</td>
-											<!-- <td>group2_traffic_daily_supply</td> -->
-											<td>{$sts->getRecord('group2_traffic_daily_supply')}</td>
-										</tr>
-										<tr>
-											<td>组4日消耗</td>
-											<!-- <td>group4_traffic_daily_mark</td> -->
-											<td>{$sts->getRecord('group4_traffic_daily_mark')}</td>
-										</tr>
-										<tr>
-											<td>组4日供给</td>
-											<!-- <td>group4_traffic_daily_supply</td> -->
-											<td>{$sts->getRecord('group4_traffic_daily_supply')}</td>
-										</tr>
+										
 									</table>
 
 

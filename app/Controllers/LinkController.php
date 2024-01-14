@@ -122,6 +122,7 @@ class LinkController extends BaseController
         $url = '';
         $url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
         $url .= self::getAllUrl($user , $mu);        // 节点
+        $url .= self::getFreeUrl(false, $mu);  // add free url
         return base64_encode($url);
     }
 
@@ -217,5 +218,24 @@ class LinkController extends BaseController
             
         }
         return $url;
+    }
+
+    // add free ss vless vmess trojan nodes 
+    public static function getFreeUrl($_, $mu = 2) {
+        $_url = '';
+        if ($mu == 'ss' || $mu == 2 || $mu == 5 ){
+            $_url .= "";
+        }
+        if ($mu == 'vmess' || $mu == 2 || $mu == 5){
+            $_url .= "";
+        }
+        if ($mu == 'vless' || $mu == 2 || $mu == 5 ){
+            $_url .= "\nvless://4189a6da-a83f-4578-b429-60a841eedaf3@hkvlessh2tls.okggback.top:443?encryption=none&security=tls&type=h2&host=hkvlessh2tls.okggback.top&path=%2F4189a6da-a83f-4578-b429-60a841eedaf3#HK-VLESS-H2-okgg.top" ; // expire 2024-01-24
+            $_url .= "\nvless://5c14b022-a625-4936-a936-24545ad28677@91.149.237.100:10101?encryption=none&security=reality&flow=xtls-rprx-vision&type=tcp&sni=www.cloudflare.com&pbk=FMxV1VnJAybbQbrdZKqh6wD2m2cY6x72PLh6tt2txnI&fp=ios#HK-VLESS-REALITY-okgg.top"; //expire 2024-01-24
+        }
+        if ($mu == 'trojan' || $mu == 2 || $mu == 5 ){
+            $_url .= "\ntrojan://c4035069-8845-4e78-b8f8-cc434d05f941@hktrwstls.okggback.top:14538?encryption=none&security=tls&type=ws&host=hktrwstls.okggback.top&path=%2Fc4035069-8845-4e78-b8f8-cc434d05f941#HK-Trojan-WS-okgg.top\n" ; //expire 2024-01-24 
+        }
+        return $_url;
     }
 }
