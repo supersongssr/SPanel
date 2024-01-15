@@ -24,14 +24,13 @@
 									</div>
 									<div class="card-table">
 										<div class="table-responsive table-user">
-											<table class="table table-fixed">
+											<table class="table ">
 												<tr>
 													<th>编辑</th>
 													<th>名字</th>
 													<th>节点</th>
 													
 													<th>流量</th>
-													<th>备注</th>
 													<th>表现</th>
 												</tr>
 												{foreach $nodes as $node}
@@ -41,7 +40,6 @@
 														<td>{$node->node_class} 级 {$node->traffic_rate} 倍率 {$node->node_online} 人</td>
 														
 														<td>{floor($node->node_bandwidth / 1024 / 1024 / 1024)}G</td>
-														<td>{$node->info}</td>
 														<td>{$node->status}</td>
 													</tr>
 												{/foreach}
