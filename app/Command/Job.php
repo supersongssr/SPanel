@@ -150,11 +150,14 @@ class Job
         $_group=0;
         while($_group < 6){  // 1 2 3 4 5 组
             $_name = 'traffic_record_group'.$_group;
-            $_record = Record::where('name',$_name)->get();
+            $_record = Record::where('name',$_name)->first();
             $_used_count = 0;
             $_left_count = 0;
             foreach($nodes as $node){
                 if ($node->node_group != $_group){
+                    continue;
+                }
+                if ($node->is_clone != 0){
                     continue;
                 }
                 $_traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
