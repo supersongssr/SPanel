@@ -203,12 +203,12 @@ class LinkController extends BaseController
                 $i++ ;
             } elseif ( $node->sort == 13 && ($mu == 'vless' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
-                $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
+                $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&fp=ios&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
                 $url .= '#'.urlencode($node->name.'@'.$node->id .$info) . "\n";
                 $i++ ;
             } elseif ( $node->sort == 14 && ($mu == 'trojan' || $mu == 2 || $mu == 5 ) ) {
                 $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
-                $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
+                $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&fp=ios&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
                 $url .= '#'.urlencode($node->name.'@'.$node->id .$info) . "\n";
                 $i++ ;
             }

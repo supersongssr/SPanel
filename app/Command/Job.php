@@ -172,8 +172,8 @@ class Job
             }
                 // 表现为: 使用流量+某个值 (等于提供的值) 如果出现了负数,说明 提供的流量不够了. 每个节点只统计 0-100G范围内.
             $_new_value = round($_used_count/1024/1024/1024).'+'.round(($_left_count - $_used_count)/1024/1024/1024).'G,'.$_record->value; 
-            $_new_value = substr($_new_value, 0, 32);  // 限制字符串的长度 太长了不好显示
-            $_record->value = $_new_value.'|'.date("Y-m-d"); //添加一个日期,方便判断
+            $_new_value = substr($_new_value, 0, 63);  // 限制字符串的长度 太长了不好显示
+            $_record->value = $_new_value.'|'.date("m-d"); //添加一个日期,方便判断
             $_record->save();
             $_group++;
         }
