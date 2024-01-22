@@ -161,13 +161,13 @@ class Job
                     continue;
                 }
                 $_traffic_today = $node->node_bandwidth - $node->node_bandwidth_lastday;
-                $_traffic_today > 100*1024*1024*1024 && $_traffic_today = 100*1024*1024*1024; //上限100G
+                $_traffic_today > 999*1024*1024*1024 && $_traffic_today = 999*1024*1024*1024; //使用 0-999
                 $_traffic_today < 1 && $_traffic_today = 0; //下限0G
                 $_used_count += $_traffic_today ;
 
                 $_traffic_left_daily = $node->traffic_left_daily ;
                 $_traffic_left_daily > 100*1024*1024*1024 && $_traffic_left_daily = 100*1024*1024*1024;  //剩余流量的统计上限100G
-                $_traffic_left_daily < 1 && $_traffic_left_daily = 0;  //下限0G
+                $_traffic_left_daily < 1 && $_traffic_left_daily = 0;  // 0-100G
                 $_left_count += $_traffic_left_daily;
             }
                 // 表现为: 使用流量+某个值 (等于提供的值) 如果出现了负数,说明 提供的流量不够了. 每个节点只统计 0-100G范围内.
