@@ -90,6 +90,11 @@ class Analytics
         return User::where("enable","=",1)->where('class','=',$vip)->where("node_group","=",$group)->where('t','>',(time()-24*3600))->count();
     }
 
+    public function getLiveUserByVipAndGroupIn1Hour($vip,$group)
+    {
+        return User::where("enable","=",1)->where('class','=',$vip)->where("node_group","=",$group)->where('t','>',(time()-24*3600))->count();
+    }
+
 
     public function getCheckinUser()
     {
@@ -184,6 +189,13 @@ class Analytics
         return Node::where("type","=",1)->where('is_clone',0)->sum('node_cost');
     }
 
+    public function getTrafficLeftDailyGb($g)
+    {
+        $count = Node::where("type","=",1)->where('is_clone',0)->where('node_group',$g)->where('traffic_left_daily','<',100*1024*1024*1024)->sum('traffic_left_daily');
+        $countMoreThan100G = Node::where("type","=",1)->where('is_clone',0)->where('node_group',$g)->where('traffic_left_daily','>=',100*1024*1024*1024)->count();
+        return round($count/1024/1024/1024 + $countMoreThan100G * 100);
+    }
+
 
     public function getVIPNode($vip)
     {
@@ -197,7 +209,7 @@ class Analytics
 
     public function getCostByVipAndGroup($vip,$group)
     {
-        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->where('is_clone','=',0)->sum('node_cost');
+        return Node::where("type","=",1)->where('node_class','=',$vip)->where('node_group','=',$group)->sum('node_cost');
     }
 
 

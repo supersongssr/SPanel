@@ -227,9 +227,43 @@ class XCat
     {
 
 
-        // echo '迁移分组 5 to 3';
-        // $users = User::where("node_group",5)->get();
-        // // $nodes = Node::where("node_group",5)->get();
+        // echo '迁移分组 2 to 4';
+        // $users = User::where("node_group",2)->get();
+        // $nodes = Node::where("node_group",2)->get();
+        // echo '开始迁移用户';
+        // foreach ($users as $user) {
+        //     # code...
+        //     $user->node_group = 4;
+        //     echo $user->id . '---';
+        //     $user->save();
+        // }
+        // echo 'start move nodes ';
+        // foreach ($nodes as $node) {
+        //     $node->node_group = 4;
+        //     echo $node->id .'===';
+        //     $node->save();
+        // }
+
+        // echo '迁移分组 3 to 2';
+        // $users = User::where("node_group",3)->get();
+        // $nodes = Node::where("node_group",3)->get();
+        // echo '开始迁移用户';
+        // foreach ($users as $user) {
+        //     # code...
+        //     $user->node_group = 2;
+        //     echo $user->id . '---';
+        //     $user->save();
+        // }
+        // echo 'start move nodes ';
+        // foreach ($nodes as $node) {
+        //     $node->node_group = 2;
+        //     echo $node->id .'===';
+        //     $node->save();
+        // }
+
+        // echo '迁移分组 4 to 3';
+        // $users = User::where("node_group",4)->get();
+        // $nodes = Node::where("node_group",4)->get();
         // echo '开始迁移用户';
         // foreach ($users as $user) {
         //     # code...
@@ -243,6 +277,8 @@ class XCat
         //     echo $node->id .'===';
         //     $node->save();
         // }
+
+
 
 
         // echo 'try clean node online log ';

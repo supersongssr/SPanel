@@ -144,7 +144,7 @@ class Job
     public static function DailyJob()
     {
         //自动审计每天节点流量数据 song
-        $nodes = Node::where('id','>',60)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
+        $nodes = Node::where('id','>',9)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
 
         // 分组流量统计
         $_group=0;
@@ -247,7 +247,7 @@ class Job
             $user->enable = 0;
             $user->warming = date("Ymd H:i:s").'账号余额异常，系统启用账号保护。请检查您的余额';
             $user->ban_times += $user->class;
-            $user->ban_times > 16 && $user->pass = time();
+            // $user->ban_times > 16 && $user->pass = time();
             $user->score -= 1;   //用户积分 - 1
             $user->save();
         }
@@ -287,7 +287,7 @@ class Job
         foreach ($users as $user) {
             $user->score -= 1;
             $user->ban_times += 1; //用户封禁次数+用户等级 每次+1次违规吧
-            $user->ban_times > 16 && $user->pass = time() && $user->enable = 0;
+            $user->ban_times > 16 &&  $user->enable = 0;
             $user->warming = date("Ymd H:i:s") . '近期下行流量较多，系统已为您分配大带宽节点，下载请使用低倍率节点，切换分组请在个人设定页面';
             $user->node_group > 1 && $user->node_group -= 1;  // 分配到下一组
             $user->transfer_limit += $user->class *1024*1024*1024;  //然后加上一些流量，相当于重置
@@ -393,9 +393,9 @@ class Job
     }
 //   定时任务开启的情况下，每天自动检测有没有最新版的后端，github源来自Miku
      public static function updatedownload()
-      {
+    {
         // system('cd '.BASE_PATH."/public/ssr-download/ && git pull https://github.com/xcxnig/ssr-download.git");
-     }
+    }
 
 
     public static function CheckJob()
