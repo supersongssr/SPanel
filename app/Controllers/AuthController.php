@@ -191,12 +191,12 @@ class AuthController extends BaseController
 
 
         // Handle Login
-        //$user = User::where('id', '=', $ret)->first();
+        $user = User::where('id', '=', $ret)->first();
         // 这里只允许状态为 enable > 0 的用户登录 禁用被禁用的用户登录，防止密码被篡改的用户去改密码
-        $user = User::where('id', '=', $ret)->where('enable','>',0)->first();
+        // $user = User::where('id', '=', $ret)->where('enable','>',0)->first();
         if (empty($user->id)) {
             $res['ret'] = 0;
-            $res['msg'] = "账号被保护，请使用密码登录激活账号。";
+            $res['msg'] = "账号被保护，请联系管理员。";
             return $response->getBody()->write(json_encode($res));
         }
         // @todo

@@ -193,11 +193,10 @@ class Job
 
             // node_sort
             if ( $node->custom_rss == 1 ) {  //添加正常订阅的节点才处理   //思考一下这个怎么计算? 
-                $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 10;     // 节点维修值 如果节点为0 就需要大修了。
+                $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 3;     // 节点维修值 如果节点为0 就需要大修了。
                 $traffic_today < 8*1024*1024*1024 && $node->node_sort -= 2;
                 $traffic_today < 16*1024*1024*1024 && $node->node_sort -= 1;
-                $traffic_today > 32*1024*1024*1024 && $node->node_sort += 2;
-                $traffic_today > 64*1024*1024*1024 && $node->node_sort += 4;
+                $traffic_today > 32*1024*1024*1024 && $node->node_sort = 0;
             }
             
             // traffic_rate :

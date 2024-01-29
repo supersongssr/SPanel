@@ -240,6 +240,9 @@ class ApiController extends BaseController
         // $request->getParam('sort') == 'v2' && $node->sort = 11;
         // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
         // node->node_ip  和v2ray无关，但是和服务器相关的信息
+        if ($request->getParam('node_unlock') != '' ){  // 获取 node_unlock信息
+            $node->node_unlock = str_replace(',','&',$request->getParam('node_unlock'));
+        }
         if ( $request->getParam('node_ip') || $request->getParam('node_ipv6') ) {
             $node->node_ip = 'ip=' . $request->getParam('node_ip');
             $node->node_ip .= '&ipv6=' . $request->getParam('node_ipv6');
@@ -271,6 +274,7 @@ class ApiController extends BaseController
             $node->server .= '&flow='.$request->getParam('v2_flow');  // xtls流控
             $node->server .= '&uuid='.$request->getParam('v2_uuid');  //独立节点标志
             $node->server .= '&cdn='.$request->getParam('v2_cdn');  //是否支持CDN？ 这个 最好是用 CDN标志
+            $node->server .= '&fp='.$request->getParam('v2_fp'); // fingerPrint
             //这里的许多参数，都值得商榷。目前来看，很明显这些参数，不适合用在
             //最好是保持参数的一致性，以及参数的可阅读性。 1 那个 v2的参数 为标准，其他的为新加的。
             // 一个小原则： 一律用简写。 因为作为参数 方便 或则不用简写，就用正常的标注方案？ 可是我觉得，正常的标注方案， 用的也是简写？ 
