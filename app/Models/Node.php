@@ -20,9 +20,9 @@ class Node extends Model
         'sort' => 'int',
     ];
 
-    public function getV2($server)
+    public function getV2($str)
     {
-        parse_str( $this->attributes['server'], $v2);  //获取参数
+        parse_str( $str, $v2);  //获取参数
         return $v2;
     }
 

@@ -117,8 +117,8 @@
 								</a>
 							</li> -->
 							<li>
-								<a href="/user/cfcdnlooking">
-									<i class="icon icon-lg">visibility</i>&nbsp;网速优化
+								<a href="/user/nodeunlock">
+									<i class="icon icon-lg">important_devices</i>&nbsp;媒体解锁
 								</a>
 							</li>
 							<li>
@@ -156,6 +156,11 @@
 							<li>
 								<a href="/user/lookingglass">
 									<i class="icon icon-lg">visibility</i>&nbsp;节点网速
+								</a>
+							</li>
+							<li>
+								<a href="/user/cfcdnlooking">
+									<i class="icon icon-lg">visibility</i>&nbsp;网速优化
 								</a>
 							</li>
 							<li>

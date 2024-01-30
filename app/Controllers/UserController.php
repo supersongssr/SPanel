@@ -483,14 +483,20 @@ class UserController extends BaseController
     public function node($request, $response, $args)
     {
         $user = Auth::getUser();
-        if ($user->class < 5) {
-            $nodes = Node::where('id','>',3)->where('type', 1)->orderBy('node_class')->get();
-        }else{
-            $nodes = Node::where('id','>',3)->where('type', 1)->where('node_group',$user->node_group)->orderBy('node_class')->get();
-        }
+        // if ($user->class < 5) {
+        //     $nodes = Node::where('id','>',9)->where('type', 1)->orderBy('node_class')->get();
+        // }else{
+            $nodes = Node::where('id','>',9)->where('type', 1)->where('node_group',$user->node_group)->orderBy('node_class')->get();
+        // }
         return $this->view()->assign('nodes', $nodes)->assign('tools', new Tools())->assign('user', $user)->registerClass("URL", "App\Utils\URL")->display('user/node.tpl');
     }
 
+    public function nodeUnlock($request, $response, $args)
+    {
+        $user = Auth::getUser();
+        $nodes = Node::where('id','>',9)->where('type', 1)->where('node_group',$user->node_group)->get();
+        return $this->view()->assign('nodes', $nodes)->assign('tools', new Tools())->assign('user', $user)->registerClass("URL", "App\Utils\URL")->display('user/nodeunlock.tpl');
+    }
 
     public function node_old($request, $response, $args)
     {
@@ -627,7 +633,6 @@ class UserController extends BaseController
         if ($node == null) {
             return null;
         }
-
 
         switch ($node->sort) {
             case 0:
