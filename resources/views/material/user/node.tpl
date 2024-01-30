@@ -46,7 +46,7 @@
                                 <div class="nodehead node-flex">
                                     <!-- {if $config['enable_flag']=='true'}<div class="flag"><img src="/images/prefix/v2ray.png" alt=""></div>{/if} -->
                                     <i class="material-icons node-icon">public </i>
-									<div class="nodename"> {$node['name']}_#{$node['id']}</div>
+									<div class="nodename"> {$node['name']}_@{$node['id']}</div>
                                 </div>
                                 <div class="nodemiddle node-flex">
                                     
@@ -54,7 +54,7 @@
                                 </div>
                                 <div class="nodeinfo node-flex">
 									
-                                    <div class="nodetraffic node-flex"><i class="material-icons node-icon">equalizer</i><span>{floor($node['node_bandwidth']/1000000000)}/{floor($node['node_bandwidth_limit']/1000000000)}GB</span></div>
+                                    <div class="nodetraffic node-flex"><i class="material-icons node-icon">equalizer</i><span>{floor($node['node_bandwidth']/1000000000)}GB</span></div>
                                     <div class="onlinemember node-flex"><i class="material-icons node-icon">person_add</i><span>{$node->node_online}</span></div>
 									<div class="nodecheck node-flex">
                                         <i class="material-icons node-icon">network_check</i><span>x{$node['traffic_rate']}</span>

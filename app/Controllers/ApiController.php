@@ -241,7 +241,10 @@ class ApiController extends BaseController
         // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
         // node->node_ip  和v2ray无关，但是和服务器相关的信息
         if ($request->getParam('node_unlock') != '' ){  // 获取 node_unlock信息
-            $node->node_unlock = str_replace(',','&',$request->getParam('node_unlock'));
+            
+            $_a = str_replace(',','&',$request->getParam('node_unlock'));
+            $_a = str_replace(':','=',$_a);
+            $node->node_unlock = $_a;
         }
         if ( $request->getParam('node_ip') || $request->getParam('node_ipv6') ) {
             $node->node_ip = 'ip=' . $request->getParam('node_ip');

@@ -197,6 +197,7 @@ class Job
                 $traffic_today < 8*1024*1024*1024 && $node->node_sort -= 2;
                 $traffic_today < 16*1024*1024*1024 && $node->node_sort -= 1;
                 $traffic_today > 32*1024*1024*1024 && $node->node_sort = 0;
+                $node->traffic_used_daily > $node->traffic_left_daily && $node->node_sort = 0; // 已用流量日均 > 剩余流量 日均 , 说明用的多
             }
             
             // traffic_rate :
