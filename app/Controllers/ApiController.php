@@ -231,6 +231,7 @@ class ApiController extends BaseController
         // node_info 有数据才更改
         $request->getParam('node_name') && $node->name = $request->getParam('node_name');
         $request->getParam('node_info') && $node->info = $request->getParam('node_info');
+        $request->getParam('node_unlock_info') && $node->info .= $request->getParam('node_unlock_info');
         $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
         $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
         $request->getParam('node_cost') != '' && $node->node_cost = $request->getParam('node_cost');
@@ -241,7 +242,6 @@ class ApiController extends BaseController
         // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
         // node->node_ip  和v2ray无关，但是和服务器相关的信息
         if ($request->getParam('node_unlock') != '' ){  // 获取 node_unlock信息
-            
             $_a = str_replace(',','&',$request->getParam('node_unlock'));
             $_a = str_replace(':','=',$_a);
             $node->node_unlock = $_a;
