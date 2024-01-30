@@ -817,3 +817,5 @@ ALTER TABLE `ss_node` ADD `traffic_used_daily` bigint(20) DEFAULT '0' COMMENT '�
 ALTER TABLE `ss_node` ADD `traffic_left_daily` bigint(20) DEFAULT '0' COMMENT '剩余流量日均';
 
 ALTER TABLE `ss_node` ADD `node_unlock` varchar(500) DEFAULT '' COMMENT 'IP限制解锁';
+
+ALTER TABLE `ss_node` ADD `country_code` varchar(32) DEFAULT '' COMMENT '国家代码';

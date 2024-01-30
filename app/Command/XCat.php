@@ -226,7 +226,15 @@ class XCat
     public function test()
     {
 
-
+        // $node = Node::find(468);
+        // echo $node->id;
+        // if (!$node){
+        //     echo 123;
+        // }
+        // $node= New Node();
+        // $node->id = 466;
+        // $node->name = 'a test';
+        // $node->save();
         // echo '迁移分组 2 to 4';
         // $users = User::where("node_group",2)->get();
         // $nodes = Node::where("node_group",2)->get();

@@ -228,6 +228,10 @@ class ApiController extends BaseController
         $id = $args['id'];
         $id < 10 && exit;  //1-9为保留ID。 通知节点为 group0 
         $node = Node::find($id);
+        if (! $node) {
+            $node = New Node(); 
+            $node->id = $args['id'];
+        }
         // node_info 有数据才更改
         $request->getParam('node_name') && $node->name = $request->getParam('node_name');
         $request->getParam('node_info') && $node->info = $request->getParam('node_info');
@@ -238,6 +242,8 @@ class ApiController extends BaseController
         $request->getParam('node_traffic_limit') && $node->node_bandwidth_limit = $request->getParam('node_traffic_limit')*1024*1024*1024;
         $request->getParam('node_traffic_resetday') && $node->bandwidthlimit_resetday = $request->getParam('node_traffic_resetday');
         $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');  //排序
+        $request->getParam('node_country_code') != '' && $node->country_code = $request->getParam('node_country_code');  //排序
+
         // $request->getParam('sort') == 'v2' && $node->sort = 11;
         // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
         // node->node_ip  和v2ray无关，但是和服务器相关的信息
