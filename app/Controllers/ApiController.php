@@ -235,7 +235,7 @@ class ApiController extends BaseController
         // node_info 有数据才更改
         $request->getParam('node_name') && $node->name = $request->getParam('node_name');
         $request->getParam('node_info') && $node->info = $request->getParam('node_info');
-        $request->getParam('node_unlock_info') && $node->info .= $request->getParam('node_unlock_info');
+        // $request->getParam('node_unlock_info') && $node->info .= $request->getParam('node_unlock_info');
         $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
         $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
         $request->getParam('node_cost') != '' && $node->node_cost = $request->getParam('node_cost');
