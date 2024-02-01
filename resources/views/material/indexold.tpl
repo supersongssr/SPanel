@@ -61,9 +61,9 @@
                               <div class="content">
 							<div class="inner">
 								<h1>{$config["appName"]}</h1>
-								公告：注册送<code>32G</code>流量，<code>0.66￥</code>余额，<code>32</code>次邀请码，免费网速<code>1-10M</code>带宽，捐赠用户网速<code>16Mbps-1000Mbps</code>
+								公告：注册送<code>32G</code>流量，<code>0.99￥</code>余额，<code>16</code>次邀请码，免费网速<code>1-10M</code>带宽，捐赠用户网速<code>16Mbps-1Gbps</code>
 								<br>
-								全球<code>500+</code>节点，<code>50Gbps</code>总带宽，BGP CN2 HKBN PWWC NTT多线接入, 解锁 NetFlix HULU HBO
+								全球<code>500+</code>节点，<code>50Gbps</code>总带宽，BGP CN2 HKBN PWWC NTT多线接入, 解锁 Openai NetFlix Disney HULU HBO等
 								<br>
 								推广返利:<code>{$config["invite_gift_money"]}￥</code>金额+<code>{$config["code_payback"]}%</code>提成+<code>{$config["invite_gift"]}G</code>流量+<code>{$config["code_payback2"]}%</code>二级提成+<code>1-8G</code>每天签到流量
 

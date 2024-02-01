@@ -7,7 +7,7 @@
 <main class="content">
 	<div class="content-header ui-content-header">
 		<div class="container">
-			<h1 class="content-heading">节点列表</h1>
+			<h1 class="content-heading">媒体解锁</h1>
 		</div>
 	</div>
 
@@ -80,7 +80,7 @@
 														<div class="card-main">
 																<div class="card-inner">
 														{* <div><i class="icon icon-lg node-icon">chat</i> {$node['info']}</div> *}
-														<div class="nodename">流媒体解锁信息</div>
+														<div class="nodename">IP解锁项目:</div>
 													    {$nodeunlock = $node->getV2($node['node_unlock'])}  <!-- $u: unlock -->
                                                         {foreach $nodeunlock as $k => $v }
                                                                 <span class="card-tag tag-blue">{$k}</span> : <span class="card-tag tag-green">{$v}</span>  |  
