@@ -494,7 +494,7 @@ class UserController extends BaseController
     public function nodeUnlock($request, $response, $args)
     {
         $user = Auth::getUser();
-        $nodes = Node::where('id','>',9)->where('type', 1)->where('node_group',$user->node_group)->get();
+        $nodes = Node::where('id','>',9)->where('type', 1)->where('node_group',$user->node_group)->orderBy('traffic_left_daily','desc')->get();
         return $this->view()->assign('nodes', $nodes)->assign('tools', new Tools())->assign('user', $user)->registerClass("URL", "App\Utils\URL")->display('user/nodeunlock.tpl');
     }
 

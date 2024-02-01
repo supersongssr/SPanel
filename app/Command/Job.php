@@ -173,6 +173,7 @@ class Job
                 // 表现为: 使用流量+某个值 (等于提供的值) 如果出现了负数,说明 提供的流量不够了. 每个节点只统计 0-100G范围内.
             $_new_value = round($_used_count/1024/1024/1024).'+'.round(($_left_count - $_used_count)/1024/1024/1024).'G,'.$_record->value; 
             $_new_value = substr($_new_value, 0, 63);  // 限制字符串的长度 太长了不好显示
+            $node->custom_rss == 0 && $_new_value = 'U'.$_new_value;
             $_record->value = $_new_value.'|'.date("m-d"); //添加一个日期,方便判断
             $_record->save();
             $_group++;
@@ -192,7 +193,7 @@ class Job
             $node->status .= '|'.date("Y-m-d");
 
             // node_sort
-            if ( $node->custom_rss == 1 ) {  //添加正常订阅的节点才处理   //思考一下这个怎么计算? 
+            if ( $node->custom_rss == 1 && $node->is_clone == 0 ) {  //添加正常订阅的节点才处理   //思考一下这个怎么计算? 
                 $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 3;     // 节点维修值 如果节点为0 就需要大修了。
                 $traffic_today < 8*1024*1024*1024 && $node->node_sort -= 2;
                 $traffic_today < 16*1024*1024*1024 && $node->node_sort -= 1;
