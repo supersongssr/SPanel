@@ -226,11 +226,12 @@ class XCat
     public function test()
     {
 
-        // $node = Node::find(468);
-        // echo $node->id;
-        // if (!$node){
-        //     echo 123;
+        // $nodes = Node::where("type",0)->get();
+        // foreach($nodes as $node){
+        //     $node->node_sort = 0;
+        //     $node->save();
         // }
+
         // $node= New Node();
         // $node->id = 466;
         // $node->name = 'a test';
