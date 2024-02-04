@@ -710,7 +710,7 @@ class Tools
             'zw' => '🇿🇼',
         );
 
-        if (! $iso_to_emoji[$iso] ){
+        if (empty( $iso_to_emoji[$iso] ) ){
             return '🇺🇳';
         }else{
             return $iso_to_emoji[$iso];

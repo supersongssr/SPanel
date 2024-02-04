@@ -226,32 +226,24 @@ class XCat
     public function test()
     {
 
-        // $nodes = Node::where("type",0)->get();
-        // foreach($nodes as $node){
-        //     $node->node_sort = 0;
+
+        // $nodes = Node::where("id",'>',9)->get();
+        // echo '修改name ';
+        // foreach ($nodes as $node) {
+        //     if (empty($node->country_code) ) {
+        //         continue;
+        //     }
+        //     $node->name = Tools::isoToEmoji($node->country_code) . $node->name;
         //     $node->save();
         // }
-
+        
         // $node= New Node();
         // $node->id = 466;
         // $node->name = 'a test';
         // $node->save();
         // echo '迁移分组 2 to 4';
         // $users = User::where("node_group",2)->get();
-        // $nodes = Node::where("node_group",2)->get();
-        // echo '开始迁移用户';
-        // foreach ($users as $user) {
-        //     # code...
-        //     $user->node_group = 4;
-        //     echo $user->id . '---';
-        //     $user->save();
-        // }
-        // echo 'start move nodes ';
-        // foreach ($nodes as $node) {
-        //     $node->node_group = 4;
-        //     echo $node->id .'===';
-        //     $node->save();
-        // }
+        
 
         // echo '迁移分组 3 to 2';
         // $users = User::where("node_group",3)->get();
