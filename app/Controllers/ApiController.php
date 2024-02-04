@@ -243,7 +243,7 @@ class ApiController extends BaseController
         $request->getParam('node_traffic_resetday') && $node->bandwidthlimit_resetday = $request->getParam('node_traffic_resetday');
         $request->getParam('node_sort') != '' && $node->node_sort = $request->getParam('node_sort');  //排序
         $request->getParam('node_country_code') != '' && $node->country_code = $request->getParam('node_country_code');  //排序
-
+        $request->getParam('node_country_code') != '' && $node->name = Tools::isoToEmoji($request->getParam('node_country_code')) .$node->name;
         // $request->getParam('sort') == 'v2' && $node->sort = 11;
         // $request->getParam('sort') == 'cf' && $node->sort = 12;  // 这俩就不再用了，很容易搞错。
         // node->node_ip  和v2ray无关，但是和服务器相关的信息
