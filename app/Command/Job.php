@@ -190,6 +190,7 @@ class Job
             // status 
             $node->status = round($traffic_today/1024/1024/1024) . ',' . $node->status ;    //将每天统计的节点的数据写入到节点的备注中去
             $node->status = substr($node->status, 0,32);             //截取字符串长度为128位 防止超出
+            $node->custom_rss == 0 && $node->status = 'U'.$node->status; //流量用多的节点,前面加一个U避免误解
             $node->status .= '|'.date("Y-m-d");
 
             // node_sort

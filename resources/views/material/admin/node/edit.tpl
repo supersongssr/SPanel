@@ -19,7 +19,7 @@
 								
 								<div class="card-inner">
 									<div> <p> 
-									is_clone={$node->is_clone} 
+									is_clone={$node->is_clone} ; usedDaily={round($node->traffic_used_daily/1024/1024/1024)}G ; leftDaily={round($node->traffic_left_daily/1024/1024/1024)}G
 									</p> </div>
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="name">节点名称  #{$node->id}</label>
@@ -49,6 +49,11 @@
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="info">节点描述</label>
 										<input class="form-control maxwidth-edit" id="info" name="info" type="text" value="{$node->info}">
+									</div>
+
+									<div class="form-group form-group-label">
+										<label class="floating-label" for="node_unlock">节点解锁</label>
+										<input class="form-control maxwidth-edit" id="node_unlock" name="node_unlock" type="text" value="{$node->node_unlock}">
 									</div>
 
 									
