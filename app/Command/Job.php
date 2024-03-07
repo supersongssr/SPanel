@@ -144,7 +144,7 @@ class Job
     public static function DailyJob()
     {
         //自动审计每天节点流量数据 song
-        $nodes = Node::where('id','>',9)->get();  // 只获取9以上的分组不是0的节点 因为0组是给news节点用的。
+        $nodes = Node::where('id','>',9)->get();  // 只获取9以上的分组不是0的节点 1-9是给通知节点用的 。
 
         // 分组流量统计
         $_group=0;
@@ -164,7 +164,9 @@ class Job
                 $_traffic_today > 999*1024*1024*1024 && $_traffic_today = 999*1024*1024*1024; //使用 0-999
                 $_traffic_today < 1 && $_traffic_today = 0; //下限0G
                 $_used_count += $_traffic_today ;
-
+                if ($node->type != 1){  # 如果节点是故障的,就处理掉.
+                    continue;
+                }
                 $_traffic_left_daily = $node->traffic_left_daily ;
                 $_traffic_left_daily > 100*1024*1024*1024 && $_traffic_left_daily = 100*1024*1024*1024;  //剩余流量的统计上限100G
                 $_traffic_left_daily < 1 && $_traffic_left_daily = 0;  // 0-100G
@@ -214,6 +216,8 @@ class Job
             $node->traffic_rate = $_rate;
 
             $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据
+            $node->traffic_used_daily = 0;  # 这里需要重置一下这个信息,因为这些信息是后台上报的. 为避免失效的节点在这里被计算
+            $node->traffic_left_daily = 0;
             $node->save();
             
             // //将节点每天的流量数据 写入到 node info 中，标志是 load = 0

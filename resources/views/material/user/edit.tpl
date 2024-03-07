@@ -77,8 +77,10 @@
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">欧美多 带宽大</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">亚太多 延迟低</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">欧美多</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">欧美多</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">亚太多</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="group">亚太多</a></li>
 											</ul>
 										</div>
 							        </div>
@@ -123,9 +125,9 @@
 												<button class="btn btn-flat" id="sub_limit_update"><span class="icon">check</span>&nbsp;</button>
 										</div>
 
-										<p>当前数量：<code id="ajax-user-passwd">{$user->sub_limit}</code>；等级越高，通过订阅获取的节点数越多，您可以在这里自定义订阅获取的节点数量。</p>
+										<p>节点太多困扰了您?您可以在这里限制订阅获取的节点数量。</p>
 										<div class="form-group form-group-label">
-											<label class="floating-label" for="sub_limit">等级越高，订阅越多</label>
+											<label class="floating-label" for="sub_limit">订阅节点数量</label>
 											<input class="form-control maxwidth-edit" id="sub_limit" type="text">
 										</div>
 									</div>
@@ -145,7 +147,7 @@
 										<p>当前SS密码：<code id="ajax-user-passwd">{$user->passwd}</code><button class="kaobei copy-text btn btn-subscription" type="button" data-clipboard-text="{$user->passwd}">点击拷贝</button></p>
 										<p>当前V2rayUUID：<code id="ajax-user-passwd">{$user->v2ray_uuid}</code><button class="kaobei copy-text btn btn-subscription" type="button" data-clipboard-text="{$user->v2ray_uuid}">点击拷贝</button></p>
 										<div class="form-group form-group-label">
-											<label class="floating-label" for="sspwd">新连接密码（修改后ss sr v2ray连接配置将会改变，请客户端更新节点）</label>
+											<label class="floating-label" for="sspwd">输入新连接密码 </label>
 											<input class="form-control maxwidth-edit" id="sspwd" type="text">
 										</div>
 									</div>

@@ -241,43 +241,39 @@ class XCat
         // $node->id = 466;
         // $node->name = 'a test';
         // $node->save();
-        // echo '迁移分组 2 to 4';
-        // $users = User::where("node_group",2)->get();
-        
 
-        // echo '迁移分组 3 to 2';
+
+
+        // echo '迁移分组 3 to 5';
         // $users = User::where("node_group",3)->get();
         // $nodes = Node::where("node_group",3)->get();
-        // echo '开始迁移用户';
-        // foreach ($users as $user) {
-        //     # code...
-        //     $user->node_group = 2;
-        //     echo $user->id . '---';
-        //     $user->save();
-        // }
-        // echo 'start move nodes ';
-        // foreach ($nodes as $node) {
-        //     $node->node_group = 2;
+        // foreach($nodes as $node){
+        //     $node->node_group = 5;
         //     echo $node->id .'===';
         //     $node->save();
+        // }
+        // foreach($users as $user){
+        //     $user->node_group = 5;
+        //     echo $user->id . '---';
+        //     $user->save();
         // }
 
-        // echo '迁移分组 4 to 3';
-        // $users = User::where("node_group",4)->get();
-        // $nodes = Node::where("node_group",4)->get();
+    
+        // echo '2组变成 4 3 2 三个分组';
+        // $users = User::where("node_group",2)->get();
+        // // $nodes = Node::where("node_group",2)->where('is_clone',0)->get();
         // echo '开始迁移用户';
         // foreach ($users as $user) {
         //     # code...
-        //     $user->node_group = 3;
+        //     $nn = $user->id % 3 + 2 ;
         //     echo $user->id . '---';
+        //     echo $nn;
+        //     $user->node_group = $nn;
         //     $user->save();
         // }
-        // echo 'start move nodes ';
-        // foreach ($nodes as $node) {
-        //     $node->node_group = 3;
-        //     echo $node->id .'===';
-        //     $node->save();
-        // }
+        
+     
+        
 
 
 
