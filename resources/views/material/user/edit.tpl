@@ -77,10 +77,9 @@
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">欧美多</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">欧美多</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">亚太多</a></li>
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="4" data="group">亚太多</a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">下载优先 </a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">带宽优先 </a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">延迟优先 </a></li>
 											</ul>
 										</div>
 							        </div>
