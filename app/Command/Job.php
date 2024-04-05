@@ -210,9 +210,9 @@ class Job
             } else{
                 $_rate = 1;
             }
-            $_rate = round($_rate * $node->node_cost / 2); // 最低价格是2 美金,超过2美金的话,倍率会计算的高一些. 
+            $_rate = round($_rate * $node->node_cost / 5); //  按照价格是5美金计算
             $_rate < 1 && $_rate = 1;
-            $_rate > 5 && $_rate = 5;
+            $_rate > 3 && $_rate = 3;
             $node->traffic_rate = $_rate;
 
             $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据

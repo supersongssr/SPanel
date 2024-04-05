@@ -20,6 +20,8 @@
 								<div class="card-inner">
 									<div> <p> 
 									is_clone={$node->is_clone} ; usedDaily={round($node->traffic_used_daily/1024/1024/1024)}G ; leftDaily={round($node->traffic_left_daily/1024/1024/1024)}G
+									traffic_used={floor($node->traffic_used / 1024 / 1024 / 1024)}G;
+									traffic_left={floor($node->traffic_left / 1024 / 1024 / 1024)}G;
 									</p> </div>
 									<div class="form-group form-group-label">
 										<label class="floating-label" for="name">节点名称  #{$node->id}</label>
