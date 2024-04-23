@@ -76,7 +76,7 @@
 								</div>
 							</div>
 							<div class="col-xx-12 col-xs-6 col-lg-3">
-								<!-- <div class="card user-info">
+								<div class="card user-info">
 									<div class="user-info-main">
 										<div class="nodemain">
 											<div class="nodehead node-flex">
@@ -103,7 +103,7 @@
 											<span><i class="icon icon-md">donut_large</i>在线连接/限制数</span>
 										</div>
 									</div>
-								</div> -->
+								</div> 
 							</div>
 							<div class="col-xx-12 col-xs-6 col-lg-3">
 								<div class="card user-info">
