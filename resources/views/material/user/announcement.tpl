@@ -26,7 +26,7 @@
 													<tr>
 														<!--<td>#{$ann->id}</td> 
 														<td>{$ann->date}</td> song-->
-														<td>{$ann->date}&nbsp;&nbsp;<a href="/user/announcement/{$ann->id}" class="btn">{$ann->markdown}</a><br>{$ann->content}</td>
+														<td>{$ann->date}&nbsp;|&nbsp;<a href="/user/announcement/{$ann->id}" >{$ann->title}</a> {$ann->content}</td>
 													</tr>
 													{/foreach}
 												</table>

@@ -800,19 +800,17 @@ class UserController extends BaseController
     public function announcement($request, $response, $args)
     {
         if (empty($args['id'])) {        //Song
-            # code...
             $Anns = Ann::orderBy('date', 'desc')->get();
             foreach ($Anns as $Ann) {
-                $title = explode('#',$Ann->markdown);
-                $Ann->markdown = $title['1'];
+                $title = explode("\n",$Ann->markdown);
                 $Ann->content = '';
+                $Ann->title = $title[0];
             }
         }else{
-            $id = $args['id'];
-            $Anns = Ann::where("id", "=", $id)->get();
+            $Anns = Ann::where("id", "=", $args['id'])->get();
             foreach ($Anns as $Ann) {
-                $title = explode('#',$Ann->markdown);
-                $Ann->markdown = $title['1'];
+                $title = explode("\n",$Ann->markdown);
+                $Ann->title = $title[0];
             }
         }
 
