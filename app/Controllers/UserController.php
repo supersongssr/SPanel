@@ -1181,12 +1181,23 @@ class UserController extends BaseController
         //# 只允许购买 套餐等级 >= 用户等级的商品   这样就可以实现用户购买的套餐可以叠加了。只能向上叠加。
         ##这里需要先 json_decode一下 商品中的 content内容
         //$shop_content = $content = json_decode($shop->content, true);
-        if ( $shop->user_class() <= $user->class) {
+        if ( $shop->user_class() < $user->class) {   // 不允许购买低等级套餐的节点
             # code...
             $res['ret'] = 0;
             $res['msg'] = "您是尊贵的VIP ".$user->class." ，推荐您购买VIP ".$user->class." 以上套餐。当前套餐等级为VIP ".$shop->user_class()." <您的VIP等级。";
             return $response->getBody()->write(json_encode($res));
+        } elseif ( $shop->user_class() == $user->class ){
+            $_user_last_bought = Bought::where("userid", $user->id)->orderBy('id','DESC')->first();
+            if ( ( time() - $_user_last_bought->datetime ) < 86500 ){  //两次购买间隔 需要 > 24小时
+                $res['ret'] = 0;
+                $res['msg'] = "两次相同套餐购买间隔需要>1天,避免您误点击造成的重复购买";
+                return $response->getBody()->write(json_encode($res));
+            }
         }
+        
+        # 购买低等级或同等级套餐,需要限制至少 大于 24小时才能购买
+        // 获取 历史购买记录,查询历史购买的套餐的时间
+        // 查询到上次购买的时间如果是 24小时内的话, 就提醒说, 需要24小时后再购买别的套餐什么的.
 
         $user->money =bcsub($user->money , $price,2);
         $user->save();
