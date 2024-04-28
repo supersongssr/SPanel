@@ -126,11 +126,7 @@
 									<i class="icon icon-lg">announcement</i>&nbsp;帮助文档
 								</a>
 							</li>
-							<li>
-								<a href="/user/ticket">
-									<i class="icon icon-lg">question_answer</i>&nbsp;技术支持
-								</a>
-							</li>
+							
 						</ul>
 						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_detect">账户</a>
 						<ul class="menu-collapse collapse in" id="ui_menu_detect">
@@ -146,6 +142,12 @@
 								</a>
 							</li>
 
+							<li>
+								<a href="/user/ticket">
+									<i class="icon icon-lg">question_answer</i>&nbsp;技术支持
+								</a>
+							</li>
+
 							<!-- <li>
 								<a href="/user/relay">
 									<i class="icon icon-lg">compare_arrows</i>&nbsp;中转规则
@@ -153,7 +155,7 @@
 							</li> -->
 
 
-							<li>
+							<!-- <li>
 								<a href="/user/lookingglass">
 									<i class="icon icon-lg">visibility</i>&nbsp;节点网速
 								</a>
@@ -168,6 +170,8 @@
 									<i class="icon icon-lg">hourglass_empty</i>&nbsp;流量记录
 								</a>
 							</li>
+							<li><a href="/user/detect"><i class="icon icon-lg">account_balance</i>&nbsp;审计规则</a></li>
+							<li><a href="/user/detect/log"><i class="icon icon-lg">assignment_late</i>&nbsp;审计记录</a></li>
 							{if $config['enable_donate']=='true'}
 							<li>
 								<a href="/user/donate">
@@ -175,10 +179,10 @@
 								</a>
 							</li>
 							{/if}
+							-->
 
 
-							<li><a href="/user/detect"><i class="icon icon-lg">account_balance</i>&nbsp;审计规则</a></li>
-							<li><a href="/user/detect/log"><i class="icon icon-lg">assignment_late</i>&nbsp;审计记录</a></li>
+							
 						</ul>
 
 
@@ -189,13 +193,6 @@
 						</li>
 						{/if}
 
-						{if $user->isAdmin()}
-							<li>
-								<a href="/admin">
-									<i class="icon icon-lg">person_pin</i>&nbsp;管理面板
-								</a>
-							</li>
-						{/if}
 
                         {if $can_backtoadmin}
                             <li>
