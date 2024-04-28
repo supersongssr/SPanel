@@ -225,7 +225,7 @@
 													<div class="tab-pane fade active in" id="all_v2rayng">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
-														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/v2rayNG.apk" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载v1.6.30</a><a href="https://github.com/2dust/v2rayNG/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> -> 安装</p>
+														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/v2rayNG.apk" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载</a><a href="https://github.com/2dust/v2rayNG/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> -> 安装</p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>v2rayNG -> 左上角 -> <code>订阅设置</code> -> 右上角<code>+</code>添加订阅；v2rayNG -> 右上角 <code>+</code> ->更新订阅；</p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>选择节点 -> 右下角 <code>图标</code> -> 弹出窗口：允许VPN(仅第一次开启出现)</p>
 													</div>
