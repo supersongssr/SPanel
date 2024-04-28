@@ -166,11 +166,11 @@
 												<li>
 													<a class="" data-toggle="tab" href="#all_router"><i class="icon icon-lg">router</i>&nbsp;软路由</a>
 												</li>
-												<li>
+												<!-- <li>
 													<a class="" data-toggle="tab" href="#all_game"><i class="icon icon-lg">videogame_asset</i>&nbsp;游戏</a>
-												</li>
+												</li> -->
 												<li >
-													<a class="" data-toggle="tab" href="#all_info"><i class="icon icon-lg">info_outline</i>&nbsp;订阅</a>
+													<a class="" data-toggle="tab" href="#all_info"><i class="icon icon-lg">info_outline</i>&nbsp;其他</a>
 												</li>
 											</ul>
 										</nav>
