@@ -360,7 +360,6 @@ class AuthController extends BaseController
         $wechat = trim($wechat);
         // check code
 
-
         if (Config::get('enable_reg_captcha') == 'true') {
             switch(Config::get('captcha_provider'))
             {
@@ -384,58 +383,46 @@ class AuthController extends BaseController
             }
         }
 
-
         //dumplin：1、邀请人等级为0则邀请码不可用；2、邀请人invite_num为可邀请次数，填负数则为无限
-        $c = InviteCode::where('code', $code)->first();
-        $date_lastday = date("Y-m-d H:i:s" , (time() - 86400) );
-        if ($c == null) {
-            if (Config::get('register_mode') == 'invite') {
+        $c = InviteCode::where('code', $code)->orderBy('id','desc')->first();  //倒叙最后一个
+        if (Config::get('register_mode') == 'invite'){
+            if ($code == '' || $code == null ){
                 $res['ret'] = 0;
-                $res['msg'] = "邀请码无效";
+                $res['msg'] = "请输入邀请码:".$code;
                 return $response->getBody()->write(json_encode($res));
+            }elseif ($c == null || $c->id == '') {
+                $res['ret'] = 0;
+                $res['msg'] = "邀请码无效".$code;
+                return $response->getBody()->write(json_encode($res));
+            }elseif ($c->user_id != 0) {
+                $gift_user = User::where("id", "=", $c->user_id)->first();
+                if ($gift_user == null || $gift_user->id == 0) {
+                    $res['ret'] = 0;
+                    $res['msg'] = "邀请人不存在";
+                    return $response->getBody()->write(json_encode($res));
+                } else if ($gift_user->class == 0) {
+                    $res['ret'] = 0;
+                    $res['msg'] = "邀请人不是VIP";
+                    return $response->getBody()->write(json_encode($res));
+                } else if ($gift_user->enable == 0) { // 增加限制邀请人必须是 enable 才能用
+                    $res['ret'] = 0;
+                    $res['msg'] = "请联系邀请人激活账号";
+                    return $response->getBody()->write(json_encode($res));
+                } else if ($gift_user->invite_num < 1) {
+                    $res['ret'] = 0;
+                    $res['msg'] = "邀请人可用邀请次数不足";
+                    return $response->getBody()->write(json_encode($res));
+                }  else if ($gift_user->money < 0) { // 限制邀请人的余额必须为正，才能继续邀请
+                    
+                    $res['ret'] = 0;
+                    $res['msg'] = "请联系邀请人先充值余额";
+                    return $response->getBody()->write(json_encode($res));
+                } else if ($gift_user->t == 0) { // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
+                    $res['ret'] = 0;
+                    $res['msg'] = "请联系邀请人先使用本站24小时后再邀请";
+                    return $response->getBody()->write(json_encode($res));
+                } 
             }
-        } else if ($c->user_id != 0) {
-            $gift_user = User::where("id", "=", $c->user_id)->first();
-            if ($gift_user == null) {
-                $res['ret'] = 0;
-                $res['msg'] = "邀请人不存在";
-                return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->class == 0) {
-                $res['ret'] = 0;
-                $res['msg'] = "邀请人不是VIP";
-                return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->invite_num == 0) {
-                $res['ret'] = 0;
-                $res['msg'] = "邀请人可用邀请次数为0";
-                return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->enable == 0) {
-                // 增加限制邀请人必须是 enable 才能用
-                $res['ret'] = 0;
-                $res['msg'] = "请联系邀请人先激活账号";
-                return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->money < 0) {
-                // 限制邀请人的余额必须为正，才能继续邀请
-                $res['ret'] = 0;
-                $res['msg'] = "请联系邀请人先充值余额";
-                return $response->getBody()->write(json_encode($res));
-            } else if ($gift_user->t == 0) {
-                // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
-                $res['ret'] = 0;
-                $res['msg'] = "请联系邀请人试用一下本站";
-                return $response->getBody()->write(json_encode($res));
-            } 
-            // else if ($gift_user->score < 1) {
-            //     // 限制邀请人必须 score 有值才能邀请
-            //     $res['ret'] = 0;
-            //     $res['msg'] = "请联系邀请人体验一下本站节点再注册";
-            //     return $response->getBody()->write(json_encode($res));
-            // } else if ($gift_user->reg_date > $date_lastday) {
-            //     // 限制邀请人必须使用过本站后才能邀请，不使用的话，不能邀请
-            //     $res['ret'] = 0;
-            //     $res['msg'] = "请联系邀请人体验一下网站再注册";
-            //     return $response->getBody()->write(json_encode($res));
-            // }
-
         }
 
         // check email format
@@ -481,11 +468,11 @@ class AuthController extends BaseController
             return $response->getBody()->write(json_encode($res));
         }
 
-        if ($imtype == "" || $wechat == "") {
-            $res['ret'] = 0;
-            $res['msg'] = "请填上你的联络方式";
-            return $response->getBody()->write(json_encode($res));
-        }
+        // if ($imtype == "" || $wechat == "") {
+        //     $res['ret'] = 0;
+        //     $res['msg'] = "请填上你的联络方式";
+        //     return $response->getBody()->write(json_encode($res));
+        // }
 
         // IP 注册频率的限制
         $user_reg_ip = substr($_SERVER["REMOTE_ADDR"],0,24);
@@ -577,22 +564,24 @@ class AuthController extends BaseController
             // 这里保存一次，下面的 $user-id 才能获取到。可以有。嘎嘎 
             $user->save();
             $gift_user = User::where("id", "=", $c->user_id)->first();
-            $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1000 * 1000;
-            //song 增加gift user的 money 先赠送5元
-            $gift_user->money += Config::get('invite_gift_money');
-            $gift_user->invite_num -= 1;
-            $gift_user->save();
-            // 用户分组 和 邀请人一致 sdo2022-04-27
-            $user->node_group = $gift_user->node_group;
-            //song 写入新的返利日志 
-            //写入返利日志
-            $Payback = new Payback();
-            $Payback->total = -1;
-            $Payback->userid = $user->id;  //用户注册的ID 
-            $Payback->ref_by = $c->user_id;  //邀请人ID
-            $Payback->ref_get = Config::get('invite_gift_money');
-            $Payback->datetime = time();
-            $Payback->save();
+            if ($gift_user != null && $gift_user->id != 0){
+                $gift_user->transfer_enable += Config::get('invite_gift') * 1024 * 1000 * 1000;
+                //song 增加gift user的 money 先赠送5元
+                $gift_user->money += Config::get('invite_gift_money');
+                $gift_user->invite_num -= 1;
+                $gift_user->save();
+                // 用户分组 和 邀请人一致 sdo2022-04-27
+                $user->node_group = $gift_user->node_group;
+                //song 写入新的返利日志 
+                //写入返利日志
+                $Payback = new Payback();
+                $Payback->total = -1;
+                $Payback->userid = $user->id;  //用户注册的ID 
+                $Payback->ref_by = $c->user_id;  //邀请人ID
+                $Payback->ref_get = Config::get('invite_gift_money');
+                $Payback->datetime = time();
+                $Payback->save();
+            }
         }
         //Song
         //$eduSupport = 'edu.cn';

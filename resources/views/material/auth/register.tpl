@@ -73,16 +73,20 @@
 								</div>
 							</div>
 						</div>
-						{if $config['register_mode'] == 'invite'}
+						
 						<div class="rowtocol">
 							<div class="auth-row">
 								<div class="form-group form-group-label">
+									{if $config['register_mode'] == 'invite'}
 									<label class="floating-label" for="code">邀请码(必填)</label>
+									{else}
+									<label class="floating-label" for="code">邀请码(可选)</label>
+									{/if}
 									<input class="form-control maxwidth-auth" id="code" type="text">
 								</div>
 							</div>
 						</div>
-						{/if}
+						
 						{if $enable_email_verify == 'true'}
 						<div class="rowtocol">
 							<div class="rowtocol">
@@ -193,9 +197,9 @@
 <script>
     $(document).ready(function(){
         function register(){
-          code = $("#code").val();
+          //code = $("#code").val();
     	{if $config['register_mode'] != 'invite'}
-           code = 0;
+           //code = 0;
            if ((getCookie('code'))!=''){
            code = getCookie('code');
           }
@@ -214,7 +218,7 @@
 					wechat: $("#wechat").val(),{if $recaptcha_sitekey != null}
                     recaptcha: grecaptcha.getResponse(),{/if}
 					imtype: $("#imtype").val(),
-					code:code{if $enable_email_verify == 'true'},
+					code: $("#code").val(){if $enable_email_verify == 'true'},
 					emailcode: $("#email_code").val(){/if}{if $geetest_html != null},
 					geetest_challenge: validate.geetest_challenge,
                     geetest_validate: validate.geetest_validate,
