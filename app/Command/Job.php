@@ -293,22 +293,24 @@ class Job
         foreach ($users as $user) {
             $user->score -= 1;
             $user->ban_times += 1; //用户封禁次数+用户等级 每次+1次违规吧
-            $user->ban_times > 16 &&  $user->enable = 0;
+            // $user->ban_times > 16 &&  $user->enable = 0;
             $user->warming = date("Ymd H:i:s") . '近期下行流量较多，系统已为您分配大带宽节点，下载请使用低倍率节点，切换分组请在个人设定页面';
             $user->node_group > 1 && $user->node_group -= 1;  // 分配到下一组
             $user->transfer_limit += $user->class *1024*1024*1024;  //然后加上一些流量，相当于重置
             $user->save();
         }
         Telegram::Send("总流量完毕");
-        # 除了1组用户，其他组的用户每使用1天增加1积分 余额须 > 0
-        $time_last24hours = time() - 24*3600;
+        
+        $time_last24hours = time() - 24*3600;  # 除了1组用户，其他组的用户每使用1天增加1积分 余额须 > 0
         $users = User::where('node_group','>',1)->where('enable','>',0)->where('money','>',0)->where('class','>',0)->where('t','>',$time_last24hours)->get();  //获取过去24小时内有使用网站的用户
         foreach ($users as $user) {
             $user->score += 1; // 积分加1
             $user->save();
         }
         Telegram::Send("积分完毕");
+
         //将余额 小于 0 的用户，请空邀请人，收回邀请返利  选取 余额 <0  邀请人不为0 的情况  另外那个 score 值不低于 目前是设定的64
+        // 防止用户邀请返利的值, 都快用完了,才收回返利的情况
         $users = User::where('money','<',0)->where('ref_by','!=',0)->where('score','<',64)->get();  // 使用积分小于 32 且 money 小于 0 会被清理
         foreach ($users as $user) {
             $ref_user = User::find($user->ref_by);
@@ -319,10 +321,7 @@ class Job
             //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
             if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
                 $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
-                //不再扣除流量 扣除邀请的流量！
-                //$ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
-                //邀请人的 ban_times += 1 惩罚一下
-                $ref_user->ban_times += 1 ;
+                $ref_user->ban_times += 1 ; //邀请人的 ban_times += 1 惩罚一下
                 $ref_user->save();
                 //写入返利日志
                 $Payback = new Payback();
@@ -943,38 +942,32 @@ class Job
                 $iskilluser = true;
             }
 
-            //song 如果返利扣除在这里扣除的话，会不会好一些？我觉得会好一些，不错的主意。嘎嘎 有点意思，嘿嘿 可以有
-            if ( $iskilluser ) {
-                # code...
+            if ( $iskilluser ) { // 删除用户 , 扣除返利
                 echo ' deluser-'.$user->id;
-                if ($user->ref_by != 0 ) {  //存在邀请， 
-                    # code...
+                if ($user->ref_by != 0 && $user->ref_by != '') {  //存在邀请， 
                     $ref_user = User::find($user->ref_by);
-                    //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
-                    $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
-                    //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量
-                    $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
-                    //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
-                    if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
-                        $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
-                        //扣除邀请的流量！ 不再扣除邀请流量
-                        //$ref_user->transfer_enable -= Config::get('invite_gift') * 1024 * 1024 * 1024;
-                        //邀请人的 ban_times += 1 惩罚一下
-                        $ref_user->ban_times += 1 ;
-                        $ref_user->save();
-                        //写入返利日志
-                        $Payback = new Payback();
-                        #echo $user->id;
-                        #echo ' ';
-                        $Payback->total = -2;
-                        $Payback->userid = $user->id;  //用户注册的ID
-                        $Payback->ref_by = $user->ref_by;  //邀请人ID
-                        $Payback->ref_get = - $ref_payback->ref_get;
-                        $Payback->datetime = time();
-                        $Payback->save();
-                        // ref_payback 的 callback 写为1 就是这个返利被收回了。 实际这样的话，还是一个不错的方案的。也就是说，这个返利的话，只需要这里加一个参数就好了。无需之前的那种复杂的方案！ 这个可以有。
-                        $ref_payback->callback = 1; // 设置这个返利已被收回！ 不错的做法和想法！ 
-                        $ref_payback->save();
+                    if ($ref_user->score < 32){ 
+                        //这里 -1 代表是注册返利  -2 代表是 删除账号 取消返利
+                        $ref_payback = Payback::where('total','=',-1)->where('userid','=',$user->id)->where('ref_by','=',$user->ref_by)->first();
+                        //这里 查询一下是否已经存在 扣除余额的情况，统计一下 -2 情况的数量
+                        $pays = Payback::where('total','=',-2)->where('userid','=',$user->id)->where('ref_by','=', $user->ref_by)->count();
+                        //先判断一下这个邀请人是否还存在   判断是否存在已扣除的情况
+                        if ($ref_user->id != null  && $ref_payback->ref_get != null && $pays < 1) {    //如果存在
+                            $ref_user->money -= $ref_payback->ref_get;     //这里用当前余额，减去当初返利的余额。
+                            $ref_user->ban_times += 1 ;
+                            $ref_user->save();
+                            //写入返利日志
+                            $Payback = new Payback();
+                            $Payback->total = -2;
+                            $Payback->userid = $user->id;  //用户注册的ID
+                            $Payback->ref_by = $user->ref_by;  //邀请人ID
+                            $Payback->ref_get = - $ref_payback->ref_get;
+                            $Payback->datetime = time();
+                            $Payback->save();
+                            // ref_payback 的 callback 写为1 就是这个返利被收回了。 实际这样的话，还是一个不错的方案的。也就是说，这个返利的话，只需要这里加一个参数就好了。无需之前的那种复杂的方案！ 这个可以有。
+                            $ref_payback->callback = 1; // 设置这个返利已被收回！ 不错的做法和想法！ 
+                            $ref_payback->save();
+                        }
                     }
                 }
                 //然后再删除用户
