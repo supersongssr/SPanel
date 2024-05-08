@@ -93,6 +93,7 @@ class UserController extends BaseController
             ->assign('geetest_html', $GtSdk)
             ->assign('mergeSub', Config::get('mergeSub'))
             ->assign('subUrl', Config::get('subUrl'))
+            ->assign('subconUrl', Config::get('subconUrl'))
             ->assign("user", $this->user)
             ->registerClass("URL", "App\Utils\URL")
             ->assign('baseUrl', Config::get('baseUrl'))

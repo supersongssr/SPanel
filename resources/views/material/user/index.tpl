@@ -170,7 +170,7 @@
 													<a class="" data-toggle="tab" href="#all_game"><i class="icon icon-lg">videogame_asset</i>&nbsp;游戏</a>
 												</li> -->
 												<li >
-													<a class="" data-toggle="tab" href="#all_info"><i class="icon icon-lg">info_outline</i>&nbsp;其他</a>
+													<a class="" data-toggle="tab" href="#all_info"><i class="icon icon-lg">info_outline</i>&nbsp;更多</a>
 												</li>
 											</ul>
 										</nav>
@@ -190,7 +190,7 @@
 
 													<div class="tab-pane fade active in" id="all_v2rayn">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/v2rayN-Core.zip" class="btn-dl"><i class="material-icons">save_alt</i> 本站v6.32</a><a href="https://github.com/2dust/v2rayN/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> ->解压->运行 <code>V2rayN.exe</code> </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>V2rayN -> 订阅 -> <code>订阅设置</code> -> 添加 -> 备注:随意 , 地址:(如上);  -> 确定 
 															<br> v2rayN -> 订阅 -><code>更新订阅(不通过代理)</code> -> (出现节点列表)  
@@ -202,7 +202,7 @@
 
                                                     <div class="tab-pane fade" id="all_clash">
 														<div><span class="icon icon-lg text-white">flash_auto</span> Clash新版订阅地址: </div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subconUrl}/sub?target=clash&new_name=true&url={urlencode('巴哈吧哈')}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/Clash.for.Windows-0.19.8-win.7z" class="btn-dl"><i class="material-icons">save_alt</i> 本站v0.19.8</a><a href="https://github.com/Fndroid/clash_for_windows_pkg/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> ->解压->运行 <code>Clash.exe</code> </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>Clash -> <code>Profiles</code> -> 输入订阅地址 -> <code>Download</code></p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>Clash -> <code>System Proxy</code> -> <code>Start with Windows</code> </p>
@@ -224,14 +224,14 @@
 													
 													<div class="tab-pane fade active in" id="all_v2rayng">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/v2rayNG.apk" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载</a><a href="https://github.com/2dust/v2rayNG/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> -> 安装</p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>v2rayNG -> 左上角 -> <code>订阅设置</code> -> 右上角<code>+</code>添加订阅；v2rayNG -> 右上角 <code>+</code> ->更新订阅；</p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>选择节点 -> 右下角 <code>图标</code> -> 弹出窗口：允许VPN(仅第一次开启出现)</p>
 													</div>
 													<div class="tab-pane fade" id="all_sagernet">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/SN-0.7-rc06-arm64-v8a.apk" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载v0.7-rc06</a><a href="https://github.com/SagerNet/SagerNet/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> -> 安装</p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>SagerNet -> 左上角菜单 -> 分组 -> 右上角<code>+</code> -> <code>分组类型:订阅</code> -> 订阅链接填写 -> 保存； 自动获取节点</p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>SagerNet -> 左上角菜单 -> 配置 ; 选择节点 -> 右下角图标 -> 允许VPN(如果出现弹窗)</p>
@@ -249,7 +249,7 @@
 													</nav>
 													<div class="tab-pane fade active in" id="all_shadowrocket">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span> <b>获取软件</b>获取软件：在<code>非国区</code>AppStore中搜索<code>shadowrocket</code>购买($2.99) -> 安装</p>
 														<p><span class="icon icon-lg text-white">filter_2</span> <b>订阅节点：</b>Shadowrocket -> 右上角 <code>+</code> -> 类型:<code>Subscribe</code> -> URL：订阅地址-> 完成</p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>点击节点 -> 点击上方<code>未连接</code> 切换为 连接 。<small>*如遇到提示是否允许小火箭使用代理，点击ALLOW*</small></p>
@@ -271,7 +271,7 @@
 													</nav>
 													<div class="tab-pane fade active in" id="all_v2raya">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 推荐搭配 搭配 Homebrew 安装，请先安装 <a href="https://brew.sh/" >Homebrew</a>  
 															<br> 下载V2rayA: <a href="">本站下载</a> 或 <a href="https://github.com/v2rayA/v2rayA/releases">官网下载</a>， 下载 -> 解压 -> 将 v2rayA文件重命名为 v2raya 并将其保存到 /usr/local/bin/
 															<br> 在 /usr/local/bin/ 目录下 新建一个 sh脚本 v2raya.sh 输入如下内容：
@@ -291,7 +291,7 @@
 													</div>
 													<div class="tab-pane fade" id="all_v2rayu">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button><br></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/V2rayU-64.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载 v3.3.0 Intel芯片版</a> <a href="/download/V2rayU-arm64.dmg" class="btn-dl"><i class="material-icons">save_alt</i> v3.3.0 M1/M2芯片版</a> <a href="https://github.com/yanue/V2rayU/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载v3.3.0</a>→在<code>安装界面</code>将<code>v2rayU</code>拖到<code>Applications</code>文件夹→打开启动台，找到v2rayU→点击启动；<small>*首次打开会有安全提示，点击 好*</small></p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>右键状态栏v2rayU图标 -> 订阅设置/Subscribe→URL/<code>地址:</code>→remark/备注：<code>{$config["appName"]}</code>→add/添加 →update servers/更新；获取节点</p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>选择节点→右键任务栏图标→GlobalMode/全局模式→Turn V2ray-Core:On → 打开浏览器使用</p>
@@ -315,7 +315,7 @@
 													
 													<div class="tab-pane fade active in" id="all_v2raya_debian">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
 															<br> 安装后可以关掉V2ray服务，V2rayA不依赖V2ray服务，只需要V2raycore <code>sudo systemctl disable v2ray --now</code>
 															<br> 安装 V2rayA : 添加公钥 <code>wget -qO - https://apt.v2raya.mzz.pub/key/public-key.asc | sudo apt-key add -</code>
@@ -333,7 +333,7 @@
 													</div>
 													<div class="tab-pane fade  " id="all_v2raya_centos">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 安装V2ray: <code>curl -Ls https://mirrors.v2raya.org/go.sh | sudo bash</code>
 															<br> 安装后可以关掉V2ray服务，V2rayA不依赖V2ray服务，只需要V2raycore <code>sudo systemctl disable v2ray --now</code>
 															<br> 下载RPM包 <code>cd;wget -LOk https://github.com/v2rayA/v2rayA/releases/download/v1.5.6.2/installer_redhat_x64_1.5.6.2.rpm</code>
@@ -351,7 +351,7 @@
 													<div class="tab-pane fade  " id="all_qv2ray">
 														<p>友情提示：Qv2ray团队已停止开发该软件。最后更新时间为2021-08-17 </p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 使用教程请查看 <a href="http://qv2ray.net/lang/zh/getting-started/">官方教程地址</a> </p>
 													</div>
 												</div>
@@ -369,7 +369,7 @@
 														<p><span class="icon icon-lg text-white">filter_1</span><b>安装软件：</b><a href="/user/announcement/26" class="btn-dl">查看教程</a> </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>使用软件：</b><a href="/user/announcement/28" class="btn-dl">查看教程</a> </p>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b>  </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>  </p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>  </p> -->
@@ -387,7 +387,7 @@
 													
 													<div class="tab-pane fade active in" id="all_gameplugin">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">复制</button></div>
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b>  </p>
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>  </p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b>  </p> -->
@@ -405,50 +405,50 @@
 													</nav>
 													<div class="tab-pane fade active in" id="all_hand">
 														<div><span class="icon icon-lg text-white">flash_auto</span> Clash新版订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clash&new_name=true&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> Clash订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clash&new_name=false&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clash&new_name=false&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clash&new_name=false&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clash&new_name=false&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> ClashR新版订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clashr&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clashr&new_name=true&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clashr&new_name=true&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clashr&new_name=true&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> ClashR订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clashr&new_name=false&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clashr&new_name=false&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=clashr&new_name=false&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=clashr&new_name=false&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> Quan-X订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=quanx&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=quanx&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=quanx&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> Surfboard订阅：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=surfboard&url={$subUrl}{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="https://sub.okggrss.buzz/sub?target=surfboard&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="https://sub.okggrss.buzz/sub?target=surfboard&url={$subUrl}/link/{$ssr_sub_token}?mu=2&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online.ini">
 															点击复制
 														</button>
 														</div>
 														<br>
 														<div><span class="icon icon-lg text-white">flash_auto</span> 默认V2ray订阅地址：</div>
-														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}{$ssr_sub_token}?mu=2" readonly="true" />
-														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}{$ssr_sub_token}?mu=2">
+														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true" />
+														<button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">
 															点击复制
 														</button>
 														</div>
