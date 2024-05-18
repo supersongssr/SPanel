@@ -192,8 +192,8 @@
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/v2rayN-Core.zip" class="btn-dl"><i class="material-icons">save_alt</i> 本站v6.32</a><a href="https://github.com/2dust/v2rayN/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载</a> ->解压->运行 <code>V2rayN.exe</code> </p>
-														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>V2rayN -> 订阅 -> <code>订阅设置</code> -> 添加 -> 备注:随意 , 地址:(如上);  -> 确定 
-															<br> v2rayN -> 订阅 -><code>更新订阅(不通过代理)</code> -> (出现节点列表)  
+														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>V2rayN -> 订阅分组 -> <code>订阅分组设置</code> -> 添加 -> 别名:随意 , 可选地址:(如上), 勾选启用订阅  -> 确定 
+															<br> v2rayN -> 订阅分组 -><code>更新订阅(不通过代理)</code> -> (出现节点列表)  
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用节点：</b> V2rayN -> 选择节点(如'香港') -> 右键点击 -> 设为活动服务器
 															<br> <code>V2rayN</code> 系统代理 -> 自动配置系统代理 -> 路由 -> 绕过大陆 -> 完成</p>
 														<p><span class="icon icon-lg text-white">filter_4</span><b>图文教程</b> -> <a href="/user/announcement/3" class="btn-dl">v2rayN图文教程</a></p>
