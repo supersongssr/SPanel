@@ -270,7 +270,7 @@
 															</li>
 														</ul>
 													</nav>
-													<div class="tab-pane fade active in" id="all_v2raya">
+													<div class="tab-pane fade" id="all_v2raya">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<!-- <p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b> 推荐搭配 搭配 Homebrew 安装，请先安装 <a href="https://brew.sh/" >Homebrew</a>  
@@ -290,7 +290,7 @@
 														<p><span class="icon icon-lg text-white">filter_2</span><b>订阅节点：</b>V2rayA网页 -> <code>导入</code> 填写订阅地址 -> 确定 </p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用软件：</b><a href="/user/announcement/28" class="btn-dl">查看教程</a> </p>
 													</div>
-													<div class="tab-pane fade" id="all_v2rayu">
+													<div class="tab-pane fade active in" id="all_v2rayu">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subUrl}/link/{$ssr_sub_token}?mu=2" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subUrl}/link/{$ssr_sub_token}?mu=2">复制</button><br></div>
 														<p><span class="icon icon-lg text-white">filter_1</span><b>获取软件：</b><a href="/download/V2rayU-64.dmg" class="btn-dl"><i class="material-icons">save_alt</i> 本站下载 v4.1 Intel芯片版</a> <a href="/download/V2rayU-arm64.dmg" class="btn-dl"><i class="material-icons">save_alt</i> v4.1 M1/2/3/4APPLE芯片版</a> <a href="https://github.com/yanue/V2rayU/releases" class="btn-dl"><i class="material-icons">save_alt</i> 官网下载最新版</a>→在<code>安装界面</code>将<code>v2rayU</code>拖到<code>Applications</code>; 运行: 访达 → 应用 ，找到v2rayU→ 右键点击启动；</p>
