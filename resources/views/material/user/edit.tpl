@@ -71,13 +71,13 @@
 												<div class="card-heading">分组 网络</div>
 												<button class="btn btn-flat" id="group-update"><span class="icon">check</span>&nbsp;</button>
 										</div>
-										<p>设置您的需求，根据您的选择分配新节点。设置完成,10分钟后生效,请重新获取节点。</p>
+										<p>设置您的需求，根据您的选择分配新节点,旧节点失效。设置完成,10分钟后生效,请重新获取节点。</p>
 										<div class="form-group form-group-label control-highlight-custom dropdown">
 											<label class="floating-label" for="group">请选择您的分组</label>
 											<button id="group" type="button" class="form-control maxwidth-edit" data-toggle="dropdown" value="{$user->node_group}">
 											</button>
 											<ul class="dropdown-menu" aria-labelledby="mail">
-												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">下载优先 </a></li>
+												<li><a href="#" class="dropdown-option" onclick="return false;" val="1" data="group">流量优先 </a></li>
 												<li><a href="#" class="dropdown-option" onclick="return false;" val="2" data="group">带宽优先 </a></li>
 												<li><a href="#" class="dropdown-option" onclick="return false;" val="3" data="group">延迟优先 </a></li>
 											</ul>

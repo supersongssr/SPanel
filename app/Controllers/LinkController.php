@@ -120,7 +120,7 @@ class LinkController extends BaseController
         // $newResponse->getBody()->write(self::GetSSRSub(User::where('id', '=', $Elink->userid)->first(), $mu));
         // return $newResponse;
         $url = '';
-        $url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
+        //$url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
         $url .= self::getAllUrl($user , $mu);        // 节点
         // $url .= self::getFreeUrl(false, $mu);  // add free url
         return base64_encode($url);
@@ -142,7 +142,7 @@ class LinkController extends BaseController
                 $v2_json = [        
                     "v"    => "2",
                     "ps"   => $node->name,
-                    "add"  => 'baidu.com' ,
+                    "add"  => 'okgg.top' ,
                     "port" => 443 ,
                     "id"   => '6c6a0625-ac3f-4bd8-9cc8-0545e4e11409',
                     "aid"  => 0 ,
