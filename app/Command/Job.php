@@ -296,7 +296,7 @@ class Job
             // $user->ban_times > 16 &&  $user->enable = 0;
             $user->warming = date("Ymd H:i:s") . '近期下行流量较多，系统已为您分配大带宽节点，下载请使用低倍率节点，切换分组请在个人设定页面';
             $user->node_group > 1 && $user->node_group -= 1;  // 分配到下一组
-            $user->transfer_limit += $user->class *1024*1024*1024;  //然后加上一些流量，相当于重置
+            $user->transfer_limit += $user->class *10*1024*1024*1024;  //然后加上一些流量，相当于重置
             $user->save();
         }
         Telegram::Send("总流量完毕");
