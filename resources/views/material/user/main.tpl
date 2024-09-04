@@ -83,11 +83,13 @@
 
 						<a class="waves-attach" data-toggle="collapse" href="#ui_menu_help">商店</a>
 						<ul class="menu-collapse collapse in" id="ui_menu_help">
+							{if $config['payment_system']!='none' && $config['payment_system']!='' }
                           	<li>
 								<a href="/user/code">
 									<i class="icon icon-lg">code</i>&nbsp;捐赠/充值
 								</a>
 							</li>
+							{/if}
 
 							<li>
 								<a href="/user/shop">
