@@ -164,9 +164,9 @@ class Job
                 $_traffic_today > 999*1024*1024*1024 && $_traffic_today = 999*1024*1024*1024; //使用 0-999
                 $_traffic_today < 1 && $_traffic_today = 0; //下限0G
                 $_used_count += $_traffic_today ;
-                if ($node->type != 1){  # 如果节点是故障的,就处理掉.
-                    continue;
-                }
+                // if ($node->type != 1){  # 如果节点是故障的,就处理掉. # 2024-09-12 配合后台每日流量限制,有些状态为0的节点,也能被使用
+                //     continue;
+                // }
                 $_traffic_left_daily = $node->traffic_left_daily ;
                 $_traffic_left_daily > 100*1024*1024*1024 && $_traffic_left_daily = 100*1024*1024*1024;  //剩余流量的统计上限100G
                 $_traffic_left_daily < 1 && $_traffic_left_daily = 0;  // 0-100G
@@ -195,6 +195,26 @@ class Job
             $node->custom_rss == 0 && $node->status = 'U'.$node->status; //流量用多的节点,前面加一个U避免误解
             $node->status .= '|'.date("Y-m-d");
 
+            if ($traffic_today < 49*1024*1024*1024 && $node->class > 1 && $node->custom_rss == 1 ){  // 每日 < 32G的健康节点,等级降一级 
+                $node->class -= 1;
+                $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
+                foreach($clone_nodes as $c){
+                    $c->class -= 1;
+                    $c->save();
+                }
+                unset($clone_nodes);
+            }
+
+            if ($traffic_today > 64*1024*1024*1024 && $node->class < 10 ){  // 每日 >64G 的节点,等级升一级 
+                $node->class += 1;
+                $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
+                foreach($clone_nodes as $c){
+                    $c->class += 1;
+                    $c->save();
+                }
+                unset($clone_nodes); //释放内存
+            }
+
             // node_sort
             if ( $node->type != 0 && $node->custom_rss == 1 && $node->is_clone == 0 ) {  //添加正常订阅的节点才处理   //思考一下这个怎么计算? 
                 $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 3;     // 节点维修值 如果节点为0 就需要大修了。
@@ -215,7 +235,7 @@ class Job
             $_rate > 3 && $_rate = 3;
             $node->traffic_rate = $_rate;
 
-            $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据
+            $node->node_bandwidth_lastday = $node->node_bandwidth;   // 这里重置一下每天的统计数据 就算是失效的节点这里也计算.
             $node->traffic_used_daily = 0;  # 这里需要重置一下这个信息,因为这些信息是后台上报的. 为避免失效的节点在这里被计算
             $node->traffic_left_daily = 0;
             $node->save();
