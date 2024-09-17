@@ -227,18 +227,18 @@ class XCat
     {
 
 
-        # get the nodes from and name 
-        $nodes = Node::where("type",1)->where('is_clone',0)->orderby('node_group','desc')->get();
-        $a='';
-        foreach($nodes as $node){
-            parse_str($node->node_ip, $b);  //获取参数
-            $a.=$node->name.' '.$node->country_code. '@'.$node->id  .' | G'.$node->node_group.' | '.$b['expire'].' | '.$b['from']."\n";
-            echo $node->id.' | ';
-        }
-        $myfile = fopen("/www/wwwroot/ssp-uim/public/out.txt", "w") or die("Unable to open file!");
-        fwrite($myfile, $a);
-        fclose($myfile);
-        echo 'done';
+        // # get the nodes from and name 
+        // $nodes = Node::where("type",1)->where('is_clone',0)->orderby('node_group','desc')->get();
+        // $a='';
+        // foreach($nodes as $node){
+        //     parse_str($node->node_ip, $b);  //获取参数
+        //     $a.=$node->name.' '.$node->country_code. '@'.$node->id  .' | G'.$node->node_group.' | '.$b['expire'].' | '.$b['from']."\n";
+        //     echo $node->id.' | ';
+        // }
+        // $myfile = fopen("/www/wwwroot/ssp-uim/public/out.txt", "w") or die("Unable to open file!");
+        // fwrite($myfile, $a);
+        // fclose($myfile);
+        // echo 'done';
         
 
         // echo '迁移分组 2 to 3';

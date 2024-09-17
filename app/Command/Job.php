@@ -195,8 +195,8 @@ class Job
             $node->custom_rss == 0 && $node->status = 'U'.$node->status; //流量用多的节点,前面加一个U避免误解
             $node->status .= '|'.date("Y-m-d");
 
-            if ($traffic_today < 49*1024*1024*1024 && $node->class > 1 && $node->custom_rss == 1 ){  // 每日 < 32G的健康节点,等级降一级 
-                $node->class -= 1;
+            if ($traffic_today < 49*1024*1024*1024 && $node->node_class > 1 && $node->custom_rss == 1 ){  // 每日 < 32G的健康节点,等级降一级 
+                $node->node_class -= 1;
                 $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
                     $c->class -= 1;
@@ -205,8 +205,8 @@ class Job
                 unset($clone_nodes);
             }
 
-            if ($traffic_today > 64*1024*1024*1024 && $node->class < 10 ){  // 每日 >64G 的节点,等级升一级 
-                $node->class += 1;
+            if ($traffic_today > 64*1024*1024*1024 && $node->node_class < 10 ){  // 每日 >64G 的节点,等级升一级 
+                $node->node_class += 1;
                 $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
                     $c->class += 1;
