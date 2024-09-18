@@ -254,7 +254,7 @@
 													<div class="tab-pane fade active in" id="all_ios_singbox">
 														<div><span class="icon icon-lg text-white">flash_auto</span> 订阅地址：</div>
 														<div class="float-clear"><input type="text" class="input form-control form-control-monospace cust-link col-xx-12 col-sm-8 col-lg-7" name="input1" readonly value="{$subconUrl}/sub?target=singbox&url={$subUrl}/link/{$ssr_sub_token}&insert=false&emoji=true&list=false&tfo=false&scv=true&fdn=false&expand=true&sort=false" readonly="true"><button class="copy-text btn btn-subscription col-xx-12 col-sm-3 col-lg-2" type="button" data-clipboard-text="{$subconUrl}/sub?target=singbox&url={$subUrl}/link/{$ssr_sub_token}&insert=false&emoji=true&list=false&tfo=false&scv=true&fdn=false&expand=true&sort=false">复制</button><br></div>
-														<p><span class="icon icon-lg text-white">filter_1</span> <b>获取软件:</b>在<code>非国区</code>AppStore中搜索<code>Sing-Box</code>免费 -> 安装</p>
+														<p><span class="icon icon-lg text-white">filter_1</span> <b>获取软件:</b>在<code>非国区</code>AppStore中搜索<code>Sing-Box</code>免费 -> 安装(当前该软件下架) 请使用该地址下载<a href="https://apps.apple.com/us/app/sing-box-vt/id6673731168" class="btn-dl"><i class="material-icons">save_alt</i> Sing-Box-VT</a></p>
 														<p><span class="icon icon-lg text-white">filter_2</span> <b>订阅节点：</b>Sing-Box -> Profiles -> NewProfile -> Type :Remote -> URL:输入订阅地址 -> Create</p>
 														<p><span class="icon icon-lg text-white">filter_3</span><b>使用代理：</b>Sing-Box -> DashBoard <code>Enable</code>选择 。<small>*如遇到提示是否允许使用代理，点击ALLOW*</small></p>
 														<p><span class="icon icon-lg text-white">filter_4</span><b>图文教程：</b><a>图文教程</a></p>
