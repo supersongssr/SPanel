@@ -24,18 +24,9 @@
                                 <div class="card-inner">
 
                                     {if $config["enable_admin_contact"] == 'true'}
-                                        <p class="card-heading">充值遇到问题？发送邮件至 spay@ssmail.win 联系管理员</p>
-                                        {if $config["admin_contact1"]!=null}
-                                            <li>{$config["admin_contact1"]}</li>
-                                        {/if}
-                                        {if $config["admin_contact2"]!=null}
-                                            <li>{$config["admin_contact2"]}</li>
-                                        {/if}
-                                        {if $config["admin_contact3"]!=null}
-                                            <li>{$config["admin_contact3"]}</li>
-                                        {/if}
+                                        <p class="card-heading">充值遇到问题？发送邮件至 {$config["admin_contact1"]} 联系管理员</p>
                                     {/if}
-                                    <p><font color="#FA8072" size="3">任何未提前邮件沟通就发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
+                                    <p><font color="#FA8072" size="3">任何未提前沟通就发起的支付投诉/退款,账号ID/IP永久冻结</font></p>
                                     <p><i class="icon icon-lg">attach_money</i>当前余额：<font color="#399AF2" size="5">{$user->money}</font> </p>
                                 </div>
                             </div>
@@ -81,13 +72,16 @@
                                         <p>@充值余额:-> <a type="button" class="btn fbtn-brand" href="{{$clonepay_url}}" target="_blank" >充值网站 (商品已安全处理)</a></p>  
                                         <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (相同邮箱 充值同步)</p>
                                         <p>2. 在 <code>充值网站</code> 支付充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
-                                        <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">刷新余额 {$user->money}￥</a></p>
-                                        <p><font color="#399AF2" size="4">充值问题专用邮箱：cpay@ssmail.win （22:00前当日回复,22:00后次日回复）</font></p>
-                                        <p><font color="#FA8072" size="3">任何未提前邮件沟通而发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
-                                    <hr>
-                                        <p>@常见问题:-> <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">充值未同步? 点此同步充值记录</button></p>
+                                        <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">点此 刷新余额</a></p>
+                                        <p>4. 充值未同步? <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">点此 同步充值记录</button></p>
+                                        
+                                    </div>
+                                    <div>
+                                        <p>@常见问题: </p>
                                         <p><code>*邮箱不同，充值记录同步么？ - 不同步(必须邮箱相同)</code></p>
                                         <p><code>*邮箱相同，用户名密码不同，充值记录同步么？ - 同步(邮箱相同即可)</code></p>
+                                        <p><font color="#399AF2" size="4">充值售后邮箱：{$config["admin_contact1"]} （1个工作日内回复）</font></p>
+                                        <p><font color="#FA8072" size="3">任何未提前邮件沟通而发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
                                     </div>
                                 </div>
                             </div>
