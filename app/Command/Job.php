@@ -199,7 +199,7 @@ class Job
                 $node->node_class -= 1;
                 $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
-                    $c->class -= 1;
+                    $c->node_class -= 1;
                     $c->save();
                 }
                 unset($clone_nodes);
@@ -209,7 +209,7 @@ class Job
                 $node->node_class += 1;
                 $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
-                    $c->class += 1;
+                    $c->node_class += 1;
                     $c->save();
                 }
                 unset($clone_nodes); //释放内存
