@@ -181,7 +181,7 @@ class LinkController extends BaseController
                 if ( $v2['cdnip'] ){
                     $v2['add'] = $v2['cdnip'];
                 }
-                if ( $user->cfcdn ){
+                if ( $v2['cdn'] == 'cf' && $user->cfcdn ){
                     $v2['add'] = $user->cfcdn;
                 }
             }
