@@ -177,8 +177,13 @@ class LinkController extends BaseController
         }
         foreach ($nodes as $node) {
             parse_str($node->server, $v2);  //获取参数
-            if ( $v2['cdn'] && $user->cfcdn ) {     //配置cfCDN参数
-                $v2['add'] = $user->cfcdn;
+            if ( $v2['cdn'] ){ # 配置CDN ip
+                if ( $v2['cdnip'] ){
+                    $v2['add'] = $v2['cdnip'];
+                }
+                if ( $user->cfcdn ){
+                    $v2['add'] = $user->cfcdn;
+                }
             }
             if ($node->sort == 11 && ($mu == 'vmess' || $mu == 2 || $mu == 5) ) {
                 $v2_json = [
