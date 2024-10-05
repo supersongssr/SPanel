@@ -336,7 +336,7 @@ class ApiController extends BaseController
         
         
         // 验证签名
-        $signStr = $request->getParam('salt') .'&'. date('Ymd') .'&'.$request->getParam('order').'&'.$request->getParam('money').'&'.$clonepay_apis[$from]['apitoken'];
+        $signStr = $request->getParam('salt') .'&'. date('Ymd') .'&'.$request->getParam('order').'&'.$request->getParam('money').'&'.$clonepay_apis[$from]['paytoken'];
         if (md5($signStr) != $request->getParam('sign')) {
             exit;
         }
@@ -372,7 +372,7 @@ class ApiController extends BaseController
         $codeq->number = $request->getParam('money');
         $codeq->isused = 1;
         $codeq->userid = $user->id;
-        $codeq->usedatetime=$request->getParam('time');
+        $codeq->usedatetime=date("Y-m-d H:i:s", $request->getParam('time'));
         $codeq->save();
         // 给用户加上余额。
         $user->money += $request->getParam('money');

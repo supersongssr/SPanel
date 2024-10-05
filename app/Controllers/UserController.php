@@ -124,7 +124,7 @@ class UserController extends BaseController
         $clonepay_apis = Config::get('clonepay_apis');
         $clonepays = array();  // 多维数组
         foreach ($clonepay_webs as $k => $v ){
-            $sign = $this->user->email . '&' .date('Ymd') .'&' . $clonepay_apis[$v]['apitoken'];
+            $sign = $this->user->email . '&' .date('Ymd') .'&' . $clonepay_apis[$v]['logintoken'];
             $clonepays[$v]['name'] = $clonepay_apis[$v]['name'];
             $clonepays[$v]['url'] = $clonepay_apis[$v]['homeurl'].'&regname=game' . $this->user->id . '&regemail='. $this->user->email . '&regkey=' .md5($sign);
         };

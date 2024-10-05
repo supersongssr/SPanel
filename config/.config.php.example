@@ -185,6 +185,8 @@ $System_Config['clonepay_apis'] = [     // clonepay 站点配置
                 'homeurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown_login',
                 'syncurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown',
                 'apitoken' => 'wagagadididi',
+                'logintoken' => '',  //用于登录的token 
+                'paytoken'  => '',  //用于支付的token
                 'safeip' => '127.0.0.1',
                 'safeipv6' => 'ipv6'
         ],
@@ -193,6 +195,8 @@ $System_Config['clonepay_apis'] = [     // clonepay 站点配置
                 'homeurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown_login',
                 'syncurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown',
                 'apitoken' => 'wagagadididi',
+                'logintoken' => '',  //用于登录的token 
+                'paytoken'  => '',  //用于支付的token
                 'safeip' => '127.0.0.1',
                 'safeipv6' => 'ipv6'
         ],
