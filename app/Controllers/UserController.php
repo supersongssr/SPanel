@@ -117,9 +117,19 @@ class UserController extends BaseController
         }
         $codes = Code::where('type', '<>', '-2')->where('userid', '=', $this->user->id)->orderBy('id', 'desc')->paginate(15, ['*'], 'page', $pageNum);
         $codes->setPath('/user/code');
-        $sign = $this->user->email . '&' .date('Ymd') .'&' . Config::get('clonepay_apitoken');
-        $clonepay_url = Config::get('clonepay_homeurl') .'&regname=game' . $this->user->id . '&regemail='. $this->user->email . '&regkey=' .md5($sign);
-        return $this->view()->assign('clonepay_url',$clonepay_url)->assign('codes', $codes)->assign('pmw', Payment::purchaseHTML())->display('user/code.tpl');
+        
+        //$clonepay_url = Config::get('clonepay_homeurl') .'&regname=game' . $this->user->id . '&regemail='. $this->user->email . '&regkey=' .md5($sign);
+        
+        $clonepay_webs = Config::get('clonepay_webs');
+        $clonepay_apis = Config::get('clonepay_apis');
+        $clonepays = array();  // 多维数组
+        foreach ($clonepay_webs as $k => $v ){
+            $sign = $this->user->email . '&' .date('Ymd') .'&' . $clonepay_apis[$v]['apitoken'];
+            $clonepays[$v]['name'] = $clonepay_apis[$v]['name'];
+            $clonepays[$v]['url'] = $clonepay_apis[$v]['homeurl'].'&regname=game' . $this->user->id . '&regemail='. $this->user->email . '&regkey=' .md5($sign);
+        };
+
+        return $this->view()->assign('clonepays',$clonepays)->assign('codes', $codes)->assign('pmw', Payment::purchaseHTML())->display('user/code.tpl');
     }
 
     public function orderDelete($request, $response, $args)
@@ -2184,10 +2194,26 @@ class UserController extends BaseController
             $rs['msg'] = '此功能尚未开启，请刷新页面';
             return $response->getBody()->write(json_encode($rs));
         }
+
+        if (empty($request->getParam('code'))){
+            $rs['ret'] = 0;
+            $rs['msg'] = '请求信息为空,请Email联系管理员';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
         // 开始同步信息
         $user = Auth::getUser();
-        if (Config::get('clonepay_syncurl')) {   //是否设置了 同步 url地址
-            $sync_url = Config::get('clonepay_syncurl') .'&email=' . $user->email ;
+        $code = $request->getParam('code');
+        $clonepay_apis = Config::get('clonepay_apis');
+
+        if (empty($clonepay_apis[$code])){
+            $rs['ret'] = 0;
+            $rs['msg'] = '支付站点不存在,请Email联系管理员';
+            return $response->getBody()->write(json_encode($rs));
+        }
+
+        if (!empty($clonepay_apis[$code]['syncurl'])) {   //是否设置了 同步 url地址
+            $sync_url = $clonepay_apis[$code]['syncurl'] .'&email=' . $user->email ;
             // 开始 curl get 
             // 初始化
             $curl = curl_init();
@@ -2207,6 +2233,10 @@ class UserController extends BaseController
             // 关闭连接
             curl_close($curl);
             // 返回数据
+        }else{
+            $rs['ret'] = 0;
+            $rs['msg'] = '支付回调不存在,快Email联系管理员';
+            return $response->getBody()->write(json_encode($rs));
         }
         if ($syncpays) {
             parse_str($syncpays, $msg);

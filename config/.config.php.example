@@ -177,10 +177,32 @@ $System_Config['enable_checkin_captcha'] = 'false';	//启用签到验证码
 #取值 none | codepay | trimepay | f2fpay | yftpay | chenAlipay | paymentwall | spay | paytaro | fakapay | clonepay
 $System_Config['payment_system']='none';
 
+
+$System_Config['clonepay_webs'] = [ 'game','video'];   // 开启哪些 clonepay 的站点
+$System_Config['clonepay_apis'] = [     // clonepay 站点配置
+        'game' => [
+                'name' => '游戏',
+                'homeurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown_login',
+                'syncurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown',
+                'apitoken' => 'wagagadididi',
+                'safeip' => '127.0.0.1',
+                'safeipv6' => 'ipv6'
+        ],
+        'video' => [
+                'name' => '视频',
+                'homeurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown_login',
+                'syncurl' => 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown',
+                'apitoken' => 'wagagadididi',
+                'safeip' => '127.0.0.1',
+                'safeipv6' => 'ipv6'
+        ],
+        
+    ];
+
 # clonepay 参数 sdo2022-03-21
 $System_Config['clonepay_homeurl'] = 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown_login';
-$System_Config['clonepay_syncurl'] = ['http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown'];
-$System_Config['clonepay_apitoken'] = 'clonepaysimida'; // 安全密钥 
+$System_Config['clonepay_syncurl'] = 'http://modown.cc/wp-admin/admin-ajax.php?action=clonepay_modown';
+$System_Config['clonepay_apitoken'] = 'wagagadidiidi'; // 安全密钥 
 $System_Config['clonepay_safeip'] = '127.0.0.1';  //安全通信唯一ip地址
 $System_Config['clonepay_safeipv6'] = '';  //安全通信 唯一 ipv6地址
 

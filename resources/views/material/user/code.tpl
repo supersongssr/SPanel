@@ -68,21 +68,52 @@
                                     <div class="cardbtn-edit">
                                             <div class="card-heading">充值余额  (代付充值)</div>
                                     </div>
-                                    <div>
-                                        <p>@充值余额:-> <a type="button" class="btn fbtn-brand" href="{{$clonepay_url}}" target="_blank" >充值网站 (商品已安全处理)</a></p>  
-                                        <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (相同邮箱 充值同步)</p>
-                                        <p>2. 在 <code>充值网站</code> 支付充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
-                                        <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">点此 刷新余额</a></p>
-                                        <p>4. 充值未同步? <button id="syncclonepay" type="submit" class="btn fbtn-green btn-sm ">点此 同步充值记录</button></p>
-                                        
-                                    </div>
-                                    <div>
-                                        <p>@常见问题: </p>
+                                    <nav class="tab-nav margin-top-no">
+                                        <ul class="nav nav-list">
+                                            <li class="active in">
+                                                <a class="" data-toggle="tab" href="#warning"><i class="icon icon-lg">announcement</i>&nbsp;说明</a>
+                                            </li>
+                                            {foreach $clonepays as $k => $v }
+                                                <li class="">
+                                                    <a class="" data-toggle="tab" href="#{$k}"><i class="icon icon-lg">card_giftcard</i>&nbsp;代付充值: {$v['name']}</a>
+                                                </li>
+                                            {/foreach}
+                                        </ul>
+                                    </nav>
+                                    <div class="tab-pane fade active in" id="warning">
+                                        <p>@充值步骤: </p>
+                                        <p><span class="icon icon-lg text-white">filter_1</span>选择代付: 在右侧选择<code>代付充值合作网站</code> 充值站点 </p>
+                                        <p><span class="icon icon-lg text-white">filter_2</span>注册账号: 使用本站邮箱 <code>{$user->email}</code> 注册账号 (跳转时会自动相同邮箱注册)</p>
+                                        <p><span class="icon icon-lg text-white">filter_3</span>同步充值: 在代付网站充值, <code>自动同步充值金额</code> 至本站</p>
+                                        <p>@注意事项: </p>
                                         <p><code>*邮箱不同，充值记录同步么？ - 不同步(必须邮箱相同)</code></p>
                                         <p><code>*邮箱相同，用户名密码不同，充值记录同步么？ - 同步(邮箱相同即可)</code></p>
                                         <p><font color="#399AF2" size="4">充值售后邮箱：{$config["admin_contact1"]} （1个工作日内回复）</font></p>
                                         <p><font color="#FA8072" size="3">任何未提前邮件沟通而发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
+                                        <p>@常见问题: </p>
+                                        <p><small>*代付网站充值的金额,可以在代付网站消费吗? 可以</small></p>
+                                        <p><small>*在代付网站消费,会扣本站余额吗? 不会</small></p>
+                                        <p><small>*在代付网站充值,邮箱不同,充值记录同步吗? 不同步(必须邮箱相同)</small></p>
+                                        <p><small>*在代付网站消费,消费记录会同步吗? 不会(仅同步充值记录)</small></p>
+                                        <p><small>*在代付网站充值,是否相当于同时充值了代付网站和本站? 是的(买一赠一)</small></p>
                                     </div>
+                                    {foreach $clonepays as $k => $v }
+                                        <div class="tab-pane fade " id="{$k}">
+                                            <p>@充值余额:-> <a type="button" class="btn fbtn-brand" href="{$v['url']}" target="_blank" >充值网站 {$v['name']}</a></p>  
+                                            <p>1. 在 <code>充值网站</code> 用邮箱 <font color="#FF5733">{$user->email}</font> 注册帐号。 (相同邮箱 充值同步)</p>
+                                            <p>2. 在 <code>充值网站</code> 支付充值 <font color="#FF5733"> = </font>本站充值。 (充值记录 自动同步)</p>
+                                            <p>3. 充值完成? <a type="button" class="btn " href="javascript:location.reload();">点此 刷新余额</a></p>
+                                            <p>4. 充值未同步? <button onclick="syncclonepay('{$k}')"  type="submit" class="btn fbtn-green btn-sm ">点此 同步充值记录</button></p>
+                                            
+                                            <hr>
+
+                                            <p>@常见问题: </p>
+                                            <p><code>*邮箱不同，充值记录同步么？ - 不同步(必须邮箱相同)</code></p>
+                                            <p><code>*邮箱相同，用户名密码不同，充值记录同步么？ - 同步(邮箱相同即可)</code></p>
+                                            <p><font color="#399AF2" size="4">充值售后邮箱：{$config["admin_contact1"]} （1个工作日内回复）</font></p>
+                                            <p><font color="#FA8072" size="3">任何未提前邮件沟通而发起的支付投诉/发卡投诉,账号ID/IP永久冻结</font></p>
+                                        </div>
+                                    {/foreach}
                                 </div>
                             </div>
                         </div>
@@ -284,30 +315,29 @@
 
 {if $config["payment_system"] == 'clonepay'}
 <script>
-    $(document).ready(function () {
-        $("#syncclonepay").click(function () {
-            $.ajax({
-                type: "POST",
-                url: "/syncclonepay",
-                dataType: "json",
-                data: {
-                },
-                success: function (data) {
-                    if (data.ret) {
-                        $("#result").modal();
-                        $("#msg").html(data.msg);
-                    } else {
-                        $("#result").modal();
-                        $("#msg").html(data.msg);
-                    }
-                },
-                error: function (jqXHR) {
+    function syncclonepay($paysite){
+        $.ajax({
+            type: "POST",
+            url: "/syncclonepay",
+            dataType: "json",
+            data: {
+                code:$paysite,
+            },
+            success: function (data) {
+                if (data.ret) {
                     $("#result").modal();
-                    $("#msg").html("！错误提示："+data.msg);
+                    $("#msg").html(data.msg);
+                } else {
+                    $("#result").modal();
+                    $("#msg").html(data.msg);
                 }
-            })
+            },
+            error: function (jqXHR) {
+                $("#result").modal();
+                $("#msg").html("！错误提示："+data.msg);
+            }
         })
-    })
+    }
 </script>
 {/if}
 

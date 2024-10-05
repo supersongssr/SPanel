@@ -57,7 +57,7 @@ class Config
             "enable_email_verify" => self::get("enable_email_verify"),
             "telegram_grouplink" => self::get("telegram_grouplink"),
             "ticket_price" => self::get("ticket_price"),
-            "clonepay_homeurl" => self::get("clonepay_homeurl")
+            // "clonepay_homeurl" => self::get("clonepay_homeurl")  //只有在前端页面获取信息的才放在这里
          ];
     }
 

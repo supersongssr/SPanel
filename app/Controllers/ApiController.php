@@ -308,17 +308,35 @@ class ApiController extends BaseController
 
     public function clonepay($request, $response, $args){  // sdo 2022-03-18 clonepay 同步 sdo2022-04-13改名
         //验证是否开启 clonepay
-        // if (Config::get('payment_system') != 'clonepay') {
-        //     exit;
-        // }
-        // 验证 ip  
-        $ip = $_SERVER["REMOTE_ADDR"]; // 获取请求ip
-        if ($ip != Config::get('clonepay_safeip') && $ip != Config::get('clonepay_safeipv6')) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
+        if (Config::get('payment_system') != 'clonepay') {
             exit;
         }
+
+        // clonepay 安全判断
+        $from = $request->getParam('from');
+        if (empty($from)){
+            exit;
+        }
+        // $clonepay_webs = Config::get('clonepay_webs');
+        // if (!in_array($from, $clonepay_webs)){
+        //     exit;
+        // }
+        $clonepay_apis = Config::get('clonepay_apis');  
+        if (empty($clonepay_apis[$from])){
+            exit;
+        }
+
+        // 验证 ip  
+        $ip = $_SERVER["REMOTE_ADDR"]; // 获取请求ip
+        if ($ip != $clonepay_apis[$from]['safeip'] && $ip != $clonepay_apis[$from]['safeipv6']) {  // 获取到的请求ip，和ip，ipv6都不匹配的话，说明是非法ip，屏蔽掉。
+            exit;
+        }
+
+        // 获取 apitoken
+        
         
         // 验证签名
-        $signStr = $request->getParam('order').'&'.$request->getParam('money').'&'.Config::get('clonepay_apitoken');
+        $signStr = $request->getParam('salt') .'&'. date('Ymd') .'&'.$request->getParam('order').'&'.$request->getParam('money').'&'.$clonepay_apis[$from]['apitoken'];
         if (md5($signStr) != $request->getParam('sign')) {
             exit;
         }
@@ -335,15 +353,21 @@ class ApiController extends BaseController
         }
         // 和 充值卡充值一样的原理，进行充值和返利。
         // 验证是否已经存在订单号了！ 如果已经存在了，就不再加money了。
-        $code_id = 'cp-' . $order;  //加一个标识符号 可以有。但是其实也没啥必要 cpm clonepaymodown cpr clonepayripro
-        $existcode = Code::where('code',$code_id)->first();
+        
+        $existcode = Code::where('code','cp-'.$order)->first();  //code 数据库存储字符串长度很长的,不用担心
+        if ($existcode->id) {    //2024-10-05 7天后这里可以取消掉.等于说更换了新的 订单号 2024-10-13号后可以取消
+            echo '&error=订单已存在';
+            exit;
+        }
+        $order = 'cp-'. $from . $order;  //加上 tag 
+        $existcode = Code::where('code',$order)->first();  //code 数据库存储字符串长度很长的,不用担心
         if ($existcode->id) {
             echo '&error=订单已存在';
             exit;
         }
         // 记录着个订单号到 数据库，加上clone这个
         $codeq = New Code();
-        $codeq->code = $code_id;
+        $codeq->code = $order;
         $codeq->type = -1;
         $codeq->number = $request->getParam('money');
         $codeq->isused = 1;
