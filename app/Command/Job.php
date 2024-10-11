@@ -195,9 +195,10 @@ class Job
             $node->custom_rss == 0 && $node->status = 'U'.$node->status; //流量用多的节点,前面加一个U避免误解
             $node->status .= '|'.date("Y-m-d");
 
-            if ($node->node_group != 1 && $traffic_today < 49*1024*1024*1024 && $node->node_class > 1 && $node->custom_rss == 1 ){  // 每日 < 32G的健康节点,等级降一级 
+            // 节点降级
+            if ($node->node_class > 1 && $node->custom_rss == 1  && $traffic_today * 2 < $node->traffic_left_daily ){  
                 $node->node_class -= 1;
-                $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
+                $clone_nodes = Node::where('is_clone','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
                     $c->node_class -= 1;
                     $c->save();
@@ -205,9 +206,10 @@ class Job
                 unset($clone_nodes);
             }
 
-            if ($node->node_group != 1 && $traffic_today > 64*1024*1024*1024 && $node->node_class < 10 ){  // 每日 >64G 的节点,等级升一级 
+            // 节点升级
+            if ($node->custom_rss == 0 && $node->node_group != 1 && $node->node_class < 9 ){ 
                 $node->node_class += 1;
-                $clone_nodes = Node::where('id','=',$node->id)->get();  // 处理 clone节点的等级
+                $clone_nodes = Node::where('is_clone','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
                     $c->node_class += 1;
                     $c->save();
@@ -215,18 +217,17 @@ class Job
                 unset($clone_nodes); //释放内存
             }
 
-            // node_sort
-            if ( $node->type != 0 && $node->custom_rss == 1 && $node->is_clone == 0 ) {  //添加正常订阅的节点才处理   //思考一下这个怎么计算? 
-                $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 3;     // 节点维修值 如果节点为0 就需要大修了。
-                $traffic_today < 8*1024*1024*1024 && $node->node_sort -= 2;
-                $traffic_today < 16*1024*1024*1024 && $node->node_sort -= 1;
-                $traffic_today > 32*1024*1024*1024 && $node->node_sort = 0;
+            // 节点提示
+            if ( $node->type != 0 && $node->custom_rss == 1 && $node->is_clone == 0 ) {   
+                $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 10;    
+                $traffic_today < $node->traffic_left_daily * 2 && $node->node_sort -= 2;
+                $traffic_today < $node->traffic_left_daily && $node->node_sort -= 1;
                 $node->traffic_used_daily > $node->traffic_left_daily && $node->node_sort = 0; // 已用流量日均 > 剩余流量 日均 , 说明用的多
             }
             
-            // traffic_rate :
+            // 节点倍率
             if ($node->traffic_left_daily > 0){  //剩余日均流量 > 0才行,因为要做被除数
-                $_rate = $node->traffic_used_daily / $node->traffic_left_daily;
+                $_rate = abs($node->traffic_used_daily / $node->traffic_left_daily);
             } else{
                 $_rate = 1;
             }
@@ -239,14 +240,7 @@ class Job
             $node->traffic_used_daily = 0;  # 这里需要重置一下这个信息,因为这些信息是后台上报的. 为避免失效的节点在这里被计算
             $node->traffic_left_daily = 0;
             $node->save();
-            
-            // //将节点每天的流量数据 写入到 node info 中，标志是 load = 0
-            // $node_info = new NodeInfoLog();
-            // $node_info->node_id = $node->id;
-            // $node_info->uptime = $traffic_today ;
-            // $node_info->load = 0;
-            // $node_info->log_time = time();
-            // $node_info->save();
+   
         }
 
         Telegram::Send("节点梳理完毕");

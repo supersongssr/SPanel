@@ -86,7 +86,7 @@ class LinkController extends BaseController
         $user->rss_count += 1;            // 记录IP
         $rss_today = $user->rss_count - $user->rss_count_lastday;       // 今日订阅次数
         $rss_ips_today = $user->rss_ips_count - $user->rss_ips_lastday;       // 今日订阅 IP来源数
-        if ( $rss_ips_today > 16 && $rss_today % 3 == 0 ) {
+        if ( $rss_ips_today > 32 && $rss_today % 3 == 0 ) {
             $user->enable = 0 ;// 禁用用户 
             $user->node_group = 1; //把用户放到1组去
             $user->warming = date("Ymd H:i:s").'今日IP来源>'.$rss_ips_today.'，太多IP在使用您的订阅，疑似泄露，今日剩余2次订阅机会，请单日IP来源<16个,请激活帐号，您封禁前订阅IP是：'.$user->rss_ip;
@@ -94,17 +94,17 @@ class LinkController extends BaseController
             $url .= '#'.urlencode('今日订阅IPs>'.$rss_ips_today.'，今日封禁订阅，请登录帐号检查');
             $user->save();
             return base64_encode($url);
-        } elseif ( $rss_today >= 32 && $rss_today % 8 == 0 ) {
+        } elseif ( $rss_today >= 64 && $rss_today % 8 == 0 ) {
             $user->enable = 0; // 禁用用户 
-            $user->warming = date("Ymd H:i:s").'今日rss请求次数：'.$rss_today.'次，为防CC，今日剩余7次订阅机会，请单日订阅<25次，请激活帐号，您封禁前订阅IP是：'.$user->rss_ip; //增加提醒
+            $user->warming = date("Ymd H:i:s").'今日rss请求次数：'.$rss_today.'次，为防CC，今日剩余7次订阅机会，请单日订阅<32次，请激活帐号，您封禁前订阅IP是：'.$user->rss_ip; //增加提醒
             $url = 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
             $url .= '#'.urlencode('今日订阅>'.$rss_today.'次，帐号异常，请登录激活');
             $user->save();
             return base64_encode($url);
-        } elseif ( $rss_today > 64 && $rss_today % 3 == 0 ) {
+        } elseif ( $rss_today > 128 && $rss_today % 3 == 0 ) {
             $user->enable = 0; // 禁用用户 
             $user->node_group = 1; //把用户放到1组去
-            $user->warming = date("Ymd H:i:s").'今日rss请求次数:'.$rss_today.'次，为防CC，今日剩余2次订阅机会，请单日订阅<25次,请激活帐号，您封禁前订阅IP是：'.$user->rss_ip; //增加提醒
+            $user->warming = date("Ymd H:i:s").'今日rss请求次数:'.$rss_today.'次，为防CC，今日剩余2次订阅机会，请单日订阅<32次,请激活帐号，您封禁前订阅IP是：'.$user->rss_ip; //增加提醒
             $url = 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@127.0.0.1:80';      //添加用户到期信息
             $url .= '#'.urlencode('今日订阅>'.$rss_today.'次，帐号异常，请登录激活');
             $user->save();
