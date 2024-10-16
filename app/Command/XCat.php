@@ -226,6 +226,11 @@ class XCat
     public function test()
     {
 
+        // $nodes = Node::where('node_sort','<','1')->get();
+        // foreach ($nodes as $node) {
+        //     $node->node_sort = 0;
+        //     $node->save();
+        // }
 
         // # get the nodes from and name 
         // $nodes = Node::where("type",1)->where('is_clone',0)->orderby('node_group','desc')->get();

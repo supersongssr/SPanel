@@ -220,8 +220,8 @@ class Job
             // 节点提示
             if ( $node->type != 0 && $node->custom_rss == 1 && $node->is_clone == 0 ) {   
                 $traffic_today < 1*1024*1024*1024 && $node->node_sort -= 10;    
-                $traffic_today < $node->traffic_left_daily * 2 && $node->node_sort -= 2;
-                $traffic_today < $node->traffic_left_daily && $node->node_sort -= 1;
+                $traffic_today < 8*1024*1024*1024 && $node->node_sort -= 2;
+                $traffic_today < 16*1024*1024*1024 && $node->node_sort -= 1;
                 $node->traffic_used_daily > $node->traffic_left_daily && $node->node_sort = 0; // 已用流量日均 > 剩余流量 日均 , 说明用的多
             }
             

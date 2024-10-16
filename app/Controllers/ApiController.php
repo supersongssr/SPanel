@@ -268,6 +268,7 @@ class ApiController extends BaseController
             $request->getParam('v2') == 'vless' && $node->sort = 13;
             $request->getParam('v2') == 'trojan' && $node->sort = 14;
             $node->server = 'v2='.$request->getParam('v2');
+            $node->server .= '&cdn='.$request->getParam('v2_cdn');  //是否支持CDN？ 这个 最好是用 CDN标志
             $node->server .= '&add='.$request->getParam('v2_add');
             $node->server .= '&port='.$request->getParam('v2_port');
             $node->server .= '&aid='.$request->getParam('v2_aid');
@@ -284,7 +285,6 @@ class ApiController extends BaseController
             $node->server .= '&ecpt='.$request->getParam('v2_ecpt');  //vless独有
             $node->server .= '&flow='.$request->getParam('v2_flow');  // xtls流控
             $node->server .= '&uuid='.$request->getParam('v2_uuid');  //独立节点标志
-            $node->server .= '&cdn='.$request->getParam('v2_cdn');  //是否支持CDN？ 这个 最好是用 CDN标志
             $node->server .= '&cdnip='.$request->getParam('v2_cdn_ip');  //是否支持CDN？ 这个 最好是用 CDN标志
             $node->server .= '&fp='.$request->getParam('v2_fp'); // fingerPrint
             
