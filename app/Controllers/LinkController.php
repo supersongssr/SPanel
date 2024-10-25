@@ -120,29 +120,30 @@ class LinkController extends BaseController
         // $newResponse->getBody()->write(self::GetSSRSub(User::where('id', '=', $Elink->userid)->first(), $mu));
         // return $newResponse;
         $url = '';
-        //$url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
+        $url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
         $url .= self::getAllUrl($user , $mu);        // 节点
         // $url .= self::getFreeUrl(false, $mu);  // add free url
         return base64_encode($url);
     }
 
     public static function getNews($user, $mu = 2) {
+        $url = '';
         $Nodes = Node::where("type", "=","1")->where("node_group", "=", 0)->orderBy("node_sort","DESC")->get();
         if ( $mu == 'ss' || $mu == 2 || $mu == 5 ) {  //一些设备不支持 ss节点
-            $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@baidu.com:443';      //添加用户到期信息
-            $url .= '#'.urlencode('邮箱：'.$user->email.'_等级：'.$user->class.'_VIP有效期：'.$user->class_expire) ."\n";
-            // $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@baidu.com:443';      //添加用户到期信息
+            $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@github.com:443';      //添加用户到期信息
+            $url .= '#'.urlencode('用户'.$user->email) ."\n";
+            // $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@github.com:443';      //添加用户到期信息
             // $url .= '#'.urlencode('剩余流量：'.$user->unusedTraffic()) ."\n";
         }
         foreach ($Nodes as $key => $node) {        // ss节点类的news
             if ( $node->sort == 0 && ($mu == 'ss' || $mu == 2 || $mu == 5 ) ) {
-                $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@baidu.com:443';
+                $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@github.com:443';
                 $url .= '#'.urlencode($node->name) ."\n";
             }elseif ($node->sort == 11 && ( $mu == 'vmess' || $mu == 2) ) {
                 $v2_json = [        
                     "v"    => "2",
                     "ps"   => $node->name,
-                    "add"  => 'okgg.top' ,
+                    "add"  => 'okxyz.xyz' ,
                     "port" => 443 ,
                     "id"   => '6c6a0625-ac3f-4bd8-9cc8-0545e4e11409',
                     "aid"  => 0 ,
@@ -157,10 +158,10 @@ class LinkController extends BaseController
                 ];
                 $url .= 'vmess://' . base64_encode(json_encode($v2_json, JSON_UNESCAPED_UNICODE)) . "\n" ;
             }elseif ($node->sort == 13 && ( $mu == 'vless' || $mu == 2) ) {
-                $url .= 'vless://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@baidu.com:443?encryption=none';
+                $url .= 'vless://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@github.com:443?encryption=none';
                 $url .= '#'.urlencode($node->name) . "\n";
             }elseif ($node->sort == 14 && ( $mu == 'trojan' || $mu == 2) ) {
-                $url .= 'trojan://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@baidu.com:443';
+                $url .= 'trojan://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@github.com:443';
                 $url .= '#'.urlencode($node->name) . "\n";
             }
         }  
@@ -168,7 +169,7 @@ class LinkController extends BaseController
     }
 
     public static function getAllUrl($user, $mu = 2) {
-        $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("traffic_left_daily","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
+        $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
         $i = 0;
         //sdo2022-04-27 节点后缀添加网站名字
         $info = '';

@@ -196,7 +196,7 @@ class Job
             $node->status .= '|'.date("Y-m-d");
 
             // 节点降级
-            if ($node->node_class > 1 && $node->custom_rss == 1  && $traffic_today * 2 < $node->traffic_left_daily ){  
+            if ($node->node_class > 1 && $node->is_clone == 0 && $node->custom_rss == 1  && $traffic_today * 2 < $node->traffic_left_daily ){  
                 $node->node_class -= 1;
                 $clone_nodes = Node::where('is_clone','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
@@ -207,7 +207,7 @@ class Job
             }
 
             // 节点升级
-            if ($node->custom_rss == 0 && $node->node_group != 1 && $node->node_class < 9 ){ 
+            if ($node->custom_rss == 0 && $node->is_clone == 0 && $node->node_group != 1 && $node->node_class < 9 ){ 
                 $node->node_class += 1;
                 $clone_nodes = Node::where('is_clone','=',$node->id)->get();  // 处理 clone节点的等级
                 foreach($clone_nodes as $c){
