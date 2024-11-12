@@ -166,6 +166,52 @@ class ApiController extends BaseController
         return $this->echoJson($response, $res);
     }
 
+    // 
+    public function simpleApiTools($request, $response, $args){
+        // 验证 token
+        if(!empty($request->getParam('token')) && !empty($request->getParam('salt'))){
+            if (md5(Config::get('muKey') . $request->getParam('salt')) != $request->getParam('token')){
+                echo 'error=token-error';
+                exit;
+            }
+        }else{
+            echo 'err=notoken';
+            exit;
+        }
+
+        // 获取 访问者 ip
+        if (!empty($request->getParam('ip'))){
+            echo 'ip='. $_SERVER["REMOTE_ADDR"];
+            exit;
+        }
+
+        // 获取 过期时间
+        if (!empty($request->getParam('due'))){
+            $_due_time = time() + 300; // 5分钟有效期
+            echo 'due='.$_due_time;
+            exit;
+        }   
+
+        // 获取一个 可用的 nodeid
+        if (!empty($request->getParam('new_node_id'))){
+            $node = Node::where('id','>',99)->where('type','=',0)->orderBy('node_heartbeat','asc')->first();
+            if ($node){
+                if ($node->node_heartbeat < time() - 604800){   // 过期7天
+                    $node->node_heartbeat = time();
+                    $node->save();
+                    echo 'node_id='.$node->id;
+                    exit;
+                }
+            }
+            echo 'err=node-empty';
+            exit;
+        }
+
+        echo 'err=unknow';
+        exit;
+
+    }
+
     // ss node backend upload new traffic and ip message 
     public function ssn_sub($request, $response, $args)
     {

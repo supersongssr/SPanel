@@ -398,6 +398,7 @@ $app->group('/api', function () {
     $this->post('/ssn_sub/{id}','App\Controllers\ApiController:ssn_sub'); // song 后端节点用于上报节点状态 流量的API
     $this->post('/ssn_v2/{id}','App\Controllers\ApiController:ssn_v2'); // song 后端节点用于上报节点状态 流量的API
     $this->post('/clonepay','App\Controllers\ApiController:clonepay'); // sdo 2022-03-18 clonepay 支付同步方案
+    $this->post('/simple_api_tools','App\Controllers\ApiController:simpleApiTools'); //sdo 2024-11-12 simple api tools 
 
 });
 
