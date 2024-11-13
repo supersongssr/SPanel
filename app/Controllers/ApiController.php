@@ -195,13 +195,13 @@ class ApiController extends BaseController
             $res['due_time'] = $_due_time;
         }   
 
-        // 获取一个 可用的 nodeid
-        if (!empty($request->getParam('node_id'))){
+        // 获取一个 可用的 new node id
+        if (!empty($request->getParam('new_node_id'))){
             $node = Node::where('id','>',99)->where('type','=',0)->orderBy('node_heartbeat','asc')->first();
             if ($node && $node->node_heartbeat < time() - 604800){
                 $node->node_heartbeat = time();
                 $node->save();
-                $res['node_id'] = $node->id;
+                $res['new_node_id'] = $node->id;
             }else{
                 $res['err'] = 'node-id-usedout';
             }
