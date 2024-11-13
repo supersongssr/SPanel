@@ -45,7 +45,6 @@
 														<span class="enable-flag">
 															   {$node['name']} @ {$node['id']}
 														</span>
-														|
 														<!--  <span class="node-icon"><i class="icon icon-lg">flight_takeoff</i></span>
 														  <strong><b><span class="node-alive">{$node->node_online}</span></b></strong> 
 											            | <span class="node-icon"><i class="icon icon-lg">cloud</i></span>
@@ -56,8 +55,8 @@
 															<span class="node-band">{floor($node['node_bandwidth']/1000000000)}/{floor($node['node_bandwidth_limit']/1000000000)}</span>
 														| <span class="node-icon"><i class="icon icon-lg">network_check</i></span>
 														<span class="node-tr">{$node['traffic_rate']}</span> 
-														| <span class="node-icon"><i class="icon icon-lg">notifications_none</i></span>   -->
-														<span class="node-status">{$node['info']}</span>
+														| <span class="node-icon"><i class="icon icon-lg">notifications_none</i></span>-->
+														<span class="node-status">{$node['info']}</span>    
 													</div>
 												</div>
 											</div>
@@ -80,10 +79,10 @@
 														<div class="card-main">
 																<div class="card-inner">
 														{* <div><i class="icon icon-lg node-icon">chat</i> {$node['info']}</div> *}
-														<div class="nodename">IP解锁项目:</div>
+														<div class="nodename"></div>
 													    {$nodeunlock = $node->getV2($node['node_unlock'])}  <!-- $u: unlock -->
                                                         {foreach $nodeunlock as $k => $v }
-                                                                <span class="card-tag tag-blue">{$k}</span> : <span class="card-tag tag-green">{$v}</span>  |  
+                                                                <span class="card-tag tag-blue">{$k}</span> : <span class="card-tag tag-green">{$v}</span>  <br>  
                                                         {/foreach}
 													
                                                     

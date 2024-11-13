@@ -46,11 +46,11 @@
                                 <div class="nodehead node-flex">
                                     <!-- {if $config['enable_flag']=='true'}<div class="flag"><img src="/images/prefix/v2ray.png" alt=""></div>{/if} -->
                                     <i class="material-icons node-icon">public </i>
-									<div class="nodename"> {$node['name']}_@{$node['id']}</div>
+									<div class="nodename"> {$node['name']}_@_{$node['id']}</div>
                                 </div>
                                 <div class="nodemiddle node-flex">
                                     
-                                    <div class="nodetype node-flex"><i class="material-icons node-icon">notifications_none</i>{$node['info']}</div>
+                                    <div class="nodetype node-flex"><i class="material-icons node-icon">notifications_none</i>{if $node['sort']== 11 }Vmess{elseif $node['sort']== 13 }Vless{elseif $node['sort']== 14 }Trojan{else }SS{/if}</div>
                                 </div>
                                 <div class="nodeinfo node-flex">
 									

@@ -449,6 +449,8 @@ class Tools
 
     public static function isoToEmoji($iso)
 	{
+        # $iso 全部转为 小写
+        $iso = strtolower($iso);
 		$iso_to_emoji = array(
             'ac' => '🇦🇨',
             'ad' => '🇦🇩',

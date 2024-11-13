@@ -191,8 +191,7 @@ class ApiController extends BaseController
 
         // 获取 一个访问过期时间 (5分钟)
         if (!empty($request->getParam('due_time'))){
-            $_due_time = time() + 300; // 5分钟有效期
-            $res['due_time'] = $_due_time;
+            $res['due_time'] = time() + 30;
         }   
 
         // 获取一个 可用的 new node id
@@ -283,7 +282,7 @@ class ApiController extends BaseController
         $request->getParam('node_name') && $node->name = $request->getParam('node_name');
         $request->getParam('node_country_code') != '' && $node->country_code = $request->getParam('node_country_code');  //排序
         $request->getParam('node_country_code') != '' && $node->name = Tools::isoToEmoji($request->getParam('node_country_code')) .$node->name;
-        $request->getParam('node_info') && $node->info = $request->getParam('node_info');
+        $request->getParam('node_info') && $node->info = $request->getParam('node_info'); //节点解锁信息
         // $request->getParam('node_unlock_info') && $node->info .= $request->getParam('node_unlock_info');
         $request->getParam('node_level') && $node->node_class = $request->getParam('node_level');
         $request->getParam('node_group') && $node->node_group = $request->getParam('node_group');
