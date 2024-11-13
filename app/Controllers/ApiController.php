@@ -171,45 +171,46 @@ class ApiController extends BaseController
         // 验证 token
         if(!empty($request->getParam('token')) && !empty($request->getParam('salt'))){
             if (md5(Config::get('muKey') . $request->getParam('salt')) != $request->getParam('token')){
-                echo 'error=token-error';
-                exit;
+                $res['err'] = 'token error';
+                return $this->echoJson($response, $res);
             }
         }else{
-            echo 'err=notoken';
-            exit;
+            $res['err'] = 'notoken';
+            return $this->echoJson($response, $res);
         }
 
         // 获取 访问者 ip
         if (!empty($request->getParam('ip'))){
-            echo 'ip='. $_SERVER["REMOTE_ADDR"];
-            exit;
+            $res['ip'] = $_SERVER['REMOTE_ADDR'];
         }
 
-        // 获取 过期时间
-        if (!empty($request->getParam('due'))){
+        // 获取 访问时间
+        if (!empty($request->getParam('time'))){
+            $res['time'] = time();
+        }
+
+        // 获取 一个访问过期时间 (5分钟)
+        if (!empty($request->getParam('due_time'))){
             $_due_time = time() + 300; // 5分钟有效期
-            echo 'due='.$_due_time;
-            exit;
+            $res['due_time'] = $_due_time;
         }   
 
         // 获取一个 可用的 nodeid
-        if (!empty($request->getParam('new_node_id'))){
+        if (!empty($request->getParam('node_id'))){
             $node = Node::where('id','>',99)->where('type','=',0)->orderBy('node_heartbeat','asc')->first();
-            if ($node){
-                if ($node->node_heartbeat < time() - 604800){   // 过期7天
-                    $node->node_heartbeat = time();
-                    $node->save();
-                    echo 'node_id='.$node->id;
-                    exit;
-                }
+            if ($node && $node->node_heartbeat < time() - 604800){
+                $node->node_heartbeat = time();
+                $node->save();
+                $res['node_id'] = $node->id;
+            }else{
+                $res['err'] = 'node-id-usedout';
             }
-            echo 'err=node-empty';
-            exit;
         }
 
-        echo 'err=unknow';
-        exit;
-
+        if (empty($res)){
+            $res['err'] = 'no-param';
+        }
+        return $this->echoJson($response, $res);
     }
 
     // ss node backend upload new traffic and ip message 
