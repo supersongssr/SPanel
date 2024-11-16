@@ -112,34 +112,34 @@ class LinkController extends BaseController
         }
         $user->save();
         
-        $mu = 2;
-        if (isset($request->getQueryParams()['mu'])) {
-            $mu = $request->getQueryParams()['mu'];
+        $params = $request->getQueryParams(); // 定义一个变量 = 查询字符串
+        if (empty($params)) { //兼容模式,如果没有params参数, mu=2就这么设定了
+            $params['mu'] = 2;
         }
         // $newResponse = $response->withHeader('Content-type', ' application/octet-stream; charset=utf-8')->withHeader('Cache-Control', 'no-store, no-cache, must-revalidate')->withHeader('Content-Disposition', ' attachment; filename=' . $token . '.txt');
-        // $newResponse->getBody()->write(self::GetSSRSub(User::where('id', '=', $Elink->userid)->first(), $mu));
+        // $newResponse->getBody()->write(self::GetSSRSub(User::where('id', '=', $Elink->userid)->first(), $params['mu']));
         // return $newResponse;
         $url = '';
-        $url .= self::getNews($user , $mu);        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
-        $url .= self::getAllUrl($user , $mu);        // 节点
-        // $url .= self::getFreeUrl(false, $mu);  // add free url
+        $url .= self::getNews($user , $params );        // 新闻节点，给用户看的节点 放在最前面，方便用户查看。
+        $url .= self::getAllUrl($user , $params );        // 节点
+        // $url .= self::getFreeUrl(false, $params );  // add free url
         return base64_encode($url);
     }
 
-    public static function getNews($user, $mu = 2) {
+    public static function getNews($user, $params) {
         $url = '';
         $Nodes = Node::where("type", "=","1")->where("node_group", "=", 0)->orderBy("node_sort","DESC")->get();
-        if ( $mu == 'ss' || $mu == 2 || $mu == 5 ) {  //一些设备不支持 ss节点
+        if ( $params['ss'] || $params['mu'] == 2 || $params['mu'] == 5 ) {  //一些设备不支持 ss节点
             $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@github.com:443';      //添加用户到期信息
             $url .= '#'.urlencode('用户'.$user->email) ."\n";
             // $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@github.com:443';      //添加用户到期信息
             // $url .= '#'.urlencode('剩余流量：'.$user->unusedTraffic()) ."\n";
         }
         foreach ($Nodes as $key => $node) {        // ss节点类的news
-            if ( $node->sort == 0 && ($mu == 'ss' || $mu == 2 || $mu == 5 ) ) {
+            if ( $node->sort == 0 && ($params['ss'] || $params['mu'] == 2 || $params['mu'] == 5 ) ) {
                 $url .= 'ss://YWVzLTEyOC1nY206NjYwMWZiOTBlOWIz@github.com:443';
                 $url .= '#'.urlencode($node->name) ."\n";
-            }elseif ($node->sort == 11 && ( $mu == 'vmess' || $mu == 2) ) {
+            }elseif ($node->sort == 11 && ( $params['vmess'] || $params['mu'] == 2) ) {
                 $v2_json = [        
                     "v"    => "2",
                     "ps"   => $node->name,
@@ -157,10 +157,10 @@ class LinkController extends BaseController
                     "alpn" => ''  
                 ];
                 $url .= 'vmess://' . base64_encode(json_encode($v2_json, JSON_UNESCAPED_UNICODE)) . "\n" ;
-            }elseif ($node->sort == 13 && ( $mu == 'vless' || $mu == 2) ) {
+            }elseif ($node->sort == 13 && ( $params['vless'] || $params['mu'] == 2) ) {
                 $url .= 'vless://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@github.com:443?encryption=none';
                 $url .= '#'.urlencode($node->name) . "\n";
-            }elseif ($node->sort == 14 && ( $mu == 'trojan' || $mu == 2) ) {
+            }elseif ($node->sort == 14 && ( $params['trojan'] || $params['mu'] == 2) ) {
                 $url .= 'trojan://c073aa06-c111-4f1c-8faf-e111ce8e1ceb@github.com:443';
                 $url .= '#'.urlencode($node->name) . "\n";
             }
@@ -168,7 +168,17 @@ class LinkController extends BaseController
         return $url;
     }
 
-    public static function getAllUrl($user, $mu = 2) {
+    public static function getAllUrl($user, $params ) {
+        $url = '';
+        $limit = array(
+            'ss' => 0,
+            'vmess' => 0,
+            'vless' => 0,
+            'trojan' => 0,
+            'mu' => 0,
+        );
+        $nodes = Node::where("type", "=","1")->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get(
+        );
         $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
         $i = 0;
         //sdo2022-04-27 节点后缀添加网站名字
@@ -186,7 +196,12 @@ class LinkController extends BaseController
                     $v2['add'] = $user->cfcdn;
                 }
             }
-            if ($node->sort == 11 && ($mu == 'vmess' || $mu == 2 || $mu == 5) ) {
+            if ($node->sort == 11 && ($params['vmess'] || $params['mu'] == 2 || $params['mu'] == 5) ) {
+                
+                $limit['vmess']++ ;
+                if (is_numeric($params['vmess']) && $limit['vmess'] > $params['vmess']){ //限制单协议数量
+                    continue;
+                }
                 $v2_json = [
                     "v"    => "2",
                     "ps"   => $node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').'@'.$node->id.$info,
@@ -207,12 +222,22 @@ class LinkController extends BaseController
                 ];
                 $url .= 'vmess://' . base64_encode(json_encode($v2_json, JSON_UNESCAPED_UNICODE)) . "\n" ;
                 $i++ ;
-            } elseif ( $node->sort == 13 && ($mu == 'vless' || $mu == 2 || $mu == 5 ) ) {
+                
+            } elseif ( $node->sort == 13 && ($params['vless'] || $params['mu'] == 2 || $params['mu'] == 5 ) ) {
+                
+                $limit['vless']++ ;
+                if (is_numeric($params['vless']) && $limit['vless'] > $params['vless']){ //限制单协议数量
+                    continue;
+                }
                 $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&fp='.$v2['fp'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
                 $url .= '#'.urlencode($node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').'@'.$node->id .$info) . "\n";
                 $i++ ;
-            } elseif ( $node->sort == 14 && ($mu == 'trojan' || $mu == 2 || $mu == 5 ) ) {
+            } elseif ( $node->sort == 14 && ($params['trojan'] || $params['mu'] == 2 || $params['mu'] == 5 ) ) {
+                $limit['trojan']++ ;
+                if (is_numeric($params['trojan']) && $limit['trojan'] > $params['trojan']){ //限制单协议数量
+                    continue;
+                }
                 $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
                 $url .= '#'.urlencode($node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').'@'.$node->id .$info) . "\n";
@@ -227,18 +252,18 @@ class LinkController extends BaseController
     }
 
     // add free ss vless vmess trojan nodes 
-    public static function getFreeUrl($_, $mu = 2) {
+    public static function getFreeUrl($_, $params ) {
         $_url = '';
-        if ($mu == 'ss' || $mu == 2 || $mu == 5 ){
+        if ($params['ss'] || $params['mu'] == 2 || $params['mu'] == 5 ){
             $_url .= "";
         }
-        if ($mu == 'vmess' || $mu == 2 || $mu == 5){
+        if ($params['vmess'] || $params['mu'] == 2 || $params['mu'] == 5){
             $_url .= "";
         }
-        if ($mu == 'vless' || $mu == 2 || $mu == 5 ){
+        if ($params['vless'] || $params['mu'] == 2 || $params['mu'] == 5 ){
             $_url .= "";
         }
-        if ($mu == 'trojan' || $mu == 2 || $mu == 5 ){
+        if ($params['trojan'] || $params['mu'] == 2 || $params['mu'] == 5 ){
             $_url .= "";
         }
         return $_url;

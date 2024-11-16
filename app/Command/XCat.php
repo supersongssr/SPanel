@@ -35,6 +35,8 @@ use App\Models\Node;
 use App\Utils\GA;
 use App\Utils\QRcode;
 
+use Redis ; #song 
+
 class XCat
 {
     public $argv;
@@ -225,6 +227,29 @@ class XCat
 
     public function test()
     {
+
+
+        echo 'redis test ';
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        $redis->set('foo', 'xcx');
+        $redis->expire('foo', 10);
+        echo $redis->get('foo');
+        echo 'redis test end';
+
+        // $i = 0;
+        // while ($i < 100) {
+            
+        //     $node = New Node();
+        //     $node->name = 'test';
+        //     $node->save();
+        //     if ($node->id > 887 ) {
+        //         $i = 999;
+        //     }
+        //     $i++;
+        //     echo $i;
+        // }
+            
 
         // $nodes = Node::where('node_sort','<','1')->get();
         // foreach ($nodes as $node) {

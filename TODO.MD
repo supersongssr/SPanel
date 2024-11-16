@@ -11,3 +11,5 @@
 - [] add simple api tools 
     - 格式
         
+
+- [] 订阅添加查询字符串,除了 mu 添加 vless= vmess= trojan= ss= app= app代表来自哪个代理软件 
