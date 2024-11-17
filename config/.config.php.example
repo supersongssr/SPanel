@@ -143,6 +143,11 @@ $System_Config['finance_public']='false';			//财务报告是否向Telegram群�
 $System_Config['telegram_grouplink']='';           //telegram群邀请链接
 
 
+// Telegram bot 通知设置,给管理员自己的
+$System_Config['telegram_notify_url']='';	// telegram bot 通知地址，用于接收通知，例如 https://api.telegram.org/bot1231312312/sendMessage
+$System_Config['telegram_notify_chatid']='';	// telegram bot 通知用户聊天 id 
+
+
 //沟通设置--------------------------------------------------------------------------------------------
 #客服系统设置，注册地址 https://www.mylivechat.com
 $System_Config['enable_mylivechat']='false';		//是否开启客服系统

@@ -124,6 +124,7 @@ php xcat initdownload         //下载ssr程式
 58 3 * * * php -n /www/wwwroot/spanel/xcat dailyjob
 17 */3 * * * php /www/wwwroot/spanel/xcat checkjob
 ###*/12 * * * * php /www/wwwroot/spanel/xcat syncnode  #这个要不得，然后网站会出大问题的！主要是V2节点的IP会被重置！
+30 * * * * php /www/wwwroot/ssp-uim/xcat hourlyjob //添加了 Hourlyjob功能
 ```
 如果需要自动备份，可模仿以下两例，自行添加一条
 ```

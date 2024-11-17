@@ -31,6 +31,8 @@ use App\Models\UnblockIp;
 use App\Models\Payback;  // 原来是缺少这个 song
 use App\Models\Record;  // record表
 
+use Redis;
+
 class Job
 {
     public static function syncnode()
@@ -408,6 +410,42 @@ class Job
         Telegram::Send("订阅统计完毕");
 
         Telegram::Send("姐姐姐姐，今日任务完成了呢,很开心");
+
+
+
+
+        // 统计每日流量使用 超过 10G的用户,超过20G用户, 超过100G用户 使用 redis
+        $redis = new Redis();
+        $redis->connect('127.0.0.1', 6379);
+        $past_day_time = time() - 24 * 3600;
+        $users = User::where('enable','>',0)->where('t', '>',  $past_day_time)->get();
+        $active_users = 0;
+        $users_over_10g = 0;
+        $users_over_20g = 0;
+        $users_over_100g = 0;
+        foreach ($users as $user) {  // 统计 过去24小时,流量超过10G 20G 100G的用户数
+            $active_users++;
+            $total_used_traffic = $user->u + $user->d;
+            $lastday_used_traffic = $redis->get('ssp:user:'.$user->id.':traffic_lastday');
+            if ($lastday_used_traffic){
+                if ($total_used_traffic - $lastday_used_traffic > 10*1024*1024*1024) {
+                    $users_over_10g++;
+                }
+                if ($total_used_traffic - $lastday_used_traffic > 20*1024*1024*1024) {
+                    $users_over_20g++;
+                }
+                if ($total_used_traffic - $lastday_used_traffic > 100*1024*1024*1024) {
+                    $users_over_100g++;
+                }
+            }
+            
+            $redis->setex('ssp:user:'.$user->id.':traffic_lastday',4600,$total_used_traffic);
+        }
+
+        // 通知 notify telegram 
+        Xcat::notifyTg('过去一天有流量用户数:'.$active_users.',超过10G用户数:'.$users_over_10g.',超过20G用户数:'.$users_over_20g.',超过100G用户数:'.$users_over_100g)
+   
+
 
     }
 //   定时任务开启的情况下，每天自动检测有没有最新版的后端，github源来自Miku
