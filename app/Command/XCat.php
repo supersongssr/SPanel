@@ -77,29 +77,29 @@ class XCat
             case("sendFinanceMail_month"):
                 return FinanceMail::sendFinanceMail_month();
             case("reall"):
-                    return DailyMail::reall();
+                return DailyMail::reall();
             case("syncusers"):
-                    return SyncRadius::syncusers();
+                return SyncRadius::syncusers();
             case("synclogin"):
-                    return SyncRadius::synclogin();
+                return SyncRadius::synclogin();
             case("syncvpn"):
                 return SyncRadius::syncvpn();
             case("nousers"):
-                    return ExtMail::sendNoMail();
+                return ExtMail::sendNoMail();
             case("oldusers"):
-                    return ExtMail::sendOldMail();
+                return ExtMail::sendOldMail();
             case("syncnode"):
-                    return Job::syncnode();
+                return Job::syncnode();
             case("syncnasnode"):
-                    return Job::syncnasnode();
+                return Job::syncnasnode();
             case("detectGFW"):
                 return Job::detectGFW();
             case("syncnas"):
-                    return SyncRadius::syncnas();
+                return SyncRadius::syncnas();
             case("dailyjob"):
                 return Job::DailyJob();
             case("hourlyjob"): //song 
-                return $this->hourlyJob();
+                return Job::HourlyJob();
             case("checkjob"):
                 return Job::CheckJob();
             case("dbclean"):
@@ -231,14 +231,8 @@ class XCat
     {
 
 
-        // echo 'redis test ';
-        // $redis = new Redis();
-        // $redis->connect('127.0.0.1', 6379);
-        // $redis->setex('foo', 100, 'xcx');
-        // $a = $redis->get('foo');
-        // $this->notifyTg('this is the notify tg info:'.$a);
-        // echo 'redis test end';
-
+       
+        
         // $i = 0;
         // while ($i < 100) {
             
@@ -646,67 +640,8 @@ class XCat
 
     }
 
-    // 每小时的任务 SONG 2024-11-17 
-    public function hourlyJob()
-    {
-        // 统计每小时超过5G流量的用户数 使用 redis
-        $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
-        // $redis->select(0);
-        $past_hour_time = time() - 3600;
-        $users = User::where('enable',1)->where('t','>',$past_hour_time)->get(); //获取在过去1小时内有流量的 用户
-        $last_hour_users = 0;
-        $used_5g_users = 0;
-        $used_10g_users = 0;
-        $userd_20g_users = 0;
-        foreach ($users as $user) {
-            // 尝试获取当前用户所有流量
-            $last_hour_users++;
-            $total_used_traffic = $user->u + $user->d ;
-            $lasthour_used_traffic = $redis->get('ssp:user:'.$user->id.':traffic_lasthour');
-            if ($lasthour_used_traffic) {
-                if ($total_used_traffic - $lasthour_used_traffic > 5000000000) {
-                    $used_5g_users++;
-                }
-                if ($total_used_traffic - $lasthour_used_traffic > 10000000000) {
-                    $used_10g_users++;
-                }
-                if ($total_used_traffic - $lasthour_used_traffic > 20000000000) {
-                    $userd_20g_users++;
-                }
-            }
-            
-            $redis->setex('ssp:user:'.$user->id.':traffic_lasthour', 3900, $total_used_traffic); //写入当前用户使用量数据
-        }
-
-        $this->notifyTg('每小时任务执行完成，过去一小时有流量用户数：'.$last_hour_users.'，超过5G用户数：'.$used_5g_users.'，超过10G用户数：'.$used_10g_users.'，超过20G用户数：'.$userd_20g_users);
-
-    }
-
-
-    // 发送 telegram 通知 还没测试,到时候再测试吧
-    public function notifyTg($message)
-    {
-        $tg_url = Config::get('telegram_notify_url');
-        $tg_chat_id = Config::get('telegram_notify_chat_id');
-        $params = array(
-            'chat_id' => $tg_chat_id,
-            'text' => 'ssp-job-notify:'.$message
-           
-        );
-
-        $ch = curl_init();
-        curl_setopt($ch, CURLOPT_URL, $tg_url);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $output = curl_exec($ch);
-        curl_close($ch);
-        
-        
-    }
-
-
+    
+    
 
     public function transRecord()
     {

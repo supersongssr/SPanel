@@ -13,3 +13,17 @@
         
 
 - [x] 订阅添加查询字符串,除了 mu 添加 vless= vmess= trojan= ss= app= app代表来自哪个代理软件 
+
+- [x] 流量限制 TODO 
+    - [x] plan 
+        - 每小时流量 > 5G 禁用. 让用户激活.
+        - 每天流量 > 10G 禁用, 让用户激活.
+        - 每 x天流量 > x , 用户移到下一分组
+        - notify 
+    - [x] todo  
+        
+
+
+- [] next : 整理 auto job 
+    - [] daily job 
+    - [] hourly job 

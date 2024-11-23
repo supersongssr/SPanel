@@ -31,12 +31,17 @@ use App\Models\UnblockIp;
 use App\Models\Payback;  // 原来是缺少这个 song
 use App\Models\Record;  // record表
 
+use App\Services\RedisClient; // song 
+use App\Utils\Notify; #song 
+
+
 use Redis;
 
 class Job
 {
     public static function syncnode()
     {
+        echo 'this fucntion syncnode is disable now';
         // $nodes = Node::all();
         // foreach ($nodes as $node) {
         //     if ($node->sort == 11) {
@@ -143,8 +148,106 @@ class Job
         Telegram::Send("姐姐姐姐，数据库被清理了，感觉身体被掏空了呢~");
     }
 
+    // 每小时的自动任务
+    public static function HourlyJob(){
+        self::DisableHourlyUsedOverUsers();
+    }
+
+    // 禁用 每小时 流量 超标的用户
+    public static function DisableHourlyUsedOverUsers(){
+
+        ##
+        ## 限制每小时的流量 为 5G ; 不统计 1分组的用户
+        ##
+        $redis = new RedisClient();
+        $houly_users = 0;
+        $used_over_users = 0;
+        $used_over_info = '';
+        for ( $_group = 2; $_group <= 5 ; $_group++ )  // < 分组处理 减少 内存占用
+        {
+            $users = User::where('enable',1)->where('node_group',$_group)->where('t','>',time() - 3600)->get();
+            # 判断 $users 是否为空
+            // if ( $_group != 0 &&  count($users) == 0 )  // $users是个 object
+            // {
+            //     echo 'empty group';
+            //     break;
+            // }
+            
+            foreach ( $users as $user )
+            {
+                // 尝试获取当前用户所有流量
+                echo $user->id .PHP_EOL;
+                $houly_users++;
+                $all_traffic = $user->u + $user->d ;
+                $all_traffic_lasthour = $redis->get('ssp:user:'.$user->id.':traffic_lasthour');
+                if ($all_traffic_lasthour) {
+                    if ($all_traffic - $all_traffic_lasthour > 5*1000*1000*1000) {
+                        $used_over_users++;
+                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group . '使用了' . ($all_traffic - $all_traffic_lasthour) / 1024 / 1024 / 1024 . 'G流量，超过5G限制，请及时处理。';
+                        $user->enable = 0;
+                        $user->warming = '流量峰值异常,可能是下载器在使用您的流量,如需下载请使用流量优先分组;请输入账号解除限制';
+                        echo $used_over_info;
+                        $user->save();
+                    }
+                }
+                $redis->setex('ssp:user:'.$user->id.':traffic_lasthour', 4600, $all_traffic); //写入当前用户使用量数据 过期1.5小时
+
+                
+            }
+        }
+        if ( $used_over_users > 0 )
+        {
+            Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$houly_users.'，超过5G用户数：'.$used_over_users.',使用超流量禁用用户如下:'. $used_over_info);
+        }
+
+
+    }
+
+    // 禁用每天流量超标的用户
+    public static function DisableDailyUsedOverUsers()
+    {
+        $redis = new RedisClient();
+        $daily_users = 0;
+        $used_over_users = 0;
+        $used_over_info = '';
+        for ( $_group = 1; $_group <= 5 ; $_group++ )  // < 分组处理 减少 内存占用
+        {
+            $users = User::where('enable',1)->where('node_group',$_group)->where('t','>',time() - 24*3600)->get();
+            # 判断 $users 是否为空
+            foreach ( $users as $user )
+            {
+                // 尝试获取当前用户所有流量
+                echo $user->id .PHP_EOL;
+                $daily_users++;
+                $all_traffic = $user->u + $user->d ;
+                $all_traffic_lastday = $redis->get('ssp:user:'.$user->id.':traffic_lastday');
+                if ($all_traffic_lastday) {
+                    if ($all_traffic - $all_traffic_lastday > 10*1000*1000*1000) {
+                        $used_over_users++;
+                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group.'使用了' . ($all_traffic - $all_traffic_lastday) / 1024 / 1024 / 1024 . 'G流量，超过10G限制，请及时处理。';
+                        $user->enable = 0;
+                        $user->warming = '昨日流量使用异常,疑似账号被盗,已临时禁止,请输入您的账号邮箱解除限制;';
+                        echo $used_over_info;
+                        $user->save();
+                    } 
+                }
+                $redis->setex('ssp:user:'.$user->id.':traffic_lastday', 86400, $all_traffic); //写入当前用户使用量数据 过期1天
+            }
+        }
+        if ( $used_over_users > 0 )
+        {
+            Notify::Send('每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过10G用户数：'.$used_over_users);
+            Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
+        }
+    }
+
+    // 每天的自动任务
     public static function DailyJob()
     {
+        self::DisableDailyUsedOverUsers();
+
+        echo 'I am here 248'. PHP_EOL;
+
         //自动审计每天节点流量数据 song
         $nodes = Node::where('id','>',9)->get();  // 只获取9以上的分组不是0的节点 1-9是给通知节点用的 。
 
@@ -413,38 +516,6 @@ class Job
 
 
 
-
-        // 统计每日流量使用 超过 10G的用户,超过20G用户, 超过100G用户 使用 redis
-        $redis = new Redis();
-        $redis->connect('127.0.0.1', 6379);
-        $past_day_time = time() - 24 * 3600;
-        $users = User::where('enable','>',0)->where('t', '>',  $past_day_time)->get();
-        $active_users = 0;
-        $users_over_10g = 0;
-        $users_over_20g = 0;
-        $users_over_100g = 0;
-        foreach ($users as $user) {  // 统计 过去24小时,流量超过10G 20G 100G的用户数
-            $active_users++;
-            $total_used_traffic = $user->u + $user->d;
-            $lastday_used_traffic = $redis->get('ssp:user:'.$user->id.':traffic_lastday');
-            if ($lastday_used_traffic){
-                if ($total_used_traffic - $lastday_used_traffic > 10*1024*1024*1024) {
-                    $users_over_10g++;
-                }
-                if ($total_used_traffic - $lastday_used_traffic > 20*1024*1024*1024) {
-                    $users_over_20g++;
-                }
-                if ($total_used_traffic - $lastday_used_traffic > 100*1024*1024*1024) {
-                    $users_over_100g++;
-                }
-            }
-            
-            $redis->setex('ssp:user:'.$user->id.':traffic_lastday',4600,$total_used_traffic);
-        }
-
-        // 通知 notify telegram 
-        Xcat::notifyTg('过去一天有流量用户数:'.$active_users.',超过10G用户数:'.$users_over_10g.',超过20G用户数:'.$users_over_20g.',超过100G用户数:'.$users_over_100g)
-   
 
 
     }

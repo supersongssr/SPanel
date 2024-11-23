@@ -146,7 +146,7 @@ $System_Config['telegram_grouplink']='';           //telegram群邀请链接
 // Telegram bot 通知设置,给管理员自己的
 $System_Config['telegram_notify_url']='';	// telegram bot 通知地址，用于接收通知，例如 https://api.telegram.org/bot1231312312/sendMessage
 $System_Config['telegram_notify_chatid']='';	// telegram bot 通知用户聊天 id 
-
+$System_Config['telegram_notify_prefix']='sspanel-test:';	// telegram bot 通知前缀 用于识别消息来源
 
 //沟通设置--------------------------------------------------------------------------------------------
 #客服系统设置，注册地址 https://www.mylivechat.com

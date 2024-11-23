@@ -28,7 +28,7 @@ git reset --hard origin/dev
 git pull
 ````
 
-##how to use
+## how to use
 ````
 本Wiki参考于@zircon所写的[安装魔改前端](https://github.com/zyl6698/ss-panel-v3-mod-with-f2fpay/wiki/%E5%AE%89%E8%A3%85%E9%AD%94%E6%94%B9%E5%89%8D%E7%AB%AF)教程
 
@@ -41,6 +41,7 @@ git pull
 
 在宝塔面板中找到php，点击设置
 
+插件中找到 redis 安装
 在**禁用函数**一栏找到 `system` `proc_open` `proc_get_status` `putenv`去除它
 
 在**性能调整**中，把 PHP 运行模式设置为 **静态**
@@ -53,10 +54,10 @@ web环境配置好后
 
 ```
 cd /www/wwwroot/你的网站 
-yum update
+yum update 
 yum install git -y
-git clone -b dev https://github.com/supersongssr/spanel.git tmp && mv tmp/.git . && rm -rf tmp && git reset --hard
-chown -R root:root *
+git clone https://github.com/supersongssr/SPanel 
+chown -R www:www *
 chmod -R 755 *
 chown -R www:www storage
 php composer.phar install
@@ -95,6 +96,8 @@ mysql>use database_name;                               // 选择数据库
 mysql>source /www/wwwroot/ssp-uim/sql/glzjin_all.sql;  // 导入.sql文件
 
 ```
+
+### INSTALL redis 
 
 ### 配置 sspanel
 
