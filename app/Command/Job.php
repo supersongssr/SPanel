@@ -160,7 +160,7 @@ class Job
         ## 限制每小时的流量 为 5G ; 不统计 1分组的用户
         ##
         $redis = new RedisClient();
-        $houly_users = 0;
+        $hourly_users = 0;
         $used_over_users = 0;
         $used_over_info = '';
         for ( $_group = 2; $_group <= 5 ; $_group++ )  // < 分组处理 减少 内存占用
@@ -177,27 +177,28 @@ class Job
             {
                 // 尝试获取当前用户所有流量
                 echo $user->id .PHP_EOL;
-                $houly_users++;
-                $all_traffic = $user->u + $user->d ;
-                $all_traffic_lasthour = $redis->get('ssp:user:'.$user->id.':traffic_lasthour');
-                if ($all_traffic_lasthour) {
-                    if ($all_traffic - $all_traffic_lasthour > 5*1000*1000*1000) {
+                $hourly_users++;
+                $total_traffic = $user->u + $user->d ;
+                $total_traffic_lasthour = $redis->get('ssp:user:'.$user->id.':traffic_lasthour');
+                if ($total_traffic_lasthour) {
+                    if ($total_traffic - $total_traffic_lasthour > 5*1000*1000*1000) {
                         $used_over_users++;
-                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group . '使用了' . ($all_traffic - $all_traffic_lasthour) / 1024 / 1024 / 1024 . 'G流量，超过5G限制，请及时处理。';
+                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group . '使用了' . ($total_traffic - $total_traffic_lasthour) / 1024 / 1024 / 1024 . 'G流量，超过5G限制，请及时处理。';
                         $user->enable = 0;
                         $user->warming = '流量峰值异常,可能是下载器在使用您的流量,如需下载请使用流量优先分组;请输入账号解除限制';
                         echo $used_over_info;
                         $user->save();
                     }
                 }
-                $redis->setex('ssp:user:'.$user->id.':traffic_lasthour', 4600, $all_traffic); //写入当前用户使用量数据 过期1.5小时
+                $redis->setex('ssp:user:'.$user->id.':traffic_lasthour', 4600, $total_traffic); //写入当前用户使用量数据 过期1.5小时
 
                 
             }
         }
         if ( $used_over_users > 0 )
         {
-            Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$houly_users.'，超过5G用户数：'.$used_over_users.',使用超流量禁用用户如下:'. $used_over_info);
+            Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users);
+            Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
         }
 
 
@@ -219,19 +220,19 @@ class Job
                 // 尝试获取当前用户所有流量
                 echo $user->id .PHP_EOL;
                 $daily_users++;
-                $all_traffic = $user->u + $user->d ;
-                $all_traffic_lastday = $redis->get('ssp:user:'.$user->id.':traffic_lastday');
-                if ($all_traffic_lastday) {
-                    if ($all_traffic - $all_traffic_lastday > 10*1000*1000*1000) {
+                $total_traffic = $user->u + $user->d ;
+                $total_traffic_lastday = $redis->get('ssp:user:'.$user->id.':traffic_lastday');
+                if ($total_traffic_lastday) {
+                    if ($total_traffic - $total_traffic_lastday > 10*1000*1000*1000) {
                         $used_over_users++;
-                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group.'使用了' . ($all_traffic - $all_traffic_lastday) / 1024 / 1024 / 1024 . 'G流量，超过10G限制，请及时处理。';
+                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group.'使用了' . ($total_traffic - $total_traffic_lastday) / 1024 / 1024 / 1024 . 'G流量，超过10G限制，请及时处理。';
                         $user->enable = 0;
                         $user->warming = '昨日流量使用异常,疑似账号被盗,已临时禁止,请输入您的账号邮箱解除限制;';
                         echo $used_over_info;
                         $user->save();
                     } 
                 }
-                $redis->setex('ssp:user:'.$user->id.':traffic_lastday', 86400, $all_traffic); //写入当前用户使用量数据 过期1天
+                $redis->setex('ssp:user:'.$user->id.':traffic_lastday', 86400, $total_traffic); //写入当前用户使用量数据 过期1天
             }
         }
         if ( $used_over_users > 0 )
