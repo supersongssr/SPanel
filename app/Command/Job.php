@@ -197,8 +197,10 @@ class Job
         }
         if ( $used_over_users > 0 )
         {
-            Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users);
-            Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
+            // Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users);
+            // Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
+            echo '每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users;
+            echo ',使用超流量禁用用户如下:'. $used_over_info;
         }
 
 
@@ -237,8 +239,8 @@ class Job
         }
         if ( $used_over_users > 0 )
         {
-            // Notify::Send('每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过10G用户数：'.$used_over_users);
-            // Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
+            Notify::Send('每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过10G用户数：'.$used_over_users);
+            Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
             echo '每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过10G用户数：'.$used_over_users;
             echo ',使用超流量禁用用户如下:'. $used_over_info;
         }

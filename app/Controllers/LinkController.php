@@ -177,9 +177,13 @@ class LinkController extends BaseController
             'trojan' => 0,
             'mu' => 0,
         );
-        $nodes = Node::where("type", "=","1")->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get(
-        );
-        $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
+        // $nodes = Node::where("type", "=","1")->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get();
+        
+        if (!empty($params['orderbyid'])){  //2024-11-09 添加orderbyid项,方便排查节点故障,获取节点
+            $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("id","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
+        }else{
+            $nodes = Node::where("type", "=","1")->where('custom_rss' ,'=',1)->where("node_group", "=", $user->node_group)->where("node_class", "<=", $user->class)->orderBy("node_class","DESC")->orderBy("traffic_left_daily","DESC")->get();   //custom_rss 这里被定义为了 是否支持 用户订阅
+        }
         $i = 0;
         //sdo2022-04-27 节点后缀添加网站名字
         $info = '';
