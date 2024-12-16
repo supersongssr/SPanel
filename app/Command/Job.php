@@ -227,7 +227,7 @@ class Job
                 if ($total_traffic_lastday) {
                     if ($total_traffic - $total_traffic_lastday > 10*1000*1000*1000) {
                         $used_over_users++;
-                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group.'使用了' . ($total_traffic - $total_traffic_lastday) / 1024 / 1024 / 1024 . 'G流量，超过10G限制，请及时处理。';
+                        $used_over_info .= 'User' . $user->id. 'L:'. $user->class .',G:'. $_group.'Used' . intval(($total_traffic - $total_traffic_lastday) / 1024 / 1024 / 1024) . 'G;';
                         $user->enable = 0;
                         $user->warming = '昨日流量使用异常,疑似账号被盗,已临时禁止,请输入您的账号邮箱解除限制;';
                         echo $used_over_info;
