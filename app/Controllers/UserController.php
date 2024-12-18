@@ -497,7 +497,7 @@ class UserController extends BaseController
         // if ($user->class < 5) {
         //     $nodes = Node::where('id','>',9)->where('type', 1)->orderBy('node_class')->get();
         // }else{
-            $nodes = Node::where('id','>',9)->where('type', 1)->where('node_group',$user->node_group)->orderBy('node_class')->get();
+            $nodes = Node::where('id','>',9)->where('type', 1)->where('node_group',$user->node_group)->where('node_class','<=',10)->orderBy('node_class')->get();
         // }
         return $this->view()->assign('nodes', $nodes)->assign('tools', new Tools())->assign('user', $user)->registerClass("URL", "App\Utils\URL")->display('user/node.tpl');
     }
