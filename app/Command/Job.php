@@ -163,7 +163,7 @@ class Job
         $hourly_users = 0;
         $used_over_users = 0;
         $used_over_info = '';
-        for ( $_group = 2; $_group <= 5 ; $_group++ )  // < 分组处理 减少 内存占用
+        for ( $_group = 1; $_group <= 5 ; $_group++ )  // < 分组处理 减少 内存占用
         {
             $users = User::where('enable',1)->where('node_group',$_group)->where('t','>',time() - 3600)->get();
             # 判断 $users 是否为空
@@ -183,7 +183,7 @@ class Job
                 if ($total_traffic_lasthour) {
                     if ($total_traffic - $total_traffic_lasthour > 5*1000*1000*1000) {
                         $used_over_users++;
-                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group . '使用了' . ($total_traffic - $total_traffic_lasthour) / 1024 / 1024 / 1024 . 'G流量，超过5G限制，请及时处理。';
+                        $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group . '使用了___' . intval(($total_traffic - $total_traffic_lasthour) / 1024 / 1024 / 1024) . 'G流量___';
                         $user->enable = 0;
                         $user->warming = '流量峰值异常,可能是下载器在使用您的流量,如需下载请使用流量优先分组;请输入账号解除限制';
                         echo $used_over_info;
@@ -227,7 +227,7 @@ class Job
                 if ($total_traffic_lastday) {
                     if ($total_traffic - $total_traffic_lastday > 10*1000*1000*1000) {
                         $used_over_users++;
-                        $used_over_info .= 'User' . $user->id. 'L:'. $user->class .',G:'. $_group.'Used' . intval(($total_traffic - $total_traffic_lastday) / 1024 / 1024 / 1024) . 'G;';
+                        $used_over_info .= 'User' . $user->id. 'L:'. $user->class .',G:'. $_group.'Used___' . intval(($total_traffic - $total_traffic_lastday) / 1024 / 1024 / 1024) . 'G___;';
                         $user->enable = 0;
                         $user->warming = '昨日流量使用异常,疑似账号被盗,已临时禁止,请输入您的账号邮箱解除限制;';
                         echo $used_over_info;
