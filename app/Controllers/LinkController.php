@@ -208,7 +208,7 @@ class LinkController extends BaseController
                 }
                 $v2_json = [
                     "v"    => "2",
-                    "ps"   => $node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').'@'.$node->id.$info,
+                    "ps"   => $node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').$info,
                     "add"  => $v2['add'] ,
                     "port" => $v2['port'] ,
                     "id"   => ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) ,
@@ -235,7 +235,7 @@ class LinkController extends BaseController
                 }
                 $url .= 'vless://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?encryption='.$v2['ecpt'].'&type='.$v2['net'].'&headerType='.$v2['type'].'&fp='.$v2['fp'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').'@'.$node->id .$info) . "\n";
+                $url .= '#'.urlencode($node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').$info) . "\n";
                 $i++ ;
             } elseif ( $node->sort == 14 && ($params['trojan'] || $params['mu'] == 2 || $params['mu'] == 5 ) ) {
                 $limit['trojan']++ ;
@@ -244,7 +244,7 @@ class LinkController extends BaseController
                 }
                 $url .= 'trojan://' . ($v2['uuid'] ? $v2['uuid'] : $user->v2ray_uuid) .'@' . $v2['add'] .':' . $v2['port'];
                 $url .= '?type='.$v2['net'].'&headerType='.$v2['type'].'&host='.urlencode($v2['host']).'&path='.urlencode($v2['path']).'&flow='.$v2['flow'].'&security='.$v2['tls'].'&sni='.$v2['sni'].'&serviceName='.$v2['serviceName'].'&mode='.$v2['mode'].'&alpn='.urlencode($v2['alpn']);
-                $url .= '#'.urlencode($node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').'@'.$node->id .$info) . "\n";
+                $url .= '#'.urlencode($node->name.($node->traffic_rate > 1 ? '-X'.$node->traffic_rate : '').$info) . "\n";
                 $i++ ;
             }
             if ( $i > $user->sub_limit ) {

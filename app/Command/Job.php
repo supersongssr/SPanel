@@ -163,7 +163,7 @@ class Job
         $hourly_users = 0;
         $used_over_users = 0;
         $used_over_info = '';
-        for ( $_group = 1; $_group <= 5 ; $_group++ )  // < 分组处理 减少 内存占用
+        for ( $_group = 2; $_group <= 3 ; $_group++ )  // < 分组处理 减少 内存占用; 仅限制 2 3 组, 1 4 组不再限制每小时流量. 
         {
             $users = User::where('enable',1)->where('node_group',$_group)->where('t','>',time() - 3600)->get();
             # 判断 $users 是否为空
@@ -181,7 +181,7 @@ class Job
                 $total_traffic = $user->u + $user->d ;
                 $total_traffic_lasthour = $redis->get('ssp:user:'.$user->id.':traffic_lasthour');
                 if ($total_traffic_lasthour) {
-                    if ($total_traffic - $total_traffic_lasthour > 5*1000*1000*1000) {
+                    if ($total_traffic - $total_traffic_lasthour > 6*1000*1000*1000) {
                         $used_over_users++;
                         $used_over_info .= '用户' . $user->id. '等级:'. $user->class .',分组:'. $_group . '使用了___' . intval(($total_traffic - $total_traffic_lasthour) / 1024 / 1024 / 1024) . 'G流量___';
                         $user->enable = 0;
@@ -195,9 +195,12 @@ class Job
                 
             }
         }
+
+        
+        // Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users);
+
         if ( $used_over_users > 0 )
         {
-            // Notify::Send('每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users);
             // Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
             echo '每小时任务执行完成，过去一小时有流量用户数：'.$hourly_users.'，超过5G用户数：'.$used_over_users;
             echo ',使用超流量禁用用户如下:'. $used_over_info;
@@ -225,7 +228,7 @@ class Job
                 $total_traffic = $user->u + $user->d ;
                 $total_traffic_lastday = $redis->get('ssp:user:'.$user->id.':traffic_lastday');
                 if ($total_traffic_lastday) {
-                    if ($total_traffic - $total_traffic_lastday > 10*1000*1000*1000) {
+                    if ($total_traffic - $total_traffic_lastday > 16*1000*1000*1000) {
                         $used_over_users++;
                         $used_over_info .= 'User' . $user->id. 'L:'. $user->class .',G:'. $_group.'Used___' . intval(($total_traffic - $total_traffic_lastday) / 1024 / 1024 / 1024) . 'G___;';
                         $user->enable = 0;
@@ -237,11 +240,11 @@ class Job
                 $redis->setex('ssp:user:'.$user->id.':traffic_lastday', 86400, $total_traffic); //写入当前用户使用量数据 过期1天
             }
         }
+        Notify::Send('每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过16G用户数：'.$used_over_users);
         if ( $used_over_users > 0 )
         {
-            Notify::Send('每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过10G用户数：'.$used_over_users);
             Notify::Send(',使用超流量禁用用户如下:'. $used_over_info);
-            echo '每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过10G用户数：'.$used_over_users;
+            echo '每天任务执行完成，过去一天有流量用户数：'.$daily_users.'，超过16G用户数：'.$used_over_users;
             echo ',使用超流量禁用用户如下:'. $used_over_info;
         }
     }
